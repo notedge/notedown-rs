@@ -5,7 +5,7 @@ extern crate proc_macro;
 
 use notedown_ast::AST;
 use notedown_parser::parse;
-
+mod easy;
 mod pre_build;
 // mod easy;
 // mod normal;

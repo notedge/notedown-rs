@@ -1,7 +1,7 @@
 mod regroup;
 
 use crate::{error::Error::FileNotFound, note_down::Rule, parser::regroup::regroup_list_view, Error, NoteDownParser, ParserConfig, ParserResult};
-use notedown_ast::{utils::dedent_less_than, Command, CommandKind, ListView, TableView, Url, Value, AST};
+use notedown_ast::{utils::dedent_less_than, Command, CommandKind, Url, Value, AST};
 use pest::{
     iterators::{Pair, Pairs},
     Parser,

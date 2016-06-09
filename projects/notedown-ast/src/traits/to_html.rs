@@ -11,25 +11,43 @@ impl ToHTML for AST {
     fn to_html(&self) -> String {
         match self {
             AST::None => {String::new()}
-            AST::Statements(_) => {unimplemented!()}
+            AST::Statements(v) => {v.to_html()}
             AST::Header { .. } => {unimplemented!()}
             AST::HorizontalRule { .. } => {unimplemented!()}
-            AST::Paragraph { .. } => {unimplemented!()}
+            AST::Paragraph { children, .. } => {
+                format!("<p>{}</p>",children.to_html())
+            }
             AST::Highlight { .. } => {unimplemented!()}
             AST::MathBlock { .. } => {unimplemented!()}
             AST::TableView { .. } => {unimplemented!()}
             AST::QuoteList { .. } => {unimplemented!()}
             AST::OrderedList { .. } => {unimplemented!()}
             AST::OrderlessList { .. } => {unimplemented!()}
-            AST::Normal { .. } => {unimplemented!()}
-            AST::Raw { .. } => {unimplemented!()}
+            AST::Normal { inner,.. } => {
+                inner.to_owned()
+            }
+            AST::Raw { inner,.. } => {
+                format!("`{}`", inner)
+            }
             AST::Code { .. } => {unimplemented!()}
-            AST::Italic { .. } => {unimplemented!()}
-            AST::Bold { .. } => {unimplemented!()}
-            AST::Emphasis { .. } => {unimplemented!()}
-            AST::Underline { .. } => {unimplemented!()}
-            AST::Strikethrough { .. } => {unimplemented!()}
-            AST::Undercover { .. } => {unimplemented!()}
+            AST::Italic { children,.. } => {
+                format!("<i>{}</i>", children.to_html())
+            }
+            AST::Bold { children,.. } => {
+                format!("<b>{}</b>", children.to_html())
+            }
+            AST::Emphasis { children,.. } => {
+                format!("<em>{}</em>", children.to_html())
+            }
+            AST::Underline { children,.. } => {
+                format!("<u>{}</u>", children.to_html())
+            }
+            AST::Strikethrough { children,.. } => {
+                format!("<del>{}</del>", children.to_html())
+            }
+            AST::Undercover { children,.. } => {
+                format!("<span class=\"undercover\">{}</span>", children.to_html())
+            }
             AST::MathInline { .. } => {unimplemented!()}
             AST::MathDisplay { .. } => {unimplemented!()}
             AST::Link { .. } => {unimplemented!()}
@@ -58,13 +76,6 @@ impl ToHTML for AST {
             }
             AST::Header { level, children:e,.. } => format!("<h{0}>{1}</h{0}>", level, e.to_html()),
 
-            AST::Paragraph { children,.. } => format!("<p>{}</p>", children.to_html()),
-            AST::Normal { s ,..} => s.to_owned(),
-            AST::Strong { s,.. } => format!("<b>{}</b>", s.to_html()),
-            AST::Emphasis { s,.. } => format!("<i>{}</i>", s.to_html()),
-            AST::Underline { s,.. } => format!("<u>{}</u>", s.to_html()),
-            AST::Strikethrough { s,.. } => format!("<del>{}</del>", s.to_html()),
-            AST::Undercover { s,.. } => format!("<ast.span class=\"undercover\">{}</ast.span>", s.to_html()),
             /*
             AST::Table { head, align, terms, column } => {
                 let align_iter = align.iter().chain(repeat(&align[align.len() - 1]));
