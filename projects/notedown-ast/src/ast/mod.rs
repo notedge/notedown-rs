@@ -3,8 +3,7 @@ mod link;
 
 use std::fmt::{self, Debug, Display, Formatter};
 
-pub use crate::Value;
-pub use command::{Command, CommandKind};
+pub use command::CommandKind;
 pub use link::SmartLink;
 use std::collections::HashMap;
 pub use url::Url;
@@ -130,12 +129,11 @@ pub enum AST {
     //
     Command {
         cmd: String,
-        args: Vec<Value>,
-        kvs: HashMap<String, Value>,
+        args: Vec<AST>,
+        kvs: HashMap<String, AST>,
         kind: CommandKind,
         r: TextRange,
     },
-
     String {
         inner: String,
         r: TextRange,
@@ -183,15 +181,15 @@ impl Debug for TextRange {
 impl Display for AST {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
-            AST::None => {write!(f,"")}
+            AST::None => write!(f, ""),
             AST::Statements(v) => {
-                let s:Vec<_> = v.iter().map(|e|format!("{}",e)).collect();
+                let s: Vec<_> = v.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))
             }
-            AST::Header { .. } => {unimplemented!()}
-            AST::HorizontalRule { .. } => {unimplemented!()}
-            AST::Paragraph { .. } => {unimplemented!()}
-            AST::Highlight { lang, code, inline,  .. } => {
+            AST::Header { .. } => unimplemented!(),
+            AST::HorizontalRule { .. } => unimplemented!(),
+            AST::Paragraph { .. } => unimplemented!(),
+            AST::Highlight { lang, code, inline, .. } => {
                 if *inline {
                     write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = code)
                 }
@@ -199,30 +197,30 @@ impl Display for AST {
                     write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = lang, body = code)
                 }
             }
-            AST::MathBlock { .. } => {unimplemented!()}
-            AST::TableView { .. } => {unimplemented!()}
-            AST::QuoteList { .. } => {unimplemented!()}
-            AST::OrderedList { .. } => {unimplemented!()}
-            AST::OrderlessList { .. } => {unimplemented!()}
-            AST::Normal { .. } => {unimplemented!()}
-            AST::Raw { .. } => {unimplemented!()}
-            AST::Code { .. } => {unimplemented!()}
-            AST::Italic { .. } => {unimplemented!()}
-            AST::Bold { .. } => {unimplemented!()}
-            AST::Emphasis { .. } => {unimplemented!()}
-            AST::Underline { .. } => {unimplemented!()}
-            AST::Strikethrough { .. } => {unimplemented!()}
-            AST::Undercover { .. } => {unimplemented!()}
-            AST::MathInline { .. } => {unimplemented!()}
-            AST::MathDisplay { .. } => {unimplemented!()}
-            AST::Link { .. } => {unimplemented!()}
-            AST::Escaped { .. } => {unimplemented!()}
-            AST::Command { .. } => {unimplemented!()}
-            AST::String { .. } => {unimplemented!()}
-            AST::Integer { .. } => {unimplemented!()}
-            AST::Decimal { .. } => {unimplemented!()}
-            AST::Boolean { .. } => {unimplemented!()}
-            AST::Array { .. } => {unimplemented!()}
+            AST::MathBlock { .. } => unimplemented!(),
+            AST::TableView { .. } => unimplemented!(),
+            AST::QuoteList { .. } => unimplemented!(),
+            AST::OrderedList { .. } => unimplemented!(),
+            AST::OrderlessList { .. } => unimplemented!(),
+            AST::Normal { .. } => unimplemented!(),
+            AST::Raw { .. } => unimplemented!(),
+            AST::Code { .. } => unimplemented!(),
+            AST::Italic { .. } => unimplemented!(),
+            AST::Bold { .. } => unimplemented!(),
+            AST::Emphasis { .. } => unimplemented!(),
+            AST::Underline { .. } => unimplemented!(),
+            AST::Strikethrough { .. } => unimplemented!(),
+            AST::Undercover { .. } => unimplemented!(),
+            AST::MathInline { .. } => unimplemented!(),
+            AST::MathDisplay { .. } => unimplemented!(),
+            AST::Link { .. } => unimplemented!(),
+            AST::Escaped { .. } => unimplemented!(),
+            AST::Command { .. } => unimplemented!(),
+            AST::String { .. } => unimplemented!(),
+            AST::Integer { .. } => unimplemented!(),
+            AST::Decimal { .. } => unimplemented!(),
+            AST::Boolean { .. } => unimplemented!(),
+            AST::Array { .. } => unimplemented!(),
         }
     }
 }

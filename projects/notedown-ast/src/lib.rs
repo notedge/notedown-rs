@@ -1,9 +1,7 @@
 mod ast;
 mod traits;
-mod value;
 
-pub use ast::{Command, CommandKind, SmartLink, TextRange, Url, AST};
-pub use value::Value;
+pub use ast::{CommandKind, SmartLink, TextRange, Url, AST};
 
 pub mod utils {
     pub use crate::traits::*;

@@ -1,6 +1,5 @@
 mod from;
 
-use crate::Command;
 use std::fmt::{self, Debug, Display, Formatter};
 
 #[derive(Clone, Eq, PartialEq)]

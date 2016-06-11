@@ -1,6 +1,11 @@
+mod slugify;
 mod to_html;
+
 pub trait ToHTML {
     fn to_html(&self) -> String;
+}
+pub trait Slugify {
+    fn slugify(&self) -> String;
 }
 
 // #[derive(Debug, Clone)]

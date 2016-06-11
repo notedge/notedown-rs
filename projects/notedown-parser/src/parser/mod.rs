@@ -1,7 +1,12 @@
 mod regroup;
 
-use crate::{error::Error::FileNotFound, note_down::Rule, parser::regroup::regroup_list_view, Error, NoteDownParser, ParserConfig, ParserResult};
-use notedown_ast::{utils::dedent_less_than, Command, CommandKind, Url, Value, AST};
+use crate::{
+    error::Error::FileNotFound,
+    note_down::Rule,
+    parser::regroup::{regroup_list_view, regroup_table_view},
+    Error, NoteDownParser, ParserConfig, ParserResult,
+};
+use notedown_ast::{utils::dedent_less_than, CommandKind, Url, AST};
 use pest::{
     iterators::{Pair, Pairs},
     Parser,
@@ -10,7 +15,6 @@ use std::{
     collections::{HashMap, VecDeque},
     fs,
 };
-use crate::parser::regroup::regroup_table_view;
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -125,15 +129,15 @@ impl ParserConfig {
                     let mut inner = pair.into_inner();
                     let head = inner.next().unwrap();
                     let mut item = match head.as_rule() {
-                        Rule::Vertical =>  vec![],
-                        _ =>vec![self.parse_span_term(head)],
+                        Rule::Vertical => vec![],
+                        _ => vec![self.parse_span_term(head)],
                     };
                     for n in inner {
                         match n.as_rule() {
                             Rule::Vertical => {
                                 line.push(item);
                                 item = vec![]
-                            },
+                            }
                             _ => item.push(self.parse_span_term(n)),
                         }
                     }
