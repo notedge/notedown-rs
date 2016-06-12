@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate text_utils;
+
 mod ast;
 mod traits;
 

@@ -166,11 +166,11 @@ To put a code block within a list item, the code block needs to be indented *twi
 
 ### Code Blocks
 
-Pre-formatted code blocks are used for writing about programming or markup source code. Rather than forming normal paragraphs, the lines of a code block are interpreted literally. Markdown wraps a code block in both `<pre>` and `<code>` tags.
+Pre-formatted code blocks are used for writing about programming or markup source code. Rather than forming html.normal paragraphs, the lines of a code block are interpreted literally. Markdown wraps a code block in both `<pre>` and `<code>` tags.
 
 To produce a code block in Markdown, simply indent every line of the block by at least 4 spaces or 1 tab.
 
-This is a normal paragraph:
+This is a html.normal paragraph:
 
 ```txt
 This is a code block.
@@ -230,6 +230,6 @@ Markdown treats asterisks (`*`) and underscores (`_`) as indicators of emphasis.
 
 ### Code
 
-To indicate a span of code, wrap it with backtick quotes (` ` `). Unlike a pre-formatted code block, a code span indicates code within a normal paragraph. For example:
+To indicate a span of code, wrap it with backtick quotes (` ` `). Unlike a pre-formatted code block, a code span indicates code within a html.normal paragraph. For example:
 
 Use the `printf()` function.

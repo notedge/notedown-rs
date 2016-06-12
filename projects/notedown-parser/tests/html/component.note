@@ -1,5 +1,5 @@
 <Component b=true s="str", n=0>
-	normal text
+	html.normal text
 	*i* **b**
 	~u~ ~~d~~
 

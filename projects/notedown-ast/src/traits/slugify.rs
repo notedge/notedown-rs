@@ -1,12 +1,13 @@
 use crate::AST;
 use crate::traits::Slugify;
+pub use text_utils::slugify;
 
 impl Slugify for Vec<AST> {
     fn slugify(&self) -> String {
         let mut out = String::new();
         for span in self {
             if !out.is_empty() {
-                out.push(s);
+                out.push('-');
             }
             out.push_str(&span.slugify());
         }
@@ -51,14 +52,20 @@ impl Slugify for AST {
     }
 }
 
-impl Slugify for &str {
+impl Slugify for String {
     fn slugify(&self) -> String {
         slugify!(self)
     }
 }
 
-impl Slugify for String {
-    fn slugify(&self, sp: char) -> String {
-        Slugify::slugify(&self.as_str(), sp)
+impl Slugify for &String {
+    fn slugify(&self) -> String {
+        slugify!(self)
+    }
+}
+
+impl Slugify for &str {
+    fn slugify(&self) -> String {
+        slugify!(self)
     }
 }

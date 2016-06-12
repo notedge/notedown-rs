@@ -5,10 +5,10 @@ extern crate proc_macro;
 
 use notedown_ast::AST;
 use notedown_parser::parse;
-mod easy;
+mod html;
 mod pre_build;
 // mod easy;
-// mod normal;
+// mod html.normal;
 
 #[test]
 fn ready() {

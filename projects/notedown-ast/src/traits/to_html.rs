@@ -12,7 +12,7 @@ impl ToHTML for AST {
         match self {
             AST::None => String::new(),
             AST::Statements(v) => v.to_html(),
-            AST::Header { .. } => unimplemented!(),
+            AST::Header { level, children,.. } =>  format!("<h{0}>{1}</h{0}>", level, children.to_html()),
             AST::HorizontalRule { .. } => unimplemented!(),
             AST::Paragraph { children, .. } => format!("<p>{}</p>", children.to_html()),
             AST::Highlight { .. } => unimplemented!(),

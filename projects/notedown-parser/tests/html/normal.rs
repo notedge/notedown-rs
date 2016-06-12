@@ -1,10 +1,10 @@
-use notedown_ast::{parse, ToHTML};
-
 use std::{fs::File, io::prelude::*};
+use notedown_parser::parse;
+use notedown_ast::utils::ToHTML;
 
 #[test]
 fn test_math() {
-    let mut file = File::create("tests/normal/part1.md").unwrap();
+    let mut file = File::create("tests/html/part1.md").unwrap();
     let f = parse(include_str!("part1.note"));
     // println!("{:#?}", f);
     file.write_all(f.to_html().as_bytes()).unwrap();
@@ -12,7 +12,7 @@ fn test_math() {
 
 #[test]
 fn test_style() {
-    let mut file = File::create("tests/normal/style.md").unwrap();
+    let mut file = File::create("tests/html.normal/style.md").unwrap();
     let f = parse(include_str!("style.note"));
     // println!("{:#?}", f);
     file.write_all(f.to_html().as_bytes()).unwrap();
@@ -20,7 +20,7 @@ fn test_style() {
 
 #[test]
 fn test_asterisk() {
-    let mut file = File::create("tests/normal/asterisk.md").unwrap();
+    let mut file = File::create("tests/html.normal/asterisk.md").unwrap();
     let f = parse(include_str!("asterisk.note"));
     // println!("{:#?}", f);
     file.write_all(f.to_html().as_bytes()).unwrap();
@@ -28,7 +28,7 @@ fn test_asterisk() {
 
 #[test]
 fn test_command() {
-    let mut file = File::create("tests/normal/commands.md").unwrap();
+    let mut file = File::create("tests/html.normal/commands.md").unwrap();
     let f = parse(include_str!("commands.note"));
     // println!("{:#?}", f);
     file.write_all(f.to_html().as_bytes()).unwrap();
@@ -37,7 +37,7 @@ fn test_command() {
 
 #[test]
 fn test_component() {
-    let mut file = File::create("tests/normal/component.md").unwrap();
+    let mut file = File::create("tests/html.normal/component.md").unwrap();
     let f = parse(include_str!("component.note"));
     // println!("{:#?}", f);
     file.write_all(f.to_html().as_bytes()).unwrap();
