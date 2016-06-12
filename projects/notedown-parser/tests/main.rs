@@ -3,22 +3,13 @@ extern crate quote;
 extern crate pest_generator;
 extern crate proc_macro;
 
-use notedown_ast::AST;
-use notedown_parser::parse;
 mod html;
 mod pre_build;
-// mod easy;
-// mod html.normal;
+mod text;
 
 #[test]
 fn ready() {
     println!("it, works!")
-}
-
-#[test]
-fn readme() {
-    let ast = parse(include_str!("readme.md"));
-    println!("{:#?}", ast)
 }
 
 #[test]

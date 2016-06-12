@@ -1,21 +1,21 @@
 program = _{SOI ~ statement*  ~  EOI}
 statement = _{
-    Header
-  | HorizontalRule
-  | Code
-  | Table
-  | List
-  | Template
-  | Command
-  | EmptyLine{1,}
-  | TextBlock
+    Header |
+    HorizontalRule |
+    Code |
+    Table |
+    List |
+    Template |
+    Command |
+    EmptyLine{1,} |
+    TextBlock
 }
 EmptyLine = _{WHITE_SPACE*  ~  LINE_SEPARATOR}
 BlockEnd = !{EmptyLine{2}|EmptyLine~EOI|EOI}
 RestOfLine = !{(!LINE_SEPARATOR  ~  ANY)*}
 /*====================================================================================================================*/
 //!#E06C75: Header
-Header = ${WHITE_SPACE* ~ Sharp{1, 6}  ~  TextElement+ }
+Header = ${WHITE_SPACE* ~ Sharp{1, 6} ~ WHITE_SPACE  ~  TextElement+}
 /*====================================================================================================================*/
 TextBlock = {(TextElement|(!LINE_SEPARATOR{2,} ~ LINE_SEPARATOR))+}
 TextElement = _{
@@ -43,9 +43,16 @@ TableRestLine = {(Escape ~ Vertical |Vertical |TextElement)*}
 /*====================================================================================================================*/
 /// Green
 List = {ListFirstLine ~ (LINE_SEPARATOR ~ ListRestLine)*}
-ListFirstLine = {WHITE_SPACE* ~ ListMark  ~ TextElement+}
-ListRestLine = {WHITE_SPACE* ~ (ListMark|Vertical)  ~ TextElement+}
-ListMark = @{(Minus|Plus|QuoteMark|Integer~Dot) ~ WHITE_SPACE}
+ListFirstLine = {
+    WHITE_SPACE* ~ ListMark ~ Checkmark ~ TextElement+ |
+    WHITE_SPACE* ~ ListMark ~ TextElement+
+}
+ListRestLine = {
+    WHITE_SPACE* ~ (ListMark|Vertical) ~ Checkmark ~ TextElement+ |
+    WHITE_SPACE* ~ (ListMark|Vertical) ~ TextElement+
+}
+ListMark = @{(Minus|Plus|QuoteMark|Integer~Dot) ~ WHITE_SPACE+}
+Checkmark = @{"["~ ANY ~"]"}
 /*====================================================================================================================*/
 ///Red
 HorizontalRule = @{WHITE_SPACE* ~ (Minus{3,}|Set{3,})}
@@ -54,7 +61,10 @@ MathStatement = _{Math|MathRest}
 ///#E06C75
 Math = {MathLevel ~ MathText ~ POP ~ Dollar}
 MathLevel = {Dollar~PUSH (Dollar*)}
-MathText = {(Escape~Dollar|!(Dollar ~ PEEK) ~ (!LINE_SEPARATOR{2,} ~ ANY))*}
+MathText = {(Escape ~ Dollar|!(Dollar ~ PEEK) ~ (!LINE_SEPARATOR{2,} ~ ANY))*}
+MathBlock = {
+    WHITE_SPACE* ~ "$$" ~ "$$"
+}
 ///Gray
 MathRest = {Dollar+}
 /*====================================================================================================================*/

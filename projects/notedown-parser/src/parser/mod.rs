@@ -4,9 +4,9 @@ use crate::{
     error::Error::FileNotFound,
     note_down::Rule,
     parser::regroup::{regroup_list_view, regroup_table_view},
-    Error, NoteDownParser, ParserConfig, ParserResult,
+    NoteDownParser, ParserConfig, ParserResult,
 };
-use notedown_ast::{utils::dedent_less_than, CommandKind, Url, AST};
+use notedown_ast::{CommandKind, Url, AST};
 use pest::{
     iterators::{Pair, Pairs},
     Parser,
@@ -62,27 +62,13 @@ impl ParserConfig {
                     codes.extend(self.parse_table(pair));
                     continue;
                 }
+                Rule::Code => self.parse_code_block(pair),
                 _ => debug_cases!(pair),
             };
             // println!("{:?}", code);
             codes.push(code);
         }
         Ok(AST::Statements(codes))
-    }
-    fn parse_header(&self, pairs: Pair<Rule>) -> AST {
-        let r = self.get_position(pairs.as_span());
-        let mut level = 0;
-        let mut head = AST::None;
-        for pair in pairs.into_inner() {
-            match pair.as_rule() {
-                Rule::WHITE_SPACE => continue,
-                Rule::Sharp => level += 1,
-                Rule::TextRest => head = self.parse_normal_text(pair),
-
-                _ => debug_cases!(pair),
-            };
-        }
-        return AST::Header { children: vec![head], level, r };
     }
     fn parse_list(&self, pairs: Pair<Rule>) -> Vec<AST> {
         // let r = self.get_position(pairs.as_span());
@@ -154,11 +140,35 @@ impl ParserConfig {
         }
         return regroup_table_view(&table_terms);
     }
+    pub fn parse_code_block(&self, pairs: Pair<Rule>) -> AST {
+        let r = self.get_position(pairs.as_span());
+        let mut lang = "txt";
+        let mut code = "";
+        for pair in pairs.into_inner() {
+            match pair.as_rule() {
+                Rule::WHITE_SPACE => continue,
+                Rule::CodeLevel => continue,
+                Rule::CodeMark => continue,
+                Rule::SYMBOL => lang = pair.as_str(),
+                Rule::CodeText => code = pair.as_str(),
+                _ => debug_cases!(pair),
+            };
+        }
+        AST::Highlight { lang: lang.to_string(), code: code.to_string(), inline: false, high_line: vec![], r }
+    }
 
-    pub fn parse_text(&self, text: &str, shift: (usize, usize)) -> Vec<AST> {
-        let _ = text;
-        let _ = shift;
-        unimplemented!()
+    fn parse_header(&self, pairs: Pair<Rule>) -> AST {
+        let r = self.get_position(pairs.as_span());
+        let mut level = 0;
+        let mut children = vec![];
+        for pair in pairs.into_inner() {
+            match pair.as_rule() {
+                Rule::WHITE_SPACE => continue,
+                Rule::Sharp => level += 1,
+                _ => children.push(self.parse_span_term(pair)),
+            };
+        }
+        return AST::Header { children, level, r };
     }
 
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> AST {
@@ -187,6 +197,7 @@ impl ParserConfig {
             Rule::RawRest | Rule::StyleRest | Rule::TildeRest | Rule::MathRest => self.parse_normal_text(pair),
             Rule::WHITE_SPACE | Rule::LINE_SEPARATOR => self.parse_normal_text(pair),
             Rule::Escaped => self.parse_escaped(pair),
+
             _ => debug_cases!(pair),
         }
     }
@@ -258,14 +269,11 @@ impl ParserConfig {
     }
     fn parse_escaped(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
-        let c = match pairs.as_str() {
-            "\\*" => "*",
-            _ => {
-                println!("{}", pairs.as_str());
-                unimplemented!()
-            }
+        let c = match pairs.as_str().chars().next() {
+            None => '\\',
+            Some(s) => s,
         };
-        AST::Normal { inner: c.to_string(), r }
+        AST::Escaped { inner: c, r }
     }
 }
 // impl ParserConfig {

@@ -1,6 +1,4 @@
-use crate::note_down::Rule;
 use notedown_ast::AST;
-use pest::iterators::Pair;
 
 pub fn regroup_list_view(lists: &[(usize, &str, Vec<AST>)]) -> Vec<AST> {
     vec![]

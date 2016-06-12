@@ -1,7 +1,6 @@
 use notedown_ast::utils::ToHTML;
 use notedown_parser::parse;
 
-
 mod easy;
 mod normal;
 

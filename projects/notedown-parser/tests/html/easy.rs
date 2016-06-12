@@ -14,15 +14,17 @@ fn test_header() {
     # Title **bold**
     "#;
     let output = r#"
-        <p>
-            Loremipsumdolorsitamet,consecteturadipiscingelit,seddoeiusmodtempor</br>
-            incididuntutlaboreetdoloremagnaaliqua.Utenimadminimveniam,quis</br>
-            nostrudexercitationullamcolaborisnisiutaliquipexeacommodoconsequat.</br>
-            Duisauteiruredolorinreprehenderitinvoluptatevelitessecillumdolore</br>
-            eufugiatnullapariatur.Excepteursintoccaecatcupidatatnonproident,sunt</br>
-            inculpaquiofficiadeseruntmollitanimidestlaborum.
-        </p>
-    "#;
+        <h1>Title 1</h1>
+        <h2>Title 2</h2>
+        <h3>Title 3</h3>
+        <h4>Title 4</h4>
+        <h5>Title 5</h5>
+        <h6>Title 6</h6>
+        <p>####### Title 7</p>
+
+        <h1>Title<b>bold</b></h1>
+        <p></p>
+    "#;//TODO: empty p as null
     trim_eq(input, output)
 }
 
