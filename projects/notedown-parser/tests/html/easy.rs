@@ -24,7 +24,7 @@ fn test_header() {
 
         <h1>Title<b>bold</b></h1>
         <p></p>
-    "#;//TODO: empty p as null
+    "#; //TODO: empty p as null
     trim_eq(input, output)
 }
 

@@ -3,7 +3,7 @@ use std::fmt::{self, Display, Formatter};
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum SmartLink {
     // from, to
-    Hyperlinks { from: String, to: String, alt: Option<String>, bind: Option<String> },
+    Hyperlinks { from: String, to: Option<String>, alt: Option<String>, bind: Option<String> },
     // from, to, alt (, , Option<String>)
     Image { img: String, to: Option<String>, alt: Option<String>, bind: Option<String> },
     Reciprocal,
@@ -15,7 +15,10 @@ impl Display for SmartLink {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             SmartLink::Hyperlinks { from, to, alt, bind } => {
-                let from_to = if from == to { format!("[{}]", from) } else { format!("[{} > {}]", from, to) };
+                let from_to = match to {
+                    None => format!("[{}]", from),
+                    Some(to) => format!("[{} > {}]", from, to),
+                };
                 match (bind, alt) {
                     (None, None) => write!(f, "{}", from_to),
                     (Some(bind), None) => write!(f, "{}[:{}]", from_to, bind),

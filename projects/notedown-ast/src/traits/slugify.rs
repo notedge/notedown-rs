@@ -1,5 +1,4 @@
-use crate::AST;
-use crate::traits::Slugify;
+use crate::{traits::Slugify, AST};
 pub use text_utils::slugify;
 
 impl Slugify for Vec<AST> {
