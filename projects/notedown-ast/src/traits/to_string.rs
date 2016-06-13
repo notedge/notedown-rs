@@ -1,6 +1,5 @@
-use crate::AST;
+use crate::{utils::join_ast_list, AST};
 use std::fmt::{self, Display, Formatter};
-use crate::utils::join_ast_list;
 
 impl Display for AST {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {

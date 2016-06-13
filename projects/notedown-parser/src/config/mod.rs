@@ -1,5 +1,5 @@
 use notedown_ast::{TextRange, Url};
-use pest::Span;
+use notedown_pest::Span;
 
 pub struct ParserConfig {
     pub file_url: Option<Url>,

@@ -170,7 +170,6 @@ impl Default for AST {
     }
 }
 
-
 impl AST {
     pub fn to_vec(&self) -> Vec<AST> {
         match self {

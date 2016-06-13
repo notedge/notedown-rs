@@ -2,15 +2,11 @@ mod regroup;
 
 use crate::{
     error::Error::FileNotFound,
-    note_down::Rule,
     parser::regroup::{regroup_list_view, regroup_table_view},
-    NoteDownParser, ParserConfig, ParserResult,
+    ParserConfig, ParserResult,
 };
 use notedown_ast::{CommandKind, Url, AST};
-use pest::{
-    iterators::{Pair, Pairs},
-    Parser,
-};
+use notedown_pest::{Pair, Pairs, Parser, Rule, NoteDownParser};
 use std::{
     collections::{HashMap, VecDeque},
     fs,

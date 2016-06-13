@@ -1,4 +1,4 @@
-use crate::note_down::Rule;
+use notedown_pest::Rule;
 
 #[derive(Debug)]
 pub enum Error {
@@ -9,8 +9,8 @@ pub enum Error {
 
 pub type ParserResult<T> = Result<T, Error>;
 
-impl From<pest::error::Error<Rule>> for Error {
-    fn from(e: pest::error::Error<Rule>) -> Self {
+impl From<notedown_pest::Error<Rule>> for Error {
+    fn from(e: notedown_pest::Error<Rule>) -> Self {
         Error::LexerError(format!("{}", e))
     }
 }

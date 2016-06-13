@@ -56,7 +56,7 @@ impl AST {
                 }
             }
         };
-        return root
+        return root;
     }
 }
 
