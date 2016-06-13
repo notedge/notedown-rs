@@ -1,3 +1,4 @@
+mod range;
 mod toc;
 
 pub use crate::traits::*;

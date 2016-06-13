@@ -1,10 +1,8 @@
 use crate::{TextRange, AST};
-use std::rc::Rc;
 
 #[derive(Debug)]
 pub struct TOC {
     level: usize,
-    parent: Option<Box<TOC>>,
     pub detail: String,
     pub range: TextRange,
     pub selection_range: TextRange,
@@ -13,21 +11,19 @@ pub struct TOC {
 
 impl Default for TOC {
     fn default() -> Self {
-        Self {
-            level: 0,
-            detail: "ROOT".to_string(),
-            range: Default::default(),
-            selection_range: Default::default(),
-            children: vec![],
-            parent: None,
-        }
+        Self { level: 0, detail: String::from("ROOT"), range: Default::default(), selection_range: Default::default(), children: vec![] }
+    }
+}
+
+impl TOC {
+    fn last_at_level(&mut self, depth: usize) -> &mut TOC {
+        if depth == 0 || self.children.len() == 0 { self } else { self.children.last_mut().unwrap().last_at_level(depth - 1) }
     }
 }
 
 impl AST {
     pub fn toc(&self, max_depth: usize) -> TOC {
-        let mut out = &mut TOC::default();
-        let mut last_level = 0;
+        let mut root = TOC::default();
         let mut toc_ignore = false;
         if let AST::Statements(terms) = self {
             for term in terms {
@@ -40,26 +36,16 @@ impl AST {
                         if *level > max_depth {
                             continue;
                         }
-
-                        if *level > last_level {
-                            let mut new = &mut TOC {
-                                level: *level,
-                                parent: Some(Box::new(out.clone())),
-                                detail: join_ast_list(children),
-                                range: r.clone(),
-                                selection_range: r.clone(),
-                                children: vec![],
-                            };
-                            out.children.push(new.clone());
-                            out = &mut new
-                        }
-                        else {
-                            println!("{:#?}", out);
-                            println!("{:#?}", level);
-                            println!("{}", join_ast_list(children).trim());
-                            println!("{:#?}", r);
-                            unimplemented!();
-                        }
+                        let parent = root.last_at_level(level - 1);
+                        let (a, b) = r.start;
+                        let new = TOC {
+                            level: *level,
+                            detail: join_ast_list(children),
+                            range: *r,
+                            selection_range: TextRange::new(a, b, a, b),
+                            children: vec![],
+                        };
+                        parent.children.push(new);
                     }
                     AST::Command { cmd, .. } => {
                         if let "toc_ignore" = cmd.as_str() {
@@ -70,7 +56,7 @@ impl AST {
                 }
             }
         };
-        return out;
+        return root
     }
 }
 

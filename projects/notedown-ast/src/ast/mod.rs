@@ -1,8 +1,6 @@
 mod command;
 mod link;
 
-use std::fmt::{self, Debug, Display, Formatter};
-
 pub use command::CommandKind;
 pub use link::SmartLink;
 use std::collections::HashMap;
@@ -149,7 +147,7 @@ pub enum AST {
     },
 }
 
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Copy, Clone, Eq, PartialEq)]
 pub struct TextRange {
     // pub index: u64,
     pub start: (u64, u64),
@@ -172,11 +170,6 @@ impl Default for AST {
     }
 }
 
-impl Debug for TextRange {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "({}, {}) → ({}, {})", self.start.0, self.start.1, self.end.0, self.end.1)
-    }
-}
 
 impl AST {
     pub fn to_vec(&self) -> Vec<AST> {

@@ -13,5 +13,5 @@ fn test_header() {
 
     # Title **bold**
     "#;
-    println!("{:#?}", parse(input).toc())
+    println!("{:#?}", parse(input).toc(9))
 }

@@ -1,5 +1,6 @@
 use crate::AST;
 use std::fmt::{self, Display, Formatter};
+use crate::utils::join_ast_list;
 
 impl Display for AST {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
@@ -29,7 +30,7 @@ impl Display for AST {
             AST::Raw { .. } => unimplemented!(),
             AST::Code { .. } => unimplemented!(),
             AST::Italic { .. } => unimplemented!(),
-            AST::Bold { .. } => unimplemented!(),
+            AST::Bold { children, .. } => write!(f, "**{}**", join_ast_list(children)),
             AST::Emphasis { .. } => unimplemented!(),
             AST::Underline { .. } => unimplemented!(),
             AST::Strikethrough { .. } => unimplemented!(),

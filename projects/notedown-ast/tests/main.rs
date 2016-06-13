@@ -1,3 +1,4 @@
+mod fast_test;
 #[test]
 fn ready() {
     println!("it, works!")
