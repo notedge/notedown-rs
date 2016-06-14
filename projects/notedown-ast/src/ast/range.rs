@@ -1,5 +1,21 @@
-use crate::TextRange;
 use std::fmt::{self, Debug, Formatter};
+
+#[derive(Copy, Clone, Eq, PartialEq)]
+pub struct TextRange {
+    // pub index: u64,
+    pub start: (u64, u64),
+    pub end: (u64, u64),
+}
+
+impl Default for TextRange {
+    fn default() -> Self {
+        Self {
+            // index: 0,
+            start: (0, 0),
+            end: (0, 0),
+        }
+    }
+}
 
 impl Debug for TextRange {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {

@@ -36,12 +36,7 @@ impl AST {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TOC {
-                            level: *level,
-                            detail: join_ast_list(children),
-                            range: *r,
-                            children: vec![],
-                        };
+                        let new = TOC { level: *level, detail: join_ast_list(children), range: *r, children: vec![] };
                         parent.children.push(new);
                     }
                     AST::Command { cmd, .. } => {

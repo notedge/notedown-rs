@@ -6,7 +6,7 @@ use crate::{
     ParserConfig, ParserResult,
 };
 use notedown_ast::{CommandKind, Url, AST};
-use notedown_pest::{Pair, Pairs, Parser, Rule, NoteDownParser};
+use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::{
     collections::{HashMap, VecDeque},
     fs,

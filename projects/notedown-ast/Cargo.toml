@@ -10,7 +10,6 @@ edition = "2018"
 
 [dependencies]
 text-utils = "0.3"
-url = "2.1"
 
 [dev-dependencies]
 

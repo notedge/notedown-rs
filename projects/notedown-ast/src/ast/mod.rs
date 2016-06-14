@@ -1,10 +1,11 @@
 mod command;
 mod link;
+mod range;
 
 pub use command::CommandKind;
 pub use link::SmartLink;
+pub use range::TextRange;
 use std::collections::HashMap;
-pub use url::Url;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum AST {
@@ -120,9 +121,9 @@ pub enum AST {
     //
     Command {
         cmd: String,
+        kind: CommandKind,
         args: Vec<AST>,
         kvs: HashMap<String, AST>,
-        kind: CommandKind,
         r: TextRange,
     },
     String {
@@ -145,23 +146,6 @@ pub enum AST {
         inner: Vec<AST>,
         r: TextRange,
     },
-}
-
-#[derive(Copy, Clone, Eq, PartialEq)]
-pub struct TextRange {
-    // pub index: u64,
-    pub start: (u64, u64),
-    pub end: (u64, u64),
-}
-
-impl Default for TextRange {
-    fn default() -> Self {
-        Self {
-            // index: 0,
-            start: (0, 0),
-            end: (0, 0),
-        }
-    }
 }
 
 impl Default for AST {
