@@ -1,7 +1,6 @@
 [package]
 name = "notedown_parser"
-# publish = false
-version = "0.6.0"
+version = "0.7.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/nyar-lang/notedown-rs"

@@ -2,16 +2,15 @@ use crate::{TextRange, AST};
 
 #[derive(Debug)]
 pub struct TOC {
-    level: usize,
+    pub level: usize,
     pub detail: String,
     pub range: TextRange,
-    pub selection_range: TextRange,
     pub children: Vec<TOC>,
 }
 
 impl Default for TOC {
     fn default() -> Self {
-        Self { level: 0, detail: String::from("ROOT"), range: Default::default(), selection_range: Default::default(), children: vec![] }
+        Self { level: 0, detail: String::from("ROOT"), range: Default::default(), children: vec![] }
     }
 }
 
@@ -37,12 +36,10 @@ impl AST {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let (a, b) = r.start;
                         let new = TOC {
                             level: *level,
                             detail: join_ast_list(children),
                             range: *r,
-                            selection_range: TextRange::new(a, b, a, b),
                             children: vec![],
                         };
                         parent.children.push(new);
