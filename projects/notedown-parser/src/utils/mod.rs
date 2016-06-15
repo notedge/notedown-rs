@@ -1,7 +1,7 @@
-use crate::{note_down::Rule, ParserConfig};
-use notedown_ast::AST;
-use pest::iterators::Pair;
+pub use notedown_ast::utils::*;
+pub use url::Url;
 
+/*
 pub fn unescape(s: &str, c: &str) -> String {
     let mut e = String::from("\\");
     e.push_str(c);
@@ -66,3 +66,4 @@ pub fn map_white_space(c: &str) -> AST {
         _ => AST::Normal(String::from(" ")),
     }
 }
+*/

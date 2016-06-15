@@ -12,6 +12,17 @@ fn test_header() {
     ####### Title 7
 
     # Title **bold**
+
+    # Title 1
+    ## Title 2.1
+    ## Title 2.2
+
+    \toc_ignore
+
+    ## Title 2.3
+    ### Title 3.1
+    ### Title 3.2
+    ### Title 3.3
     "#;
     println!("{:#?}", parse(input).toc(9))
 }

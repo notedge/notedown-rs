@@ -5,12 +5,12 @@ use crate::{
     parser::regroup::{regroup_list_view, regroup_table_view},
     ParserConfig, ParserResult,
 };
-use notedown_ast::{CommandKind, Url, AST};
+use notedown_ast::{CommandKind, AST};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::{
-    collections::{HashMap, VecDeque},
     fs,
 };
+use url::Url;
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -59,6 +59,7 @@ impl ParserConfig {
                     continue;
                 }
                 Rule::Code => self.parse_code_block(pair),
+                Rule::CommandBlock=>self.parse_command_block(pair),
                 _ => debug_cases!(pair),
             };
             // println!("{:?}", code);
@@ -166,7 +167,24 @@ impl ParserConfig {
         }
         return AST::Header { children, level, r };
     }
-
+    pub fn parse_command_block(&self, pairs: Pair<Rule>) -> AST {
+        let r = self.get_position(pairs.as_span());
+        let mut cmd = "txt";
+        for pair in pairs.into_inner() {
+            match pair.as_rule() {
+                Rule::Escape=>continue,
+                Rule::SYMBOL=>cmd = pair.as_str(),
+                _ => debug_cases!(pair),
+            };
+        }
+        AST::Command {
+            cmd: cmd.to_string(),
+            kind: CommandKind::Normal,
+            args: vec![],
+            kvs: Default::default(),
+            r
+        }
+    }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let codes = self.parse_span(pairs);

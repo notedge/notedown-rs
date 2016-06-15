@@ -1,6 +1,7 @@
 mod command;
 mod link;
 mod range;
+mod literal;
 
 pub use command::CommandKind;
 pub use link::SmartLink;
