@@ -1,6 +1,6 @@
 [package]
-name = "notedown_ast"
-version = "0.8.3"
+name = "notedown-yew"
+version = "0.1.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "notedown ast and converter"
 repository = "https://github.com/nyar-lang/Notedown-rs"
@@ -9,9 +9,8 @@ license = "MPL-2.0"
 edition = "2018"
 
 [dependencies]
-text-utils = "0.3"
-# lsp-types = { version = "0.86", features = ["proposed"] }
-
+yew = "0.17"
+notedown_parser = {version = "0.7", path = "../notedown-parser"}
 
 [dev-dependencies]
 
