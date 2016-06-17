@@ -9,6 +9,34 @@ pub use range::TextRange;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
+pub enum ASTKind {
+    None,
+    Statements,
+    Header {
+        level: usize,
+    },
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum CST {
+    Node {
+        kind: ASTKind,
+        children: Vec<CST>,
+        r: TextRange,
+    },
+    Leaf {
+        kind: ASTKind,
+        r: TextRange,
+    },
+}
+
+impl CST {
+    pub fn node() {
+
+    }
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum AST {
     /// - `None`: It doesn't look like anything to me
     None,

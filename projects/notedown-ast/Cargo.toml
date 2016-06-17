@@ -11,9 +11,11 @@ edition = "2018"
 [dependencies]
 text-utils = "0.3"
 # lsp-types = { version = "0.86", features = ["proposed"] }
-
+yew = { version =  "0.17", optional = true }
+yew-katex = { version =  "0.2", optional = true }
 
 [dev-dependencies]
 
 [features]
-default = []
+default = ["render"]
+render = ["yew", "yew-katex"]
