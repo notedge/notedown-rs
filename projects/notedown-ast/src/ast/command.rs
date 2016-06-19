@@ -1,3 +1,5 @@
+use super::*;
+
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum CommandKind {
     /// ```md
@@ -28,11 +30,21 @@ pub enum CommandKind {
     /// ```
     SelfClose,
 }
-// impl Display for Command {
-// fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-// let a = self.args.iter().map(|v| format!("{}", v));
-// let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
-//
-// write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
-// }
-// }
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct Command {
+    pub cmd: String,
+    pub kind: CommandKind,
+    pub args: Vec<AST>,
+    pub kvs: HashMap<String, AST>,
+}
+
+
+impl Display for Command {
+fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+let a = self.args.iter().map(|v| format!("{}", v));
+let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
+
+write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
+}
+}

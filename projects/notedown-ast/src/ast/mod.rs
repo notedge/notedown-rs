@@ -19,16 +19,9 @@ pub use crate::ast::command::Command;
 pub use crate::ast::header::Header;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum AST {
-    Node {
-        kind: ASTKind,
-        children: Vec<AST>,
-        r: Option<Box<TextRange>>,
-    },
-    Leaf {
-        kind: ASTKind,
-        r: Option<Box<TextRange>>,
-    },
+pub struct AST {
+    kind: ASTKind,
+    r: Option<Box<TextRange>>,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -38,104 +31,55 @@ pub enum ASTKind {
     Statements(Vec<AST>),
     // Blocks
     /// - `Header`: TEXT, level
-    Header {
-        inner: Box<Header>,
-    },
-    HorizontalRule {
-    },
+    Header(Box<Header>),
+    HorizontalRule,
     ///  - `Paragraph`:
-    Paragraph {
-        children: Vec<AST>,
-    },
-    CodeBlock {
-        inner: Box<CodeBlock>,
-    },
+    Paragraph(Vec<AST>),
+    CodeBlock(Box<CodeBlock>),
     /// - `Math`:
-    MathBlock {
-        inner: String,
-    },
-    TableView {
-        inner: Box<TableView>,
-    },
-    ListView {
-        inner: Box<ListView>,
-    },
+    MathBlock(String),
+    TableView(Box<TableView>),
+    ListView(Box<ListView>),
     /// - `Code`:
     // inlined
-    Normal {
-        inner: String,
-    },
-    Raw {
-        inner: String,
-    },
+    Normal(String),
+    Raw(String),
     /// `` `code` ``
-    Code {
-        inner: String,
-    },
-    Italic {
-        children: Vec<AST>,
-    },
-    Bold {
-        children: Vec<AST>,
-    },
-    Emphasis {
-        children: Vec<AST>,
-    },
-    Underline {
-        children: Vec<AST>,
-    },
-    Strikethrough {
-        children: Vec<AST>,
-    },
-    Undercover {
-        children: Vec<AST>,
-    },
-    MathInline {
-        inner: String,
-    },
-    MathDisplay {
-        inner: String,
-    },
-    Link {
-        inner: Box<SmartLink>,
-    },
-    Escaped {
-        inner: char,
-    },
+    Code(String),
+    Italic(Vec<AST>),
+    Bold(Vec<AST>),
+    Emphasis(Vec<AST>),
+    Underline(Vec<AST>),
+    Strikethrough (Vec<AST>),
+    Undercover(Vec<AST>),
+    MathInline(String),
+    MathDisplay (String),
+    Link (Box<SmartLink>),
+    Escaped(char),
     //
-    Command {
-        inner: Box<Command>,
-    },
-    String {
-        inner: String,
-    },
-    Integer {
-        inner: String,
-    },
-    Decimal {
-        inner: String,
-    },
-    Boolean {
-        inner: bool,
-    },
-    Array {
-        inner: Vec<AST>,
-    },
+    Command (Box<Command>),
+    String (String),
+    Number (String),
+    Boolean (bool),
+    Array (Vec<AST>),
+    Object
 }
 
 impl Default for AST {
     fn default() -> Self {
-        Self::Leaf { kind: ASTKind::None, r: None }
+        Self {
+            kind: ASTKind::None,
+            r: None
+        }
     }
 }
 
 impl AST {
     pub fn to_vec(&self) -> Vec<AST> {
-        match self {
-            AST::Node { children, .. } => {
-                children.to_owned()
-            }
-            AST::Leaf { .. } => vec![],
+        use ASTKind::*;
+        match &self.kind {
+            Statements(v)| Paragraph(v) => {v.to_owned()},
+            _ => vec![]
         }
     }
 }
