@@ -16,10 +16,12 @@ macro_rules! show_size {
     };
 }
 
+
 #[test]
 fn get_size() {
     show_size!();
     show_size!(AST);
     show_size!(TextRange);
     show_size!(SmartLink);
+    show_size!(TextRange);
 }

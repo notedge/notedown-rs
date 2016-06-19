@@ -1,5 +1,6 @@
 use crate::{traits::Slugify, AST};
 pub use text_utils::slugify;
+use crate::ast::ASTKind;
 
 impl Slugify for Vec<AST> {
     fn slugify(&self) -> String {
@@ -17,36 +18,18 @@ impl Slugify for Vec<AST> {
 impl Slugify for AST {
     fn slugify(&self) -> String {
         match self {
-            AST::None => String::new(),
-            AST::Statements(_) => unimplemented!(),
-            AST::Header { .. } => unimplemented!(),
-            AST::HorizontalRule { .. } => unimplemented!(),
-            AST::Paragraph { .. } => unimplemented!(),
-            AST::Highlight { .. } => unimplemented!(),
-            AST::MathBlock { .. } => unimplemented!(),
-            AST::TableView { .. } => unimplemented!(),
-            AST::QuoteList { .. } => unimplemented!(),
-            AST::OrderedList { .. } => unimplemented!(),
-            AST::OrderlessList { .. } => unimplemented!(),
-            AST::Normal { inner, .. } => inner.to_owned().slugify(),
-            AST::Raw { .. } => unimplemented!(),
-            AST::Code { .. } => unimplemented!(),
-            AST::Italic { .. } => unimplemented!(),
-            AST::Bold { .. } => unimplemented!(),
-            AST::Emphasis { .. } => unimplemented!(),
-            AST::Underline { .. } => unimplemented!(),
-            AST::Strikethrough { .. } => unimplemented!(),
-            AST::Undercover { .. } => unimplemented!(),
-            AST::MathInline { .. } => unimplemented!(),
-            AST::MathDisplay { .. } => unimplemented!(),
-            AST::Link { .. } => unimplemented!(),
-            AST::Escaped { .. } => unimplemented!(),
-            AST::Command { .. } => unimplemented!(),
-            AST::String { .. } => unimplemented!(),
-            AST::Integer { .. } => unimplemented!(),
-            AST::Decimal { .. } => unimplemented!(),
-            AST::Boolean { .. } => unimplemented!(),
-            AST::Array { .. } => unimplemented!(),
+            AST::Node { children,.. } => {children.slugify()}
+            AST::Leaf { kind,.. } => {kind.slugify()}
+        }
+    }
+}
+
+impl Slugify for ASTKind {
+    fn slugify(&self) -> String {
+        match self {
+            ASTKind::None => String::new(),
+            ASTKind::Normal {0: inner } => inner.to_owned().slugify(),
+            _ => format!("Slugify: {:#?}", self),
         }
     }
 }

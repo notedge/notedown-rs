@@ -12,19 +12,14 @@ impl Display for AST {
             AST::Header { .. } => unimplemented!(),
             AST::HorizontalRule { .. } => unimplemented!(),
             AST::Paragraph { .. } => unimplemented!(),
-            AST::Highlight { lang, code, inline, .. } => {
-                if *inline {
-                    write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = code)
-                }
-                else {
-                    write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = lang, body = code)
-                }
+            AST::CodeBlock { inner, .. } => {
+                Display::fmt(inner, f)
             }
             AST::MathBlock { .. } => unimplemented!(),
             AST::TableView { .. } => unimplemented!(),
-            AST::QuoteList { .. } => unimplemented!(),
-            AST::OrderedList { .. } => unimplemented!(),
-            AST::OrderlessList { .. } => unimplemented!(),
+            AST::ListView { inner, .. } => {
+                Display::fmt(inner, f)
+            }
             AST::Normal { inner, .. } => write!(f, "{}", inner),
             AST::Raw { .. } => unimplemented!(),
             AST::Code { .. } => unimplemented!(),

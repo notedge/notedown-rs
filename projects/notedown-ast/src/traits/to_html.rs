@@ -1,4 +1,5 @@
 use crate::{traits::ToHTML, AST};
+use crate::ast::{ASTKind, Header};
 
 impl ToHTML for Vec<AST> {
     fn to_html(&self) -> String {
@@ -10,44 +11,53 @@ impl ToHTML for Vec<AST> {
 impl ToHTML for AST {
     fn to_html(&self) -> String {
         match self {
-            AST::None => String::new(),
-            AST::Statements(v) => v.to_html(),
-            AST::Header { level, children, .. } => format!("<h{0}>{1}</h{0}>", level, children.to_html()),
-            AST::HorizontalRule { .. } => unimplemented!(),
-            AST::Paragraph { children, .. } => format!("<p>{}</p>", children.to_html()),
-            AST::Highlight { .. } => unimplemented!(),
-            AST::MathBlock { .. } => unimplemented!(),
-            AST::TableView { .. } => unimplemented!(),
-            AST::QuoteList { .. } => unimplemented!(),
-            AST::OrderedList { .. } => unimplemented!(),
-            AST::OrderlessList { .. } => unimplemented!(),
-            AST::Normal { inner, .. } => inner.to_owned(),
-            AST::Raw { inner, .. } => format!("`{}`", inner),
-            AST::Code { .. } => unimplemented!(),
-            AST::Italic { children, .. } => format!("<i>{}</i>", children.to_html()),
-            AST::Bold { children, .. } => format!("<b>{}</b>", children.to_html()),
-            AST::Emphasis { children, .. } => format!("<em>{}</em>", children.to_html()),
-            AST::Underline { children, .. } => format!("<u>{}</u>", children.to_html()),
-            AST::Strikethrough { children, .. } => format!("<del>{}</del>", children.to_html()),
-            AST::Undercover { children, .. } => format!("<span class=\"undercover\">{}</span>", children.to_html()),
-            AST::MathInline { .. } => unimplemented!(),
-            AST::MathDisplay { .. } => unimplemented!(),
-            AST::Link { .. } => unimplemented!(),
-            AST::Escaped { .. } => unimplemented!(),
-            AST::Command { .. } => unimplemented!(),
-            AST::String { .. } => unimplemented!(),
-            AST::Integer { .. } => unimplemented!(),
-            AST::Decimal { .. } => unimplemented!(),
-            AST::Boolean { .. } => unimplemented!(),
-            AST::Array { .. } => unimplemented!(),
+            AST::Node { kind,children,.. } |
+            AST::Leaf { kind,.. } => {
+                match kind {
+                    ASTKind::None => String::new(),
+                    ASTKind::Statements {..} => v.to_html(),
+                    ASTKind::Header {  0:inner,.. } => inner.to_html(),
+                    ASTKind::HorizontalRule { .. } => unimplemented!(),
+                    ASTKind::Paragraph { .. } => format!("<p>{}</p>", children.to_html()),
+                    ASTKind::CodeBlock { .. } => unimplemented!(),
+                    ASTKind::MathBlock { .. } => unimplemented!(),
+                    ASTKind::TableView { .. } => unimplemented!(),
+                    ASTKind::ListView { .. } => unimplemented!(),
+                    ASTKind::Normal { 0:inner,.. } => inner.to_owned(),
+                    ASTKind::Raw {  0:inner,.. } => format!("`{}`", inner),
+                    ASTKind::Code { .. } => unimplemented!(),
+                    ASTKind::Italic {  .. } => format!("<i>{}</i>", children.to_html()),
+                    ASTKind::Bold {  .. } => format!("<b>{}</b>", children.to_html()),
+                    ASTKind::Emphasis {  .. } => format!("<em>{}</em>", children.to_html()),
+                    ASTKind::Underline {  .. } => format!("<u>{}</u>", children.to_html()),
+                    ASTKind::Strikethrough {  .. } => format!("<del>{}</del>", children.to_html()),
+                    ASTKind::Undercover { .. } => format!("<span class=\"undercover\">{}</span>", children.to_html()),
+                    ASTKind::MathInline { .. } => unimplemented!(),
+                    ASTKind::MathDisplay { .. } => unimplemented!(),
+                    ASTKind::Link { .. } => unimplemented!(),
+                    ASTKind::Escaped { .. } => unimplemented!(),
+                    ASTKind::Command { .. } => unimplemented!(),
+                    ASTKind::String { .. } => unimplemented!(),
+                    ASTKind::Number { .. } => unimplemented!(),
+                    ASTKind::Boolean { .. } => unimplemented!(),
+                    ASTKind::Array { .. } => unimplemented!(),
+                    ASTKind::Object => {}
+                }
+            }
         }
+    }
+}
+
+impl ToHTML for Header {
+    fn to_html(&self) -> String {
+        format!("<h{0}>{1}</h{0}>", self.level, self.children.to_html())
     }
 }
 
 // impl ToHTML for AST {
 // fn to_html(&self) -> String {
 // match self {
-// AST::Statements(e) => {
+// ASTKind::Statements(e) => {
 // let mut text = String::new();
 // for node in e {
 // text += &node.to_html()
@@ -55,13 +65,13 @@ impl ToHTML for AST {
 // let trimmed: Vec<_> = text.lines().map(|s| s.trim()).collect();
 // trimmed.join("\n")
 // }
-// AST::Header { level, children:e,.. } => format!("<h{0}>{1}</h{0}>", level, e.to_html()),
+// ASTKind::Header { level, children:e,.. } => format!("<h{0}>{1}</h{0}>", level, e.to_html()),
 //
 //
-// AST::Table { head, align, terms, column } => {
+// ASTKind::Table { head, align, terms, column } => {
 // let align_iter = align.iter().chain(repeat(&align[align.len() - 1]));
 // let thead = {
-// let mut head = head.iter().chain(repeat(&AST::Space));
+// let mut head = head.iter().chain(repeat(&ASTKind::Space));
 // let mut align = align_iter.clone();
 // let mut thead = String::new();
 // for _ in 0..*column {
@@ -73,7 +83,7 @@ impl ToHTML for AST {
 // };
 // let mut trs = vec![];
 // for term in terms {
-// let mut head = term.iter().chain(repeat(&AST::Space));
+// let mut head = term.iter().chain(repeat(&ASTKind::Space));
 // let mut align = align_iter.clone();
 // let mut thead = String::new();
 // for _ in 0..*column {
@@ -85,7 +95,7 @@ impl ToHTML for AST {
 // }
 // format!("<table>{}<tbody>{}</tbody></table>", thead, trs.join(""))
 // }
-// AST::Quote { body, style } => {
+// ASTKind::Quote { body, style } => {
 // let quote = body.iter().map(|s| s.to_html()).collect::<Vec<String>>().join("");
 // match style.as_str() {
 // "info" | "danger" | "warning" | "success" => {
@@ -94,36 +104,36 @@ impl ToHTML for AST {
 // _ => format!("<blockquote>{}</blockquote>", quote),
 // }
 // }
-// AST::Ordered(v) => {
+// ASTKind::Ordered(v) => {
 // let quote = v.iter().map(|s| format!("<li>{}</li>", s.to_html())).collect::<Vec<String>>().join("");
 // format!("<ol>{}</ol>", quote)
 // }
-// AST::Orderless(v) => {
+// ASTKind::Orderless(v) => {
 // let quote = v.iter().map(|s| format!("<li>{}</li>", s.to_html())).collect::<Vec<String>>().join("");
 // format!("<ul>{}</ul>", quote)
 // }
 //
-// AST::Command(s, keys, values) => {
+// ASTKind::Command(s, keys, values) => {
 // let ref cfg = GLOBAL_CONFIG.lock().unwrap();
 // format!("cmd: {}\narg: {:?}\nkvs: {:?}", s, keys, values)
 // }
 // /
-// AST::None => String::from(""),
-// AST::Newline => String::from("</br>"),
+// ASTKind::None => String::from(""),
+// ASTKind::Newline => String::from("</br>"),
 //
-// AST::Raw(s) => format!("<pre>{}</pre>", s),
-// AST::Code(s) => format!("<code>{}</code>", s),
+// ASTKind::Raw(s) => format!("<pre>{}</pre>", s),
+// ASTKind::Code(s) => format!("<code>{}</code>", s),
 //
 // #[cfg(feature = "default")]
-// AST::MathInline(s) => format!("<span class=\"math\">${}$</span> ", s),
+// ASTKind::MathInline(s) => format!("<span class=\"math\">${}$</span> ", s),
 // #[cfg(feature = "desktop")]
-// AST::MathInline(s) => utils::rex_math_inline(s),
+// ASTKind::MathInline(s) => utils::rex_math_inline(s),
 // #[cfg(feature = "default")]
-// AST::MathDisplay(s) => format!("<p class=\"math\">$${}$$</p> ", s),
+// ASTKind::MathDisplay(s) => format!("<p class=\"math\">$${}$$</p> ", s),
 // #[cfg(feature = "desktop")]
-// AST::MathDisplay(s) => utils::rex_math_display(s),
+// ASTKind::MathDisplay(s) => utils::rex_math_display(s),
 // _ => {
-// let a = format!("HTML unimplemented AST::{:?}", self);
+// let a = format!("HTML unimplemented ASTKind::{:?}", self);
 // println!("{}", a.split("(").next().unwrap_or("Unknown"));
 // format!("{:?}", self);
 // unreachable!()
