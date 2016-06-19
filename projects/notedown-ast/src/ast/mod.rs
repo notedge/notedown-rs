@@ -1,194 +1,141 @@
 mod command;
 mod link;
-mod range;
 mod literal;
+mod range;
+mod code_block;
+mod list;
+mod table;
+mod header;
 
 pub use command::CommandKind;
 pub use link::SmartLink;
 pub use range::TextRange;
 use std::collections::HashMap;
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum ASTKind {
-    None,
-    Statements,
-    Header {
-        level: usize,
-    },
-}
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub enum CST {
-    Node {
-        kind: ASTKind,
-        children: Vec<CST>,
-        r: TextRange,
-    },
-    Leaf {
-        kind: ASTKind,
-        r: TextRange,
-    },
-}
-
-impl CST {
-    pub fn node() {
-
-    }
-}
+use std::fmt::{self, Display, Formatter};
+pub use crate::ast::code_block::CodeBlock;
+pub use crate::ast::list::ListView;
+pub use crate::ast::table::TableView;
+pub use crate::ast::command::Command;
+pub use crate::ast::header::Header;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum AST {
+    Node {
+        kind: ASTKind,
+        children: Vec<AST>,
+        r: Option<Box<TextRange>>,
+    },
+    Leaf {
+        kind: ASTKind,
+        r: Option<Box<TextRange>>,
+    },
+}
+
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum ASTKind {
     /// - `None`: It doesn't look like anything to me
     None,
     Statements(Vec<AST>),
     // Blocks
     /// - `Header`: TEXT, level
     Header {
-        level: usize,
-        children: Vec<AST>,
-        r: TextRange,
+        inner: Box<Header>,
     },
     HorizontalRule {
-        r: TextRange,
     },
     ///  - `Paragraph`:
     Paragraph {
         children: Vec<AST>,
-        r: TextRange,
     },
-    Highlight {
-        lang: String,
-        code: String,
-        inline: bool,
-        high_line: Vec<usize>,
-        r: TextRange,
+    CodeBlock {
+        inner: Box<CodeBlock>,
     },
     /// - `Math`:
     MathBlock {
         inner: String,
-        r: TextRange,
     },
     TableView {
-        head: Vec<AST>,
-        align: Vec<Option<bool>>,
-        terms: Vec<Vec<AST>>,
-        column: usize,
-        r: TextRange,
+        inner: Box<TableView>,
     },
-    QuoteList {
-        style: Option<String>,
-        body: Vec<AST>,
-        r: TextRange,
-    },
-    OrderedList {
-        head: usize,
-        body: Vec<AST>,
-        r: TextRange,
-    },
-    OrderlessList {
-        body: Vec<AST>,
-        r: TextRange,
+    ListView {
+        inner: Box<ListView>,
     },
     /// - `Code`:
     // inlined
     Normal {
         inner: String,
-        r: TextRange,
     },
     Raw {
         inner: String,
-        r: TextRange,
     },
     /// `` `code` ``
     Code {
         inner: String,
-        r: TextRange,
     },
     Italic {
         children: Vec<AST>,
-        r: TextRange,
     },
     Bold {
         children: Vec<AST>,
-        r: TextRange,
     },
     Emphasis {
         children: Vec<AST>,
-        r: TextRange,
     },
     Underline {
         children: Vec<AST>,
-        r: TextRange,
     },
     Strikethrough {
         children: Vec<AST>,
-        r: TextRange,
     },
     Undercover {
         children: Vec<AST>,
-        r: TextRange,
     },
-
     MathInline {
         inner: String,
-        r: TextRange,
     },
     MathDisplay {
         inner: String,
-        r: TextRange,
     },
-
     Link {
-        inner: SmartLink,
-        r: TextRange,
+        inner: Box<SmartLink>,
     },
-
     Escaped {
         inner: char,
-        r: TextRange,
     },
     //
     Command {
-        cmd: String,
-        kind: CommandKind,
-        args: Vec<AST>,
-        kvs: HashMap<String, AST>,
-        r: TextRange,
+        inner: Box<Command>,
     },
     String {
         inner: String,
-        r: TextRange,
     },
     Integer {
         inner: String,
-        r: TextRange,
     },
     Decimal {
         inner: String,
-        r: TextRange,
     },
     Boolean {
         inner: bool,
-        r: TextRange,
     },
     Array {
         inner: Vec<AST>,
-        r: TextRange,
     },
 }
 
 impl Default for AST {
     fn default() -> Self {
-        Self::None
+        Self::Leaf { kind: ASTKind::None, r: None }
     }
 }
 
 impl AST {
     pub fn to_vec(&self) -> Vec<AST> {
         match self {
-            AST::Statements(v) => v.to_owned(),
-            AST::Paragraph { children, .. } => children.to_owned(),
-            _ => vec![],
+            AST::Node { children, .. } => {
+                children.to_owned()
+            }
+            AST::Leaf { .. } => vec![],
         }
     }
 }
