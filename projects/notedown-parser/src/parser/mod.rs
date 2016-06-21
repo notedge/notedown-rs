@@ -1,4 +1,5 @@
 mod regroup;
+mod text;
 
 use crate::{
     error::Error::FileNotFound,
@@ -7,9 +8,8 @@ use crate::{
 };
 use notedown_ast::{CommandKind, AST};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
-use std::{
-    fs,
-};
+use std::fs;
+pub use text::ParseText;
 use url::Url;
 
 macro_rules! debug_cases {
@@ -22,20 +22,8 @@ macro_rules! debug_cases {
 }
 
 impl ParserConfig {
-    pub fn parse_file(&mut self, file: &Url) -> ParserResult<AST> {
-        let text = match file.to_file_path() {
-            Ok(o) => {
-                self.file_url = Some(file.clone());
-                fs::read_to_string(o)?
-            }
-            Err(_) => return Err(FileNotFound(file.to_string().to_owned())),
-        };
-        self.parse(&text)
-    }
-    pub fn parse(&self, text: &str) -> ParserResult<AST> {
-        let input = text.replace("\r\n", "\n");
-        let pairs = NoteDownParser::parse(Rule::program, &input)?;
-        self.parse_program(pairs)
+    pub fn parse(&self, input: impl ParseText) -> ParserResult<AST> {
+        self.parse_program(input.parse_text()?)
     }
     pub fn parse_program(&self, pairs: Pairs<Rule>) -> ParserResult<AST> {
         let mut codes = vec![];
@@ -59,7 +47,7 @@ impl ParserConfig {
                     continue;
                 }
                 Rule::Code => self.parse_code_block(pair),
-                Rule::CommandBlock=>self.parse_command_block(pair),
+                Rule::CommandBlock => self.parse_command_block(pair),
                 _ => debug_cases!(pair),
             };
             // println!("{:?}", code);
@@ -151,7 +139,7 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        AST::Highlight { lang: lang.to_string(), code: code.to_string(), inline: false, high_line: vec![], r }
+        AST::CodeBlock { lang: lang.to_string(), code: code.to_string(), inline: false, high_line: vec![], r }
     }
 
     fn parse_header(&self, pairs: Pair<Rule>) -> AST {
@@ -172,18 +160,12 @@ impl ParserConfig {
         let mut cmd = "txt";
         for pair in pairs.into_inner() {
             match pair.as_rule() {
-                Rule::Escape=>continue,
-                Rule::SYMBOL=>cmd = pair.as_str(),
+                Rule::Escape => continue,
+                Rule::SYMBOL => cmd = pair.as_str(),
                 _ => debug_cases!(pair),
             };
         }
-        AST::Command {
-            cmd: cmd.to_string(),
-            kind: CommandKind::Normal,
-            args: vec![],
-            kvs: Default::default(),
-            r
-        }
+        AST::Command { cmd: cmd.to_string(), kind: CommandKind::Normal, args: vec![], kvs: Default::default(), r }
     }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());

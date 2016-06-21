@@ -1,4 +1,4 @@
-use notedown_ast::{TextRange};
+use notedown_ast::TextRange;
 use notedown_pest::Span;
 use url::Url;
 
