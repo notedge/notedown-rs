@@ -1,5 +1,5 @@
-mod toc;
 mod ask_element;
+mod toc;
 
 pub use crate::traits::*;
 pub use text_utils::*;

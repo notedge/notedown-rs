@@ -1,4 +1,4 @@
-use crate::{TextRange, AST};
+use crate::{ast::ASTKind, TextRange, AST};
 
 #[derive(Debug)]
 pub struct TOC {
@@ -24,23 +24,25 @@ impl AST {
     pub fn toc(&self, max_depth: usize) -> TOC {
         let mut root = TOC::default();
         let mut toc_ignore = false;
-        if let AST::Statements(terms) = self {
+        if self.kind() == ASTKind::Statements {
+            let terms = self.children();
             for term in terms {
-                match term {
-                    AST::Header { level, children, r } => {
+                match &term.kind() {
+                    ASTKind::Header(header) => {
+                        let level = header.level;
                         if toc_ignore {
                             toc_ignore = false;
                             continue;
                         }
-                        if *level > max_depth {
+                        if level > max_depth {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TOC { level: *level, detail: join_ast_list(children), range: *r, children: vec![] };
+                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.range(), children: vec![] };
                         parent.children.push(new);
                     }
-                    AST::Command { cmd, .. } => {
-                        if let "toc_ignore" = cmd.as_str() {
+                    ASTKind::Command(cmd) => {
+                        if cmd.is("toc_ignore") {
                             toc_ignore = true
                         }
                     }

@@ -4,7 +4,7 @@ fn ready() {
     println!("it, works!")
 }
 
-use notedown_ast::{SmartLink, TextRange, AST};
+use notedown_ast::{ASTKind, SmartLink, TextRange, AST};
 use std::mem::size_of;
 
 macro_rules! show_size {
@@ -16,12 +16,11 @@ macro_rules! show_size {
     };
 }
 
-
 #[test]
 fn get_size() {
     show_size!();
     show_size!(AST);
+    show_size!(ASTKind);
     show_size!(TextRange);
     show_size!(SmartLink);
-    show_size!(TextRange);
 }

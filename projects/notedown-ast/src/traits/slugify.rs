@@ -1,6 +1,5 @@
-use crate::{traits::Slugify, AST};
+use crate::{ast::ASTKind, traits::Slugify, AST};
 pub use text_utils::slugify;
-use crate::ast::ASTKind;
 
 impl Slugify for Vec<AST> {
     fn slugify(&self) -> String {
@@ -18,8 +17,8 @@ impl Slugify for Vec<AST> {
 impl Slugify for AST {
     fn slugify(&self) -> String {
         match self {
-            AST::Node { children,.. } => {children.slugify()}
-            AST::Leaf { kind,.. } => {kind.slugify()}
+            AST::Node { children, .. } => children.slugify(),
+            AST::Leaf { kind, .. } => kind.slugify(),
         }
     }
 }
@@ -28,7 +27,7 @@ impl Slugify for ASTKind {
     fn slugify(&self) -> String {
         match self {
             ASTKind::None => String::new(),
-            ASTKind::Normal {0: inner } => inner.to_owned().slugify(),
+            ASTKind::Normal { 0: inner } => inner.to_owned().slugify(),
             _ => format!("Slugify: {:#?}", self),
         }
     }

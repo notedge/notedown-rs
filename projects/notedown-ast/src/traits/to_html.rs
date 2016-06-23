@@ -1,5 +1,8 @@
-use crate::{traits::ToHTML, AST};
-use crate::ast::{ASTKind, Header};
+use crate::{
+    ast::{ASTKind, Header},
+    traits::ToHTML,
+    AST,
+};
 
 impl ToHTML for Vec<AST> {
     fn to_html(&self) -> String {
@@ -10,40 +13,36 @@ impl ToHTML for Vec<AST> {
 
 impl ToHTML for AST {
     fn to_html(&self) -> String {
-        match self {
-            AST::Node { kind,children,.. } |
-            AST::Leaf { kind,.. } => {
-                match kind {
-                    ASTKind::None => String::new(),
-                    ASTKind::Statements {..} => v.to_html(),
-                    ASTKind::Header {  0:inner,.. } => inner.to_html(),
-                    ASTKind::HorizontalRule { .. } => unimplemented!(),
-                    ASTKind::Paragraph { .. } => format!("<p>{}</p>", children.to_html()),
-                    ASTKind::CodeBlock { .. } => unimplemented!(),
-                    ASTKind::MathBlock { .. } => unimplemented!(),
-                    ASTKind::TableView { .. } => unimplemented!(),
-                    ASTKind::ListView { .. } => unimplemented!(),
-                    ASTKind::Normal { 0:inner,.. } => inner.to_owned(),
-                    ASTKind::Raw {  0:inner,.. } => format!("`{}`", inner),
-                    ASTKind::Code { .. } => unimplemented!(),
-                    ASTKind::Italic {  .. } => format!("<i>{}</i>", children.to_html()),
-                    ASTKind::Bold {  .. } => format!("<b>{}</b>", children.to_html()),
-                    ASTKind::Emphasis {  .. } => format!("<em>{}</em>", children.to_html()),
-                    ASTKind::Underline {  .. } => format!("<u>{}</u>", children.to_html()),
-                    ASTKind::Strikethrough {  .. } => format!("<del>{}</del>", children.to_html()),
-                    ASTKind::Undercover { .. } => format!("<span class=\"undercover\">{}</span>", children.to_html()),
-                    ASTKind::MathInline { .. } => unimplemented!(),
-                    ASTKind::MathDisplay { .. } => unimplemented!(),
-                    ASTKind::Link { .. } => unimplemented!(),
-                    ASTKind::Escaped { .. } => unimplemented!(),
-                    ASTKind::Command { .. } => unimplemented!(),
-                    ASTKind::String { .. } => unimplemented!(),
-                    ASTKind::Number { .. } => unimplemented!(),
-                    ASTKind::Boolean { .. } => unimplemented!(),
-                    ASTKind::Array { .. } => unimplemented!(),
-                    ASTKind::Object => {}
-                }
-            }
+        let children = self.children();
+        match self.kind() {
+            ASTKind::None => String::new(),
+            ASTKind::Statements => children.to_html(),
+            ASTKind::Header(inner) => inner.to_html(),
+            ASTKind::HorizontalRule { .. } => unimplemented!(),
+            ASTKind::Paragraph => format!("<p>{}</p>", children.to_html()),
+            ASTKind::CodeBlock { .. } => unimplemented!(),
+            ASTKind::MathBlock { .. } => unimplemented!(),
+            ASTKind::TableView { .. } => unimplemented!(),
+            ASTKind::ListView { .. } => unimplemented!(),
+            ASTKind::Normal(inner) => inner.to_string(),
+            ASTKind::Raw(inner) => format!("`{}`", inner),
+            ASTKind::Code { .. } => unimplemented!(),
+            ASTKind::Italic { .. } => format!("<i>{}</i>", children.to_html()),
+            ASTKind::Bold { .. } => format!("<b>{}</b>", children.to_html()),
+            ASTKind::Emphasis { .. } => format!("<em>{}</em>", children.to_html()),
+            ASTKind::Underline { .. } => format!("<u>{}</u>", children.to_html()),
+            ASTKind::Strikethrough { .. } => format!("<del>{}</del>", children.to_html()),
+            ASTKind::Undercover { .. } => format!("<span class=\"undercover\">{}</span>", children.to_html()),
+            ASTKind::MathInline { .. } => unimplemented!(),
+            ASTKind::MathDisplay { .. } => unimplemented!(),
+            ASTKind::Link { .. } => unimplemented!(),
+            ASTKind::Escaped { .. } => unimplemented!(),
+            ASTKind::Command { .. } => unimplemented!(),
+            ASTKind::String { .. } => unimplemented!(),
+            ASTKind::Number { .. } => unimplemented!(),
+            ASTKind::Boolean { .. } => unimplemented!(),
+            ASTKind::Array { .. } => unimplemented!(),
+            ASTKind::Object => unimplemented!(),
         }
     }
 }

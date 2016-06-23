@@ -39,12 +39,17 @@ pub struct Command {
     pub kvs: HashMap<String, AST>,
 }
 
-
 impl Display for Command {
-fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-let a = self.args.iter().map(|v| format!("{}", v));
-let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let a = self.args.iter().map(|v| format!("{}", v));
+        let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
 
-write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
+        write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
+    }
 }
+
+impl Command {
+    pub fn is(&self, rhs: impl AsRef<str>) -> bool {
+        self.cmd.as_str() == rhs.as_ref()
+    }
 }
