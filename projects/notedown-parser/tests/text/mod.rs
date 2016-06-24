@@ -1,4 +1,4 @@
-use notedown_parser::parse;
+use crate::parse;
 
 #[test]
 fn test_header() {

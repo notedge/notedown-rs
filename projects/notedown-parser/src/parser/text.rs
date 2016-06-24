@@ -21,7 +21,7 @@ impl ParseText for String {
 
 impl ParseText for PathBuf {
     fn parse_text(&self) -> ParserResult<Pairs<Rule>> {
-        fs::read_to_string(o)?.parse_text()
+        fs::read_to_string(self)?.parse_text()
     }
 }
 

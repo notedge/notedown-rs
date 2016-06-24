@@ -105,4 +105,36 @@ impl AST {
     pub fn statements(children: Vec<AST>, r: TextRange) -> Self {
         Self::Node { kind: ASTKind::Statements, children, r: Some(Box::new(r)) }
     }
+    pub fn header(children: Vec<AST>, level: usize, r: TextRange) -> Self {
+        let header = Header { level, children };
+        Self::Leaf { kind: ASTKind::Header(Box::new(header)), r: Some(Box::new(r)) }
+    }
+
+    pub fn math(text: String, style: &str, r: TextRange) -> Self {
+        let kind = match style {
+            "inline" => ASTKind::MathInline(Box::new(text)),
+            "display" => ASTKind::MathDisplay(Box::new(text)),
+            _ => ASTKind::MathBlock(Box::new(text)),
+        };
+        Self::Leaf { kind, r: Some(Box::new(r)) }
+    }
+    pub fn style(children: Vec<AST>, style: &str, r: TextRange) -> Self {
+        let kind = match style {
+            "*" | "i" | "italic" => ASTKind::Italic,
+            "**" | "b" | "bold" => ASTKind::Bold,
+            "***" => ASTKind::Emphasis,
+            "~" | "u" | "underline" => ASTKind::Underline,
+            "~~" => ASTKind::Strikethrough,
+            "~~~" => ASTKind::Undercover,
+            _ => unreachable!(),
+        };
+        Self::Node { kind, children, r: Some(Box::new(r)) }
+    }
+    pub fn text(text: String, style: &str, r: TextRange) -> Self {
+        let kind = match style {
+            "raw" => ASTKind::Raw(Box::new(text)),
+            _ => ASTKind::Normal(Box::new(text)),
+        };
+        Self::Leaf { kind, r: Some(Box::new(r)) }
+    }
 }

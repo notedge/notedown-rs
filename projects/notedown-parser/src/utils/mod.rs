@@ -1,4 +1,5 @@
 pub use notedown_ast::utils::*;
+pub use notedown_pest::*;
 pub use url::Url;
 
 // pub fn unescape(s: &str, c: &str) -> String {
