@@ -1,34 +1,43 @@
 use super::*;
 use std::path::PathBuf;
+use std::mem;
 
-pub trait ParseText {
-    fn parse_text(&self) -> ParserResult<Pairs<Rule>>;
+pub trait CanParse {
+    fn as_url(&self) -> Option<Url> {
+        None
+    }
+    fn as_text(&self) -> ParserResult<&str>;
 }
 
-impl ParseText for &str {
-    fn parse_text(&self) -> ParserResult<Pairs<Rule>> {
-        let input = self.replace("\r\n", "\n").replace("\\\n", "");
-        let pairs = NoteDownParser::parse(Rule::program, &input)?;
-        return Ok(pairs);
+impl CanParse for &str {
+    fn as_text(&self) -> ParserResult<&str> {
+        Ok(self)
     }
 }
 
-impl ParseText for String {
-    fn parse_text(&self) -> ParserResult<Pairs<Rule>> {
-        self.parse_text()
+
+
+impl CanParse for String {
+    fn as_text(&self) -> ParserResult<&str> {
+        Ok(self.as_str())
     }
 }
 
-impl ParseText for PathBuf {
-    fn parse_text(&self) -> ParserResult<Pairs<Rule>> {
-        fs::read_to_string(self)?.parse_text()
+
+impl CanParse for PathBuf {
+    fn as_text(&self) -> ParserResult<&str> {
+        unimplemented!()
     }
 }
 
-impl ParseText for Url {
-    fn parse_text(&self) -> ParserResult<Pairs<Rule>> {
+impl CanParse for Url {
+    fn as_url(&self) -> Option<Url> {
+        Some(self.to_owned())
+    }
+
+    fn as_text(&self) -> ParserResult<&str> {
         match self.to_file_path() {
-            Ok(o) => o.parse_text(),
+            Ok(o) => fs::read_to_string(o)?.as_text(),
             Err(_) => Err(FileNotFound(self.to_string().to_owned())),
         }
     }

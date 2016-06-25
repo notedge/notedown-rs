@@ -2,10 +2,10 @@ use super::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct CodeBlock {
-    lang: String,
-    code: String,
-    inline: bool,
-    high_line: Vec<usize>,
+   pub lang: String,
+    pub code: String,
+    pub inline: bool,
+    pub  high_line: Vec<usize>,
 }
 
 impl Display for CodeBlock {

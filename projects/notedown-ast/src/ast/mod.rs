@@ -105,9 +105,19 @@ impl AST {
     pub fn statements(children: Vec<AST>, r: TextRange) -> Self {
         Self::Node { kind: ASTKind::Statements, children, r: Some(Box::new(r)) }
     }
+    pub fn paragraph(children: Vec<AST>, r: TextRange) -> Self {
+        Self::Node { kind: ASTKind::Paragraph, children, r: Some(Box::new(r)) }
+    }
     pub fn header(children: Vec<AST>, level: usize, r: TextRange) -> Self {
         let header = Header { level, children };
         Self::Leaf { kind: ASTKind::Header(Box::new(header)), r: Some(Box::new(r)) }
+    }
+
+    pub fn code(code: CodeBlock, r:TextRange) -> AST {
+        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), r: Some(Box::new(r)) }
+    }
+    pub fn command(cmd: Command, r:TextRange) -> AST {
+        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), r: Some(Box::new(r)) }
     }
 
     pub fn math(text: String, style: &str, r: TextRange) -> Self {
@@ -136,5 +146,8 @@ impl AST {
             _ => ASTKind::Normal(Box::new(text)),
         };
         Self::Leaf { kind, r: Some(Box::new(r)) }
+    }
+    pub fn escaped(char: char, r: TextRange) -> Self {
+        Self::Leaf { kind: ASTKind::Escaped(char), r: Some(Box::new(r)) }
     }
 }

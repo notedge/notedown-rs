@@ -1,5 +1,5 @@
 use notedown_ast::utils::ToHTML;
-use notedown_parser::parse;
+use crate::parse;
 use std::{fs::File, io::prelude::*};
 
 #[test]

@@ -10,6 +10,6 @@ fn ready() {
 }
 
 pub fn parse(s: &str) -> AST {
-    let cfg = ParserConfig::default();
+    let mut cfg = ParserConfig::default();
     cfg.parse(s).unwrap_or_default()
 }
