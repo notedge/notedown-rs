@@ -1,6 +1,6 @@
 [package]
 name = "notedown_ast"
-version = "0.9.0"
+version = "0.9.1"
 authors = ["Aster <192607617@qq.com>"]
 description = "notedown ast and converter"
 repository = "https://github.com/nyar-lang/Notedown-rs"
@@ -18,4 +18,4 @@ yew-katex = { version =  "0.2", optional = true }
 
 [features]
 default = []
-render = ["yew", "yew-katex"]
+web = ["yew", "yew-katex"]

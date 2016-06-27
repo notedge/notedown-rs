@@ -1,10 +1,12 @@
 use std::fmt::{self, Debug, Formatter};
 
+type RangeSize = u64;
+
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct TextRange {
     // pub index: u64,
-    pub start: (u64, u64),
-    pub end: (u64, u64),
+    pub start: (RangeSize, RangeSize),
+    pub end: (RangeSize, RangeSize),
 }
 
 impl Default for TextRange {
@@ -24,10 +26,13 @@ impl Debug for TextRange {
 }
 
 impl TextRange {
-    pub fn new(a: u64, b: u64, x: u64, y: u64) -> Self {
-        Self { start: (a, b), end: (x, y) }
+    pub fn new(a: impl Into<RangeSize>, b: impl Into<RangeSize>, x: impl Into<RangeSize>, y: impl Into<RangeSize>) -> Self {
+        Self { start: (a.into(), b.into()), end: (x.into(), y.into()) }
     }
-    pub fn as_tuple(&self) -> (u64, u64, u64, u64) {
+    pub fn sum(&self) -> RangeSize {
+        self.start.0 + self.start.1 + self.end.0 + self.end.1
+    }
+    pub fn as_tuple(&self) -> (RangeSize, RangeSize, RangeSize, RangeSize) {
         (self.start.0, self.start.1, self.end.0, self.end.1)
     }
 }

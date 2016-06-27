@@ -1,5 +1,5 @@
-use notedown_ast::utils::ToHTML;
 use crate::parse;
+use notedown_ast::utils::ToHTML;
 
 mod easy;
 mod normal;

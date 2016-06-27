@@ -1,6 +1,7 @@
 use notedown_ast::AST;
 
 pub fn regroup_list_view(lists: &[(usize, &str, Vec<AST>)]) -> Vec<AST> {
+    println!("{:#?}", lists);
     vec![]
 }
 

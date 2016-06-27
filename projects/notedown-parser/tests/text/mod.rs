@@ -26,3 +26,18 @@ fn test_header() {
     "#;
     println!("{:#?}", parse(input).toc(9))
 }
+
+#[test]
+fn test_math() {
+    let input = r#"
+    inline math: $x^2$
+
+    display math: $$x^2$$
+
+    block math:
+
+    $$\frac{-b\pm\sqrt{b^2-4ac}}{2a}$$
+
+    "#;
+    println!("{:#?}", parse(input))
+}

@@ -103,21 +103,21 @@ impl AST {
 
 impl AST {
     pub fn statements(children: Vec<AST>, r: TextRange) -> Self {
-        Self::Node { kind: ASTKind::Statements, children, r: Some(Box::new(r)) }
+        Self::Node { kind: ASTKind::Statements, children, r: box_range(r) }
     }
     pub fn paragraph(children: Vec<AST>, r: TextRange) -> Self {
-        Self::Node { kind: ASTKind::Paragraph, children, r: Some(Box::new(r)) }
+        Self::Node { kind: ASTKind::Paragraph, children, r: box_range(r) }
     }
     pub fn header(children: Vec<AST>, level: usize, r: TextRange) -> Self {
         let header = Header { level, children };
-        Self::Leaf { kind: ASTKind::Header(Box::new(header)), r: Some(Box::new(r)) }
+        Self::Leaf { kind: ASTKind::Header(Box::new(header)), r: box_range(r) }
     }
 
-    pub fn code(code: CodeBlock, r:TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), r: Some(Box::new(r)) }
+    pub fn code(code: CodeBlock, r: TextRange) -> AST {
+        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), r: box_range(r) }
     }
-    pub fn command(cmd: Command, r:TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), r: Some(Box::new(r)) }
+    pub fn command(cmd: Command, r: TextRange) -> AST {
+        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), r: box_range(r) }
     }
 
     pub fn math(text: String, style: &str, r: TextRange) -> Self {
@@ -126,7 +126,7 @@ impl AST {
             "display" => ASTKind::MathDisplay(Box::new(text)),
             _ => ASTKind::MathBlock(Box::new(text)),
         };
-        Self::Leaf { kind, r: Some(Box::new(r)) }
+        Self::Leaf { kind, r: box_range(r) }
     }
     pub fn style(children: Vec<AST>, style: &str, r: TextRange) -> Self {
         let kind = match style {
@@ -138,16 +138,23 @@ impl AST {
             "~~~" => ASTKind::Undercover,
             _ => unreachable!(),
         };
-        Self::Node { kind, children, r: Some(Box::new(r)) }
+        Self::Node { kind, children, r: box_range(r) }
     }
     pub fn text(text: String, style: &str, r: TextRange) -> Self {
         let kind = match style {
             "raw" => ASTKind::Raw(Box::new(text)),
             _ => ASTKind::Normal(Box::new(text)),
         };
-        Self::Leaf { kind, r: Some(Box::new(r)) }
+        Self::Leaf { kind, r: box_range(r) }
     }
     pub fn escaped(char: char, r: TextRange) -> Self {
-        Self::Leaf { kind: ASTKind::Escaped(char), r: Some(Box::new(r)) }
+        Self::Leaf { kind: ASTKind::Escaped(char), r: box_range(r) }
+    }
+}
+
+fn box_range(r: TextRange) -> Option<Box<TextRange>> {
+    match r.sum() {
+        0 => None,
+        _ => box_range(r),
     }
 }

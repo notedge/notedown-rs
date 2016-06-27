@@ -4,4 +4,4 @@ mod ast;
 mod traits;
 pub mod utils;
 
-pub use ast::{ASTKind, CommandKind, SmartLink, TextRange, AST, CodeBlock, Command};
+pub use ast::{ASTKind, CodeBlock, Command, CommandKind, SmartLink, TextRange, AST};

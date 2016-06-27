@@ -7,6 +7,15 @@ pub enum TableView {
 
 impl Display for TableView {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        unimplemented!()
+        match self {
+            Self::SimpleTable { head, align, terms, column } => {
+                writeln!(f, "SimpleTable")?;
+                writeln!(f, "{:?}", head )?;
+                writeln!(f, "{:?}", align )?;
+                writeln!(f, "{:?}", terms )?;
+                writeln!(f, "{:?}", column )?;
+            }
+        }
+        Ok(())
     }
 }

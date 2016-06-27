@@ -1,16 +1,16 @@
+mod can_parse;
 mod regroup;
-mod text;
 
+pub use crate::parser::can_parse::CanParse;
 use crate::{
     error::Error::FileNotFound,
     parser::regroup::{regroup_list_view, regroup_table_view},
     ParserConfig, ParserResult,
 };
-use notedown_ast::{CommandKind, AST, ASTKind, CodeBlock, Command};
+use notedown_ast::{ASTKind, CodeBlock, Command, CommandKind, AST};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::fs;
 use url::Url;
-pub use crate::parser::text::CanParse;
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -26,7 +26,7 @@ impl ParserConfig {
         if let Some(s) = input.as_url() {
             self.file_url = Some(s)
         }
-        let input = input.as_text()?.replace("\r\n", "\n").replace("\\\n", "");
+        let input = input.as_text()?.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)
     }
@@ -74,13 +74,7 @@ impl ParserConfig {
                     let mut inner = pair.into_inner();
                     while let Some(n) = inner.next() {
                         match n.as_rule() {
-                            Rule::WHITE_SPACE => {
-                                indent += match n.as_str() {
-                                    " " => 1,
-                                    "\t" => self.tab_size,
-                                    _ => 1,
-                                }
-                            }
+                            Rule::WHITE_SPACE => indent += 1,
                             Rule::ListMark | Rule::Vertical => {
                                 kind = n.as_str();
                                 break;
@@ -121,7 +115,8 @@ impl ParserConfig {
                     }
                     if item.is_empty() {
                         table_terms.push(line)
-                    } else {
+                    }
+                    else {
                         line.push(item);
                         table_terms.push(line)
                     }
@@ -145,12 +140,7 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        let code = CodeBlock {
-            lang,
-            code,
-            inline: false,
-            high_line: vec![],
-        };
+        let code = CodeBlock { lang, code, inline: false, high_line: vec![] };
         AST::code(code, r)
     }
 
@@ -177,12 +167,7 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        let cmd = Command {
-            cmd,
-            kind: CommandKind::Normal,
-            args: vec![],
-            kvs: Default::default()
-        };
+        let cmd = Command { cmd, kind: CommandKind::Normal, args: vec![], kvs: Default::default() };
         AST::command(cmd, r)
     }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> AST {
@@ -192,9 +177,11 @@ impl ParserConfig {
             0 => {
                 return AST::default();
             }
-            1 => if let ASTKind::MathDisplay(math) = &codes[0].kind() {
-                return AST::math(math.as_ref().to_owned(), "block", r);
-            },
+            1 => {
+                if let ASTKind::MathDisplay(math) = &codes[0].kind() {
+                    return AST::math(math.as_ref().to_owned(), "block", r);
+                }
+            }
             _ => (),
         }
         AST::paragraph(codes, r)
@@ -266,7 +253,7 @@ impl ParserConfig {
         let r = self.get_position(pairs.as_span());
         for pair in pairs.into_inner() {
             if let Rule::RawText = pair.as_rule() {
-                return AST::text(pair.as_str().to_string(), "raw",r);
+                return AST::text(pair.as_str().to_string(), "raw", r);
             };
         }
         return AST::default();
@@ -293,98 +280,96 @@ impl ParserConfig {
     }
 }
 
-/*
-fn parse_table_align(input: &str) -> Vec<u8> {
-    let pairs = NoteDownParser::parse(Rule::TableMode, input).unwrap_or_else(|e| panic!("{}", e));
-    let mut codes = vec![];
-    let mut text = String::new();
-    for pair in pairs {
-        match pair.as_rule() {
-            Rule::EOI => continue,
-            Rule::WHITE_SPACE => text.push(' '),
-            Rule::TableRest => text.push_str(pair.as_str()),
-            Rule::TableMark => {
-                let mut code = 0;
-                if text.contains(":-") {
-                    code += 1 << 0
-                }
-                if text.contains("-:") {
-                    code += 1 << 1
-                }
-                codes.push(code);
-                text = String::new();
-            }
-            _ => debug_cases!(pair),
-        };
-    }
-    return codes;
-}
-
-#[derive(Debug)]
-pub enum List {
-    Quote,
-    Ordered,
-    Orderless,
-}
-
-impl List {
-    pub fn get_type(input: &str) -> (usize, List) {
-        let pairs = List::parse_pairs(input);
-        let mut i = 0;
-        let mut m = List::Quote;
-        for pair in pairs {
-            match pair.as_rule() {
-                Rule::WHITE_SPACE => i += 1,
-                Rule::ListMark => match pair.as_str() {
-                    ">" => m = List::Quote,
-                    "-" => m = List::Orderless,
-                    _ => m = List::Ordered,
-                },
-                _ => return (i, m),
-            };
-        }
-        return (i, m);
-    }
-    pub fn trim_indent(line: &str, _indent: usize, ty: &List) -> (bool, String) {
-        let mut new = false;
-        let mut vec: VecDeque<_> = List::parse_pairs(line).into_iter().collect();
-        match ty {
-            List::Quote => match vec[0].as_rule() {
-                Rule::ListMark => match vec[0].as_str() {
-                    ">" => {
-                        vec.pop_front();
-                    }
-                    _ => (),
-                },
-                _ => (),
-            },
-            List::Ordered => match vec[0].as_rule() {
-                Rule::ListMark => match vec[0].as_str() {
-                    "-" | ">" => (),
-                    _ => {
-                        vec.pop_front();
-                        new = true
-                    }
-                },
-                _ => (),
-            },
-            List::Orderless => match vec[0].as_rule() {
-                Rule::ListMark => match vec[0].as_str() {
-                    "-" => {
-                        vec.pop_front();
-                        new = true
-                    }
-                    _ => (),
-                },
-                _ => (),
-            },
-        }
-        let v: Vec<&str> = vec.iter().map(|x| x.as_str()).collect();
-        return (new, v.join(""));
-    }
-    fn parse_pairs(input: &str) -> Pairs<Rule> {
-        let p = NoteDownParser::parse(Rule::ListMode, input).unwrap_or_else(|e| panic!("{}", e));
-        p.into_iter().next().unwrap().into_inner()
-    }
-}
-*/
+// fn parse_table_align(input: &str) -> Vec<u8> {
+// let pairs = NoteDownParser::parse(Rule::TableMode, input).unwrap_or_else(|e| panic!("{}", e));
+// let mut codes = vec![];
+// let mut text = String::new();
+// for pair in pairs {
+// match pair.as_rule() {
+// Rule::EOI => continue,
+// Rule::WHITE_SPACE => text.push(' '),
+// Rule::TableRest => text.push_str(pair.as_str()),
+// Rule::TableMark => {
+// let mut code = 0;
+// if text.contains(":-") {
+// code += 1 << 0
+// }
+// if text.contains("-:") {
+// code += 1 << 1
+// }
+// codes.push(code);
+// text = String::new();
+// }
+// _ => debug_cases!(pair),
+// };
+// }
+// return codes;
+// }
+//
+// #[derive(Debug)]
+// pub enum List {
+// Quote,
+// Ordered,
+// Orderless,
+// }
+//
+// impl List {
+// pub fn get_type(input: &str) -> (usize, List) {
+// let pairs = List::parse_pairs(input);
+// let mut i = 0;
+// let mut m = List::Quote;
+// for pair in pairs {
+// match pair.as_rule() {
+// Rule::WHITE_SPACE => i += 1,
+// Rule::ListMark => match pair.as_str() {
+// ">" => m = List::Quote,
+// "-" => m = List::Orderless,
+// _ => m = List::Ordered,
+// },
+// _ => return (i, m),
+// };
+// }
+// return (i, m);
+// }
+// pub fn trim_indent(line: &str, _indent: usize, ty: &List) -> (bool, String) {
+// let mut new = false;
+// let mut vec: VecDeque<_> = List::parse_pairs(line).into_iter().collect();
+// match ty {
+// List::Quote => match vec[0].as_rule() {
+// Rule::ListMark => match vec[0].as_str() {
+// ">" => {
+// vec.pop_front();
+// }
+// _ => (),
+// },
+// _ => (),
+// },
+// List::Ordered => match vec[0].as_rule() {
+// Rule::ListMark => match vec[0].as_str() {
+// "-" | ">" => (),
+// _ => {
+// vec.pop_front();
+// new = true
+// }
+// },
+// _ => (),
+// },
+// List::Orderless => match vec[0].as_rule() {
+// Rule::ListMark => match vec[0].as_str() {
+// "-" => {
+// vec.pop_front();
+// new = true
+// }
+// _ => (),
+// },
+// _ => (),
+// },
+// }
+// let v: Vec<&str> = vec.iter().map(|x| x.as_str()).collect();
+// return (new, v.join(""));
+// }
+// fn parse_pairs(input: &str) -> Pairs<Rule> {
+// let p = NoteDownParser::parse(Rule::ListMode, input).unwrap_or_else(|e| panic!("{}", e));
+// p.into_iter().next().unwrap().into_inner()
+// }
+// }
