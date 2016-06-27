@@ -10,10 +10,10 @@ impl Display for TableView {
         match self {
             Self::SimpleTable { head, align, terms, column } => {
                 writeln!(f, "SimpleTable")?;
-                writeln!(f, "{:?}", head )?;
-                writeln!(f, "{:?}", align )?;
-                writeln!(f, "{:?}", terms )?;
-                writeln!(f, "{:?}", column )?;
+                writeln!(f, "{:?}", head)?;
+                writeln!(f, "{:?}", align)?;
+                writeln!(f, "{:?}", terms)?;
+                writeln!(f, "{:?}", column)?;
             }
         }
         Ok(())

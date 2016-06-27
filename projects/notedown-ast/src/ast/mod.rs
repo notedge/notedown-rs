@@ -26,7 +26,7 @@ pub enum AST {
     },
     Leaf {
         kind: ASTKind,
-        r: Option<Box<TextRange>>,
+        range: Option<Box<TextRange>>,
     },
 }
 
@@ -34,6 +34,7 @@ pub enum AST {
 pub enum ASTKind {
     /// - `None`: It doesn't look like anything to me
     None,
+    /// Top
     Statements,
     // Blocks
     /// - `Header`: TEXT, level
@@ -64,8 +65,8 @@ pub enum ASTKind {
     MathInline(Box<String>),
     MathDisplay(Box<String>),
 
-    Link(Box<SmartLink>),
     Escaped(char),
+    Link(Box<SmartLink>),
     //
     Command(Box<Command>),
     String(Box<String>),
@@ -77,7 +78,7 @@ pub enum ASTKind {
 
 impl Default for AST {
     fn default() -> Self {
-        Self::Leaf { kind: ASTKind::None, r: Default::default() }
+        Self::Leaf { kind: ASTKind::None, range: Default::default() }
     }
 }
 
@@ -96,7 +97,7 @@ impl AST {
     }
     pub fn range(&self) -> TextRange {
         match self {
-            Self::Node { r, .. } | Self::Leaf { r, .. } => r.clone().unwrap_or_default().as_ref().clone(),
+            Self::Node { r, .. } | Self::Leaf { range: r, .. } => r.clone().unwrap_or_default().as_ref().clone(),
         }
     }
 }
@@ -110,14 +111,17 @@ impl AST {
     }
     pub fn header(children: Vec<AST>, level: usize, r: TextRange) -> Self {
         let header = Header { level, children };
-        Self::Leaf { kind: ASTKind::Header(Box::new(header)), r: box_range(r) }
+        Self::Leaf { kind: ASTKind::Header(Box::new(header)), range: box_range(r) }
     }
-
     pub fn code(code: CodeBlock, r: TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), r: box_range(r) }
+        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), range: box_range(r) }
     }
     pub fn command(cmd: Command, r: TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), r: box_range(r) }
+        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), range: box_range(r) }
+    }
+
+    pub fn hr(r: TextRange) -> AST {
+        Self::Leaf { kind: ASTKind::HorizontalRule, range: box_range(r) }
     }
 
     pub fn math(text: String, style: &str, r: TextRange) -> Self {
@@ -126,15 +130,15 @@ impl AST {
             "display" => ASTKind::MathDisplay(Box::new(text)),
             _ => ASTKind::MathBlock(Box::new(text)),
         };
-        Self::Leaf { kind, r: box_range(r) }
+        Self::Leaf { kind, range: box_range(r) }
     }
     pub fn style(children: Vec<AST>, style: &str, r: TextRange) -> Self {
         let kind = match style {
             "*" | "i" | "italic" => ASTKind::Italic,
             "**" | "b" | "bold" => ASTKind::Bold,
-            "***" => ASTKind::Emphasis,
+            "***" | "em" => ASTKind::Emphasis,
             "~" | "u" | "underline" => ASTKind::Underline,
-            "~~" => ASTKind::Strikethrough,
+            "~~" | "s" => ASTKind::Strikethrough,
             "~~~" => ASTKind::Undercover,
             _ => unreachable!(),
         };
@@ -145,10 +149,10 @@ impl AST {
             "raw" => ASTKind::Raw(Box::new(text)),
             _ => ASTKind::Normal(Box::new(text)),
         };
-        Self::Leaf { kind, r: box_range(r) }
+        Self::Leaf { kind, range: box_range(r) }
     }
     pub fn escaped(char: char, r: TextRange) -> Self {
-        Self::Leaf { kind: ASTKind::Escaped(char), r: box_range(r) }
+        Self::Leaf { kind: ASTKind::Escaped(char), range: box_range(r) }
     }
 }
 

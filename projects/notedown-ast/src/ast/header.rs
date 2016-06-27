@@ -8,7 +8,7 @@ pub struct Header {
 
 impl Display for Header {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "{}", "#".repeat(self.level), )?;
+        write!(f, "{}", "#".repeat(self.level),)?;
         for term in &self.children {
             write!(f, "{}", term)?
         }

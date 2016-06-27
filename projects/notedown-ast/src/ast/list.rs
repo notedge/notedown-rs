@@ -5,6 +5,7 @@ pub enum ListView {
     QuoteList { style: String, body: Vec<AST> },
     OrderedList { head: usize, body: Vec<AST> },
     OrderlessList { body: Vec<AST> },
+    Details { summary: AST, body: Vec<AST> },
 }
 
 impl Display for ListView {
@@ -20,6 +21,9 @@ impl Display for ListView {
             }
             Self::OrderlessList { .. } => {
                 writeln!(f, "OrderlessList")?;
+            }
+            Self::Details { .. } => {
+                writeln!(f, "Details")?;
             }
         }
         Ok(())
