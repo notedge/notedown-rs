@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, TextRange, AST};
+use crate::{ast::ASTKind, TextRange, ASTNode};
 
 #[derive(Debug)]
 pub struct TOC {
@@ -20,14 +20,13 @@ impl TOC {
     }
 }
 
-impl AST {
+impl ASTNode {
     pub fn toc(&self, max_depth: usize) -> TOC {
         let mut root = TOC::default();
         let mut toc_ignore = false;
-        if self.kind() == ASTKind::Statements {
-            let terms = self.children();
+        if let ASTKind::Statements(terms) = &self.kind {
             for term in terms {
-                match &term.kind() {
+                match &term.kind {
                     ASTKind::Header(header) => {
                         let level = header.level;
                         if toc_ignore {
@@ -38,7 +37,11 @@ impl AST {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.range(), children: vec![] };
+                        let range = match &term.range {
+                            Some(s) => {*s.as_ref()},
+                            None => {Default::default()}
+                        };
+                        let new = TOC { level, detail: join_ast_list(&header.children), range, children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {
@@ -49,12 +52,12 @@ impl AST {
                     _ => (),
                 }
             }
-        };
+        }
         return root;
     }
 }
 
-pub fn join_ast_list(list: &[AST]) -> String {
+pub fn join_ast_list(list: &[ASTNode]) -> String {
     let mut out = String::new();
     for i in list {
         out.push_str(&i.to_string())

@@ -17,31 +17,23 @@ use std::{
 };
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum AST {
-    Node {
-        kind: ASTKind,
-        //      children: Box<[AST]>,
-        children: Vec<AST>,
-        r: Option<Box<TextRange>>,
-    },
-    Leaf {
-        kind: ASTKind,
-        range: Option<Box<TextRange>>,
-    },
+pub struct ASTNode {
+    pub kind: ASTKind<ASTNode>,
+    pub  range: Option<Box<TextRange>>,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum ASTKind {
+pub enum ASTKind<T> {
     /// - `None`: It doesn't look like anything to me
     None,
     /// Top
-    Statements,
+    Statements(Vec<T>),
     // Blocks
     /// - `Header`: TEXT, level
     Header(Box<Header>),
     HorizontalRule,
     ///  - `Paragraph`:
-    Paragraph,
+    Paragraph(Vec<T>),
     CodeBlock(Box<CodeBlock>),
     /// - `Math`:
     MathBlock(Box<String>),
@@ -54,13 +46,13 @@ pub enum ASTKind {
     /// `` `code` ``
     Code(Box<String>),
 
-    Italic,
-    Bold,
-    Emphasis,
+    Italic(Vec<T>),
+    Bold(Vec<T>),
+    Emphasis(Vec<T>),
 
-    Underline,
-    Strikethrough,
-    Undercover,
+    Underline(Vec<T>),
+    Strikethrough(Vec<T>),
+    Undercover(Vec<T>),
 
     MathInline(Box<String>),
     MathDisplay(Box<String>),
@@ -76,52 +68,41 @@ pub enum ASTKind {
     Object,
 }
 
-impl Default for AST {
+impl Default for ASTNode {
     fn default() -> Self {
-        Self::Leaf { kind: ASTKind::None, range: Default::default() }
+        Self { kind: ASTKind::None, range: Default::default() }
     }
 }
 
-impl AST {
-    pub fn kind(&self) -> ASTKind {
-        match self {
-            Self::Node { kind, .. } | Self::Leaf { kind, .. } => kind.to_owned(),
-        }
-    }
-
-    pub fn children(&self) -> Vec<AST> {
-        match self {
-            Self::Node { children, .. } => children.to_vec(),
-            Self::Leaf { .. } => vec![],
-        }
-    }
-    pub fn range(&self) -> TextRange {
-        match self {
-            Self::Node { r, .. } | Self::Leaf { range: r, .. } => r.clone().unwrap_or_default().as_ref().clone(),
+impl ASTNode {
+    pub fn children(&self) -> Vec<ASTNode> {
+        match &self.kind {
+            ASTKind::Statements(v) => {v.to_owned()}
+            _ => unimplemented!()
         }
     }
 }
 
-impl AST {
-    pub fn statements(children: Vec<AST>, r: TextRange) -> Self {
-        Self::Node { kind: ASTKind::Statements, children, r: box_range(r) }
+impl ASTNode {
+    pub fn statements(children: Vec<ASTNode>, r: TextRange) -> Self {
+        Self { kind: ASTKind::Statements(children) , range: box_range(r) }
     }
-    pub fn paragraph(children: Vec<AST>, r: TextRange) -> Self {
-        Self::Node { kind: ASTKind::Paragraph, children, r: box_range(r) }
+    pub fn paragraph(children: Vec<ASTNode>, r: TextRange) -> Self {
+        Self { kind: ASTKind::Paragraph(children) , range: box_range(r) }
     }
-    pub fn header(children: Vec<AST>, level: usize, r: TextRange) -> Self {
+    pub fn header(children: Vec<ASTNode>, level: usize, r: TextRange) -> Self {
         let header = Header { level, children };
-        Self::Leaf { kind: ASTKind::Header(Box::new(header)), range: box_range(r) }
+        Self { kind: ASTKind::Header(Box::new(header)), range: box_range(r) }
     }
-    pub fn code(code: CodeBlock, r: TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::CodeBlock(Box::new(code)), range: box_range(r) }
+    pub fn code(code: CodeBlock, r: TextRange) -> ASTNode {
+        Self { kind: ASTKind::CodeBlock(Box::new(code)), range: box_range(r) }
     }
-    pub fn command(cmd: Command, r: TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::Command(Box::new(cmd)), range: box_range(r) }
+    pub fn command(cmd: Command, r: TextRange) -> ASTNode {
+        Self { kind: ASTKind::Command(Box::new(cmd)), range: box_range(r) }
     }
 
-    pub fn hr(r: TextRange) -> AST {
-        Self::Leaf { kind: ASTKind::HorizontalRule, range: box_range(r) }
+    pub fn hr(r: TextRange) -> ASTNode {
+        Self { kind: ASTKind::HorizontalRule, range: box_range(r) }
     }
 
     pub fn math(text: String, style: &str, r: TextRange) -> Self {
@@ -130,29 +111,29 @@ impl AST {
             "display" => ASTKind::MathDisplay(Box::new(text)),
             _ => ASTKind::MathBlock(Box::new(text)),
         };
-        Self::Leaf { kind, range: box_range(r) }
+        Self { kind, range: box_range(r) }
     }
-    pub fn style(children: Vec<AST>, style: &str, r: TextRange) -> Self {
+    pub fn style(children: Vec<ASTNode>, style: &str, r: TextRange) -> Self {
         let kind = match style {
-            "*" | "i" | "italic" => ASTKind::Italic,
-            "**" | "b" | "bold" => ASTKind::Bold,
-            "***" | "em" => ASTKind::Emphasis,
-            "~" | "u" | "underline" => ASTKind::Underline,
-            "~~" | "s" => ASTKind::Strikethrough,
-            "~~~" => ASTKind::Undercover,
+            "*" | "i" | "italic" => ASTKind::Italic(children),
+            "**" | "b" | "bold" => ASTKind::Bold(children),
+            "***" | "em" => ASTKind::Emphasis(children),
+            "~" | "u" | "underline" => ASTKind::Underline(children),
+            "~~" | "s" => ASTKind::Strikethrough(children),
+            "~~~" => ASTKind::Undercover(children),
             _ => unreachable!(),
         };
-        Self::Node { kind, children, r: box_range(r) }
+        Self { kind,  range: box_range(r) }
     }
     pub fn text(text: String, style: &str, r: TextRange) -> Self {
         let kind = match style {
             "raw" => ASTKind::Raw(Box::new(text)),
             _ => ASTKind::Normal(Box::new(text)),
         };
-        Self::Leaf { kind, range: box_range(r) }
+        Self { kind, range: box_range(r) }
     }
     pub fn escaped(char: char, r: TextRange) -> Self {
-        Self::Leaf { kind: ASTKind::Escaped(char), range: box_range(r) }
+        Self { kind: ASTKind::Escaped(char), range: box_range(r) }
     }
 }
 

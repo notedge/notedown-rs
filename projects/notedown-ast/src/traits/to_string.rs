@@ -1,12 +1,12 @@
-use crate::{ast::ASTKind, utils::join_ast_list, AST};
+use crate::{ast::ASTKind, utils::join_ast_list, ASTNode};
 use std::fmt::{self, Display, Formatter};
 
-impl Display for AST {
+impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let children = self.children();
-        match &self.kind() {
+        match &self.kind {
             ASTKind::None => write!(f, ""),
-            ASTKind::Statements => {
+            ASTKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))
             }
@@ -21,7 +21,7 @@ impl Display for AST {
             ASTKind::Raw { .. } => unimplemented!(),
             ASTKind::Code { .. } => unimplemented!(),
             ASTKind::Italic { .. } => unimplemented!(),
-            ASTKind::Bold => write!(f, "**{}**", join_ast_list(&children)),
+            ASTKind::Bold(children) => write!(f, "**{}**", join_ast_list(&children)),
             ASTKind::Emphasis { .. } => unimplemented!(),
             ASTKind::Underline { .. } => unimplemented!(),
             ASTKind::Strikethrough { .. } => unimplemented!(),

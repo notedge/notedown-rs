@@ -1,41 +1,41 @@
-use crate::AST;
+use crate::ASTNode;
 use yew::prelude::*;
 pub use yew::{Html, Renderable};
 use yew_katex::KaTeX;
 
-impl Renderable for AST {
+impl Renderable for ASTNode {
     fn render(&self) -> Html {
         match self {
-            AST::None => html! {},
-            AST::Statements(_) => unimplemented!(),
-            AST::Header { .. } => unimplemented!(),
-            AST::HorizontalRule { .. } => unimplemented!(),
-            AST::Paragraph { .. } => unimplemented!(),
-            AST::CodeBlock { .. } => unimplemented!(),
-            AST::MathBlock { inner, .. } => html! {<KaTeX math=inner inline=false/>},
-            AST::TableView { .. } => unimplemented!(),
-            AST::QuoteList { .. } => unimplemented!(),
-            AST::OrderedList { .. } => unimplemented!(),
-            AST::OrderlessList { .. } => unimplemented!(),
-            AST::Normal { .. } => unimplemented!(),
-            AST::Raw { .. } => unimplemented!(),
-            AST::Code { .. } => unimplemented!(),
-            AST::Italic { children, .. } => children.iter().map(|e| html! {<i>{e}</i>}).collect(),
-            AST::Bold { children, .. } => children.iter().map(|e| html! {<b>{e}</b>}).collect(),
-            AST::Emphasis { .. } => unimplemented!(),
-            AST::Underline { .. } => unimplemented!(),
-            AST::Strikethrough { .. } => unimplemented!(),
-            AST::Undercover { .. } => unimplemented!(),
-            AST::MathInline { inner, .. } => html! {<KaTeX math=inner inline=true/>},
-            AST::MathDisplay { inner, .. } => html! {<KaTeX math=inner inline=false/>},
-            AST::Link { .. } => unimplemented!(),
-            AST::Escaped { .. } => unimplemented!(),
-            AST::Command { .. } => unimplemented!(),
-            AST::String { .. } => unimplemented!(),
-            AST::Integer { .. } => unimplemented!(),
-            AST::Decimal { .. } => unimplemented!(),
-            AST::Boolean { .. } => unimplemented!(),
-            AST::Array { .. } => unimplemented!(),
+            ASTNode::None => html! {},
+            ASTNode::Statements(_) => unimplemented!(),
+            ASTNode::Header { .. } => unimplemented!(),
+            ASTNode::HorizontalRule { .. } => unimplemented!(),
+            ASTNode::Paragraph { .. } => unimplemented!(),
+            ASTNode::CodeBlock { .. } => unimplemented!(),
+            ASTNode::MathBlock { inner, .. } => html! {<KaTeX math=inner inline=false/>},
+            ASTNode::TableView { .. } => unimplemented!(),
+            ASTNode::QuoteList { .. } => unimplemented!(),
+            ASTNode::OrderedList { .. } => unimplemented!(),
+            ASTNode::OrderlessList { .. } => unimplemented!(),
+            ASTNode::Normal { .. } => unimplemented!(),
+            ASTNode::Raw { .. } => unimplemented!(),
+            ASTNode::Code { .. } => unimplemented!(),
+            ASTNode::Italic { children, .. } => children.iter().map(|e| html! {<i>{e}</i>}).collect(),
+            ASTNode::Bold { children, .. } => children.iter().map(|e| html! {<b>{e}</b>}).collect(),
+            ASTNode::Emphasis { .. } => unimplemented!(),
+            ASTNode::Underline { .. } => unimplemented!(),
+            ASTNode::Strikethrough { .. } => unimplemented!(),
+            ASTNode::Undercover { .. } => unimplemented!(),
+            ASTNode::MathInline { inner, .. } => html! {<KaTeX math=inner inline=true/>},
+            ASTNode::MathDisplay { inner, .. } => html! {<KaTeX math=inner inline=false/>},
+            ASTNode::Link { .. } => unimplemented!(),
+            ASTNode::Escaped { .. } => unimplemented!(),
+            ASTNode::Command { .. } => unimplemented!(),
+            ASTNode::String { .. } => unimplemented!(),
+            ASTNode::Integer { .. } => unimplemented!(),
+            ASTNode::Decimal { .. } => unimplemented!(),
+            ASTNode::Boolean { .. } => unimplemented!(),
+            ASTNode::Array { .. } => unimplemented!(),
         }
     }
 }

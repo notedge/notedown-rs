@@ -1,6 +1,6 @@
 use nom::{branch::alt, bytes::complete::tag, combinator::value, error::ParseError, IResult};
 use nom_locate::{position, LocatedSpan};
-use notedown_ast::{Value, AST};
+use notedown_ast::{Value, ASTNode};
 
 type Span<'a> = LocatedSpan<&'a str>;
 

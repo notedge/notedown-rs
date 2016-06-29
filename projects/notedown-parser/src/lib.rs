@@ -6,4 +6,4 @@ pub mod utils;
 pub use config::ParserConfig;
 pub use error::{Error, ParserResult};
 
-pub use notedown_ast::{CommandKind, SmartLink, TextRange, AST};
+pub use notedown_ast::{CommandKind, SmartLink, TextRange, ASTNode};

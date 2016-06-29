@@ -35,8 +35,8 @@ pub enum CommandKind {
 pub struct Command {
     pub cmd: String,
     pub kind: CommandKind,
-    pub args: Vec<AST>,
-    pub kvs: HashMap<String, AST>,
+    pub args: Vec<ASTNode>,
+    pub kvs: HashMap<String, ASTNode>,
 }
 
 impl Display for Command {

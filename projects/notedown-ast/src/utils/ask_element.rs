@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, AST};
+use crate::{ast::ASTKind, ASTNode};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContentAware {
@@ -9,12 +9,12 @@ pub enum ContentAware {
     Code,
 }
 
-impl AST {
+impl ASTNode {
     pub fn content_aware(&self, line: u32, column: u32) -> ContentAware {
         let children = self.children();
-        match self.kind() {
+        match &self.kind {
             ASTKind::None => ContentAware::None,
-            ASTKind::Statements => content_aware_vec(&children, line, column),
+            ASTKind::Statements(children) => content_aware_vec(&children, line, column),
             ASTKind::Header { .. } => unimplemented!(),
             ASTKind::HorizontalRule { .. } => unimplemented!(),
             ASTKind::Paragraph { .. } => unimplemented!(),
@@ -45,7 +45,7 @@ impl AST {
     }
 }
 
-fn content_aware_vec(v: &[AST], line: u32, column: u32) -> ContentAware {
+fn content_aware_vec(v: &[ASTNode], line: u32, column: u32) -> ContentAware {
     for item in v {
         let e = item.content_aware(line, column);
         if e != ContentAware::None {

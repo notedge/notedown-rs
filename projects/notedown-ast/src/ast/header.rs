@@ -3,7 +3,7 @@ use super::*;
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct Header {
     pub level: usize,
-    pub children: Vec<AST>,
+    pub children: Vec<ASTNode>,
 }
 
 impl Display for Header {

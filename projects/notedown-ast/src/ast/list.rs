@@ -2,10 +2,10 @@ use super::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ListView {
-    QuoteList { style: String, body: Vec<AST> },
-    OrderedList { head: usize, body: Vec<AST> },
-    OrderlessList { body: Vec<AST> },
-    Details { summary: AST, body: Vec<AST> },
+    QuoteList { style: String, body: Vec<ASTNode> },
+    OrderedList { head: usize, body: Vec<ASTNode> },
+    OrderlessList { body: Vec<ASTNode> },
+    Details { summary: ASTNode, body: Vec<ASTNode> },
 }
 
 impl Display for ListView {

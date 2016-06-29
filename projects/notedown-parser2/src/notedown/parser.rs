@@ -103,7 +103,7 @@ fn test_parse_italics() {
 }
 
 use nom_locate::{position, LocatedSpan};
-use notedown_ast::AST;
+use notedown_ast::ASTNode;
 
 type Span<'a> = LocatedSpan<&'a str>;
 
