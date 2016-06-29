@@ -1,6 +1,6 @@
 use crate::{ast::ASTKind, traits::Slugify, ASTNode};
-pub use text_utils::slugify;
 use std::fmt::Debug;
+pub use text_utils::slugify;
 
 impl Slugify for Vec<ASTNode> {
     fn slugify(&self) -> String {
@@ -17,7 +17,7 @@ impl Slugify for Vec<ASTNode> {
 
 impl Slugify for ASTNode {
     fn slugify(&self) -> String {
-       self.kind.slugify()
+        self.kind.slugify()
     }
 }
 

@@ -19,7 +19,7 @@ use std::{
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct ASTNode {
     pub kind: ASTKind<ASTNode>,
-    pub  range: Option<Box<TextRange>>,
+    pub range: TextRange,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -75,34 +75,25 @@ impl Default for ASTNode {
 }
 
 impl ASTNode {
-    pub fn children(&self) -> Vec<ASTNode> {
-        match &self.kind {
-            ASTKind::Statements(v) => {v.to_owned()}
-            _ => unimplemented!()
-        }
-    }
-}
-
-impl ASTNode {
     pub fn statements(children: Vec<ASTNode>, r: TextRange) -> Self {
-        Self { kind: ASTKind::Statements(children) , range: box_range(r) }
+        Self { kind: ASTKind::Statements(children), range: r }
     }
     pub fn paragraph(children: Vec<ASTNode>, r: TextRange) -> Self {
-        Self { kind: ASTKind::Paragraph(children) , range: box_range(r) }
+        Self { kind: ASTKind::Paragraph(children), range: r }
     }
     pub fn header(children: Vec<ASTNode>, level: usize, r: TextRange) -> Self {
         let header = Header { level, children };
-        Self { kind: ASTKind::Header(Box::new(header)), range: box_range(r) }
+        Self { kind: ASTKind::Header(Box::new(header)), range: r }
     }
     pub fn code(code: CodeBlock, r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::CodeBlock(Box::new(code)), range: box_range(r) }
+        Self { kind: ASTKind::CodeBlock(Box::new(code)), range: r }
     }
     pub fn command(cmd: Command, r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::Command(Box::new(cmd)), range: box_range(r) }
+        Self { kind: ASTKind::Command(Box::new(cmd)), range: r }
     }
 
     pub fn hr(r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::HorizontalRule, range: box_range(r) }
+        Self { kind: ASTKind::HorizontalRule, range: r }
     }
 
     pub fn math(text: String, style: &str, r: TextRange) -> Self {
@@ -111,7 +102,7 @@ impl ASTNode {
             "display" => ASTKind::MathDisplay(Box::new(text)),
             _ => ASTKind::MathBlock(Box::new(text)),
         };
-        Self { kind, range: box_range(r) }
+        Self { kind, range: r }
     }
     pub fn style(children: Vec<ASTNode>, style: &str, r: TextRange) -> Self {
         let kind = match style {
@@ -123,23 +114,16 @@ impl ASTNode {
             "~~~" => ASTKind::Undercover(children),
             _ => unreachable!(),
         };
-        Self { kind,  range: box_range(r) }
+        Self { kind, range: r }
     }
     pub fn text(text: String, style: &str, r: TextRange) -> Self {
         let kind = match style {
             "raw" => ASTKind::Raw(Box::new(text)),
             _ => ASTKind::Normal(Box::new(text)),
         };
-        Self { kind, range: box_range(r) }
+        Self { kind, range: r }
     }
     pub fn escaped(char: char, r: TextRange) -> Self {
-        Self { kind: ASTKind::Escaped(char), range: box_range(r) }
-    }
-}
-
-fn box_range(r: TextRange) -> Option<Box<TextRange>> {
-    match r.sum() {
-        0 => None,
-        _ => box_range(r),
+        Self { kind: ASTKind::Escaped(char), range: r }
     }
 }

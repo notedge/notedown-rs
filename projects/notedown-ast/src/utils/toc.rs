@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, TextRange, ASTNode};
+use crate::{ast::ASTKind, ASTNode, TextRange};
 
 #[derive(Debug)]
 pub struct TOC {
@@ -37,11 +37,7 @@ impl ASTNode {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let range = match &term.range {
-                            Some(s) => {*s.as_ref()},
-                            None => {Default::default()}
-                        };
-                        let new = TOC { level, detail: join_ast_list(&header.children), range, children: vec![] };
+                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.range, children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {

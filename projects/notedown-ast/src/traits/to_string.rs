@@ -3,7 +3,6 @@ use std::fmt::{self, Display, Formatter};
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        let children = self.children();
         match &self.kind {
             ASTKind::None => write!(f, ""),
             ASTKind::Statements(children) => {

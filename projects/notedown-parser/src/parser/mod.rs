@@ -7,7 +7,7 @@ use crate::{
     parser::regroup::{regroup_list_view, regroup_table_view},
     ParserConfig, ParserResult,
 };
-use notedown_ast::{ASTKind, CodeBlock, Command, CommandKind, ASTNode};
+use notedown_ast::{ASTKind, ASTNode, CodeBlock, Command, CommandKind};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::fs;
 use url::Url;

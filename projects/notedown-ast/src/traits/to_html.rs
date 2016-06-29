@@ -1,7 +1,7 @@
 use crate::{
     ast::{ASTKind, Header, ListView, TableView},
     traits::ToHTML,
-    CodeBlock, ASTNode,
+    ASTNode, CodeBlock,
 };
 
 impl ToHTML for Vec<ASTNode> {
