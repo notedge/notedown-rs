@@ -30,15 +30,15 @@ pub enum ASTKind<T> {
     Statements(Vec<T>),
     // Blocks
     /// - `Header`: TEXT, level
-    Header(Box<Header>),
+    Header(Box<Header<T>>),
     HorizontalRule,
     ///  - `Paragraph`:
     Paragraph(Vec<T>),
     CodeBlock(Box<CodeBlock>),
     /// - `Math`:
     MathBlock(Box<String>),
-    TableView(Box<TableView>),
-    ListView(Box<ListView>),
+    TableView(Box<TableView<T>>),
+    ListView(Box<ListView<T>>),
     /// - `Code`:
     // inlined
     Normal(Box<String>),
@@ -60,7 +60,7 @@ pub enum ASTKind<T> {
     Escaped(char),
     Link(Box<SmartLink>),
     //
-    Command(Box<Command>),
+    Command(Box<Command<T>>),
     String(Box<String>),
     Number(Box<String>),
     Boolean(bool),
@@ -74,38 +74,37 @@ impl Default for ASTNode {
     }
 }
 
-impl ASTNode {
-    pub fn statements(children: Vec<ASTNode>, r: TextRange) -> Self {
-        Self { kind: ASTKind::Statements(children), range: r }
+impl<T> ASTKind<T> {
+    pub fn statements(children: Vec<T>) -> Self {
+        ASTKind::Statements(children)
     }
-    pub fn paragraph(children: Vec<ASTNode>, r: TextRange) -> Self {
-        Self { kind: ASTKind::Paragraph(children), range: r }
+    pub fn paragraph(children: Vec<T>) -> Self {
+        ASTKind::Paragraph(children)
     }
-    pub fn header(children: Vec<ASTNode>, level: usize, r: TextRange) -> Self {
+    pub fn header(children: Vec<T>, level: usize) -> Self {
         let header = Header { level, children };
-        Self { kind: ASTKind::Header(Box::new(header)), range: r }
+        ASTKind::Header(Box::new(header))
     }
-    pub fn code(code: CodeBlock, r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::CodeBlock(Box::new(code)), range: r }
+    pub fn code(code: CodeBlock) -> Self {
+        ASTKind::CodeBlock(Box::new(code))
     }
-    pub fn command(cmd: Command, r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::Command(Box::new(cmd)), range: r }
-    }
-
-    pub fn hr(r: TextRange) -> ASTNode {
-        Self { kind: ASTKind::HorizontalRule, range: r }
+    pub fn command(cmd: Command<T>) -> Self {
+        ASTKind::Command(Box::new(cmd))
     }
 
-    pub fn math(text: String, style: &str, r: TextRange) -> Self {
-        let kind = match style {
+    pub fn hr() -> ASTKind<T> {
+        ASTKind::HorizontalRule
+    }
+
+    pub fn math(text: String, style: &str) -> Self {
+        match style {
             "inline" => ASTKind::MathInline(Box::new(text)),
             "display" => ASTKind::MathDisplay(Box::new(text)),
             _ => ASTKind::MathBlock(Box::new(text)),
-        };
-        Self { kind, range: r }
+        }
     }
-    pub fn style(children: Vec<ASTNode>, style: &str, r: TextRange) -> Self {
-        let kind = match style {
+    pub fn style(children: Vec<T>, style: &str) -> Self {
+        match style {
             "*" | "i" | "italic" => ASTKind::Italic(children),
             "**" | "b" | "bold" => ASTKind::Bold(children),
             "***" | "em" => ASTKind::Emphasis(children),
@@ -113,17 +112,15 @@ impl ASTNode {
             "~~" | "s" => ASTKind::Strikethrough(children),
             "~~~" => ASTKind::Undercover(children),
             _ => unreachable!(),
-        };
-        Self { kind, range: r }
+        }
     }
-    pub fn text(text: String, style: &str, r: TextRange) -> Self {
-        let kind = match style {
+    pub fn text(text: String, style: &str) -> Self {
+        match style {
             "raw" => ASTKind::Raw(Box::new(text)),
             _ => ASTKind::Normal(Box::new(text)),
-        };
-        Self { kind, range: r }
+        }
     }
-    pub fn escaped(char: char, r: TextRange) -> Self {
-        Self { kind: ASTKind::Escaped(char), range: r }
+    pub fn escaped(char: char) -> Self {
+        ASTKind::Escaped(char)
     }
 }

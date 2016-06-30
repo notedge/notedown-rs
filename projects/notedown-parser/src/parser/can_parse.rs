@@ -5,23 +5,23 @@ pub trait CanParse {
     fn as_url(&self) -> Option<Url> {
         None
     }
-    fn as_text(&self) -> ParserResult<String>;
+    fn as_text(&self) -> Result<String>;
 }
 
 impl CanParse for &str {
-    fn as_text(&self) -> ParserResult<String> {
+    fn as_text(&self) -> Result<String> {
         Ok(self.to_string())
     }
 }
 
 impl CanParse for String {
-    fn as_text(&self) -> ParserResult<String> {
+    fn as_text(&self) -> Result<String> {
         Ok(self.to_owned())
     }
 }
 
 impl CanParse for PathBuf {
-    fn as_text(&self) -> ParserResult<String> {
+    fn as_text(&self) -> Result<String> {
         unimplemented!()
     }
 }
@@ -32,7 +32,7 @@ impl CanParse for Url {
         Some(self.to_owned())
     }
 
-    fn as_text(&self) -> ParserResult<String> {
+    fn as_text(&self) -> Result<String> {
         match self.to_file_path() {
             Ok(o) => fs::read_to_string(o)?.as_text(),
             Err(_) => Err(FileNotFound(self.to_string().to_owned())),

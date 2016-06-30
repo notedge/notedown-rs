@@ -1,14 +1,15 @@
 use super::*;
+use std::fmt::Debug;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum ListView {
-    QuoteList { style: String, body: Vec<ASTNode> },
-    OrderedList { head: usize, body: Vec<ASTNode> },
-    OrderlessList { body: Vec<ASTNode> },
-    Details { summary: ASTNode, body: Vec<ASTNode> },
+pub enum ListView<T> {
+    QuoteList { style: String, body: Vec<T> },
+    OrderedList { head: usize, body: Vec<T> },
+    OrderlessList { body: Vec<T> },
+    Details { summary: T, body: Vec<T> },
 }
 
-impl Display for ListView {
+impl<T: Debug> Display for ListView<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             Self::QuoteList { style, body } => {

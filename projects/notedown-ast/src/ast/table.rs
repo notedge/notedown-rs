@@ -1,11 +1,12 @@
 use super::*;
+use std::fmt::Debug;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub enum TableView {
-    SimpleTable { head: Vec<ASTNode>, align: Vec<u8>, terms: Vec<Vec<ASTNode>>, column: usize },
+pub enum TableView<T> {
+    SimpleTable { head: Vec<T>, align: Vec<u8>, terms: Vec<Vec<T>>, column: usize },
 }
 
-impl Display for TableView {
+impl<T: Debug> Display for TableView<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             Self::SimpleTable { head, align, terms, column } => {

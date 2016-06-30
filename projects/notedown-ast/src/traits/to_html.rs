@@ -4,7 +4,7 @@ use crate::{
     ASTNode, CodeBlock,
 };
 
-impl ToHTML for Vec<ASTNode> {
+impl<T: ToHTML> ToHTML for Vec<T> {
     fn to_html(&self) -> String {
         let s: Vec<_> = self.iter().map(ToHTML::to_html).collect();
         s.join("")
@@ -46,7 +46,7 @@ impl ToHTML for ASTNode {
     }
 }
 
-impl ToHTML for Header {
+impl<T: ToHTML> ToHTML for Header<T> {
     fn to_html(&self) -> String {
         format!("<h{0}>{1}</h{0}>", self.level, self.children.to_html())
     }
@@ -58,13 +58,13 @@ impl ToHTML for CodeBlock {
     }
 }
 
-impl ToHTML for ListView {
+impl<T> ToHTML for ListView<T> {
     fn to_html(&self) -> String {
         unimplemented!()
     }
 }
 
-impl ToHTML for TableView {
+impl<T> ToHTML for TableView<T> {
     fn to_html(&self) -> String {
         unimplemented!()
     }

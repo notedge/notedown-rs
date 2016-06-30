@@ -7,7 +7,7 @@ pub enum Error {
     IOError(String),
 }
 
-pub type ParserResult<T> = Result<T, Error>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 impl From<notedown_pest::Error<Rule>> for Error {
     fn from(e: notedown_pest::Error<Rule>) -> Self {

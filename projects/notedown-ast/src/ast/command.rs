@@ -32,14 +32,14 @@ pub enum CommandKind {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Command {
+pub struct Command<T> {
     pub cmd: String,
     pub kind: CommandKind,
-    pub args: Vec<ASTNode>,
-    pub kvs: HashMap<String, ASTNode>,
+    pub args: Vec<T>,
+    pub kvs: HashMap<String, T>,
 }
 
-impl Display for Command {
+impl<T: Display> Display for Command<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let a = self.args.iter().map(|v| format!("{}", v));
         let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
@@ -48,7 +48,7 @@ impl Display for Command {
     }
 }
 
-impl Command {
+impl<T> Command<T> {
     pub fn is(&self, rhs: impl AsRef<str>) -> bool {
         self.cmd.as_str() == rhs.as_ref()
     }

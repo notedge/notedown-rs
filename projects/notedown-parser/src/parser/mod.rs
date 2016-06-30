@@ -5,7 +5,7 @@ pub use crate::parser::can_parse::CanParse;
 use crate::{
     error::Error::FileNotFound,
     parser::regroup::{regroup_list_view, regroup_table_view},
-    ParserConfig, ParserResult,
+    ParserConfig, Result,
 };
 use notedown_ast::{ASTKind, ASTNode, CodeBlock, Command, CommandKind};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
@@ -22,7 +22,7 @@ macro_rules! debug_cases {
 }
 
 impl ParserConfig {
-    pub fn parse(&mut self, input: impl CanParse) -> ParserResult<ASTNode> {
+    pub fn parse(&mut self, input: impl CanParse) -> Result<ASTNode> {
         if let Some(s) = input.as_url() {
             self.file_url = Some(s)
         }
@@ -30,7 +30,7 @@ impl ParserConfig {
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)
     }
-    pub fn parse_program(&self, pairs: Pairs<Rule>) -> ParserResult<ASTNode> {
+    pub fn parse_program(&self, pairs: Pairs<Rule>) -> Result<ASTNode> {
         // let r = self.get_position(pairs.as_span());
         let mut codes = vec![];
         for pair in pairs {
@@ -178,7 +178,7 @@ impl ParserConfig {
                 return ASTNode::default();
             }
             1 => {
-                if let ASTKind::MathDisplay(math) = &codes[0].kind() {
+                if let ASTKind::MathDisplay(math) = &codes[0].kind {
                     return ASTNode::math(math.as_ref().to_owned(), "block", r);
                 }
             }

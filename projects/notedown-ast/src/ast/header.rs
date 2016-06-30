@@ -1,12 +1,12 @@
 use super::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct Header {
+pub struct Header<T> {
     pub level: usize,
-    pub children: Vec<ASTNode>,
+    pub children: Vec<T>,
 }
 
-impl Display for Header {
+impl<T: Display> Display for Header<T> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         write!(f, "{}", "#".repeat(self.level),)?;
         for term in &self.children {
