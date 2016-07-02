@@ -7,7 +7,7 @@ use crate::{
     parser::regroup::{regroup_list_view, regroup_table_view},
     ParserConfig, Result,
 };
-use notedown_ast::{ASTKind, ASTNode, CodeBlock, Command, CommandKind};
+use notedown_ast::{ASTKind, CodeBlock, Command, CommandKind, ASTNode};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::fs;
 use url::Url;
@@ -59,8 +59,12 @@ impl ParserConfig {
             // println!("{:?}", code);
             codes.push(code);
         }
-        // FIXME: fix range
-        Ok(ASTNode::statements(codes, Default::default()))
+        
+        Ok(ASTNode {
+            kind: ASTKind::statements(codes),
+            // FIXME: fix range
+            range: Default::default()
+        })
     }
     fn parse_list(&self, pairs: Pair<Rule>) -> Vec<ASTNode> {
         // let r = self.get_position(pairs.as_span());
@@ -141,7 +145,10 @@ impl ParserConfig {
             };
         }
         let code = CodeBlock { lang, code, inline: false, high_line: vec![] };
-        ASTNode::code(code, r)
+        ASTNode {
+            kind: ASTKind::code(code),
+            range: r
+        }
     }
 
     fn parse_header(&self, pairs: Pair<Rule>) -> ASTNode {
@@ -155,7 +162,10 @@ impl ParserConfig {
                 _ => children.push(self.parse_span_term(pair)),
             };
         }
-        return ASTNode::header(children, level, r);
+        ASTNode {
+            kind: ASTKind::header(children, level),
+            range: r
+        }
     }
     pub fn parse_command_block(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
@@ -168,23 +178,37 @@ impl ParserConfig {
             };
         }
         let cmd = Command { cmd, kind: CommandKind::Normal, args: vec![], kvs: Default::default() };
-        ASTNode::command(cmd, r)
+        ASTNode {
+            kind: ASTKind::command(cmd),
+            range: r
+        }
     }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
         let codes = self.parse_span(pairs);
         match codes.len() {
             0 => {
-                return ASTNode::default();
+                return         ASTNode {
+                    kind: ASTKind::default(),
+                    range: r
+                };
             }
             1 => {
                 if let ASTKind::MathDisplay(math) = &codes[0].kind {
-                    return ASTNode::math(math.as_ref().to_owned(), "block", r);
+                    return ASTNode {
+                        kind: ASTKind::math(math.as_ref().to_owned(), "block"),
+                        range: r
+                    }
                 }
             }
             _ => (),
         }
-        ASTNode::paragraph(codes, r)
+        ASTNode {
+            kind: ASTKind::paragraph(codes),
+            range: r
+        }
+
+
     }
     fn parse_span(&self, pairs: Pair<Rule>) -> Vec<ASTNode> {
         pairs.into_inner().map(|pair| self.parse_span_term(pair)).collect()
@@ -200,14 +224,18 @@ impl ParserConfig {
             Rule::RawRest | Rule::StyleRest | Rule::TildeRest | Rule::MathRest => self.parse_normal_text(pair),
             Rule::WHITE_SPACE | Rule::LINE_SEPARATOR => self.parse_normal_text(pair),
             Rule::Escaped => self.parse_escaped(pair),
-
             _ => debug_cases!(pair),
         }
     }
 
     fn parse_normal_text(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
-        ASTNode::text(pairs.as_str().to_string(), "normal", r)
+        ASTNode {
+            kind: ASTKind::text(pairs.as_str().to_string(), "normal"),
+            range: r
+        }
+
+
     }
     fn parse_styled_text(&self, pairs: Pair<Rule>) -> ASTNode {
         let s = pairs.as_str().to_string();
@@ -222,11 +250,15 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        match level {
-            1 => ASTNode::style(text, "*", r),
-            2 => ASTNode::style(text, "**", r),
-            3 => ASTNode::style(text, "***", r),
-            _ => ASTNode::text(s, "normal", r),
+        let kind = match level {
+            1 => ASTKind::style(text, "*"),
+            2 => ASTKind::style(text, "**"),
+            3 => ASTKind::style(text, "***"),
+            _ => ASTKind::text(s, "normal"),
+        };
+        ASTNode {
+            kind,
+            range: r
         }
     }
     fn parse_tilde_text(&self, pairs: Pair<Rule>) -> ASTNode {
@@ -242,18 +274,25 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        match level {
-            1 => ASTNode::style(text, "~", r),
-            2 => ASTNode::style(text, "~~", r),
-            3 => ASTNode::style(text, "~~~", r),
-            _ => ASTNode::text(s, "normal", r),
+        let kind = match level {
+            1 => ASTKind::style(text, "~"),
+            2 => ASTKind::style(text, "~~"),
+            3 => ASTKind::style(text, "~~~"),
+            _ => ASTKind::text(s, "normal"),
+        };
+        ASTNode {
+            kind,
+            range: r
         }
     }
     fn parse_raw_text(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
         for pair in pairs.into_inner() {
             if let Rule::RawText = pair.as_rule() {
-                return ASTNode::text(pair.as_str().to_string(), "raw", r);
+                return         ASTNode {
+                    kind: ASTKind::text(pair.as_str().to_string(), "raw"),
+                    range: r
+                }
             };
         }
         return ASTNode::default();
@@ -264,10 +303,14 @@ impl ParserConfig {
         let mut inner = pairs.into_inner();
         let level = inner.next().unwrap().as_str().len();
         let text = inner.next().unwrap().as_str().to_string();
-        match level {
-            1 => ASTNode::math(text, "inline", r),
-            2 => ASTNode::math(text, "display", r),
-            _ => ASTNode::text(s, "normal", r),
+        let kind = match level {
+            1 => ASTKind::math(text, "inline"),
+            2 => ASTKind::math(text, "display"),
+            _ => ASTKind::text(s, "normal"),
+        };
+        ASTNode {
+            kind,
+            range: r
         }
     }
     fn parse_escaped(&self, pairs: Pair<Rule>) -> ASTNode {
@@ -276,7 +319,11 @@ impl ParserConfig {
             None => '\\',
             Some(s) => s,
         };
-        ASTNode::escaped(c, r)
+        ASTNode {
+            kind: ASTKind::escaped(c),
+            range: r
+        }
+
     }
 }
 

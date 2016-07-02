@@ -68,6 +68,12 @@ pub enum ASTKind<T> {
     Object,
 }
 
+impl<T> Default for ASTKind<T> {
+    fn default() -> Self {
+        Self::None
+    }
+}
+
 impl Default for ASTNode {
     fn default() -> Self {
         Self { kind: ASTKind::None, range: Default::default() }
@@ -76,51 +82,51 @@ impl Default for ASTNode {
 
 impl<T> ASTKind<T> {
     pub fn statements(children: Vec<T>) -> Self {
-        ASTKind::Statements(children)
+        Self::Statements(children)
     }
     pub fn paragraph(children: Vec<T>) -> Self {
-        ASTKind::Paragraph(children)
+        Self::Paragraph(children)
     }
     pub fn header(children: Vec<T>, level: usize) -> Self {
         let header = Header { level, children };
-        ASTKind::Header(Box::new(header))
+        Self::Header(Box::new(header))
     }
     pub fn code(code: CodeBlock) -> Self {
-        ASTKind::CodeBlock(Box::new(code))
+        Self::CodeBlock(Box::new(code))
     }
     pub fn command(cmd: Command<T>) -> Self {
-        ASTKind::Command(Box::new(cmd))
+        Self::Command(Box::new(cmd))
     }
 
     pub fn hr() -> ASTKind<T> {
-        ASTKind::HorizontalRule
+        Self::HorizontalRule
     }
 
     pub fn math(text: String, style: &str) -> Self {
         match style {
-            "inline" => ASTKind::MathInline(Box::new(text)),
-            "display" => ASTKind::MathDisplay(Box::new(text)),
-            _ => ASTKind::MathBlock(Box::new(text)),
+            "inline" => Self::MathInline(Box::new(text)),
+            "display" => Self::MathDisplay(Box::new(text)),
+            _ => Self::MathBlock(Box::new(text)),
         }
     }
     pub fn style(children: Vec<T>, style: &str) -> Self {
         match style {
-            "*" | "i" | "italic" => ASTKind::Italic(children),
-            "**" | "b" | "bold" => ASTKind::Bold(children),
-            "***" | "em" => ASTKind::Emphasis(children),
-            "~" | "u" | "underline" => ASTKind::Underline(children),
-            "~~" | "s" => ASTKind::Strikethrough(children),
-            "~~~" => ASTKind::Undercover(children),
+            "*" | "i" | "italic" => Self::Italic(children),
+            "**" | "b" | "bold" => Self::Bold(children),
+            "***" | "em" => Self::Emphasis(children),
+            "~" | "u" | "underline" => Self::Underline(children),
+            "~~" | "s" => Self::Strikethrough(children),
+            "~~~" => Self::Undercover(children),
             _ => unreachable!(),
         }
     }
     pub fn text(text: String, style: &str) -> Self {
         match style {
-            "raw" => ASTKind::Raw(Box::new(text)),
-            _ => ASTKind::Normal(Box::new(text)),
+            "raw" => Self::Raw(Box::new(text)),
+            _ => Self::Normal(Box::new(text)),
         }
     }
     pub fn escaped(char: char) -> Self {
-        ASTKind::Escaped(char)
+        Self::Escaped(char)
     }
 }
