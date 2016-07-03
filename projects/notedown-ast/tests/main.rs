@@ -20,7 +20,7 @@ macro_rules! show_size {
 fn get_size() {
     show_size!();
     show_size!(ASTNode);
-    show_size!(ASTKind);
+    show_size!(ASTKind<ASTNode>);
     show_size!(TextRange);
     show_size!(SmartLink);
 }
