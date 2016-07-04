@@ -1,7 +1,7 @@
 use crate::{ast::ASTKind, utils::join_ast_list, ASTNode};
-use std::fmt::{self, Display, Formatter};
+use std::fmt::{self, Display, Formatter, Debug};
 
-impl Display for ASTNode {
+impl<M: Debug + Display> Display for ASTNode<M> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match &self.kind {
             ASTKind::None => write!(f, ""),

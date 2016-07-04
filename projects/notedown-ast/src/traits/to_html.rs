@@ -3,6 +3,7 @@ use crate::{
     traits::ToHTML,
     ASTNode, CodeBlock,
 };
+use std::fmt::Debug;
 
 impl<T: ToHTML> ToHTML for Vec<T> {
     fn to_html(&self) -> String {
@@ -14,7 +15,7 @@ impl<T: ToHTML> ToHTML for Vec<T> {
 // notice that html5 is compatible with xhtml, but not the other way around
 // so please close self-closing tags manually
 // eg: <hr> -> <hr/>
-impl ToHTML for ASTNode {
+impl<M: Debug> ToHTML for ASTNode<M> {
     fn to_html(&self) -> String {
         match &self.kind {
             ASTKind::None => String::new(),

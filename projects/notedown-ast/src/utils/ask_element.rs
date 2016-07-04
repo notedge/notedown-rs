@@ -9,7 +9,7 @@ pub enum ContentAware {
     Code,
 }
 
-impl ASTNode {
+impl<M> ASTNode<M> {
     pub fn content_aware(&self, line: u32, column: u32) -> ContentAware {
         match &self.kind {
             ASTKind::None => ContentAware::None,
@@ -44,7 +44,7 @@ impl ASTNode {
     }
 }
 
-fn content_aware_vec(v: &[ASTNode], line: u32, column: u32) -> ContentAware {
+fn content_aware_vec<M>(v: &[ASTNode<M>], line: u32, column: u32) -> ContentAware {
     for item in v {
         let e = item.content_aware(line, column);
         if e != ContentAware::None {

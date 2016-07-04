@@ -10,16 +10,16 @@ mod table;
 pub use crate::ast::{code_block::CodeBlock, command::Command, header::Header, list::ListView, table::TableView};
 pub use command::CommandKind;
 pub use link::SmartLink;
-pub use range::TextRange;
+pub use range::{TextRange,LSPMetaInfo};
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
 
 #[derive(Debug, Clone, Eq, PartialEq)]
-pub struct ASTNode {
-    pub kind: ASTKind<ASTNode>,
-    pub range: TextRange,
+pub struct ASTNode<M> {
+    pub kind: ASTKind<ASTNode<M>>,
+    pub meta: M,
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -68,15 +68,18 @@ pub enum ASTKind<T> {
     Object,
 }
 
+
+
+
 impl<T> Default for ASTKind<T> {
     fn default() -> Self {
         Self::None
     }
 }
 
-impl Default for ASTNode {
+impl<M: Default> Default for ASTNode<M> {
     fn default() -> Self {
-        Self { kind: ASTKind::None, range: Default::default() }
+        Self { kind: ASTKind::None, meta: Default::default() }
     }
 }
 

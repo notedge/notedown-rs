@@ -1,4 +1,6 @@
 use crate::{ast::ASTKind, ASTNode, TextRange};
+use crate::ast::LSPMetaInfo;
+use std::fmt::{Display, Debug};
 
 #[derive(Debug)]
 pub struct TOC {
@@ -20,7 +22,7 @@ impl TOC {
     }
 }
 
-impl ASTNode {
+impl ASTNode<LSPMetaInfo> {
     pub fn toc(&self, max_depth: usize) -> TOC {
         let mut root = TOC::default();
         let mut toc_ignore = false;
@@ -37,7 +39,7 @@ impl ASTNode {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.range, children: vec![] };
+                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.meta.range, children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {
@@ -53,7 +55,8 @@ impl ASTNode {
     }
 }
 
-pub fn join_ast_list(list: &[ASTNode]) -> String {
+pub fn join_ast_list<M>(list: &[ASTNode<M>]) -> String
+where ASTNode<M>: Display {
     let mut out = String::new();
     for i in list {
         out.push_str(&i.to_string())

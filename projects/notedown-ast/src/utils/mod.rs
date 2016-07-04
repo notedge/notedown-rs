@@ -1,5 +1,6 @@
 mod ask_element;
 mod toc;
+mod convert;
 
 pub use crate::traits::*;
 pub use text_utils::*;
