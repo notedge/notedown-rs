@@ -9,7 +9,7 @@ fn ready() {
     println!("it, works!")
 }
 
-pub fn parse(s: &str) -> ASTNode {
+pub fn parse(s: &str) -> ASTNode<M> {
     let mut cfg = ParserConfig::default();
     cfg.parse(s).unwrap_or_default()
 }

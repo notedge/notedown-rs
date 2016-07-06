@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, utils::join_ast_list, ASTNode};
+use crate::{ast_kind::ASTKind, utils::join_ast_list, ASTNode};
 use std::fmt::{self, Display, Formatter, Debug};
 
 impl<M: Debug + Display> Display for ASTNode<M> {

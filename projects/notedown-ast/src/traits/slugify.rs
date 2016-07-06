@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, traits::Slugify, ASTNode};
+use crate::{ast_kind::ASTKind, traits::Slugify, ASTNode};
 use std::fmt::Debug;
 pub use text_utils::slugify;
 

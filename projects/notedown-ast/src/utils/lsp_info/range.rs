@@ -1,17 +1,6 @@
-use std::fmt::{self, Debug, Formatter, Display};
+use super::*;
 
 type RangeSize = u64;
-
-#[derive(Copy, Clone,Debug, Eq, PartialEq)]
-pub struct LSPMetaInfo {
-   pub range: TextRange
-}
-
-impl Display for LSPMetaInfo {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        Debug::fmt(self, f)
-    }
-}
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct TextRange {

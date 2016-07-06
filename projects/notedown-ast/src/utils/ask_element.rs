@@ -1,4 +1,4 @@
-use crate::{ast::ASTKind, ASTNode};
+use crate::{ast_kind::ASTKind, ASTNode};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContentAware {

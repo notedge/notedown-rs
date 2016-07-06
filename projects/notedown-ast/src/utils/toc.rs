@@ -1,6 +1,7 @@
-use crate::{ast::ASTKind, ASTNode, TextRange};
-use crate::ast::LSPMetaInfo;
+use crate::{ast_kind::ASTKind, ASTNode, };
 use std::fmt::{Display, Debug};
+use crate::utils::lsp_info::TextRange;
+use crate::utils::LSPMetaInfo;
 
 #[derive(Debug)]
 pub struct TOC {

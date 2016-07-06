@@ -4,17 +4,21 @@ mod header;
 mod link;
 mod list;
 mod literal;
-mod range;
 mod table;
 
-pub use crate::ast::{code_block::CodeBlock, command::Command, header::Header, list::ListView, table::TableView};
-pub use command::CommandKind;
-pub use link::SmartLink;
-pub use range::{TextRange,LSPMetaInfo};
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
+
+
+pub use command::CommandKind;
+pub use link::SmartLink;
+
+pub use crate::ast_kind::{code_block::CodeBlock, command::Command, header::Header, list::ListView, table::TableView};
+
+
+
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct ASTNode<M> {
