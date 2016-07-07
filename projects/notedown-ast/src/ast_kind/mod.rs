@@ -1,30 +1,13 @@
-mod code_block;
-mod command;
-mod header;
-mod link;
-mod list;
-mod literal;
-mod table;
+mod elements;
+mod traits;
 
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
+pub use self::elements::*;
 
 
-pub use command::CommandKind;
-pub use link::SmartLink;
-
-pub use crate::ast_kind::{code_block::CodeBlock, command::Command, header::Header, list::ListView, table::TableView};
-
-
-
-
-#[derive(Debug, Clone, Eq, PartialEq)]
-pub struct ASTNode<M> {
-    pub kind: ASTKind<ASTNode<M>>,
-    pub meta: M,
-}
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ASTKind<T> {
@@ -81,11 +64,7 @@ impl<T> Default for ASTKind<T> {
     }
 }
 
-impl<M: Default> Default for ASTNode<M> {
-    fn default() -> Self {
-        Self { kind: ASTKind::None, meta: Default::default() }
-    }
-}
+
 
 impl<T> ASTKind<T> {
     pub fn statements(children: Vec<T>) -> Self {

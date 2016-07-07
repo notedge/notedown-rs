@@ -1,4 +1,4 @@
-use super::*;
+use crate::ast_kind::*;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum CommandKind {

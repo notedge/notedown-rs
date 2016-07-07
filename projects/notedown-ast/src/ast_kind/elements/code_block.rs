@@ -1,4 +1,4 @@
-use super::*;
+use crate::ast_kind::*;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct CodeBlock {

@@ -1,6 +1,7 @@
-use crate::{ast_kind::ASTKind, traits::Slugify, ASTNode};
+use crate::{ast_kind::ASTKind, traits::Slugify};
 use std::fmt::Debug;
 pub use text_utils::slugify;
+use crate::ast_node::ASTNode;
 
 impl<M> Slugify for Vec<ASTNode<M>>
 where ASTNode<M>: Slugify {

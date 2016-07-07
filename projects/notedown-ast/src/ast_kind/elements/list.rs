@@ -1,4 +1,4 @@
-use super::*;
+use crate::ast_kind::*;
 use std::fmt::Debug;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
