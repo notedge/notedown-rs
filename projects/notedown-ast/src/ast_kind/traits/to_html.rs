@@ -1,7 +1,7 @@
 use crate::{
     ast_kind::{ASTKind, Header, ListView, TableView},
     traits::ToHTML,
-    ASTNode, CodeBlock,
+    CodeBlock,
 };
 use std::fmt::Debug;
 
@@ -15,9 +15,9 @@ impl<T: ToHTML> ToHTML for Vec<T> {
 // notice that html5 is compatible with xhtml, but not the other way around
 // so please close self-closing tags manually
 // eg: <hr> -> <hr/>
-impl<M: Debug> ToHTML for ASTNode<M> {
+impl<T: Debug + ToHTML> ToHTML for ASTKind<T> {
     fn to_html(&self) -> String {
-        match &self.kind {
+        match self {
             ASTKind::None => String::new(),
             ASTKind::Statements(children) => children.to_html(),
             ASTKind::Header(inner) => inner.to_html(),
@@ -40,7 +40,7 @@ impl<M: Debug> ToHTML for ASTNode<M> {
             ASTKind::MathDisplay(inner) => format!(r#"<span class="math">$\displaystyle{{{}}}$</span>"#, inner),
             ASTKind::Escaped(char) => format!("{}", char),
             _ => {
-                println!("HTML unimplemented ASTKind::{:#?}", self.kind);
+                println!("HTML unimplemented ASTKind::{:#?}", self);
                 unreachable!()
             }
         }

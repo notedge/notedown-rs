@@ -1,13 +1,19 @@
-use crate::{ast_kind::ASTKind, ASTNode, };
-use std::fmt::{Display, Debug};
-use crate::utils::lsp_info::TextRange;
-use crate::utils::LSPMetaInfo;
+use crate::{
+    ast_kind::ASTKind,
+    utils::{
+        LSPMetaInfo},
+    ASTNode,
+};
+use std::fmt::{Debug, Display};
+#[cfg(feature="lsp")]
+use crate::utils::lsp_info::Range;
 
 #[derive(Debug)]
 pub struct TOC {
     pub level: usize,
     pub detail: String,
-    pub range: TextRange,
+    #[cfg(feature="lsp")]
+    pub range: Range,
     pub children: Vec<TOC>,
 }
 
@@ -40,7 +46,11 @@ impl ASTNode<LSPMetaInfo> {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TOC { level, detail: join_ast_list(&header.children), range: term.meta.range, children: vec![] };
+                        let new = TOC { level, detail: join_ast_list(&header.children),
+                            #[cfg(feature="lsp")]
+                            range: term.meta.range,
+                            children: vec![]
+                        };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {
@@ -57,7 +67,9 @@ impl ASTNode<LSPMetaInfo> {
 }
 
 pub fn join_ast_list<M>(list: &[ASTNode<M>]) -> String
-where ASTNode<M>: Display {
+where
+    ASTNode<M>: Display,
+{
     let mut out = String::new();
     for i in list {
         out.push_str(&i.to_string())

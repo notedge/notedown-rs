@@ -1,10 +1,10 @@
 mod ask_element;
-mod toc;
 mod convert;
+#[cfg(feature="lsp")]
 mod lsp_info;
+mod toc;
 
-pub use crate::traits::*;
+#[cfg(feature="lsp")]
+pub use lsp_info::{LSPMetaInfo, Range};
 pub use text_utils::*;
-
 pub use toc::{join_ast_list, TOC};
-pub use lsp_info::{LSPMetaInfo, TextRange};

@@ -1,13 +1,11 @@
 mod elements;
 mod traits;
 
+pub use self::elements::*;
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
-pub use self::elements::*;
-
-
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ASTKind<T> {
@@ -55,16 +53,11 @@ pub enum ASTKind<T> {
     Object,
 }
 
-
-
-
 impl<T> Default for ASTKind<T> {
     fn default() -> Self {
         Self::None
     }
 }
-
-
 
 impl<T> ASTKind<T> {
     pub fn statements(children: Vec<T>) -> Self {

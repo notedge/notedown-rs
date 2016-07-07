@@ -7,3 +7,4 @@ pub mod utils;
 
 pub use ast_kind::{ASTKind, CodeBlock, Command, CommandKind, SmartLink};
 pub use ast_node::ASTNode;
+pub use traits::{Slugify, ToHTML};
