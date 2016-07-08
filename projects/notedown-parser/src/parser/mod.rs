@@ -11,6 +11,7 @@ use notedown_ast::{ASTKind, ASTNode, CodeBlock, Command, CommandKind};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::fs;
 use url::Url;
+use crate::utils::LSPMetaInfo;
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -21,8 +22,10 @@ macro_rules! debug_cases {
     }};
 }
 
+pub type AST = ASTNode<LSPMetaInfo>;
+
 impl ParserConfig {
-    pub fn parse<M>(&mut self, input: impl CanParse) -> Result<ASTNode<M>> {
+    pub fn parse(&mut self, input: impl CanParse) -> Result<AST> {
         if let Some(s) = input.as_url() {
             self.file_url = Some(s)
         }
@@ -30,7 +33,7 @@ impl ParserConfig {
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)
     }
-    pub fn parse_program(&self, pairs: Pairs<Rule>) -> Result<ASTNode<M>> {
+    pub fn parse_program(&self, pairs: Pairs<Rule>) -> Result<AST> {
         // let r = self.get_position(pairs.as_span());
         let mut codes = vec![];
         for pair in pairs {
@@ -66,9 +69,9 @@ impl ParserConfig {
             meta: Default::default(),
         })
     }
-    fn parse_list<M>(&self, pairs: Pair<Rule>) -> Vec<ASTNode<M>> {
+    fn parse_list(&self, pairs: Pair<Rule>) -> Vec<AST> {
         // let r = self.get_position(pairs.as_span());
-        let mut list_terms: Vec<(usize, &str, Vec<ASTNode<M>>)> = vec![];
+        let mut list_terms: Vec<(usize, &str, Vec<AST>)> = vec![];
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::LINE_SEPARATOR => continue,
@@ -94,7 +97,7 @@ impl ParserConfig {
         }
         return regroup_list_view(&list_terms);
     }
-    fn parse_table(&self, pairs: Pair<Rule>) -> Vec<ASTNode<M>> {
+    fn parse_table(&self, pairs: Pair<Rule>) -> Vec<AST> {
         // let r = self.get_position(pairs.as_span());
         let mut table_terms = vec![];
         for pair in pairs.into_inner() {
@@ -130,7 +133,7 @@ impl ParserConfig {
         }
         return regroup_table_view(&table_terms);
     }
-    pub fn parse_code_block(&self, pairs: Pair<Rule>) -> ASTNode {
+    pub fn parse_code_block(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let mut lang = String::new();
         let mut code = String::new();
@@ -145,10 +148,13 @@ impl ParserConfig {
             };
         }
         let code = CodeBlock { lang, code, inline: false, high_line: vec![] };
-        ASTNode { kind: ASTKind::code(code), meta: r }
+        ASTNode { kind: ASTKind::code(code), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
 
-    fn parse_header(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_header(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let mut level = 0;
         let mut children = vec![];
@@ -159,9 +165,12 @@ impl ParserConfig {
                 _ => children.push(self.parse_span_term(pair)),
             };
         }
-        ASTNode { kind: ASTKind::header(children, level), meta: r }
+        ASTNode { kind: ASTKind::header(children, level), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    pub fn parse_command_block(&self, pairs: Pair<Rule>) -> ASTNode {
+    pub fn parse_command_block(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let mut cmd = String::new();
         for pair in pairs.into_inner() {
@@ -172,30 +181,42 @@ impl ParserConfig {
             };
         }
         let cmd = Command { cmd, kind: CommandKind::Normal, args: vec![], kvs: Default::default() };
-        ASTNode { kind: ASTKind::command(cmd), meta: r }
+        ASTNode { kind: ASTKind::command(cmd), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> ASTNode {
+    pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let codes = self.parse_span(pairs);
         match codes.len() {
             0 => {
-                return ASTNode { kind: ASTKind::default(), meta: r };
+                return ASTNode { kind: ASTKind::default(), meta: LSPMetaInfo {
+                    range: r,
+                    url: None
+                } };
             }
             1 => {
                 if let ASTKind::MathDisplay(math) = &codes[0].kind {
-                    return ASTNode { kind: ASTKind::math(math.as_ref().to_owned(), "block"), meta: r };
+                    return ASTNode { kind: ASTKind::math(math.as_ref().to_owned(), "block"), meta: LSPMetaInfo {
+                        range: r,
+                        url: None
+                    } };
                 }
             }
             _ => (),
         }
-        ASTNode { kind: ASTKind::paragraph(codes), meta: r }
+        ASTNode { kind: ASTKind::paragraph(codes), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    fn parse_span(&self, pairs: Pair<Rule>) -> Vec<ASTNode> {
+    fn parse_span(&self, pairs: Pair<Rule>) -> Vec<AST> {
         pairs.into_inner().map(|pair| self.parse_span_term(pair)).collect()
     }
-    fn parse_span_term(&self, pair: Pair<Rule>) -> ASTNode {
+    fn parse_span_term(&self, pair: Pair<Rule>) -> AST {
         match pair.as_rule() {
-            Rule::EOI => ASTNode::default(),
+            Rule::EOI => AST::default(),
             Rule::Style => self.parse_styled_text(pair),
             Rule::TextRest => self.parse_normal_text(pair),
             Rule::TildeLine => self.parse_tilde_text(pair),
@@ -208,11 +229,14 @@ impl ParserConfig {
         }
     }
 
-    fn parse_normal_text(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_normal_text(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
-        ASTNode { kind: ASTKind::text(pairs.as_str().to_string(), "normal"), meta: r }
+        ASTNode { kind: ASTKind::text(pairs.as_str().to_string(), "normal"), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    fn parse_styled_text(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_styled_text(&self, pairs: Pair<Rule>) -> AST {
         let s = pairs.as_str().to_string();
         let r = self.get_position(pairs.as_span());
         let mut level = 0;
@@ -231,9 +255,12 @@ impl ParserConfig {
             3 => ASTKind::style(text, "***"),
             _ => ASTKind::text(s, "normal"),
         };
-        ASTNode { kind, meta: r }
+        ASTNode { kind, meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    fn parse_tilde_text(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_tilde_text(&self, pairs: Pair<Rule>) -> AST {
         let s = pairs.as_str().to_string();
         let r = self.get_position(pairs.as_span());
         let mut level = 0;
@@ -252,18 +279,24 @@ impl ParserConfig {
             3 => ASTKind::style(text, "~~~"),
             _ => ASTKind::text(s, "normal"),
         };
-        ASTNode { kind, meta: r }
+        ASTNode { kind, meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    fn parse_raw_text(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_raw_text(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         for pair in pairs.into_inner() {
             if let Rule::RawText = pair.as_rule() {
-                return ASTNode { kind: ASTKind::text(pair.as_str().to_string(), "raw"), meta: r };
+                return ASTNode { kind: ASTKind::text(pair.as_str().to_string(), "raw"), meta: LSPMetaInfo {
+                    range: r,
+                    url: None
+                } };
             };
         }
-        return ASTNode::default();
+        return AST::default();
     }
-    fn parse_math_text(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_math_text(&self, pairs: Pair<Rule>) -> AST {
         let s = pairs.as_str().to_string();
         let r = self.get_position(pairs.as_span());
         let mut inner = pairs.into_inner();
@@ -274,15 +307,21 @@ impl ParserConfig {
             2 => ASTKind::math(text, "display"),
             _ => ASTKind::text(s, "normal"),
         };
-        ASTNode { kind, meta: r }
+        ASTNode { kind, meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
-    fn parse_escaped(&self, pairs: Pair<Rule>) -> ASTNode {
+    fn parse_escaped(&self, pairs: Pair<Rule>) -> AST {
         let r = self.get_position(pairs.as_span());
         let c = match pairs.as_str().chars().next() {
             None => '\\',
             Some(s) => s,
         };
-        ASTNode { kind: ASTKind::escaped(c), meta: r }
+        ASTNode { kind: ASTKind::escaped(c), meta: LSPMetaInfo {
+            range: r,
+            url: None
+        } }
     }
 }
 

@@ -1,5 +1,4 @@
-use notedown_ast::ASTNode;
-use notedown_parser::ParserConfig;
+use notedown_parser::{ParserConfig, AST};
 
 mod html;
 mod text;
@@ -9,7 +8,7 @@ fn ready() {
     println!("it, works!")
 }
 
-pub fn parse(s: &str) -> ASTNode<M> {
+pub fn parse(s: &str) -> AST {
     let mut cfg = ParserConfig::default();
     cfg.parse(s).unwrap_or_default()
 }
