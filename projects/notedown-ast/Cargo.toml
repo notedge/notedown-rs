@@ -1,23 +1,20 @@
 [package]
 name = "notedown_ast"
-version = "0.11.1"
+version = "0.12.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "notedown ast and converter"
-repository = "https://github.com/nyar-lang/Notedown-rs"
-readme = "Readme.md"
+repository = "https://github.com/notedge/notedown-rs"
+readme = "../../readme.md"
 license = "MPL-2.0"
 edition = "2018"
 
 [dependencies]
 text-utils = "0.3"
-yew = { version =  "0.17", optional = true }
-yew-katex = { version =  "0.2", optional = true }
 lsp-types = { version = "0.86", optional = true, features = ["proposed"] }
-notedown-pest = { version = "1.0", optional = true}
 
 [dev-dependencies]
 
 [features]
 default = ["lsp"]
-web = ["yew", "yew-katex"]
-lsp = ["lsp-types", "notedown-pest"]
+web = []
+lsp = ["lsp-types"]
