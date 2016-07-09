@@ -21,15 +21,15 @@ pub enum ASTKind<T> {
     Paragraph(Vec<T>),
     CodeBlock(Box<CodeBlock>),
     /// - `Math`:
-    MathBlock(Box<String>),
+    MathBlock(String),
     TableView(Box<TableView<T>>),
     ListView(Box<ListView<T>>),
     /// - `Code`:
     // inlined
-    Normal(Box<String>),
-    Raw(Box<String>),
+    Normal(String),
+    Raw(String),
     /// `` `code` ``
-    Code(Box<String>),
+    Code(String),
 
     Italic(Vec<T>),
     Bold(Vec<T>),
@@ -39,15 +39,15 @@ pub enum ASTKind<T> {
     Strikethrough(Vec<T>),
     Undercover(Vec<T>),
 
-    MathInline(Box<String>),
-    MathDisplay(Box<String>),
+    MathInline(String),
+    MathDisplay(String),
 
     Escaped(char),
     Link(Box<SmartLink>),
     //
     Command(Box<Command<T>>),
-    String(Box<String>),
-    Number(Box<String>),
+    String(String),
+    Number(String),
     Boolean(bool),
     Array,
     Object,
@@ -83,9 +83,9 @@ impl<T> ASTKind<T> {
 
     pub fn math(text: String, style: &str) -> Self {
         match style {
-            "inline" => Self::MathInline(Box::new(text)),
-            "display" => Self::MathDisplay(Box::new(text)),
-            _ => Self::MathBlock(Box::new(text)),
+            "inline" => Self::MathInline(text),
+            "display" => Self::MathDisplay(text),
+            _ => Self::MathBlock(text),
         }
     }
     pub fn style(children: Vec<T>, style: &str) -> Self {
@@ -101,8 +101,8 @@ impl<T> ASTKind<T> {
     }
     pub fn text(text: String, style: &str) -> Self {
         match style {
-            "raw" => Self::Raw(Box::new(text)),
-            _ => Self::Normal(Box::new(text)),
+            "raw" => Self::Raw(text),
+            _ => Self::Normal(text),
         }
     }
     pub fn escaped(char: char) -> Self {
