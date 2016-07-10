@@ -1,0 +1,15 @@
+[package]
+name = "notedown-plugin"
+version = "0.1.0"
+authors = ["Aster <192607617@qq.com>"]
+description = "Notedown Text parser"
+repository = "https://github.com/notedge/notedown-rs"
+readme = "Readme.md"
+license = "MPL-2.0"
+edition = "2018"
+
+
+[dependencies]
+
+
+[dev-dependencies]

@@ -4,7 +4,7 @@ use std::fmt::{self, Debug, Display, Formatter};
 impl<M: Debug + Display> Display for ASTNode<M> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match &self.kind {
-            ASTKind::None => write!(f, ""),
+            ASTKind::Null => write!(f, ""),
             ASTKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))

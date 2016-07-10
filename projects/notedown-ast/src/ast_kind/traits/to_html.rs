@@ -1,7 +1,7 @@
 use crate::{
     ast_kind::{ASTKind, Header, ListView, TableView},
     traits::ToHTML,
-    CodeBlock,
+    CodeHighlight,
 };
 use std::fmt::Debug;
 
@@ -18,7 +18,7 @@ impl<T: ToHTML> ToHTML for Vec<T> {
 impl<T: Debug + ToHTML> ToHTML for ASTKind<T> {
     fn to_html(&self) -> String {
         match self {
-            ASTKind::None => String::new(),
+            ASTKind::Null => String::new(),
             ASTKind::Statements(children) => children.to_html(),
             ASTKind::Header(inner) => inner.to_html(),
             ASTKind::HorizontalRule => format!("<hr/>"),
@@ -53,7 +53,7 @@ impl<T: ToHTML> ToHTML for Header<T> {
     }
 }
 
-impl ToHTML for CodeBlock {
+impl ToHTML for CodeHighlight {
     fn to_html(&self) -> String {
         unimplemented!()
     }

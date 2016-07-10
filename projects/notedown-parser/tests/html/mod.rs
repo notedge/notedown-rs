@@ -1,6 +1,9 @@
+
 use crate::parse;
 use notedown_ast::ToHTML;
 
+mod test_escaping;
+mod test_code;
 mod easy;
 mod normal;
 

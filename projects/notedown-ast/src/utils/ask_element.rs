@@ -12,7 +12,7 @@ pub enum ContentAware {
 impl<M> ASTNode<M> {
     pub fn content_aware(&self, line: u32, column: u32) -> ContentAware {
         match &self.kind {
-            ASTKind::None => ContentAware::None,
+            ASTKind::Null => ContentAware::None,
             ASTKind::Statements(children) => content_aware_vec(&children, line, column),
             ASTKind::Header { .. } => unimplemented!(),
             ASTKind::HorizontalRule { .. } => unimplemented!(),

@@ -136,18 +136,7 @@ fn test_table() {
     trim_eq(input, output)
 }
 
-#[test]
-fn test_code() {
-    let input = r#"
-    ```js
-    let r = 0
-    ```
-    "#;
-    let output = r#"
-    \js[]{"body": "\n        let r = 0\n        "}
-    "#;
-    trim_eq(input, output);
-}
+
 
 #[test]
 fn test_quote() {
@@ -162,16 +151,6 @@ fn test_quote() {
     trim_eq(input, output)
 }
 
-#[test]
-fn test_escaping() {
-    let input = r#"
-     \\
-    "#;
-    let output = r#"
-    <p>\</p>
-    "#;
-    trim_eq(input, output)
-}
 
 #[test]
 fn test_url() {

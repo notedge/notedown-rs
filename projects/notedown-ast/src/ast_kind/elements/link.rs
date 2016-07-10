@@ -1,10 +1,18 @@
 use std::fmt::{self, Display, Formatter};
 
+/// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum SmartLink<T> {
     /// ## Bare Link
     /// A link without the `[ ]`
     Bare {
+        link: T,
+    },
+    /// ## EMail
+    /// ```note
+    /// name@link.net
+    /// ```
+    EMail {
         link: T,
     },
     /// ## Path Link
@@ -37,12 +45,16 @@ pub enum SmartLink<T> {
     /// ## Tag Block
     /// ```note
     /// [^tag]: text text text
+    /// [^tag]:
+    ///     text text text
+    ///     text text text
     /// ```
     TagBlock {
         tag: T,
         text: Vec<T>,
     },
     /// ## Tag Inline
+    /// Quote a number while defining
     /// ```note
     /// text [^tag: text text text] text
     /// ```
@@ -51,6 +63,7 @@ pub enum SmartLink<T> {
         text: Vec<T>,
     },
     /// ## Tag Reference
+    /// Quote a number, note that the name is irrelevant, and a number will always be generated in sequence at the end
     /// ```note
     /// text [^tag] text text text
     /// ```
@@ -86,10 +99,11 @@ impl<T: Display> Display for SmartLink<T> {
             //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", img_to, bind, alt),
             //     }
             // }
+            SmartLink::Bare { link } => Display::fmt(link, f),
+            SmartLink::EMail { link } => Display::fmt(link, f),
             SmartLink::Reciprocal{ .. } => unimplemented!(),
             SmartLink::TagBlock { .. }=> unimplemented!(),
             SmartLink::Reference{ .. } => unimplemented!(),
-            SmartLink::Bare { .. } => unimplemented!(),
             SmartLink::Path { .. } => unimplemented!(),
             SmartLink::PathWithText { .. } => unimplemented!(),
             SmartLink::TagInline { .. } => unimplemented!(),

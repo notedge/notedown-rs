@@ -21,7 +21,7 @@ where
 impl<T: Debug> Slugify for ASTKind<T> {
     fn slugify(&self) -> String {
         match self {
-            ASTKind::None => String::new(),
+            ASTKind::Null => String::new(),
             ASTKind::Normal { 0: inner } => inner.to_owned().slugify(),
             _ => format!("Slugify: {:#?}", self),
         }

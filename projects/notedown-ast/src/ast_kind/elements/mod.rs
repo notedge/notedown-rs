@@ -7,7 +7,7 @@ mod literal;
 mod table;
 
 pub use self::{
-    code_block::CodeBlock,
+    code_block::CodeHighlight,
     command::{Command, CommandKind},
     header::Header,
     link::SmartLink,

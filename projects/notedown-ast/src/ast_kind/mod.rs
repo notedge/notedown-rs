@@ -9,9 +9,7 @@ use std::{
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum ASTKind<T> {
-    /// - `None`: It doesn't look like anything to me
-    None,
-    /// Top
+    /// Top Scope
     Statements(Vec<T>),
     // Blocks
     /// - `Header`: TEXT, level
@@ -19,7 +17,7 @@ pub enum ASTKind<T> {
     HorizontalRule,
     ///  - `Paragraph`:
     Paragraph(Vec<T>),
-    CodeBlock(Box<CodeBlock>),
+    CodeBlock(Box<CodeHighlight>),
     /// - `Math`:
     MathBlock(String),
     TableView(Box<TableView<T>>),
@@ -45,17 +43,19 @@ pub enum ASTKind<T> {
     Escaped(char),
     Link(Box<SmartLink<T>>),
     //
-    Command(Box<Command<T>>),
+    /// - `None`: It doesn't look like anything to me
+    Null,
     String(String),
     Number(String),
     Boolean(bool),
-    Array,
+    Array(Vec<T>),
     Object,
+    Command(Box<Command<T>>),
 }
 
 impl<T> Default for ASTKind<T> {
     fn default() -> Self {
-        Self::None
+        Self::Null
     }
 }
 
@@ -70,7 +70,7 @@ impl<T> ASTKind<T> {
         let header = Header { level, children };
         Self::Header(Box::new(header))
     }
-    pub fn code(code: CodeBlock) -> Self {
+    pub fn code(code: CodeHighlight) -> Self {
         Self::CodeBlock(Box::new(code))
     }
     pub fn command(cmd: Command<T>) -> Self {
