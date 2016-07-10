@@ -6,11 +6,11 @@ description = "notedown ast and converter"
 repository = "https://github.com/notedge/notedown-rs"
 readme = "../../readme.md"
 license = "MPL-2.0"
-edition = "2018"
+edition = "2021"
 
 [dependencies]
-text-utils = "0.3"
-lsp-types = { version = "0.86", optional = true, features = ["proposed"] }
+text-utils = "0.3.0"
+lsp-types = { version = "0.91.1", optional = true, features = ["proposed"] }
 
 [dev-dependencies]
 

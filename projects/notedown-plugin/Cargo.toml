@@ -6,7 +6,7 @@ description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs"
 readme = "Readme.md"
 license = "MPL-2.0"
-edition = "2018"
+edition = "2021"
 
 
 [dependencies]
