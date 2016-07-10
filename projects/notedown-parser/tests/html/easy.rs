@@ -137,7 +137,6 @@ fn test_table() {
 }
 
 #[test]
-#[cfg(not(feature = "desktop"))]
 fn test_code() {
     let input = r#"
     ```js
@@ -186,16 +185,16 @@ fn test_url() {
     "#;
     let output = r#"
     <p>
-        <ahref="https://www.zhihu.com/question/311834230/answer/595009063">https://www.zhihu.com/question/311834230/answer/595009063</a>
+        <a href="https://www.zhihu.com/question/311834230/answer/595009063">https://www.zhihu.com/question/311834230/answer/595009063</a>
         </br>
-        <ahref="http://mathworld.wolfram.com/PrimeFormulas.html">http://mathworld.wolfram.com/PrimeFormulas.html</a>
+        <a href="http://mathworld.wolfram.com/PrimeFormulas.html">http://mathworld.wolfram.com/PrimeFormulas.html</a>
     </p>
     <p>
         Page210
         </br>
-        <ahref="http://read.pudn.com/downloads133/ebook/566944/%E9%AB%98%E6%95%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A5%A5%E7%A7%98.pdf">http://read.pudn.com/downloads133/ebook/566944/高效程序的奥秘.pdf</a>
+        <a href="http://read.pudn.com/downloads133/ebook/566944/%E9%AB%98%E6%95%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A5%A5%E7%A7%98.pdf">http://read.pudn.com/downloads133/ebook/566944/高效程序的奥秘.pdf</a>
         </br>
-        <ahref="ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf">ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf</a>
+        <a href="ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf">ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf</a>
     </p>
     "#;
     trim_eq(input, output)

@@ -43,7 +43,7 @@ pub enum ASTKind<T> {
     MathDisplay(String),
 
     Escaped(char),
-    Link(Box<SmartLink>),
+    Link(Box<SmartLink<T>>),
     //
     Command(Box<Command<T>>),
     String(String),

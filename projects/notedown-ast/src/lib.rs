@@ -1,3 +1,5 @@
+#![warn(missing_docs)]
+
 extern crate text_utils;
 
 mod ast_kind;

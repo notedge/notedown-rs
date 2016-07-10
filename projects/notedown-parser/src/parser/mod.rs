@@ -186,7 +186,7 @@ impl ParserConfig {
             }
             1 => {
                 if let ASTKind::MathDisplay(math) = &codes[0].kind {
-                    return ASTNode { kind: ASTKind::math(math.as_ref().to_owned(), "block"), meta: LSPMetaInfo { range: r, url: None } };
+                    return ASTNode { kind: ASTKind::math(math.to_owned(), "block"), meta: LSPMetaInfo { range: r, url: None } };
                 }
             }
             _ => (),

@@ -1,4 +1,4 @@
-mod fast_test;
+mod build_toc;
 mod keep_size;
 #[test]
 fn ready() {
