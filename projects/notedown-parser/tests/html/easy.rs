@@ -136,8 +136,6 @@ fn test_table() {
     trim_eq(input, output)
 }
 
-
-
 #[test]
 fn test_quote() {
     let input = r#"
@@ -150,7 +148,6 @@ fn test_quote() {
     "#;
     trim_eq(input, output)
 }
-
 
 #[test]
 fn test_url() {

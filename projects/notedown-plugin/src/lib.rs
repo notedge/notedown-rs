@@ -8,8 +8,8 @@ pub trait Function: Sync + Send {
 }
 
 impl<F> Function for F
-    where
-        F: Fn(&[Value], &IndexMap<String, Value>) -> Result<Value> + Sync + Send,
+where
+    F: Fn(&[Value], &IndexMap<String, Value>) -> Result<Value> + Sync + Send,
 {
     fn apply(&self, args: &[Value], options: &IndexMap<String, Value>) -> Result<Value> {
         self(args, options)

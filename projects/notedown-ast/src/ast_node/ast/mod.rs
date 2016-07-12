@@ -1,4 +1,4 @@
-use crate::{ASTNode, ASTKind, CodeHighlight, Command};
+use crate::{ASTKind, ASTNode, CodeHighlight, Command};
 
 pub type ASTValue = ASTNode<()>;
 

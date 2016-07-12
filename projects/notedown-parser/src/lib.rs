@@ -8,4 +8,3 @@ pub use error::{Error, Result};
 
 pub use notedown_ast::{ASTKind, ASTNode, CommandKind, SmartLink};
 pub use parser::AST;
-

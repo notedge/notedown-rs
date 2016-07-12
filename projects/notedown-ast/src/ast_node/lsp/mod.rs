@@ -1,5 +1,4 @@
-use crate::utils::LSPMetaInfo;
-use crate::ASTNode;
+use crate::{utils::LSPMetaInfo, ASTNode};
 
 pub type LSPValue = ASTNode<LSPMetaInfo>;
 

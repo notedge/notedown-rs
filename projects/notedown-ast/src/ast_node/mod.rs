@@ -1,10 +1,9 @@
-mod traits;
 mod ast;
 mod lsp;
+mod traits;
 
+pub use self::{ast::ASTValue, lsp::LSPValue};
 use crate::{utils::LSPMetaInfo, ASTKind, CodeHighlight, Command};
-pub use self::ast::ASTValue;
-pub use self::lsp::LSPValue;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct ASTNode<M> {
@@ -17,5 +16,3 @@ impl<M: Default> Default for ASTNode<M> {
         Self { kind: ASTKind::Null, meta: Default::default() }
     }
 }
-
-

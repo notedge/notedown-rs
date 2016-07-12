@@ -1,6 +1,5 @@
 use super::*;
 
-
 #[test]
 fn code_inline() {
     let input = r#"

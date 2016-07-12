@@ -15,9 +15,8 @@ use crate::ast_kind::*;
 /// following code
 /// another code
 /// ```
-///
+/// 
 /// You can also add additional parameters
-///
 /// ```lang {
 ///     key = args
 /// }
@@ -26,7 +25,6 @@ use crate::ast_kind::*;
 /// another code
 /// ```
 /// ````
-///
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct CodeHighlight {
     pub lang: String,

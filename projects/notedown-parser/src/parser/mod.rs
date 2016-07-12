@@ -207,7 +207,7 @@ impl ParserConfig {
             Rule::RawRest | Rule::StyleRest | Rule::TildeRest | Rule::MathRest => self.parse_normal_text(pair),
             Rule::WHITE_SPACE | Rule::LINE_SEPARATOR => self.parse_normal_text(pair),
             Rule::Escaped => self.parse_escaped(pair),
-            Rule::CommandBlock=>self.parse_command_block(pair),
+            Rule::CommandBlock => self.parse_command_block(pair),
             _ => debug_cases!(pair),
         }
     }
