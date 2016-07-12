@@ -7,7 +7,7 @@ use std::{
     fmt::{self, Display, Formatter},
 };
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq,Hash)]
 pub enum ASTKind<T> {
     /// Top Scope
     Statements(Vec<T>),

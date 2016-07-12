@@ -30,7 +30,7 @@ impl ASTNode<LSPMetaInfo> {
         let mut toc_ignore = false;
         if let ASTKind::Statements(terms) = &self.kind {
             for term in terms {
-                match &term.kind {
+                match &self.kind {
                     ASTKind::Header(header) => {
                         let level = header.level;
                         if toc_ignore {
@@ -43,9 +43,9 @@ impl ASTNode<LSPMetaInfo> {
                         let parent = root.last_at_level(level - 1);
                         let new = TOC {
                             level,
-                            detail: join_ast_list(&header.children),
+                            detail: unimplemented!(),
                             #[cfg(feature = "lsp")]
-                            range: term.meta.range,
+                            range: term.range,
                             children: vec![],
                         };
                         parent.children.push(new);

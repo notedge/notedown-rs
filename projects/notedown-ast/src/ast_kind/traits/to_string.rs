@@ -20,7 +20,7 @@ impl<M: Debug + Display> Display for ASTNode<M> {
             ASTKind::Raw { .. } => unimplemented!(),
             ASTKind::Code { .. } => unimplemented!(),
             ASTKind::Italic { .. } => unimplemented!(),
-            ASTKind::Bold(children) => write!(f, "**{}**", join_ast_list(&children)),
+            ASTKind::Bold(children) => unimplemented!(),
             ASTKind::Emphasis { .. } => unimplemented!(),
             ASTKind::Underline { .. } => unimplemented!(),
             ASTKind::Strikethrough { .. } => unimplemented!(),
