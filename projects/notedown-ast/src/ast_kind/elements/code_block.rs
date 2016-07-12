@@ -25,7 +25,7 @@ use crate::ast_kind::*;
 /// another code
 /// ```
 /// ````
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct CodeHighlight {
     pub lang: String,
     pub code: String,

@@ -1,7 +1,7 @@
 use crate::ast_kind::*;
 use std::fmt::Debug;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ListView<T> {
     QuoteList { style: String, body: Vec<T> },
     OrderedList { head: usize, body: Vec<T> },

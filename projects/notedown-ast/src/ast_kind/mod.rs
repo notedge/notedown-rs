@@ -1,13 +1,17 @@
 mod elements;
 mod traits;
+mod styled;
+mod math;
 
 pub use self::elements::*;
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
+pub use self::styled::StyledNode;
+pub use self::math::MathNode;
 
-#[derive(Debug, Clone, Eq, PartialEq,Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ASTKind<T> {
     /// Top Scope
     Statements(Vec<T>),
@@ -19,7 +23,6 @@ pub enum ASTKind<T> {
     Paragraph(Vec<T>),
     CodeBlock(Box<CodeHighlight>),
     /// - `Math`:
-    MathBlock(String),
     TableView(Box<TableView<T>>),
     ListView(Box<ListView<T>>),
     /// - `Code`:
@@ -29,16 +32,9 @@ pub enum ASTKind<T> {
     /// `` `code` ``
     Code(String),
 
-    Italic(Vec<T>),
-    Bold(Vec<T>),
-    Emphasis(Vec<T>),
+    Styled(StyledNode<T>),
 
-    Underline(Vec<T>),
-    Strikethrough(Vec<T>),
-    Undercover(Vec<T>),
-
-    MathInline(String),
-    MathDisplay(String),
+    Math(MathNode),
 
     Escaped(char),
     Link(Box<SmartLink<T>>),
@@ -82,22 +78,11 @@ impl<T> ASTKind<T> {
     }
 
     pub fn math(text: String, style: &str) -> Self {
-        match style {
-            "inline" => Self::MathInline(text),
-            "display" => Self::MathDisplay(text),
-            _ => Self::MathBlock(text),
-        }
+        unimplemented!()
     }
-    pub fn style(children: Vec<T>, style: &str) -> Self {
-        match style {
-            "*" | "i" | "italic" => Self::Italic(children),
-            "**" | "b" | "bold" => Self::Bold(children),
-            "***" | "em" => Self::Emphasis(children),
-            "~" | "u" | "underline" => Self::Underline(children),
-            "~~" | "s" => Self::Strikethrough(children),
-            "~~~" => Self::Undercover(children),
-            _ => unreachable!(),
-        }
+
+    pub fn styled(children: Vec<T>, style: &str) -> Self {
+        Self::Styled(StyledNode::new(children, style))
     }
     pub fn text(text: String, style: &str) -> Self {
         match style {

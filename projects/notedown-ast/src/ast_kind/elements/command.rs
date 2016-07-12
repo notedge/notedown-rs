@@ -1,4 +1,5 @@
 use crate::ast_kind::*;
+use std::hash::{Hash, Hasher};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum CommandKind {
@@ -45,6 +46,12 @@ impl<T: Display> Display for Command<T> {
         let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
 
         write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
+    }
+}
+
+impl<T> Hash for Command<T> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        unimplemented!()
     }
 }
 

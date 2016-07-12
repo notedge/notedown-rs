@@ -1,7 +1,7 @@
 use std::fmt::{self, Display, Formatter};
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum SmartLink<T> {
     /// ## Bare Link
     /// A link without the `[ ]`

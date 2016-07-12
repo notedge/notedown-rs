@@ -1,6 +1,6 @@
 use crate::ast_kind::*;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Header<T> {
     pub level: usize,
     pub children: Vec<T>,

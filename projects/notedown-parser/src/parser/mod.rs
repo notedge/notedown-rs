@@ -230,9 +230,9 @@ impl ParserConfig {
             };
         }
         let kind = match level {
-            1 => ASTKind::style(text, "*"),
-            2 => ASTKind::style(text, "**"),
-            3 => ASTKind::style(text, "***"),
+            1 => ASTKind::styled(text, "*"),
+            2 => ASTKind::styled(text, "**"),
+            3 => ASTKind::styled(text, "***"),
             _ => ASTKind::text(s, "normal"),
         };
         ASTNode { kind, range: LSPMetaInfo { range: r, url: None } }
@@ -251,9 +251,9 @@ impl ParserConfig {
             };
         }
         let kind = match level {
-            1 => ASTKind::style(text, "~"),
-            2 => ASTKind::style(text, "~~"),
-            3 => ASTKind::style(text, "~~~"),
+            1 => ASTKind::styled(text, "~"),
+            2 => ASTKind::styled(text, "~~"),
+            3 => ASTKind::styled(text, "~~~"),
             _ => ASTKind::text(s, "normal"),
         };
         ASTNode { kind, range: LSPMetaInfo { range: r, url: None } }

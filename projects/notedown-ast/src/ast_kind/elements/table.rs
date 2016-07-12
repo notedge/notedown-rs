@@ -1,7 +1,7 @@
 use crate::ast_kind::*;
 use std::fmt::Debug;
 
-#[derive(Debug, Clone, Eq, PartialEq)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum TableView<T> {
     SimpleTable { head: Vec<T>, align: Vec<u8>, terms: Vec<Vec<T>>, column: usize },
 }

@@ -12,18 +12,18 @@ pub struct ASTNode<T> {
     pub range: Option<(u32, u32)>,
 }
 
-impl<M: Default> Default for ASTNode<T> {
+impl<T: Default> Default for ASTNode<T> {
     fn default() -> Self {
-        Self { kind: ASTKind::Null, range: Default::default() }
+        Self { kind: ASTKind::Null, range: None }
     }
 }
 
-impl<T> Debug for ASTNode<T> {
+impl<T:Debug> Debug for ASTNode<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let w = &mut f.debug_struct("ASTNode");
         w.field("kind", &self.kind);
         if let Some(s) = self.range {
-            w.field("range", &format!("{}-{}", s.0, s.1))
+            w.field("range", &format!("{}-{}", s.0, s.1));
         }
         w.finish()
     }
