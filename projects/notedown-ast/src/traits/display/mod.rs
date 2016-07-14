@@ -1,6 +1,9 @@
-use crate::{ast_kind::ASTKind, utils::join_ast_list, ASTNode};
+use crate::{
+    ast_kind::{ASTKind, MathNode, StyledNode},
+    utils::join_ast_list,
+    ASTNode,
+};
 use std::fmt::{self, Debug, Display, Formatter};
-use crate::ast_kind::styled::StyledNode;
 
 impl<M: Debug + Display> Display for ASTNode<M> {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
@@ -33,9 +36,14 @@ impl<M: Debug + Display> Display for ASTNode<M> {
     }
 }
 
-
 impl<T> Display for StyledNode<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         unimplemented!()
+    }
+}
+
+impl Display for MathNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
     }
 }

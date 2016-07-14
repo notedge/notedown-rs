@@ -19,8 +19,6 @@ pub struct StyledNode<T> {
     children: Vec<T>,
 }
 
-
-
 impl From<&str> for StyledKind {
     fn from(style: &str) -> Self {
         match style {
@@ -37,9 +35,6 @@ impl From<&str> for StyledKind {
 
 impl<T> StyledNode<T> {
     pub fn new(children: Vec<T>, style: &str) -> Self {
-        Self {
-            kind: StyledKind::from(style),
-            children,
-        }
+        Self { kind: StyledKind::from(style), children }
     }
 }

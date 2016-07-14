@@ -1,15 +1,12 @@
 mod elements;
-mod traits;
-mod styled;
 mod math;
+mod styled;
 
-pub use self::elements::*;
+pub use self::{elements::*, math::MathNode, styled::StyledNode};
 use std::{
     collections::HashMap,
     fmt::{self, Display, Formatter},
 };
-pub use self::styled::StyledNode;
-pub use self::math::MathNode;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ASTKind<T> {
@@ -34,7 +31,7 @@ pub enum ASTKind<T> {
 
     Styled(StyledNode<T>),
 
-    Math(MathNode),
+    Math(Box<MathNode>),
 
     Escaped(char),
     Link(Box<SmartLink<T>>),

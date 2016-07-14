@@ -1,3 +1,6 @@
+mod display;
+mod slugify;
+
 pub trait ToHTML {
     fn to_html(&self) -> String;
 }

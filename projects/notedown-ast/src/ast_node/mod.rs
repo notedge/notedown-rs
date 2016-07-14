@@ -3,8 +3,10 @@ mod lsp;
 mod traits;
 
 use crate::{utils::LSPMetaInfo, ASTKind, CodeHighlight, Command};
-use std::hash::{Hash, Hasher};
-use std::fmt::{self, Debug, Formatter};
+use std::{
+    fmt::{self, Debug, Formatter},
+    hash::{Hash, Hasher},
+};
 
 #[derive(Clone, Eq)]
 pub struct ASTNode<T> {
@@ -18,7 +20,7 @@ impl<T: Default> Default for ASTNode<T> {
     }
 }
 
-impl<T:Debug> Debug for ASTNode<T> {
+impl<T: Debug> Debug for ASTNode<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let w = &mut f.debug_struct("ASTNode");
         w.field("kind", &self.kind);
