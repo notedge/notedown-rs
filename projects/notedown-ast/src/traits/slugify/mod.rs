@@ -1,11 +1,8 @@
-use crate::{ast_kind::ASTKind, ast_node::ASTNode, traits::Slugify};
+use crate::{ast_kind::ASTKind, ast_node::ASTNode, traits::Slugify, ASTNodes};
 use std::fmt::Debug;
 pub use text_utils::slugify;
 
-impl<M> Slugify for Vec<ASTNode<M>>
-where
-    ASTNode<M>: Slugify,
-{
+impl Slugify for ASTNodes {
     fn slugify(&self) -> String {
         let mut out = String::new();
         for span in self {
@@ -18,7 +15,13 @@ where
     }
 }
 
-impl<T: Debug> Slugify for ASTKind<T> {
+impl Slugify for ASTNode {
+    fn slugify(&self) -> String {
+        self.kind.slugify()
+    }
+}
+
+impl Slugify for ASTKind {
     fn slugify(&self) -> String {
         match self {
             ASTKind::Null => String::new(),

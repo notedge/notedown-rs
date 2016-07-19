@@ -1,11 +1,10 @@
 use crate::{
     ast_kind::{ASTKind, MathNode, StyledNode},
-    utils::join_ast_list,
-    ASTNode,
+    ASTNode, ListView,
 };
 use std::fmt::{self, Debug, Display, Formatter};
 
-impl<M: Debug + Display> Display for ASTNode<M> {
+impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match &self.kind {
             ASTKind::Null => write!(f, ""),
@@ -36,7 +35,7 @@ impl<M: Debug + Display> Display for ASTNode<M> {
     }
 }
 
-impl<T> Display for StyledNode<T> {
+impl Display for StyledNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         unimplemented!()
     }
@@ -45,5 +44,26 @@ impl<T> Display for StyledNode<T> {
 impl Display for MathNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         todo!()
+    }
+}
+impl Display for ListView {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        match self {
+            Self::QuoteList { style, body } => {
+                writeln!(f, "QuoteList")?;
+                writeln!(f, "{:?}", style)?;
+                writeln!(f, "{:?}", body)?;
+            }
+            Self::OrderedList { .. } => {
+                writeln!(f, "OrderedList")?;
+            }
+            Self::OrderlessList { .. } => {
+                writeln!(f, "OrderlessList")?;
+            }
+            Self::Details { .. } => {
+                writeln!(f, "Details")?;
+            }
+        }
+        Ok(())
     }
 }

@@ -4,6 +4,8 @@ mod header;
 mod link;
 mod list;
 mod literal;
+mod math;
+mod styled;
 mod table;
 
 pub use self::{
@@ -12,5 +14,8 @@ pub use self::{
     header::Header,
     link::SmartLink,
     list::ListView,
+    math::{MathKind, MathNode},
+    styled::{StyledKind, StyledNode},
     table::TableView,
 };
+use super::*;

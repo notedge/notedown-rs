@@ -14,9 +14,9 @@ pub enum StyledKind {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct StyledNode<T> {
+pub struct StyledNode {
     kind: StyledKind,
-    children: Vec<T>,
+    children: ASTNodes,
 }
 
 impl From<&str> for StyledKind {
@@ -33,8 +33,8 @@ impl From<&str> for StyledKind {
     }
 }
 
-impl<T> StyledNode<T> {
-    pub fn new(children: Vec<T>, style: &str) -> Self {
+impl StyledNode {
+    pub fn new(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyledKind::from(style), children }
     }
 }

@@ -1,32 +1,9 @@
-use crate::ast_kind::*;
-use std::fmt::Debug;
+use super::*;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum ListView<T> {
-    QuoteList { style: String, body: Vec<T> },
-    OrderedList { head: usize, body: Vec<T> },
-    OrderlessList { body: Vec<T> },
-    Details { summary: T, body: Vec<T> },
-}
-
-impl<T: Debug> Display for ListView<T> {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self {
-            Self::QuoteList { style, body } => {
-                writeln!(f, "QuoteList")?;
-                writeln!(f, "{:?}", style)?;
-                writeln!(f, "{:?}", body)?;
-            }
-            Self::OrderedList { .. } => {
-                writeln!(f, "OrderedList")?;
-            }
-            Self::OrderlessList { .. } => {
-                writeln!(f, "OrderlessList")?;
-            }
-            Self::Details { .. } => {
-                writeln!(f, "Details")?;
-            }
-        }
-        Ok(())
-    }
+pub enum ListView {
+    QuoteList { style: String, body: ASTNodes },
+    OrderedList { head: usize, body: ASTNodes },
+    OrderlessList { body: ASTNodes },
+    Details { summary: ASTNodes, body: ASTNodes },
 }

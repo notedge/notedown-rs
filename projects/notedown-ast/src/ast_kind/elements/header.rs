@@ -1,12 +1,12 @@
 use crate::ast_kind::*;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct Header<T> {
+pub struct Header {
     pub level: usize,
-    pub children: Vec<T>,
+    pub children: Vec<ASTNode>,
 }
 
-impl<T: Display> Display for Header<T> {
+impl Display for Header {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         write!(f, "{}", "#".repeat(self.level),)?;
         for term in &self.children {

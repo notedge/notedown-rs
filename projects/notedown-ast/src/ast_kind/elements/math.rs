@@ -1,5 +1,5 @@
 use super::*;
-use crate::ASTNode;
+use std::mem::transmute;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum MathKind {
@@ -22,8 +22,11 @@ impl Default for MathNode {
 }
 
 impl MathNode {
-    pub fn into_node(self, range: (u32, u32)) -> ASTNode<T> {
-        ASTNode { kind: ASTKind::Math(Box::new(self)), range: Some(range) }
+    pub fn into_node(self, range: (u32, u32)) -> ASTNode {
+        let range = unsafe {
+            transmute::<(u32,u32), u64>(range)
+        };
+        ASTNode { kind: ASTKind::Math(Box::new(self)), range }
     }
 
     pub fn block(raw: String) -> Self {

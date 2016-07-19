@@ -13,13 +13,8 @@ macro_rules! show_size {
 #[test]
 fn get_size() {
     show_size!();
-    show_size!(ASTNode<()>);
-    show_size!(ASTNode<()>);
-    show_size!(ASTKind<ASTNode<()>>);
-    show_size!(ListView<()>);
-    show_size!(TableView<()>);
-    show_size!(SmartLink);
-
-    assert_eq!(size_of::<ASTNode<()>>(), 32);
-    assert_eq!(size_of::<ASTKind<ASTNode<()>>>(), 32);
+    show_size!(ASTNode);
+    show_size!(ASTKind);
+    assert_eq!(size_of::<ASTNode>(), 40);
+    assert_eq!(size_of::<ASTKind>(), 32);
 }
