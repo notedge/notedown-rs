@@ -1,5 +1,5 @@
-use crate::nodes::*;
-use std::hash::{Hash, Hasher};
+use super::*;
+
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
 pub enum CommandKind {
@@ -37,7 +37,7 @@ pub struct Command {
     pub cmd: String,
     pub kind: CommandKind,
     pub args: Vec<ASTNode>,
-    pub kvs: HashMap<String, ASTNode>,
+    pub kvs: Map<String, ASTNode>,
 }
 
 impl Display for Command {

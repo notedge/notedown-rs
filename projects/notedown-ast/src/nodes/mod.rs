@@ -1,18 +1,37 @@
 mod elements;
-mod value;
 mod literal;
+mod value;
 
-pub use self::elements::*;
-use std::{
-    collections::HashMap,
-    fmt::{self, Display, Formatter},
-};
+// used for ide hint
+#[cfg(debug_assertions)]
+mod remap {
+    pub use std::collections::btree_map::{Keys, Values};
+
+    pub type Set<V> = std::collections::BTreeSet<V>;
+    pub type Map<K, V> = std::collections::BTreeMap<K, V>;
+}
+
+#[cfg(not(debug_assertions))]
+mod remap {
+    pub use indexmap::map::{Keys, Values};
+
+    pub type Set<V> = indexmap::IndexSet<V>;
+    pub type Map<K, V> = indexmap::IndexMap<K, V>;
+}
+
+use self::remap::{Map, Set};
+pub use self::{elements::*, literal::Literal};
 use crate::nodes::value::Value;
-use std::mem::transmute;
-pub use self::literal::ASTNodes;
-pub use self::literal::{ASTNode, Literal};
-use num::{BigUint, BigInt};
-use std::collections::{BTreeMap, BTreeSet};
+use num::{BigInt, BigUint};
+use std::{
+    fmt::{self, Debug, Display, Formatter},
+    hash::{Hash, Hasher},
+    mem::transmute,
+};
+
+
+pub type ASTNode = Literal<ASTKind>;
+pub type ASTNodes = Vec<Literal<ASTKind>>;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ASTKind {
@@ -53,10 +72,7 @@ impl Default for ASTKind {
 
 impl ASTKind {
     pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: self,
-            range: ASTNode::range_from(range),
-        }
+        ASTNode { value: self, range: ASTNode::range_from(range) }
     }
 
     pub fn statements(children: ASTNodes) -> Self {

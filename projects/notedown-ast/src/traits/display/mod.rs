@@ -1,13 +1,15 @@
-use crate::{
-    nodes::{ASTKind, MathNode, StyledNode},
-    ListView,
-};
+use crate::{nodes::{ASTKind, ASTNode, MathNode}, ListView};
 use std::fmt::{self, Debug, Display, Formatter};
-use crate::nodes::ASTNode;
 
 impl Display for ASTNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        Display::fmt(&self.value, f)
+    }
+}
+
+impl Display for ASTKind {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match &self.value {
+        match &self {
             ASTKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))
@@ -26,22 +28,13 @@ impl Display for ASTNode {
             ASTKind::Link { .. } => unimplemented!(),
             ASTKind::Escaped { .. } => unimplemented!(),
             ASTKind::Command { .. } => unimplemented!(),
-            ASTKind::Value{ .. } => unimplemented!(),
+            ASTKind::Value { .. } => unimplemented!(),
         }
     }
 }
 
-impl Display for StyledNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        unimplemented!()
-    }
-}
 
-impl Display for MathNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
-    }
-}
+
 impl Display for ListView {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {

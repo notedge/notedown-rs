@@ -1,30 +1,48 @@
 use super::*;
 use std::hash::{Hash, Hasher};
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Debug)]
 pub enum Value {
     /// - `None`: It doesn't look like anything to me
     Null,
-    String(String),
+    Boolean(bool),
     Integer(BigInt),
     Decimal(f64),
-    Boolean(bool),
-    Set(BTreeSet<Literal<Value>>),
-    Array(BTreeMap<Literal<BigUint>, Literal<Value>>),
-    Object(BTreeMap<Literal<String>, Literal<Value>>),
+    String(String),
+    Set(Set<Literal<Value>>),
+    Array(Map<Literal<BigUint>, Literal<Value>>),
+    Object(Map<Literal<String>, Literal<Value>>),
 }
 
 impl Hash for Value {
     fn hash<H: Hasher>(&self, state: &mut H) {
         match self {
-            Value::Null => {().hash(state)}
-            Value::String(v) => {v.hash(state)}
-            Value::Integer(v) => {v.hash(state)}
-            Value::Decimal(v) => {v.hash(state)}
-            Value::Boolean(v) => {v.hash(state)}
-            Value::Set(v) => {v.hash(state)}
-            Value::Array(v) => {v.hash(state)}
-            Value::Object(v) => {v.hash(state)}
+            Self::Null => ().hash(state),
+            Self::Boolean(v) => v.hash(state),
+            Self::Integer(v) => v.hash(state),
+            Self::Decimal(v) => unsafe { transmute::<f64, [u8; 8]>(*v).hash(state) },
+            Self::String(v) => v.hash(state),
+            Self::Set(v) => v.hash(state),
+            Self::Array(v) => v.hash(state),
+            Self::Object(v) => v.hash(state),
+        }
+    }
+}
+
+impl Eq for Value {}
+
+impl PartialEq for Value {
+    fn eq(&self, other: &Value) -> bool {
+        match (self, other) {
+            (Self::Null, Self::Null) => true,
+            (Self::Boolean(l), Self::Boolean(r)) => l == r,
+            (Self::Integer(l), Self::Integer(r)) => l == r,
+            (Self::Decimal(l), Self::Decimal(r)) => l == r,
+            (Self::String(l), Self::String(r)) => l == r,
+            (Self::Set(l), Self::Set(r)) => l == r,
+            (Self::Array(l), Self::Array(r)) => l == r,
+            (Self::Object(l), Self::Object(r)) => l == r,
+            _ => false,
         }
     }
 }

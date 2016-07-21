@@ -1,5 +1,4 @@
-use crate::{nodes::ASTKind};
-use crate::nodes::ASTNode;
+use crate::nodes::{ASTKind, ASTNode};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContentAware {
@@ -28,7 +27,7 @@ impl ASTNode {
             ASTKind::Link { .. } => unimplemented!(),
             ASTKind::Escaped { .. } => unimplemented!(),
             ASTKind::Command { .. } => unimplemented!(),
-            ASTKind::Value{ .. } => unimplemented!(),
+            ASTKind::Value { .. } => unimplemented!(),
         }
     }
 }
