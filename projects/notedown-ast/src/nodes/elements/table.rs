@@ -1,4 +1,4 @@
-use crate::ast_kind::*;
+use crate::nodes::*;
 use std::fmt::Debug;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]

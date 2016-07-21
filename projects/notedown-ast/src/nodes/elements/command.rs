@@ -1,4 +1,4 @@
-use crate::ast_kind::*;
+use crate::nodes::*;
 use std::hash::{Hash, Hasher};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]

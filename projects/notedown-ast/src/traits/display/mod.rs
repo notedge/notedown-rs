@@ -1,13 +1,13 @@
 use crate::{
-    ast_kind::{ASTKind, MathNode, StyledNode},
-    ASTNode, ListView,
+    nodes::{ASTKind, MathNode, StyledNode},
+    ListView,
 };
 use std::fmt::{self, Debug, Display, Formatter};
+use crate::nodes::ASTNode;
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match &self.kind {
-            ASTKind::Null => write!(f, ""),
+        match &self.value {
             ASTKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))
@@ -26,11 +26,7 @@ impl Display for ASTNode {
             ASTKind::Link { .. } => unimplemented!(),
             ASTKind::Escaped { .. } => unimplemented!(),
             ASTKind::Command { .. } => unimplemented!(),
-            ASTKind::String { .. } => unimplemented!(),
-            ASTKind::Number { .. } => unimplemented!(),
-            ASTKind::Boolean { .. } => unimplemented!(),
-            ASTKind::Array { .. } => unimplemented!(),
-            ASTKind::Object => unimplemented!(),
+            ASTKind::Value{ .. } => unimplemented!(),
         }
     }
 }

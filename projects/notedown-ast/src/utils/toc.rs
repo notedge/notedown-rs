@@ -1,6 +1,6 @@
 // #[cfg(feature = "lsp")]
 // use crate::utils::lsp_info::Range;
-// use crate::{ast_kind::ASTKind, utils::LSPMetaInfo, ASTNode};
+// use crate::{nodes::ASTKind, utils::LSPMetaInfo, ASTNode};
 // use std::fmt::{Debug, Display};
 //
 // #[derive(Debug)]

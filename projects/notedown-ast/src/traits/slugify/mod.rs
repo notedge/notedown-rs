@@ -1,6 +1,6 @@
-use crate::{ast_kind::ASTKind, ast_node::ASTNode, traits::Slugify, ASTNodes};
-use std::fmt::Debug;
+use crate::{nodes::ASTKind, traits::Slugify};
 pub use text_utils::slugify;
+use crate::nodes::{ASTNodes, ASTNode};
 
 impl Slugify for ASTNodes {
     fn slugify(&self) -> String {
@@ -17,14 +17,13 @@ impl Slugify for ASTNodes {
 
 impl Slugify for ASTNode {
     fn slugify(&self) -> String {
-        self.kind.slugify()
+        self.value.slugify()
     }
 }
 
 impl Slugify for ASTKind {
     fn slugify(&self) -> String {
         match self {
-            ASTKind::Null => String::new(),
             ASTKind::Normal { 0: inner } => inner.to_owned().slugify(),
             _ => format!("Slugify: {:#?}", self),
         }
