@@ -1,7 +1,7 @@
 use super::*;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-pub enum StyledKind {
+pub enum StyleKind {
     Normal = 0,
 
     Italic,
@@ -14,18 +14,18 @@ pub enum StyledKind {
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct StyledNode {
-    pub kind: StyledKind,
+pub struct StyleNode {
+    pub kind: StyleKind,
     pub children: ASTNodes,
 }
 
-impl Display for StyledNode {
+impl Display for StyleNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.surround(f)
     }
 }
 
-impl From<&str> for StyledKind {
+impl From<&str> for StyleKind {
     fn from(style: &str) -> Self {
         match style {
             "*" | "i" | "italic" => Self::Italic,
@@ -39,7 +39,7 @@ impl From<&str> for StyledKind {
     }
 }
 
-impl StyledKind {
+impl StyleKind {
     pub fn surround(&self) -> &'static str {
         match self {
             Self::Normal => { "" }
@@ -53,9 +53,9 @@ impl StyledKind {
     }
 }
 
-impl StyledNode {
+impl StyleNode {
     pub fn new(children: ASTNodes, style: &str) -> Self {
-        Self { kind: StyledKind::from(style), children }
+        Self { kind: StyleKind::from(style), children }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let s  =self.kind.surround();

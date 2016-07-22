@@ -8,7 +8,7 @@ use crate::{
     utils::LSPMetaInfo,
     ParserConfig, Result,
 };
-use notedown_ast::{ASTKind, ASTNode, CodeHighlight, Command, CommandKind};
+use notedown_ast::{ASTKind, ASTNode, CodeNode, Command, CommandKind};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 use std::fs;
 use url::Url;
@@ -147,7 +147,7 @@ impl ParserConfig {
                 _ => debug_cases!(pair),
             };
         }
-        let code = CodeHighlight { lang, code, inline: false, high_line: vec![] };
+        let code = CodeNode { lang, code, inline: false, high_line: vec![] };
         ASTNode { value: ASTKind::code(code), range: LSPMetaInfo { range: r, url: None } }
     }
 

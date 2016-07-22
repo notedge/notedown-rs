@@ -26,14 +26,14 @@ use crate::nodes::*;
 /// ```
 /// ````
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct CodeHighlight {
+pub struct CodeNode {
     pub lang: String,
     pub code: String,
     pub inline: bool,
     pub high_line: Vec<usize>,
 }
 
-impl Display for CodeHighlight {
+impl Display for CodeNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         if self.inline {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)

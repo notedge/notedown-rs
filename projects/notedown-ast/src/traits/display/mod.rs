@@ -1,5 +1,5 @@
 use crate::{nodes::{ASTKind, ASTNode}, ListView};
-use std::fmt::{self, Debug, Display, Formatter};
+use std::fmt::{self, Display, Formatter};
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -17,7 +17,7 @@ impl Display for ASTKind {
             ASTKind::Header { .. } => unimplemented!(),
             ASTKind::HorizontalRule { .. } => unimplemented!(),
             ASTKind::Paragraph { .. } => unimplemented!(),
-            ASTKind::CodeBlock(inner) => Display::fmt(inner, f),
+            ASTKind::Code(inner) => Display::fmt(inner, f),
             ASTKind::TableView { .. } => unimplemented!(),
             ASTKind::ListView(inner) => Display::fmt(inner, f),
             ASTKind::Normal(inner) => write!(f, "{}", inner),

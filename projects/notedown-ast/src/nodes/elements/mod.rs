@@ -9,13 +9,13 @@ mod styled;
 mod table;
 
 pub use self::{
-    code_block::CodeHighlight,
+    code_block::CodeNode,
     command::{Command, CommandKind},
     header::Header,
     link::SmartLink,
     list::ListView,
     math::{MathKind, MathNode},
-    styled::{StyledKind, StyledNode},
+    styled::{StyleKind, StyleNode},
     table::TableView,
 };
 use super::*;

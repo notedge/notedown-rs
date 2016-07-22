@@ -7,6 +7,6 @@ pub mod utils;
 mod command;
 
 pub use nodes::{
-    ASTKind, ASTNode, ASTNodes, CodeHighlight, Command, CommandKind, ListView, MathKind, MathNode, SmartLink, StyledKind, StyledNode, TableView,
+    ASTKind, ASTNode, ASTNodes, CodeNode, Command, CommandKind, ListView, MathKind, MathNode, SmartLink, StyleKind, StyleNode, TableView,
 };
 pub use traits::{Slugify, WriteHTML};

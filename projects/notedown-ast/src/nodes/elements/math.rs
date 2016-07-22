@@ -69,6 +69,9 @@ impl MathNode {
 }
 
 impl MathNode {
+    pub fn get_text(&self) -> String {
+        self.raw.to_owned()
+    }
     pub fn get_format(&self) -> String {
         match &self.format {
             Some(s) => { s.to_owned() }

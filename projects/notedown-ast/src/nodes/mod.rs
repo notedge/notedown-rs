@@ -43,7 +43,7 @@ pub enum ASTKind {
     HorizontalRule,
     ///  - `Paragraph`:
     Paragraph(ASTNodes),
-    CodeBlock(Box<CodeHighlight>),
+    Code(Box<CodeNode>),
     /// - `Math`:
     TableView(Box<TableView>),
     ListView(Box<ListView>),
@@ -51,10 +51,8 @@ pub enum ASTKind {
     // inlined
     Normal(String),
     Raw(String),
-    /// `` `code` ``
-    Code(String),
 
-    Styled(Box<StyledNode>),
+    Styled(Box<StyleNode>),
 
     Math(Box<MathNode>),
 
@@ -85,8 +83,8 @@ impl ASTKind {
         let header = Header { level, children };
         Self::Header(Box::new(header))
     }
-    pub fn code(code: CodeHighlight) -> Self {
-        Self::CodeBlock(Box::new(code))
+    pub fn code(code: CodeNode) -> Self {
+        Self::Code(Box::new(code))
     }
     pub fn command(cmd: Command) -> Self {
         Self::Command(Box::new(cmd))
@@ -105,7 +103,7 @@ impl ASTKind {
         Self::Math(Box::new(node))
     }
     pub fn styled(children: ASTNodes, style: &str) -> Self {
-        Self::Styled(Box::new(StyledNode::new(children, style)))
+        Self::Styled(Box::new(StyleNode::new(children, style)))
     }
     pub fn text(text: String, style: &str) -> Self {
         match style {
