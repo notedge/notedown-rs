@@ -23,12 +23,27 @@ impl Default for MathNode {
 
 impl Display for MathNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        self.surround(f)
     }
 }
 
 impl MathKind {
-
+    pub fn surround_begin(&self) -> &'static str {
+        match self {
+            Self::Inline => { "$" }
+            Self::Display => { "$$" }
+            Self::BlockInline => { "\n\n$" }
+            Self::BlockDisplay => { "\n\n$$" }
+        }
+    }
+    pub fn surround_end(&self) -> &'static str {
+        match self {
+            Self::Inline => { "$" }
+            Self::Display => { "$$" }
+            Self::BlockInline => { "$\n\n" }
+            Self::BlockDisplay => { "$$\n\n" }
+        }
+    }
 }
 
 impl MathNode {
@@ -44,6 +59,12 @@ impl MathNode {
     pub fn into_node(self, range: (u32, u32)) -> ASTNode {
         let range = unsafe { transmute::<(u32, u32), u64>(range) };
         ASTNode { value: ASTKind::Math(Box::new(self)), range }
+    }
+    pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.write_str(self.kind.surround_begin())?;
+        f.write_str(&self.raw)?;
+        f.write_str(self.kind.surround_end())?;
+        Ok(())
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::{nodes::{ASTKind, ASTNode, MathNode}, ListView};
+use crate::{nodes::{ASTKind, ASTNode}, ListView};
 use std::fmt::{self, Debug, Display, Formatter};
 
 impl Display for ASTNode {

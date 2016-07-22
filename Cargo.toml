@@ -2,6 +2,7 @@
 members = ["projects/*"]
 default-members = [
     "projects/notedown-ast",
+    "projects/notedown-lsp",
     "projects/notedown-plugin",
     "projects/notedown-pest",
     "projects/notedown-parser2",
