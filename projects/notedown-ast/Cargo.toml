@@ -14,6 +14,7 @@ lsp-types = { version = "0.91.1", optional = true, features = ["proposed"] }
 num = "0.4"
 itertools = "0.10.1"
 indexmap = "1.7"
+thiserror = "1.0.30"
 
 [dev-dependencies]
 

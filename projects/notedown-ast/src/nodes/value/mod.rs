@@ -1,8 +1,8 @@
 mod methods;
-mod typping;
+mod typing;
 
 use super::*;
-
+pub use self::typing::ValueType;
 
 #[derive(Clone, Debug)]
 pub enum Value {

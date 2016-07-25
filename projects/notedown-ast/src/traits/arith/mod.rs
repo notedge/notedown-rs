@@ -1,5 +1,5 @@
 mod add;
 
-use crate::{ASTKind, NoteError, Result};
+use crate::{Result};
 use std::ops::{Add, AddAssign};
 use crate::nodes::Value;

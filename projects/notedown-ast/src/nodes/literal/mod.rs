@@ -45,8 +45,8 @@ impl<T> Literal<T> {
         Self { value, range: Self::range_from(range) }
     }
 
-    pub fn unwrap(self) -> T {
-        self.value
+    pub fn unwrap(&self) -> &T {
+        &self.value
     }
 
     pub fn range(&self) -> Option<(u32, u32)> {

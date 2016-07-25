@@ -16,7 +16,6 @@ impl ASTNode {
             ASTKind::Header { .. } => unimplemented!(),
             ASTKind::HorizontalRule { .. } => unimplemented!(),
             ASTKind::Paragraph { .. } => unimplemented!(),
-            ASTKind::CodeBlock { .. } => unimplemented!(),
             ASTKind::TableView { .. } => unimplemented!(),
             ASTKind::ListView { .. } => unimplemented!(),
             ASTKind::Normal { .. } => unimplemented!(),
