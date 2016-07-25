@@ -20,15 +20,13 @@ mod remap {
 }
 
 use self::remap::{Map, Set};
-pub use self::{elements::*, literal::Literal};
-use crate::nodes::value::Value;
+pub use self::{elements::*, literal::Literal, value::Value};
 use num::{BigInt, BigUint};
 use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
     mem::transmute,
 };
-
 
 pub type ASTNode = Literal<ASTKind>;
 pub type ASTNodes = Vec<Literal<ASTKind>>;

@@ -1,5 +1,8 @@
+mod methods;
+mod typping;
+
 use super::*;
-use std::hash::{Hash, Hasher};
+
 
 #[derive(Clone, Debug)]
 pub enum Value {
