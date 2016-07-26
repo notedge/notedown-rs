@@ -1,6 +1,5 @@
 use super::*;
 
-
 impl WriteHTML for ASTNodes {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {
         for child in self {
@@ -49,7 +48,9 @@ impl WriteHTML for ASTKind {
 impl WriteHTML for StyleNode {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {
         match self.kind {
-            StyleKind::Normal => { self.children.write_html(f)?; }
+            StyleKind::Normal => {
+                self.children.write_html(f)?;
+            }
             StyleKind::Italic => {
                 f.write_str("<i>")?;
                 self.children.write_html(f)?;
@@ -98,7 +99,6 @@ impl WriteHTML for MathNode {
         }
     }
 }
-
 
 impl WriteHTML for CodeNode {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {

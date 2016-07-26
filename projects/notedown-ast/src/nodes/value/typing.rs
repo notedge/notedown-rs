@@ -1,5 +1,5 @@
 use super::*;
-use std::collections::{BTreeSet, BTreeMap};
+use std::collections::{BTreeMap, BTreeSet};
 
 #[derive(Clone, Debug, Ord, PartialOrd, Eq, PartialEq)]
 pub enum ValueType {
@@ -17,14 +17,14 @@ pub enum ValueType {
 impl Value {
     pub fn get_type(&self) -> ValueType {
         match self {
-            Self::Null => { ValueType::Null }
-            Self::Boolean(_) => { ValueType::Boolean }
-            Self::Integer(_) => { ValueType::Integer }
-            Self::Decimal(_) => { ValueType::Decimal }
-            Self::String(_) => { ValueType::String }
-            Self::Set(v) => { self.check_set_type(v) }
-            Self::Array(v) => { self.check_list_type(v) }
-            Self::Object(v) => { self.check_dict_type(v) }
+            Self::Null => ValueType::Null,
+            Self::Boolean(_) => ValueType::Boolean,
+            Self::Integer(_) => ValueType::Integer,
+            Self::Decimal(_) => ValueType::Decimal,
+            Self::String(_) => ValueType::String,
+            Self::Set(v) => self.check_set_type(v),
+            Self::Array(v) => self.check_list_type(v),
+            Self::Object(v) => self.check_dict_type(v),
         }
     }
     pub fn get_type_name(&self) -> String {

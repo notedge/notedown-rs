@@ -1,7 +1,5 @@
 use super::*;
 
-
-
 impl WriteHTML for TableView {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {
         todo!()

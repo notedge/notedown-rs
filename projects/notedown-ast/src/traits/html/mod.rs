@@ -1,11 +1,11 @@
-mod writers;
 mod table_view;
+mod writers;
 
-use crate::{ListView, TableView};
-use crate::{CodeNode, ASTNodes, ASTNode, ASTKind, StyleNode, StyleKind, MathNode, MathKind};
-use std::fmt::{ Write, Arguments};
-use std::fmt;
-use crate::nodes::Header;
+use crate::{nodes::Header, ASTKind, ASTNode, ASTNodes, CodeNode, ListView, MathKind, MathNode, StyleKind, StyleNode, TableView};
+use std::{
+    fmt,
+    fmt::{Arguments, Write},
+};
 
 pub trait WriteHTML {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result;
@@ -19,11 +19,7 @@ pub struct HTMLRenderer {
 
 impl Default for HTMLRenderer {
     fn default() -> Self {
-        Self {
-            math_renderer: None,
-            code_renderer: None,
-            buffer: String::new(),
-        }
+        Self { math_renderer: None, code_renderer: None, buffer: String::new() }
     }
 }
 

@@ -20,7 +20,11 @@ mod remap {
 }
 
 use self::remap::{Map, Set};
-pub use self::{elements::*, literal::Literal, value::{Value, ValueType}};
+pub use self::{
+    elements::*,
+    literal::Literal,
+    value::{Value, ValueType},
+};
 use num::{BigInt, BigUint};
 use std::{
     fmt::{self, Debug, Display, Formatter},

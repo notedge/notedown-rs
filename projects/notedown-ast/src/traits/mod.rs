@@ -1,7 +1,7 @@
-mod display;
-mod slugify;
-mod html;
 mod arith;
+mod display;
+mod html;
+mod slugify;
 
 pub use html::{HTMLRenderer, WriteHTML};
 

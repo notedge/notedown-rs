@@ -1,9 +1,11 @@
 mod value;
 
-use crate::{nodes::{ASTKind, ASTNode}, ListView};
-use std::fmt::{self, Display, Formatter};
-use crate::nodes::ValueType;
+use crate::{
+    nodes::{ASTKind, ASTNode, ValueType},
+    ListView,
+};
 use itertools::Itertools;
+use std::fmt::{self, Display, Formatter};
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -37,8 +39,6 @@ impl Display for ASTKind {
     }
 }
 
-
-
 impl Display for ListView {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
@@ -60,4 +60,3 @@ impl Display for ListView {
         Ok(())
     }
 }
-

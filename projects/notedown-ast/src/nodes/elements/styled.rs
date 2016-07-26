@@ -42,13 +42,13 @@ impl From<&str> for StyleKind {
 impl StyleKind {
     pub fn surround(&self) -> &'static str {
         match self {
-            Self::Normal => { "" }
-            Self::Italic => { "*" }
-            Self::Bold => { "**" }
-            Self::Emphasis => { "***" }
-            Self::Underline => { "~" }
-            Self::Strikethrough => { "~~" }
-            Self::Undercover => { "~~~" }
+            Self::Normal => "",
+            Self::Italic => "*",
+            Self::Bold => "**",
+            Self::Emphasis => "***",
+            Self::Underline => "~",
+            Self::Strikethrough => "~~",
+            Self::Undercover => "~~~",
         }
     }
 }
@@ -58,7 +58,7 @@ impl StyleNode {
         Self { kind: StyleKind::from(style), children }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let s  =self.kind.surround();
+        let s = self.kind.surround();
         f.write_str(s)?;
         for child in &self.children {
             write!(f, "{}", child.value)?;

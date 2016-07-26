@@ -30,18 +30,18 @@ impl Display for MathNode {
 impl MathKind {
     pub fn surround_begin(&self) -> &'static str {
         match self {
-            Self::Inline => { "$" }
-            Self::Display => { "$$" }
-            Self::BlockInline => { "\n\n$" }
-            Self::BlockDisplay => { "\n\n$$" }
+            Self::Inline => "$",
+            Self::Display => "$$",
+            Self::BlockInline => "\n\n$",
+            Self::BlockDisplay => "\n\n$$",
         }
     }
     pub fn surround_end(&self) -> &'static str {
         match self {
-            Self::Inline => { "$" }
-            Self::Display => { "$$" }
-            Self::BlockInline => { "$\n\n" }
-            Self::BlockDisplay => { "$$\n\n" }
+            Self::Inline => "$",
+            Self::Display => "$$",
+            Self::BlockInline => "$\n\n",
+            Self::BlockDisplay => "$$\n\n",
         }
     }
 }
@@ -74,8 +74,8 @@ impl MathNode {
     }
     pub fn get_format(&self) -> String {
         match &self.format {
-            Some(s) => { s.to_owned() }
-            None => { "LaTeX".to_string() }
+            Some(s) => s.to_owned(),
+            None => "LaTeX".to_string(),
         }
     }
     pub fn set_format(mut self, s: String) -> Self {
