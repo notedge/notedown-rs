@@ -58,7 +58,7 @@ impl MathNode {
     }
     pub fn into_node(self, range: (u32, u32)) -> ASTNode {
         let range = unsafe { transmute::<(u32, u32), u64>(range) };
-        ASTNode { value: ASTKind::Math(Box::new(self)), range }
+        ASTNode { value: ASTKind::MathNode(Box::new(self)), range }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         f.write_str(self.kind.surround_begin())?;

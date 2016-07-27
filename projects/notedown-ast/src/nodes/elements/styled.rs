@@ -1,25 +1,21 @@
 use super::*;
 
-#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
-pub enum StyleKind {
-    Normal = 0,
-
-    Italic,
-    Bold,
-    Emphasis,
-
-    Underline,
-    Strikethrough,
-    Undercover,
-}
-
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct StyleNode {
-    pub kind: StyleKind,
-    pub children: ASTNodes,
+pub enum TextNode {
+    Normal(String),
+    Raw(String),
+    Escaped(char),
+
+    Italic(ASTNodes),
+    Bold(ASTNodes),
+    Emphasis(ASTNodes),
+
+    Underline(ASTNodes),
+    Strikethrough(ASTNodes),
+    Undercover(ASTNodes),
 }
 
-impl Display for StyleNode {
+impl Display for TextNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         self.surround(f)
     }
@@ -42,7 +38,7 @@ impl From<&str> for StyleKind {
 impl StyleKind {
     pub fn surround(&self) -> &'static str {
         match self {
-            Self::Normal => "",
+            Self::Normal | Self::Raw | Self::Escaped => "",
             Self::Italic => "*",
             Self::Bold => "**",
             Self::Emphasis => "***",
@@ -53,8 +49,13 @@ impl StyleKind {
     }
 }
 
-impl StyleNode {
-    pub fn new(children: ASTNodes, style: &str) -> Self {
+impl TextNode {
+    pub fn text(inner: String) -> Self {
+        Self::Normal(inner)
+    }
+
+
+    pub fn styled(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {

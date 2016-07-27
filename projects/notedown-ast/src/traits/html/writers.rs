@@ -29,14 +29,14 @@ impl WriteHTML for ASTKind {
                 children.write_html(f);
                 f.write_str("</p>")
             }
-            ASTKind::Code(inner) => inner.write_html(f),
+            ASTKind::CodeBlock(inner) => inner.write_html(f),
             ASTKind::TableView(inner) => inner.write_html(f),
             ASTKind::ListView(inner) => inner.write_html(f),
             ASTKind::Normal(inner) => unimplemented!(),
             ASTKind::Raw(inner) => unimplemented!(),
-            ASTKind::Code(inner) => unimplemented!(),
-            ASTKind::Styled(inner) => inner.write_html(f),
-            ASTKind::Math(_) => unimplemented!(),
+            ASTKind::CodeBlock(inner) => unimplemented!(),
+            ASTKind::TextSpan(inner) => inner.write_html(f),
+            ASTKind::MathNode(_) => unimplemented!(),
             ASTKind::Escaped(_) => unimplemented!(),
             ASTKind::Link(_) => unimplemented!(),
             ASTKind::Value(_) => unimplemented!(),
@@ -45,7 +45,7 @@ impl WriteHTML for ASTKind {
     }
 }
 
-impl WriteHTML for StyleNode {
+impl WriteHTML for TextNode {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {
         match self.kind {
             StyleKind::Normal => {

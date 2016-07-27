@@ -7,6 +7,7 @@ mod literal;
 mod math;
 mod styled;
 mod table;
+mod delimiter;
 
 pub use self::{
     code_block::CodeNode,
@@ -15,7 +16,7 @@ pub use self::{
     link::SmartLink,
     list::ListView,
     math::{MathKind, MathNode},
-    styled::{StyleKind, StyleNode},
+    styled::{StyleKind, TextNode},
     table::TableView,
 };
 use super::*;

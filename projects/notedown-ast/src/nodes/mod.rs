@@ -42,23 +42,18 @@ pub enum ASTKind {
     // Blocks
     /// - `Header`: TEXT, level
     Header(Box<Header>),
+    Delimiter(Box<Delimiter>),
     HorizontalRule,
     ///  - `Paragraph`:
     Paragraph(ASTNodes),
-    Code(Box<CodeNode>),
+    CodeBlock(Box<CodeNode>),
     /// - `Math`:
     TableView(Box<TableView>),
     ListView(Box<ListView>),
-    /// - `Code`:
-    // inlined
-    Normal(String),
-    Raw(String),
 
-    Styled(Box<StyleNode>),
 
-    Math(Box<MathNode>),
-
-    Escaped(char),
+    TextSpan(Box<TextNode>),
+    MathNode(Box<MathNode>),
     Link(Box<SmartLink<String>>),
     Value(Box<Value>),
     Command(Box<Command>),
@@ -86,7 +81,7 @@ impl ASTKind {
         Self::Header(Box::new(header))
     }
     pub fn code(code: CodeNode) -> Self {
-        Self::Code(Box::new(code))
+        Self::CodeBlock(Box::new(code))
     }
     pub fn command(cmd: Command) -> Self {
         Self::Command(Box::new(cmd))
@@ -102,16 +97,13 @@ impl ASTKind {
             "$$" => MathNode::display(text),
             _ => MathNode::block(text),
         };
-        Self::Math(Box::new(node))
+        Self::MathNode(Box::new(node))
     }
     pub fn styled(children: ASTNodes, style: &str) -> Self {
-        Self::Styled(Box::new(StyleNode::new(children, style)))
+        Self::TextSpan(Box::new(TextNode::styled(children, style)))
     }
     pub fn text(text: String, style: &str) -> Self {
-        match style {
-            "raw" => Self::Raw(text),
-            _ => Self::Normal(text),
-        }
+        Self::TextSpan(Box::new(TextNode::styled(children, style)))
     }
     pub fn escaped(char: char) -> Self {
         Self::Escaped(char)

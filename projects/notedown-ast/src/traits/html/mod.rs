@@ -1,7 +1,7 @@
 mod table_view;
 mod writers;
 
-use crate::{nodes::Header, ASTKind, ASTNode, ASTNodes, CodeNode, ListView, MathKind, MathNode, StyleKind, StyleNode, TableView};
+use crate::{nodes::Header, ASTKind, ASTNode, ASTNodes, CodeNode, ListView, MathKind, MathNode, StyleKind, TextNode, TableView};
 use std::{
     fmt,
     fmt::{Arguments, Write},
