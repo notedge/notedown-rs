@@ -1,17 +1,11 @@
 mod add;
-mod mul;
 mod index;
+mod mul;
 
-use crate::{nodes::Value, Result};
-use std::ops::{Add};
-use crate::NoteError;
-use num::ToPrimitive;
-use std::ops::{Mul, Shr, Sub};
-use std::ops::{Div};
-use num::BigInt;
+use crate::{nodes::Value, NoteError, Result};
+use num::{BigInt, ToPrimitive};
+use std::ops::{Add, Div, Mul, Shr, Sub};
 
 fn fail_int2dec(n: BigInt) -> Result<Value> {
     Err(NoteError::runtime_error(format!("Can not convert `Integer` {} to `Decimal`", n)))
 }
-
-

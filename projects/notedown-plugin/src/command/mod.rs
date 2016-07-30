@@ -1,8 +1,3 @@
 use notedown_ast::ASTNode;
 
-
-
-
-pub fn sort(a: ASTNode) {
-
-}
+pub fn sort(a: ASTNode) {}

@@ -1,6 +1,5 @@
 use super::*;
 
-
 impl Add for Value {
     type Output = Result<Self>;
 
@@ -29,8 +28,7 @@ impl Shr for Value {
     /// a ++ b
     fn shr(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `++` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch =
-            Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(NoteError::type_mismatch(msg));
         let out = match (self, other) {
             (Self::String(lhs), rhs) => Self::string_join(lhs, rhs)?,
             _ => return type_mismatch,
@@ -90,4 +88,3 @@ impl Sub for Value {
         return Ok(out);
     }
 }
-

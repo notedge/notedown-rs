@@ -1,7 +1,7 @@
 use lsp_types::Url;
 use std::{
     error::Error,
-    fmt::{Debug, Display, Formatter},
+    fmt::{self, Debug, Display, Formatter},
 };
 
 mod error_custom;
@@ -20,24 +20,12 @@ pub enum NoteErrorKind {
     IOError {},
     FormatError {},
     // PestError { #[from] source: pest::error::Error<crate::cst::Rule> },
-    LanguageError {
-        error: String,
-    },
-    StructureError {
-        error: String,
-        start: Option<usize>,
-        end: Option<usize>,
-    },
-    UnexpectedToken {
-        error: String,
-        start: Option<usize>,
-        end: Option<usize>,
-    },
+    LanguageError(String),
+    StructureError(String),
+    UnexpectedToken(String),
     TypeMismatch(String),
     RuntimeError(String),
-    InfoMissing {
-        error: String,
-    },
+    InfoMissing(String),
     /// Some nodes failed to resolve and are being rolled back
     Unwinding,
     /// A forbidden cst_node encountered
@@ -77,10 +65,22 @@ impl NoteError {
     }
 }
 
+
+impl Error for NoteError {}
+
 impl Display for NoteError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        unimplemented!()
+        let path = match &self.file {
+            Some(s) => { s.path() }
+            None => { "<Anonymous>" }
+        };
+        writeln!(f, "at ({}, {}) of {}", self.range.0, self.range.1, path)?;
+        write!(f, "{:indent$}{}", "", self.kind, indent = 4)
     }
 }
 
-impl Error for NoteError {}
+impl Display for NoteErrorKind {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
+    }
+}

@@ -8,6 +8,5 @@ pub mod utils;
 
 pub use errors::{NoteError, Result};
 pub use nodes::{
-    ASTKind, ASTNode, ASTNodes, CodeNode, Command, CommandKind, ListView, MathKind, MathNode, SmartLink, StyleKind, TextNode, TableView,
+    ASTKind, ASTNode, ASTNodes, CodeNode, Command, CommandKind, ListView, MathKind, MathNode, SmartLink, StyleKind, TableView, TextNode,
 };
-

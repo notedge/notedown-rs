@@ -2,34 +2,34 @@ use std::fmt::{self, Display, Formatter};
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum SmartLink<T> {
+pub enum SmartLink {
     /// ## Bare Link
     /// A link without the `[ ]`
-    Bare { link: T },
+    Bare { link: String },
     /// ## EMail
     /// ```note
     /// name@link.net
     /// ```
-    EMail { link: T },
+    EMail { link: String },
     /// ## Path Link
     /// A normal link without any description
     /// ```note
     /// [path-of-link]
     /// ```
-    Path { path: T },
+    Path { path: String },
     /// ## Normal Link
     /// A normal link without any description
     /// ```note
     /// [alt-text: link]
     /// ```
-    PathWithText { text: T, path: T },
+    PathWithText { text: String, path: String },
     /// ## Two-way link
     /// This means this link will create a reference on the opposite side
     /// ```note
     /// [[link]]
     /// [[link > id]]
     /// ```
-    Reciprocal { link: T, id: Option<T> },
+    Reciprocal { link: String, id: Option<String> },
     /// ## Tag Block
     /// ```note
     /// [^tag]: text text text
@@ -37,22 +37,22 @@ pub enum SmartLink<T> {
     ///     text text text
     ///     text text text
     /// ```
-    TagBlock { tag: T, text: Vec<T> },
+    TagBlock { tag: String, text: Vec<String> },
     /// ## Tag Inline
     /// Quote a number while defining
     /// ```note
     /// text [^tag: text text text] text
     /// ```
-    TagInline { tag: T, text: Vec<T> },
+    TagInline { tag: String, text: Vec<String> },
     /// ## Tag Reference
     /// Quote a number, note that the name is irrelevant, and a number will always be generated in sequence at the end
     /// ```note
     /// text [^tag] text text text
     /// ```
-    Reference { tag: T },
+    Reference { tag: String },
 }
 
-impl<T: Display> Display for SmartLink<T> {
+impl Display for SmartLink {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
             // SmartLink::Path { path: from, to, alt, bind } => {

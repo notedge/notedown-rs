@@ -49,23 +49,20 @@ impl From<&str> for StyleKind {
 impl StyleKind {
     pub fn surround(&self) -> &'static str {
         match self {
-            Self::Plain => { "" }
-            Self::Italic => { "*" }
-            Self::Bold => { "**" }
-            Self::Emphasis => { "***" }
-            Self::Underline => { "~" }
-            Self::Strikethrough => { "~~" }
-            Self::Undercover => { "~~~" }
+            Self::Plain => "",
+            Self::Italic => "*",
+            Self::Bold => "**",
+            Self::Emphasis => "***",
+            Self::Underline => "~",
+            Self::Strikethrough => "~~",
+            Self::Undercover => "~~~",
         }
     }
 }
 
 impl StyleNode {
     pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: ASTKind::StyledSpan(Box::new(self)),
-            range,
-        }
+        ASTNode { value: ASTKind::StyledSpan(Box::new(self)), range }
     }
     pub fn new(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
@@ -83,10 +80,7 @@ impl StyleNode {
 
 impl TextNode {
     pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: ASTKind::TextSpan(Box::new(self)),
-            range,
-        }
+        ASTNode { value: ASTKind::TextSpan(Box::new(self)), range }
     }
 
     pub fn new(children: String) -> Self {

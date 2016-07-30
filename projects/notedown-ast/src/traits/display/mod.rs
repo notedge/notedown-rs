@@ -1,9 +1,11 @@
 mod value;
 
-use crate::{nodes::{ASTKind, ASTNode, ValueType}, ListView, TextNode};
+use crate::{
+    nodes::{ASTKind, ASTNode, Delimiter, Value, ValueType},
+    ListView, TextNode,
+};
 use itertools::Itertools;
 use std::fmt::{self, Display, Formatter};
-use crate::nodes::{Delimiter, Value};
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {

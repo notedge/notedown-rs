@@ -62,7 +62,7 @@ pub enum ASTKind {
     MathNode(Box<MathNode>),
     /// block: ``` a ```
     /// span: `` `code`  ``
-    LinkNode(Box<SmartLink<String>>),
+    LinkNode(Box<SmartLink>),
     /// span
     TextSpan(Box<TextNode>),
     /// span
@@ -79,28 +79,17 @@ impl Default for ASTKind {
 }
 
 impl ASTKind {
-    pub fn statements(children: ASTNodes,range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: Self::Statements(children),
-            range
-        }
-
-
+    pub fn statements(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode { value: Self::Statements(children), range }
     }
-    pub fn paragraph(children: ASTNodes,range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: Self::Paragraph(children),
-            range
-        }
+    pub fn paragraph(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode { value: Self::Paragraph(children), range }
     }
     pub fn header(children: ASTNodes, level: usize) -> Self {
         let header = Header { level, children };
         Self::Header(Box::new(header))
     }
     pub fn hr(range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode {
-            value: Self::Delimiter(Box::new(Delimiter::HorizontalRule)),
-            range,
-        }
+        ASTNode { value: Self::Delimiter(Box::new(Delimiter::HorizontalRule)), range }
     }
 }

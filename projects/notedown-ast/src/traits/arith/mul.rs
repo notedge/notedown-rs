@@ -1,6 +1,5 @@
 use super::*;
 
-
 impl Mul for Value {
     type Output = Result<Self>;
     // a * b
