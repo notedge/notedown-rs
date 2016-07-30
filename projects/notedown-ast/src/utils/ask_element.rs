@@ -14,19 +14,17 @@ impl ASTNode {
         match &self.value {
             ASTKind::Statements(children) => unimplemented!(),
             ASTKind::Header { .. } => unimplemented!(),
-            ASTKind::HorizontalRule { .. } => unimplemented!(),
             ASTKind::Paragraph { .. } => unimplemented!(),
             ASTKind::TableView { .. } => unimplemented!(),
             ASTKind::ListView { .. } => unimplemented!(),
-            ASTKind::Normal { .. } => unimplemented!(),
-            ASTKind::Raw { .. } => unimplemented!(),
-            ASTKind::Code { .. } => ContentAware::Code,
             ASTKind::TextSpan(_) => unimplemented!(),
             ASTKind::MathNode(_) => ContentAware::Math,
-            ASTKind::Link { .. } => unimplemented!(),
-            ASTKind::Escaped { .. } => unimplemented!(),
             ASTKind::Command { .. } => unimplemented!(),
             ASTKind::Value { .. } => unimplemented!(),
+            ASTKind::Delimiter(_) => unimplemented!(),
+            ASTKind::CodeNode(_) => unimplemented!(),
+            ASTKind::LinkNode(_) => unimplemented!(),
+            ASTKind::StyledSpan(_) => unimplemented!(),
         }
     }
 }

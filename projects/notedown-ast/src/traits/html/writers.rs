@@ -23,24 +23,22 @@ impl WriteHTML for ASTKind {
         match self {
             ASTKind::Statements(_) => unimplemented!(),
             ASTKind::Header(_) => unimplemented!(),
-            ASTKind::HorizontalRule => write!(f, "<hr/>"),
             ASTKind::Paragraph(children) => {
                 f.write_str("<p>")?;
                 children.write_html(f);
                 f.write_str("</p>")
             }
-            ASTKind::CodeBlock(inner) => inner.write_html(f),
+            ASTKind::CodeNode(inner) => inner.write_html(f),
             ASTKind::TableView(inner) => inner.write_html(f),
             ASTKind::ListView(inner) => inner.write_html(f),
-            ASTKind::Normal(inner) => unimplemented!(),
-            ASTKind::Raw(inner) => unimplemented!(),
-            ASTKind::CodeBlock(inner) => unimplemented!(),
+            ASTKind::CodeNode(inner) => unimplemented!(),
             ASTKind::TextSpan(inner) => inner.write_html(f),
             ASTKind::MathNode(_) => unimplemented!(),
-            ASTKind::Escaped(_) => unimplemented!(),
-            ASTKind::Link(_) => unimplemented!(),
+            ASTKind::LinkNode(_) => unimplemented!(),
             ASTKind::Value(_) => unimplemented!(),
             ASTKind::Command(_) => unimplemented!(),
+            ASTKind::Delimiter(_) => {}
+            ASTKind::StyledSpan(_) => {}
         }
     }
 }
@@ -48,7 +46,7 @@ impl WriteHTML for ASTKind {
 impl WriteHTML for TextNode {
     fn write_html(&self, f: &mut HTMLRenderer) -> fmt::Result {
         match self.kind {
-            StyleKind::Normal => {
+            StyleKind::Plain => {
                 self.children.write_html(f)?;
             }
             StyleKind::Italic => {

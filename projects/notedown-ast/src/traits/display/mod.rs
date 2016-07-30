@@ -1,11 +1,9 @@
 mod value;
 
-use crate::{
-    nodes::{ASTKind, ASTNode, ValueType},
-    ListView,
-};
+use crate::{nodes::{ASTKind, ASTNode, ValueType}, ListView, TextNode};
 use itertools::Itertools;
 use std::fmt::{self, Display, Formatter};
+use crate::nodes::{Delimiter, Value};
 
 impl Display for ASTNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -21,20 +19,17 @@ impl Display for ASTKind {
                 write!(f, "{}", s.join("\n\n"))
             }
             ASTKind::Header { .. } => unimplemented!(),
-            ASTKind::HorizontalRule { .. } => unimplemented!(),
             ASTKind::Paragraph { .. } => unimplemented!(),
-            ASTKind::CodeBlock(inner) => Display::fmt(inner, f),
-            ASTKind::TableView { .. } => unimplemented!(),
+            ASTKind::Delimiter(inner) => Display::fmt(inner, f),
+            ASTKind::TableView(inner) => Display::fmt(inner, f),
             ASTKind::ListView(inner) => Display::fmt(inner, f),
-            ASTKind::Normal(inner) => write!(f, "{}", inner),
             ASTKind::TextSpan(inner) => Display::fmt(inner, f),
+            ASTKind::StyledSpan(inner) => Display::fmt(inner, f),
             ASTKind::MathNode(inner) => Display::fmt(inner, f),
-            ASTKind::Raw { .. } => unimplemented!(),
-            ASTKind::Code { .. } => unimplemented!(),
-            ASTKind::Link { .. } => unimplemented!(),
-            ASTKind::Escaped { .. } => unimplemented!(),
-            ASTKind::Command { .. } => unimplemented!(),
-            ASTKind::Value { .. } => unimplemented!(),
+            ASTKind::CodeNode(inner) => Display::fmt(inner, f),
+            ASTKind::LinkNode(inner) => Display::fmt(inner, f),
+            ASTKind::Command(inner) => Display::fmt(inner, f),
+            ASTKind::Value(inner) => Display::fmt(inner, f),
         }
     }
 }
@@ -58,5 +53,23 @@ impl Display for ListView {
             }
         }
         Ok(())
+    }
+}
+
+impl Display for Delimiter {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
+    }
+}
+
+impl Display for TextNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
+    }
+}
+
+impl Display for Value {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
     }
 }

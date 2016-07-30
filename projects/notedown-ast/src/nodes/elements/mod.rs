@@ -16,7 +16,8 @@ pub use self::{
     link::SmartLink,
     list::ListView,
     math::{MathKind, MathNode},
-    styled::{StyleKind, TextNode},
+    styled::{StyleKind, TextNode, StyleNode},
     table::TableView,
+    delimiter::Delimiter,
 };
 use super::*;

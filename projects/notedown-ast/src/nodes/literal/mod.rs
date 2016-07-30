@@ -4,13 +4,13 @@ use super::*;
 pub struct Literal<T> {
     ///
     pub(crate) value: T,
-    // pub range: Option<(u32, u32)>,
-    pub(crate) range: u64,
+    //
+    pub(crate) range: Option<(u32, u32)>,
 }
 
 impl<T: Default> Default for Literal<T> {
     fn default() -> Self {
-        Self { value: Default::default(), range: 0 }
+        Self { value: Default::default(), range: None }
     }
 }
 
@@ -18,11 +18,8 @@ impl<T: Debug> Debug for Literal<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let w = &mut f.debug_struct("ASTNode");
         w.field("kind", &self.value);
-        if self.range != 0 {
-            unsafe {
-                let s = transmute::<u64, (u32, u32)>(self.range);
-                w.field("range", &format!("{}-{}", s.0, s.1));
-            };
+        if let Some(s) = self.range {
+            w.field("range", &format!("{}-{}", s.0, s.1));
         }
         w.finish()
     }
@@ -41,31 +38,17 @@ impl<T: PartialEq> PartialEq for Literal<T> {
 }
 
 impl<T> Literal<T> {
+    #[inline]
     pub fn new(value: T, range: Option<(u32, u32)>) -> Self {
-        Self { value, range: Self::range_from(range) }
+        Self { value, range }
     }
-
+    #[inline]
     pub fn unwrap(&self) -> &T {
         &self.value
     }
 
+    #[inline]
     pub fn range(&self) -> Option<(u32, u32)> {
-        Self::range_into(self.range)
-    }
-
-    pub fn range_into(u: u64) -> Option<(u32, u32)> {
-        if u == 0 {
-            return None;
-        }
-        unsafe {
-            let s = transmute::<u64, (u32, u32)>(u);
-            return Some(s);
-        };
-    }
-    pub fn range_from(r: Option<(u32, u32)>) -> u64 {
-        match r {
-            None => 0,
-            Some(s) => unsafe { transmute::<(u32, u32), u64>(s) },
-        }
+        self.range
     }
 }

@@ -3,7 +3,6 @@ use std::{
     error::Error,
     fmt::{Debug, Display, Formatter},
 };
-use thiserror::Error;
 
 mod error_custom;
 

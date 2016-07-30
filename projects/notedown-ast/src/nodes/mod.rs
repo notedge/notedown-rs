@@ -35,6 +35,10 @@ use std::{
 pub type ASTNode = Literal<ASTKind>;
 pub type ASTNodes = Vec<Literal<ASTKind>>;
 
+/// Block,
+/// - Block:
+/// - Span: Text, Styled
+/// - Node: Code, Math, Link, Command
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ASTKind {
     /// Top Scope
@@ -42,21 +46,30 @@ pub enum ASTKind {
     // Blocks
     /// - `Header`: TEXT, level
     Header(Box<Header>),
-    Delimiter(Box<Delimiter>),
-    HorizontalRule,
     ///  - `Paragraph`:
     Paragraph(ASTNodes),
-    CodeBlock(Box<CodeNode>),
-    /// - `Math`:
+    /// block
+    Delimiter(Box<Delimiter>),
+    ///
     TableView(Box<TableView>),
+    ///
     ListView(Box<ListView>),
-
-
-    TextSpan(Box<TextNode>),
+    /// block: ``` a ```
+    /// span: `` `code`  ``
+    CodeNode(Box<CodeNode>),
+    /// block: ``` a ```
+    /// span: `` `code`  ``
     MathNode(Box<MathNode>),
-    Link(Box<SmartLink<String>>),
-    Value(Box<Value>),
+    /// block: ``` a ```
+    /// span: `` `code`  ``
+    LinkNode(Box<SmartLink<String>>),
+    /// span
+    TextSpan(Box<TextNode>),
+    /// span
+    StyledSpan(Box<StyleNode>),
+    /// in
     Command(Box<Command>),
+    Value(Box<Value>),
 }
 
 impl Default for ASTKind {
@@ -66,46 +79,28 @@ impl Default for ASTKind {
 }
 
 impl ASTKind {
-    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode { value: self, range: ASTNode::range_from(range) }
-    }
+    pub fn statements(children: ASTNodes,range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode {
+            value: Self::Statements(children),
+            range
+        }
 
-    pub fn statements(children: ASTNodes) -> Self {
-        Self::Statements(children)
+
     }
-    pub fn paragraph(children: ASTNodes) -> Self {
-        Self::Paragraph(children)
+    pub fn paragraph(children: ASTNodes,range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode {
+            value: Self::Paragraph(children),
+            range
+        }
     }
     pub fn header(children: ASTNodes, level: usize) -> Self {
         let header = Header { level, children };
         Self::Header(Box::new(header))
     }
-    pub fn code(code: CodeNode) -> Self {
-        Self::CodeBlock(Box::new(code))
-    }
-    pub fn command(cmd: Command) -> Self {
-        Self::Command(Box::new(cmd))
-    }
-
-    pub fn hr() -> ASTKind {
-        Self::HorizontalRule
-    }
-
-    pub fn math(text: String, style: &str) -> Self {
-        let node = match style {
-            "$" => MathNode::inline(text),
-            "$$" => MathNode::display(text),
-            _ => MathNode::block(text),
-        };
-        Self::MathNode(Box::new(node))
-    }
-    pub fn styled(children: ASTNodes, style: &str) -> Self {
-        Self::TextSpan(Box::new(TextNode::styled(children, style)))
-    }
-    pub fn text(text: String, style: &str) -> Self {
-        Self::TextSpan(Box::new(TextNode::styled(children, style)))
-    }
-    pub fn escaped(char: char) -> Self {
-        Self::Escaped(char)
+    pub fn hr(range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode {
+            value: Self::Delimiter(Box::new(Delimiter::HorizontalRule)),
+            range,
+        }
     }
 }

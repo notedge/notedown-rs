@@ -26,7 +26,6 @@ impl Slugify for ASTNode {
 impl Slugify for ASTKind {
     fn slugify(&self) -> String {
         match self {
-            ASTKind::Normal { 0: inner } => inner.to_owned().slugify(),
             _ => format!("Slugify: {:#?}", self),
         }
     }

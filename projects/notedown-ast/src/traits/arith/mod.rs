@@ -3,7 +3,7 @@ mod mul;
 mod index;
 
 use crate::{nodes::Value, Result};
-use std::ops::{Add, AddAssign};
+use std::ops::{Add};
 use crate::NoteError;
 use num::ToPrimitive;
 use std::ops::{Mul, Shr, Sub};
