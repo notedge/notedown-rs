@@ -1,0 +1,15 @@
+[package]
+name = "text-utils"
+version = "0.1.0"
+authors = ["Aster <192607617@qq.com>"]
+description = "Create a record to store any type of value"
+repository = "https://github.com/GalAster/dict-rs"
+keywords = ["any", "map", "dict", "record"]
+readme = "README.md"
+license = "MPL-2.0"
+edition = "2018"
+exclude = ["/tests/*"]
+
+[dependencies]
+textwrap = "0.11"
+percent-encoding = "2.1.0"
