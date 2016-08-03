@@ -85,7 +85,7 @@ impl ASTKind {
     pub fn paragraph(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: Self::Paragraph(children), range }
     }
-    pub fn header(children: ASTNodes, level: usize) -> Self {
+    pub fn header(children: ASTNodes, level: u8) -> Self {
         let header = Header { level, children };
         Self::Header(Box::new(header))
     }

@@ -82,15 +82,22 @@ impl TextNode {
     pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: ASTKind::TextSpan(Box::new(self)), range }
     }
-
     pub fn new(children: String) -> Self {
         Self::Normal(children)
     }
     pub fn raw(children: String) -> Self {
         Self::Raw(children)
     }
-    pub fn escaped(string: String) -> Self {
-        unimplemented!()
+    pub fn escaped(string: String) -> Option<Self> {
+        let mut s = string.chars().peekable();
+        match s.next() {
+            Some('\\') => {},
+            _ => {return None}
+        }
+        match s.next() {
+            Some(c) => { Some(Self::Escaped(c)) },
+            None => { None }
+        }
     }
     pub fn escaped_char(char: char) -> Self {
         Self::Escaped(char)

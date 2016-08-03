@@ -3,6 +3,7 @@ use crate::{
     traits::Slugify,
 };
 pub use text_utils::slugify;
+use crate::nodes::Header;
 
 impl Slugify for ASTNodes {
     fn slugify(&self) -> String {
@@ -28,6 +29,12 @@ impl Slugify for ASTKind {
         match self {
             _ => format!("Slugify: {:#?}", self),
         }
+    }
+}
+
+impl Slugify for Header {
+    fn slugify(&self) -> String {
+        todo!()
     }
 }
 
