@@ -1,8 +1,6 @@
 use super::*;
 
-use crate::{nodes::ASTKind, ASTNode};
-use crate::traits::Slugify;
-
+use crate::{nodes::ASTKind, traits::Slugify, ASTNode};
 
 impl TableNode {
     fn last_at_level(&mut self, depth: u8) -> &mut TableNode {
@@ -27,12 +25,7 @@ impl TableOfContent for ASTNode {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TableNode {
-                            level,
-                            detail: header.slugify(),
-                            range: todo!(),
-                            children: vec![],
-                        };
+                        let new = TableNode { level, detail: header.slugify(), range: todo!(), children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {

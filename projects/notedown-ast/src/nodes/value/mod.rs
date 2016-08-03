@@ -1,9 +1,8 @@
 mod methods;
 mod typing;
 
-
-use super::*;
 pub use self::typing::ValueType;
+use super::*;
 
 pub type Set = IndexSet<Literal<Value>>;
 pub type Array = BTreeMap<BigUint, Literal<Value>>;
@@ -35,14 +34,14 @@ impl Hash for Value {
                 for e in v {
                     e.hash(state);
                 }
-            },
+            }
             Self::Array(v) => v.hash(state),
             Self::Object(v) => {
                 v.len().hash(state);
                 for e in v {
                     e.hash(state);
                 }
-            },
+            }
         }
     }
 }

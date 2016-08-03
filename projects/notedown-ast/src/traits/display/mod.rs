@@ -1,11 +1,8 @@
 mod value;
 
-use crate::{
-    nodes::{ASTKind, Delimiter, Value, ValueType},
-};
+use crate::nodes::{ASTKind, Delimiter, ListView, Literal, TextNode, Value, ValueType};
 use itertools::Itertools;
 use std::fmt::{self, Display, Formatter, Write};
-use crate::nodes::{ListView, TextNode, Literal};
 
 impl<T: Display> Display for Literal<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -61,7 +58,7 @@ impl Display for ListView {
 impl Display for Delimiter {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::HorizontalRule => { f.write_str("---") }
+            Self::HorizontalRule => f.write_str("---"),
         }
     }
 }
@@ -69,8 +66,12 @@ impl Display for Delimiter {
 impl Display for TextNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Normal(_) => { unimplemented!() }
-            Self::Raw(_) => { unimplemented!() }
+            Self::Normal(_) => {
+                unimplemented!()
+            }
+            Self::Raw(_) => {
+                unimplemented!()
+            }
             Self::Escaped(c) => {
                 f.write_char('\\')?;
                 f.write_char(*c)
@@ -82,14 +83,22 @@ impl Display for TextNode {
 impl Display for Value {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Self::Null => { f.write_str("null") }
-            Self::Boolean(v) => { f.write_str(&v.to_string()) }
-            Self::Integer(v) => { f.write_str(&v.to_string()) }
-            Self::Decimal(v) => { f.write_str(&v.to_string()) }
-            Self::String(_) => { unimplemented!() }
-            Self::Set(_) => { unimplemented!() }
-            Self::Array(_) => { unimplemented!() }
-            Self::Object(_) => { unimplemented!() }
+            Self::Null => f.write_str("null"),
+            Self::Boolean(v) => f.write_str(&v.to_string()),
+            Self::Integer(v) => f.write_str(&v.to_string()),
+            Self::Decimal(v) => f.write_str(&v.to_string()),
+            Self::String(_) => {
+                unimplemented!()
+            }
+            Self::Set(_) => {
+                unimplemented!()
+            }
+            Self::Array(_) => {
+                unimplemented!()
+            }
+            Self::Object(_) => {
+                unimplemented!()
+            }
         }
     }
 }

@@ -6,7 +6,6 @@ pub trait TableOfContent {
     fn table_of_content(&self, config: TableConfig) -> TableNode;
 }
 
-
 #[derive(Debug)]
 pub struct TableNode {
     pub level: u8,
@@ -27,8 +26,6 @@ impl Default for TableNode {
 
 impl Default for TableConfig {
     fn default() -> Self {
-        Self {
-            max_depth: u8::MAX
-        }
+        Self { max_depth: u8::MAX }
     }
 }

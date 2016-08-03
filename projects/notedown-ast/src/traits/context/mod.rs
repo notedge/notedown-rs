@@ -1,6 +1,8 @@
-use crate::nodes::{ASTKind, ASTNode};
-use crate::traits::ContextAware;
-use crate::ASTNodes;
+use crate::{
+    nodes::{ASTKind, ASTNode},
+    traits::ContextAware,
+    ASTNodes,
+};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContextKind {

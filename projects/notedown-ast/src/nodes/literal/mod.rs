@@ -38,7 +38,6 @@ impl<T: PartialEq> PartialEq for Literal<T> {
     }
 }
 
-
 impl<T: PartialOrd> PartialOrd for Literal<T> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.value.partial_cmp(&other.value)

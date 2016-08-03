@@ -1,12 +1,12 @@
 mod arith;
+mod context;
 mod display;
 mod slugify;
-mod context;
 #[cfg(feature = "lsp-types")]
 mod toc;
 
 pub use context::ContextKind;
-pub use toc::{TableOfContent, TableNode};
+pub use toc::{TableNode, TableOfContent};
 
 pub trait Slugify {
     fn slugify(&self) -> String;

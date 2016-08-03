@@ -91,12 +91,12 @@ impl TextNode {
     pub fn escaped(string: String) -> Option<Self> {
         let mut s = string.chars().peekable();
         match s.next() {
-            Some('\\') => {},
-            _ => {return None}
+            Some('\\') => {}
+            _ => return None,
         }
         match s.next() {
-            Some(c) => { Some(Self::Escaped(c)) },
-            None => { None }
+            Some(c) => Some(Self::Escaped(c)),
+            None => None,
         }
     }
     pub fn escaped_char(char: char) -> Self {

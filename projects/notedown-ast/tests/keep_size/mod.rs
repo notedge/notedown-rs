@@ -1,4 +1,7 @@
-use notedown_ast::{ASTKind, ASTNode, nodes::{ListView, MathNode, SmartLink, TableView, TextNode}};
+use notedown_ast::{
+    nodes::{ListView, MathNode, SmartLink, TableView, TextNode},
+    ASTKind, ASTNode,
+};
 use std::mem::size_of;
 
 macro_rules! show_size {

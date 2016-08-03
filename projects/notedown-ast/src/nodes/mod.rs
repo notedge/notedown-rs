@@ -2,17 +2,16 @@ mod elements;
 mod literal;
 mod value;
 
-pub use indexmap::map::{Keys, Values};
-use indexmap::set::IndexSet;
-use indexmap::map::IndexMap;
 pub use self::{
     elements::*,
     literal::Literal,
-    value::{Value, ValueType, Set, Array, Object},
+    value::{Array, Object, Set, Value, ValueType},
 };
-use std::collections::BTreeMap;
+pub use indexmap::map::{Keys, Values};
+use indexmap::{map::IndexMap, set::IndexSet};
 use num::{BigInt, BigUint};
 use std::{
+    collections::BTreeMap,
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
     mem::transmute,

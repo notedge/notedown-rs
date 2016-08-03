@@ -1,6 +1,5 @@
 use super::*;
-use num::Signed;
-use std::ops::Neg;
+use std::collections::BTreeMap;
 
 pub trait Index<I> {
     type Output;
@@ -12,15 +11,8 @@ impl Index<BigInt> for Value {
 
     fn get_index(&self, index: &BigInt) -> Self::Output {
         match self {
-            Self::Null | Self::Boolean(_) => {
-                unimplemented!()
-                // &Err(NoteError::runtime_error(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
-            }
-            Self::Integer(_) => {
-                unimplemented!()
-            }
-            Self::Decimal(_) => {
-                unimplemented!()
+            Self::Null | Self::Boolean(_) | Self::Integer(_) | Self::Decimal(_) => {
+                Err(NoteError::type_mismatch(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
             }
             Self::String(s) => {
                 let i = if index.is_negative() {
@@ -30,27 +22,75 @@ impl Index<BigInt> for Value {
                             // (u <= max).then_some(max);
                             if u <= max { Some(max) } else { None }
                         }
-                        None => { None }
+                        None => None,
                     }
-                } else {
+                }
+                else {
                     index.to_usize()
                 };
 
                 match i.and_then(|e| s.chars().nth(e)) {
-                    Some(s) => { Ok(Value::string(s)) }
-                    None => { Err(NoteError::runtime_error(format!("Index `{}` of `String` out of range.", index))) }
+                    Some(s) => Ok(Value::string(s)),
+                    None => Err(NoteError::runtime_error(format!("Index `{}` of `String` out of range.", index))),
                 }
             }
-            Self::Set(_) => {
-                unimplemented!()
+            Self::Set(v) => {
+                // let v : BTreeSet<Literal<Value>>;
+                let out = if index.is_negative() {
+                    index.neg().to_usize().and_then(|i| v.iter().rev().nth(i))
+                }
+                else {
+                    index.to_usize().and_then(|i| v.iter().nth(i))
+                };
+                match out {
+                    Some(s) => Ok(s.value.to_owned()),
+                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Set` out of range.", index))),
+                }
             }
-            Self::Array(_) => {
-                if index.is_negative() {}
-                unimplemented!()
+            Self::Array(v) => {
+                let out = if index.is_negative() {
+                    // v.last_key_value()
+                    // let max = v.keys().next_back();
+                    todo!()
+                }
+                else {
+                    index.to_biguint().and_then(|i| v.get(&i))
+                };
+                match out {
+                    Some(s) => Ok(s.value.to_owned()),
+                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Array` out of range.", index))),
+                }
             }
-            Self::Object(_) => {
-                unimplemented!()
+            Self::Object(v) => {
+                // let v : BTreeMap<String, Literal<Value>>;
+                let out = if index.is_negative() {
+                    index.neg().to_usize().and_then(|i| v.values().rev().nth(i))
+                }
+                else {
+                    index.to_usize().and_then(|i| v.values().nth(i))
+                };
+                match out {
+                    Some(s) => Ok(s.value.to_owned()),
+                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` out of range.", index))),
+                }
             }
+        }
+    }
+}
+
+impl Index<String> for Value {
+    type Output = Result<Self>;
+
+    fn get_index(&self, index: &String) -> Self::Output {
+        match self {
+            Self::Object(v) => {
+                // let v : BTreeMap<String, Literal<Value>>;
+                match v.get(index) {
+                    Some(s) => Ok(s.value.to_owned()),
+                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` not found.", index))),
+                }
+            }
+            _ => Err(NoteError::type_mismatch(format!("Can not take `String` index of type `{}`", self.get_type_name()))),
         }
     }
 }

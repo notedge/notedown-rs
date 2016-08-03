@@ -1,9 +1,8 @@
 use crate::{
-    nodes::{ASTKind, ASTNode, ASTNodes},
+    nodes::{ASTKind, ASTNode, ASTNodes, Header},
     traits::Slugify,
 };
 pub use text_utils::slugify;
-use crate::nodes::Header;
 
 impl Slugify for ASTNodes {
     fn slugify(&self) -> String {
