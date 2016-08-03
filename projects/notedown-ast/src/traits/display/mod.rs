@@ -1,13 +1,13 @@
 mod value;
 
 use crate::{
-    nodes::{ASTKind, ASTNode, Delimiter, Value, ValueType},
+    nodes::{ASTKind, Delimiter, Value, ValueType},
 };
 use itertools::Itertools;
-use std::fmt::{self, Display, Formatter};
-use crate::nodes::{ListView, TextNode};
+use std::fmt::{self, Display, Formatter, Write};
+use crate::nodes::{ListView, TextNode, Literal};
 
-impl Display for ASTNode {
+impl<T: Display> Display for Literal<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         Display::fmt(&self.value, f)
     }
@@ -60,18 +60,36 @@ impl Display for ListView {
 
 impl Display for Delimiter {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        match self {
+            Self::HorizontalRule => { f.write_str("---") }
+        }
     }
 }
 
 impl Display for TextNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        match self {
+            Self::Normal(_) => { unimplemented!() }
+            Self::Raw(_) => { unimplemented!() }
+            Self::Escaped(c) => {
+                f.write_char('\\')?;
+                f.write_char(*c)
+            }
+        }
     }
 }
 
 impl Display for Value {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        match self {
+            Self::Null => { f.write_str("null") }
+            Self::Boolean(v) => { f.write_str(&v.to_string()) }
+            Self::Integer(v) => { f.write_str(&v.to_string()) }
+            Self::Decimal(v) => { f.write_str(&v.to_string()) }
+            Self::String(_) => { unimplemented!() }
+            Self::Set(_) => { unimplemented!() }
+            Self::Array(_) => { unimplemented!() }
+            Self::Object(_) => { unimplemented!() }
+        }
     }
 }

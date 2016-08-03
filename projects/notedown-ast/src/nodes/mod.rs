@@ -2,29 +2,15 @@ mod elements;
 mod literal;
 mod value;
 
-// used for ide hint
-#[cfg(debug_assertions)]
-mod remap {
-    pub use std::collections::btree_map::{Keys, Values};
-
-    pub type Set<V> = std::collections::BTreeSet<V>;
-    pub type Map<K, V> = std::collections::BTreeMap<K, V>;
-}
-
-#[cfg(not(debug_assertions))]
-mod remap {
-    pub use indexmap::map::{Keys, Values};
-
-    pub type Set<V> = indexmap::IndexSet<V>;
-    pub type Map<K, V> = indexmap::IndexMap<K, V>;
-}
-
-use self::remap::{Map, Set};
+pub use indexmap::map::{Keys, Values};
+use indexmap::set::IndexSet;
+use indexmap::map::IndexMap;
 pub use self::{
     elements::*,
     literal::Literal,
-    value::{Value, ValueType},
+    value::{Value, ValueType, Set, Array, Object},
 };
+use std::collections::BTreeMap;
 use num::{BigInt, BigUint};
 use std::{
     fmt::{self, Debug, Display, Formatter},

@@ -8,16 +8,16 @@ mod error_custom;
 
 pub type Result<T> = std::result::Result<T, NoteError>;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct NoteError {
     kind: Box<NoteErrorKind>,
     file: Option<Url>,
     range: (u32, u32),
 }
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum NoteErrorKind {
-    IOError {},
+    IOError(std::io::Error),
     FormatError {},
     // PestError { #[from] source: pest::error::Error<crate::cst::Rule> },
     LanguageError(String),
@@ -25,9 +25,6 @@ pub enum NoteErrorKind {
     UnexpectedToken(String),
     TypeMismatch(String),
     RuntimeError(String),
-    InfoMissing(String),
-    /// Some nodes failed to resolve and are being rolled back
-    Unwinding,
     /// A forbidden cst_node encountered
     Unreachable,
     /* #[error(transparent)]
@@ -40,6 +37,13 @@ impl NoteError {
     }
     pub fn set_range(self, range: (u32, u32)) -> Self {
         Self { kind: self.kind, file: self.file, range }
+    }
+    pub fn unreachable() -> Self {
+        Self {
+            kind: Box::new(NoteErrorKind::Unreachable),
+            file: None,
+            range: (0, 0),
+        }
     }
 
     // pub fn structure_error(msg: impl Into<String>, start: Option<usize>, end: Option<usize>) -> NoteError {
@@ -81,6 +85,21 @@ impl Display for NoteError {
 
 impl Display for NoteErrorKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        match self {
+            Self::IOError { .. } => { unimplemented!() }
+            Self::FormatError { .. } => { unimplemented!() }
+            Self::LanguageError(_) => { unimplemented!() }
+            Self::StructureError(_) => { unimplemented!() }
+            Self::UnexpectedToken(_) => { unimplemented!() }
+            Self::TypeMismatch(msg) => {
+                f.write_str("TypeMismatch: ")?;
+                f.write_str(msg)
+            }
+            Self::RuntimeError(_) => { unimplemented!() }
+            Self::Unreachable => {
+                f.write_str("InternalError: ")?;
+                f.write_str("Entered unreachable code!")
+            }
+        }
     }
 }

@@ -1,11 +1,12 @@
 use super::*;
+use std::cmp::Ordering;
 
-#[derive(Clone, Eq)]
+#[derive(Clone, Eq, Ord)]
 pub struct Literal<T> {
     ///
-    pub(crate) value: T,
+    pub value: T,
     //
-    pub(crate) range: Option<(u32, u32)>,
+    pub range: Option<(u32, u32)>,
 }
 
 impl<T: Default> Default for Literal<T> {
@@ -37,18 +38,9 @@ impl<T: PartialEq> PartialEq for Literal<T> {
     }
 }
 
-impl<T> Literal<T> {
-    #[inline]
-    pub fn new(value: T, range: Option<(u32, u32)>) -> Self {
-        Self { value, range }
-    }
-    #[inline]
-    pub fn unwrap(&self) -> &T {
-        &self.value
-    }
 
-    #[inline]
-    pub fn range(&self) -> Option<(u32, u32)> {
-        self.range
+impl<T: PartialOrd> PartialOrd for Literal<T> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.value.partial_cmp(&other.value)
     }
 }

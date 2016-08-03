@@ -1,8 +1,13 @@
 mod methods;
 mod typing;
 
-pub use self::typing::ValueType;
+
 use super::*;
+pub use self::typing::ValueType;
+
+pub type Set = IndexSet<Literal<Value>>;
+pub type Array = BTreeMap<BigUint, Literal<Value>>;
+pub type Object = IndexMap<String, Literal<Value>>;
 
 #[derive(Clone, Debug)]
 pub enum Value {
@@ -12,9 +17,9 @@ pub enum Value {
     Integer(BigInt),
     Decimal(f64),
     String(String),
-    Set(Set<Literal<Value>>),
-    Array(Map<Literal<BigUint>, Literal<Value>>),
-    Object(Map<Literal<String>, Literal<Value>>),
+    Set(Set),
+    Array(Array),
+    Object(Object),
 }
 
 impl Hash for Value {
@@ -25,9 +30,19 @@ impl Hash for Value {
             Self::Integer(v) => v.hash(state),
             Self::Decimal(v) => unsafe { transmute::<f64, [u8; 8]>(*v).hash(state) },
             Self::String(v) => v.hash(state),
-            Self::Set(v) => v.hash(state),
+            Self::Set(v) => {
+                v.len().hash(state);
+                for e in v {
+                    e.hash(state);
+                }
+            },
             Self::Array(v) => v.hash(state),
-            Self::Object(v) => v.hash(state),
+            Self::Object(v) => {
+                v.len().hash(state);
+                for e in v {
+                    e.hash(state);
+                }
+            },
         }
     }
 }
@@ -47,5 +62,17 @@ impl PartialEq for Value {
             (Self::Object(l), Self::Object(r)) => l == r,
             _ => false,
         }
+    }
+}
+
+impl Value {
+    pub fn integer(value: impl Into<BigInt>) -> Self {
+        Self::Integer(value.into())
+    }
+    pub fn decimal(value: impl Into<f64>) -> Self {
+        Self::Decimal(value.into())
+    }
+    pub fn string(value: impl Into<String>) -> Self {
+        Self::String(value.into())
     }
 }

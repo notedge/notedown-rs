@@ -30,21 +30,21 @@ impl Value {
     pub fn get_type_name(&self) -> String {
         self.get_type().to_string()
     }
-    fn check_set_type(&self, input: &Set<Literal<Value>>) -> ValueType {
-        let mut count = Set::new();
+    fn check_set_type(&self, input: &Set) -> ValueType {
+        let mut count = BTreeSet::new();
         for v in input {
-            count.insert(v.unwrap().get_type());
+            count.insert(v.value.get_type());
         }
         ValueType::Set(count)
     }
-    fn check_list_type(&self, input: &Map<Literal<BigUint>, Literal<Value>>) -> ValueType {
-        let mut count = Set::new();
+    fn check_list_type(&self, input: &Array) -> ValueType {
+        let mut count = BTreeSet::new();
         for (_, v) in input {
-            count.insert(v.unwrap().get_type());
+            count.insert(v.value.get_type());
         }
         ValueType::List(count)
     }
-    fn check_dict_type(&self, input: &Map<Literal<String>, Literal<Value>>) -> ValueType {
+    fn check_dict_type(&self, input: &Object) -> ValueType {
         unimplemented!()
     }
 }

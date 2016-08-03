@@ -35,13 +35,13 @@ pub enum CommandKind {
 pub struct Command {
     pub cmd: String,
     pub kind: CommandKind,
-    pub args: Vec<ASTNode>,
-    pub kvs: Map<String, ASTNode>,
+    pub args: Array,
+    pub kvs: Object,
 }
 
 impl Display for Command {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        let a = self.args.iter().map(|v| format!("{}", v));
+        let a = self.args.values().map(|v| format!("{}", v));
         let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
         write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
     }
@@ -49,7 +49,8 @@ impl Display for Command {
 
 impl Hash for Command {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        unimplemented!()
+        self.cmd.hash(state);
+        todo!()
     }
 }
 
