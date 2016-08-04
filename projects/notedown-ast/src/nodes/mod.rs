@@ -28,13 +28,13 @@ pub type ASTNodes = Vec<Literal<ASTKind>>;
 pub enum ASTKind {
     /// Top Scope
     Statements(ASTNodes),
-    // Blocks
-    /// - `Header`: TEXT, level
-    Header(Box<Header>),
     ///  - `Paragraph`:
     Paragraph(ASTNodes),
     /// block
     Delimiter(Box<Delimiter>),
+    // Blocks
+    /// - `Header`: TEXT, level
+    Header(Box<Header>),
     ///
     TableView(Box<TableView>),
     ///
@@ -64,16 +64,51 @@ impl Default for ASTKind {
 }
 
 impl ASTKind {
+    #[inline]
+    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode { value: self, range }
+    }
+    #[inline]
     pub fn statements(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: Self::Statements(children), range }
     }
+    #[inline]
     pub fn paragraph(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: Self::Paragraph(children), range }
     }
-    pub fn header(children: ASTNodes, level: u8) -> Self {
-        let header = Header { level, children };
-        Self::Header(Box::new(header))
+    #[inline]
+    pub fn header(children: ASTNodes, level: u8, range: Option<(u32, u32)>) -> ASTNode {
+        Header { level, children }.into_node(range)
     }
+    #[inline]
+    pub fn text(s: impl Into<String>, range: Option<(u32, u32)>) -> ASTNode {
+        TextNode::Normal(s.into()).into_node(range)
+    }
+    #[inline]
+    pub fn bold(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Bold, children }.into_node(range)
+    }
+    #[inline]
+    pub fn italic(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Italic, children }.into_node(range)
+    }
+    #[inline]
+    pub fn emphasis(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Emphasis, children }.into_node(range)
+    }
+    #[inline]
+    pub fn underline(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Underline, children }.into_node(range)
+    }
+    #[inline]
+    pub fn strikethrough(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Strikethrough, children }.into_node(range)
+    }
+    #[inline]
+    pub fn undercover(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Undercover, children }.into_node(range)
+    }
+    #[inline]
     pub fn hr(range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: Self::Delimiter(Box::new(Delimiter::HorizontalRule)), range }
     }

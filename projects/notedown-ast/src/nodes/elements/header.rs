@@ -16,3 +16,10 @@ impl Display for Header {
         Ok(())
     }
 }
+
+impl Header {
+    #[inline]
+    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode { value: ASTKind::Header(Box::new(self)), range }
+    }
+}
