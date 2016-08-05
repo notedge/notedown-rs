@@ -5,12 +5,15 @@ pub enum StyleKind {
     Plain = 0,
 
     Italic = 11,
-    Bold = 12,
+    Strong = 12,
     Emphasis = 13,
 
     Underline = 21,
-    Strikethrough = 22,
-    Undercover = 23,
+    Undercover = 22,
+    Highlight = 23,
+
+    Delete = 31,
+    Insert = 32,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -23,6 +26,7 @@ pub struct StyleNode {
 pub enum TextNode {
     Normal(String),
     Raw(String),
+    Emoji(char),
     Escaped(char),
 }
 
@@ -36,10 +40,10 @@ impl From<&str> for StyleKind {
     fn from(style: &str) -> Self {
         match style {
             "*" | "i" | "italic" => Self::Italic,
-            "**" | "b" | "bold" => Self::Bold,
+            "**" | "b" | "bold" => Self::Strong,
             "***" | "em" => Self::Emphasis,
             "~" | "u" | "underline" => Self::Underline,
-            "~~" | "s" => Self::Strikethrough,
+            "~~" | "s" => Self::Delete,
             "~~~" => Self::Undercover,
             _ => Self::Plain,
         }
@@ -51,11 +55,13 @@ impl StyleKind {
         match self {
             Self::Plain => "",
             Self::Italic => "*",
-            Self::Bold => "**",
+            Self::Strong => "**",
             Self::Emphasis => "***",
             Self::Underline => "~",
-            Self::Strikethrough => "~~",
+            Self::Delete => "~~",
             Self::Undercover => "~~~",
+            Self::Highlight => { unimplemented!() }
+            Self::Insert => { unimplemented!() }
         }
     }
 }
@@ -106,5 +112,9 @@ impl TextNode {
     }
     pub fn escaped_char(char: char) -> Self {
         Self::Escaped(char)
+    }
+
+    pub fn emoji(_: String) -> Self {
+        unimplemented!()
     }
 }

@@ -81,12 +81,33 @@ impl ASTKind {
         Header { level, children }.into_node(range)
     }
     #[inline]
+    pub fn hr(range: Option<(u32, u32)>) -> ASTNode {
+        Delimiter::HorizontalRule.into_node(range)
+    }
+    #[inline]
+    pub fn br(range: Option<(u32, u32)>) -> ASTNode {
+        ASTNode { value: todo!(), range }
+    }
+
+    #[inline]
+    pub fn code_span(range: Option<(u32, u32)>) -> ASTNode {
+        CodeNode
+    }
+}
+
+
+impl ASTKind {
+    #[inline]
     pub fn text(s: impl Into<String>, range: Option<(u32, u32)>) -> ASTNode {
         TextNode::Normal(s.into()).into_node(range)
     }
     #[inline]
-    pub fn bold(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
-        StyleNode { kind: StyleKind::Bold, children }.into_node(range)
+    pub fn emoji(s: impl Into<String>, range: Option<(u32, u32)>) -> ASTNode {
+        TextNode::emoji(s.into()).into_node(range)
+    }
+    #[inline]
+    pub fn strong(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Strong, children }.into_node(range)
     }
     #[inline]
     pub fn italic(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
@@ -101,15 +122,15 @@ impl ASTKind {
         StyleNode { kind: StyleKind::Underline, children }.into_node(range)
     }
     #[inline]
-    pub fn strikethrough(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
-        StyleNode { kind: StyleKind::Strikethrough, children }.into_node(range)
+    pub fn delete(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Delete, children }.into_node(range)
+    }
+    #[inline]
+    pub fn insert(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
+        StyleNode { kind: StyleKind::Insert, children }.into_node(range)
     }
     #[inline]
     pub fn undercover(children: ASTNodes, range: Option<(u32, u32)>) -> ASTNode {
         StyleNode { kind: StyleKind::Undercover, children }.into_node(range)
-    }
-    #[inline]
-    pub fn hr(range: Option<(u32, u32)>) -> ASTNode {
-        ASTNode { value: Self::Delimiter(Box::new(Delimiter::HorizontalRule)), range }
     }
 }

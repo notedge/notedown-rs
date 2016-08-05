@@ -3,12 +3,12 @@ mod index;
 mod mul;
 
 use crate::{
-    nodes::{Literal, Value},
+    nodes::{Value},
     NoteError, Result,
 };
 use num::{BigInt, Signed, ToPrimitive};
 use std::{
-    collections::BTreeSet,
+
     ops::{Add, Div, Mul, Neg, Shr, Sub},
 };
 

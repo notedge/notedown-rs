@@ -76,6 +76,7 @@ impl Display for TextNode {
                 f.write_char('\\')?;
                 f.write_char(*c)
             }
+            Self::Emoji(c) => {f.write_char(*c)}
         }
     }
 }
