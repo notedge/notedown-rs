@@ -6,8 +6,8 @@
 # Rust
 target/
 Cargo.lock
-*.nb
-*.ps1
 
 # Special
 projects/notedown-yew-preview
+time-travel.sh
+*.nb

@@ -32,11 +32,13 @@ pub enum NoteErrorKind {
 }
 
 impl NoteError {
-    pub fn set_url(self, url: Url) -> Self {
-        Self { kind: self.kind, file: Some(url), range: self.range }
+    pub fn set_url(mut self, url: Url) -> Self {
+        self.file = Some(url);
+        return self;
     }
-    pub fn set_range(self, range: (u32, u32)) -> Self {
-        Self { kind: self.kind, file: self.file, range }
+    pub fn set_range(mut self, range: (u32, u32)) -> Self {
+        self.range = range;
+        return self;
     }
     pub fn unreachable() -> Self {
         Self { kind: Box::new(NoteErrorKind::Unreachable), file: None, range: (0, 0) }

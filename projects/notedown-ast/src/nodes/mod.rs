@@ -88,10 +88,13 @@ impl ASTKind {
     pub fn br(range: Option<(u32, u32)>) -> ASTNode {
         ASTNode { value: todo!(), range }
     }
-
     #[inline]
-    pub fn code_span(range: Option<(u32, u32)>) -> ASTNode {
-        CodeNode
+    pub fn code_inline(code: impl Into<String>, range: Option<(u32, u32)>) -> ASTNode {
+        CodeNode::code_inline(code.into()).into_node(range)
+    }
+    #[inline]
+    pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: Option<(u32, u32)>) -> ASTNode {
+        CodeNode::code_block(language.into(), code.into()).into_node(range)
     }
 }
 
