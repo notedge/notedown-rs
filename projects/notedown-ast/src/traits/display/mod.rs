@@ -1,5 +1,7 @@
 mod value;
+mod link;
 
+use crate::nodes::SmartLink;
 use crate::nodes::{ASTKind, Delimiter, ListView, Literal, TextNode, Value, ValueType};
 use itertools::Itertools;
 use std::fmt::{self, Display, Formatter, Write};

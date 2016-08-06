@@ -18,11 +18,7 @@ pub struct NoteError {
 #[derive(Debug)]
 pub enum NoteErrorKind {
     IOError(std::io::Error),
-    FormatError {},
-    // PestError { #[from] source: pest::error::Error<crate::cst::Rule> },
-    LanguageError(String),
-    StructureError(String),
-    UnexpectedToken(String),
+    FormatError(std::fmt::Error),
     TypeMismatch(String),
     RuntimeError(String),
     /// A forbidden cst_node encountered
@@ -87,15 +83,6 @@ impl Display for NoteErrorKind {
                 unimplemented!()
             }
             Self::FormatError { .. } => {
-                unimplemented!()
-            }
-            Self::LanguageError(_) => {
-                unimplemented!()
-            }
-            Self::StructureError(_) => {
-                unimplemented!()
-            }
-            Self::UnexpectedToken(_) => {
                 unimplemented!()
             }
             Self::TypeMismatch(msg) => {

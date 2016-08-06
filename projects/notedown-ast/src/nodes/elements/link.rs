@@ -1,5 +1,3 @@
-use std::fmt::{self, Display, Formatter};
-
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum SmartLink {
@@ -52,41 +50,6 @@ pub enum SmartLink {
     Reference { tag: String },
 }
 
-impl Display for SmartLink {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self {
-            // SmartLink::Path { path: from, to, alt, bind } => {
-            //     let from_to = match to {
-            //         None => format!("[{}]", from),
-            //         Some(to) => format!("[{} > {}]", from, to),
-            //     };
-            //     match (bind, alt) {
-            //         (None, None) => write!(f, "{}", from_to),
-            //         (Some(bind), None) => write!(f, "{}[:{}]", from_to, bind),
-            //         (None, Some(alt)) => write!(f, "{}[{}]", from_to, alt),
-            //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", from_to, bind, alt),
-            //     }
-            // }
-            // SmartLink::PathWithText { text: img, path: to, alt, bind } => {
-            //     let img_to = match to {
-            //         None => format!("[{}]", img),
-            //         Some(s) => format!("[{} > {}]", img, s),
-            //     };
-            //     match (bind, alt) {
-            //         (None, None) => write!(f, "{}", img_to),
-            //         (Some(bind), None) => write!(f, "{}[:{}]", img_to, bind),
-            //         (None, Some(alt)) => write!(f, "{}[{}]", img_to, alt),
-            //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", img_to, bind, alt),
-            //     }
-            // }
-            SmartLink::Bare { link } => Display::fmt(link, f),
-            SmartLink::EMail { link } => Display::fmt(link, f),
-            SmartLink::Reciprocal { .. } => unimplemented!(),
-            SmartLink::TagBlock { .. } => unimplemented!(),
-            SmartLink::Reference { .. } => unimplemented!(),
-            SmartLink::Path { .. } => unimplemented!(),
-            SmartLink::PathWithText { .. } => unimplemented!(),
-            SmartLink::TagInline { .. } => unimplemented!(),
-        }
-    }
+impl SmartLink {
+
 }
