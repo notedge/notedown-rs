@@ -60,8 +60,12 @@ impl StyleKind {
             Self::Underline => "~",
             Self::Delete => "~~",
             Self::Undercover => "~~~",
-            Self::Highlight => { unimplemented!() }
-            Self::Insert => { unimplemented!() }
+            Self::Highlight => {
+                unimplemented!()
+            }
+            Self::Insert => {
+                unimplemented!()
+            }
         }
     }
 }

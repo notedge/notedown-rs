@@ -1,5 +1,6 @@
 use super::*;
 
+
 impl Add for Value {
     type Output = Result<Self>;
 
@@ -12,10 +13,10 @@ impl Add for Value {
             (Self::String(lhs), Self::String(rhs)) => Self::String(lhs + &rhs),
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs + &rhs),
             (Self::Integer(lhs), Self::Decimal(rhs)) | (Self::Decimal(rhs), Self::Integer(lhs)) => match lhs.to_f64() {
-                Some(s) => Self::Decimal(s + &rhs),
+                Some(s) => Self::Decimal(s + rhs),
                 None => return fail_int2dec(lhs),
             },
-            (Self::Decimal(lhs), Self::Decimal(rhs)) => Self::Decimal(lhs + &rhs),
+            (Self::Decimal(lhs), Self::Decimal(rhs)) => Self::Decimal(lhs + rhs),
             _ => return type_mismatch,
         };
         return Ok(out);

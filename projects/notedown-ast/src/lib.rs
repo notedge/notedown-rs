@@ -1,5 +1,6 @@
-extern crate text_utils;
+#![allow(clippy::needless_return)]
 
+extern crate text_utils;
 mod command;
 mod errors;
 pub mod nodes;

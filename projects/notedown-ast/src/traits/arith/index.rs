@@ -1,6 +1,5 @@
 use super::*;
 
-
 pub trait Index<I> {
     type Output;
     fn get_index(&self, index: &I) -> Self::Output;

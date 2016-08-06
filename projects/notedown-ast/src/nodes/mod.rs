@@ -14,7 +14,6 @@ use std::{
     collections::BTreeMap,
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
-    mem::transmute,
 };
 
 pub type ASTNode = Literal<ASTKind>;
@@ -97,7 +96,6 @@ impl ASTKind {
         CodeNode::code_block(language.into(), code.into()).into_node(range)
     }
 }
-
 
 impl ASTKind {
     #[inline]

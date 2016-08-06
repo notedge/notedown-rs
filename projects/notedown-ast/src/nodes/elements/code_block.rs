@@ -16,7 +16,7 @@ use crate::nodes::*;
 /// another code
 /// ```
 /// 
-/// You can also add additional parameters
+/// // You can also add additional parameters
 /// ```lang {
 ///     key = args
 /// }
@@ -37,14 +37,7 @@ pub struct CodeNode {
 
 impl Default for CodeNode {
     fn default() -> Self {
-        Self {
-            lang: String::from("text"),
-            code: String::new(),
-            inline: false,
-            highlight: false,
-            file: None,
-            high_line: vec![],
-        }
+        Self { lang: String::from("text"), code: String::new(), inline: false, highlight: false, file: None, high_line: vec![] }
     }
 }
 
@@ -52,7 +45,8 @@ impl Display for CodeNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         if self.inline {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)
-        } else {
+        }
+        else {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = self.lang, body = self.code)
         }
     }
@@ -81,34 +75,18 @@ impl CodeNode {
 }
 
 impl CodeNode {
-    ///
     /// ```notedown
     /// `s`
     /// ```
     #[inline]
     pub fn code_inline(code: String) -> Self {
-        Self {
-            lang: String::from("text"),
-            inline: true,
-            highlight: false,
-            code,
-            file: None,
-            high_line: vec![],
-        }
+        Self { lang: String::from("text"), inline: true, highlight: false, code, file: None, high_line: vec![] }
     }
-    ///
-/// ```notedown
-/// `s`
-/// ```
+    /// ```notedown
+    /// `s`
+    /// ```
     #[inline]
     pub fn code_block(lang: String, code: String) -> Self {
-        Self {
-            lang,
-            inline: false,
-            highlight: true,
-            code,
-            file: None,
-            high_line: vec![],
-        }
+        Self { lang, inline: false, highlight: true, code, file: None, high_line: vec![] }
     }
 }
