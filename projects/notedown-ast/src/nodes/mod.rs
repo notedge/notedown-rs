@@ -15,6 +15,7 @@ use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
 };
+use std::collections::{BTreeSet};
 
 pub type ASTNode = Literal<ASTKind>;
 pub type ASTNodes = Vec<Literal<ASTKind>>;

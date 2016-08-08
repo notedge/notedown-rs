@@ -2,6 +2,8 @@
     "name": "notedown-workspace",
     "private": true,
     "scripts": {
+        "u": "cargo upgrade --workspace",
+        "p": "cargo publish --allow-dirty",
         "pest": "cargo test --color=always --no-run --package notedown_parser --test pre_build gen_parser && cargo fmt --all",
         "build": "cargo build --release",
         "test": "cargo test --release",

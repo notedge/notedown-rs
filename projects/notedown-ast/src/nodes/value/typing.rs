@@ -1,5 +1,5 @@
 use super::*;
-use std::collections::{BTreeMap, BTreeSet};
+
 
 #[derive(Clone, Debug, Ord, PartialOrd, Eq, PartialEq)]
 pub enum ValueType {
@@ -45,6 +45,11 @@ impl Value {
         ValueType::List(count)
     }
     fn check_dict_type(&self, input: &Object) -> ValueType {
-        unimplemented!()
+        //let input: BTreeMap<String, Literal<Value>>;
+        let mut count = BTreeMap::new();
+        for (k, v) in input {
+            count.insert(k.to_owned(), v.value.get_type());
+        }
+        ValueType::Object(count)
     }
 }

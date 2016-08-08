@@ -6,6 +6,9 @@ default-members = [
     "projects/notedown-pest",
     "projects/notedown-parser2",
 ]
+exclude = [
+    "projects/notedown-parser",
+]
 
 [profile.release]
 lto = true

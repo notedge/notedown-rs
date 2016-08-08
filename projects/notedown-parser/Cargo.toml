@@ -7,7 +7,7 @@ repository = "https://github.com/notedge/notedown-rs"
 readme = "../../readme.md"
 license = "MPL-2.0"
 edition = "2021"
-
+publish = false
 
 [dependencies]
 notedown_ast = {version = "0.12", path = "../notedown-ast"}

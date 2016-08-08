@@ -2,7 +2,6 @@ mod arith;
 mod context;
 mod display;
 mod slugify;
-#[cfg(feature = "lsp-types")]
 mod toc;
 
 pub use context::ContextKind;

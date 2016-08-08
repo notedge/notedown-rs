@@ -1,3 +1,4 @@
+use std::ops::RangeInclusive;
 use crate::nodes::*;
 
 /// # Code Block
@@ -15,7 +16,7 @@ use crate::nodes::*;
 /// following code
 /// another code
 /// ```
-/// 
+///
 /// // You can also add additional parameters
 /// ```lang {
 ///     key = args
@@ -31,13 +32,25 @@ pub struct CodeNode {
     inline: bool,
     highlight: bool,
     code: String,
-    file: Option<String>,
-    high_line: Vec<usize>,
+    show_file_name: Option<String>,
+    /// None means not show line_number
+    show_line_number: Option<usize>,
+    highlight_lines: Vec<RangeInclusive<usize>>,
+    hide_lines: Vec<RangeInclusive<usize>>,
 }
 
 impl Default for CodeNode {
     fn default() -> Self {
-        Self { lang: String::from("text"), code: String::new(), inline: false, highlight: false, file: None, high_line: vec![] }
+        Self {
+            lang: String::from("text"),
+            code: String::new(),
+            inline: false,
+            highlight: false,
+            show_file_name: None,
+            show_line_number: None,
+            highlight_lines: vec![],
+            hide_lines: vec![],
+        }
     }
 }
 
@@ -45,8 +58,7 @@ impl Display for CodeNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         if self.inline {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)
-        }
-        else {
+        } else {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = self.lang, body = self.code)
         }
     }
@@ -62,14 +74,31 @@ impl CodeNode {
         self.lang = lang;
         return self;
     }
+
     #[inline]
-    pub fn set_highlight_line(mut self, lines: Vec<usize>) -> Self {
-        self.high_line = lines;
+    pub fn set_file_name(mut self, name: String) -> Self {
+        self.show_file_name = Some(name);
         return self;
     }
     #[inline]
-    pub fn set_file_name(mut self, name: String) -> Self {
-        self.file = Some(name);
+    pub fn clear_highlight_line(mut self) -> Self {
+        self.highlight_lines.clear();
+        return self;
+    }
+    #[inline]
+    pub fn set_highlight_line(mut self, lines: Vec<RangeInclusive<usize>>) -> Self {
+        self.highlight_lines = lines;
+        return self;
+    }
+
+    #[inline]
+    pub fn add_highlight_line(mut self, line: usize) -> Self {
+        self.highlight_lines.push(RangeInclusive::new(line, line));
+        return self;
+    }
+    #[inline]
+    pub fn add_highlight_range(mut self, lines: RangeInclusive<usize>) -> Self {
+        self.highlight_lines.push(lines);
         return self;
     }
 }
@@ -80,13 +109,25 @@ impl CodeNode {
     /// ```
     #[inline]
     pub fn code_inline(code: String) -> Self {
-        Self { lang: String::from("text"), inline: true, highlight: false, code, file: None, high_line: vec![] }
+        Self {
+            lang: String::from("text"),
+            inline: true,
+            highlight: false,
+            code,
+            ..Default::default()
+        }
     }
     /// ```notedown
     /// `s`
     /// ```
     #[inline]
     pub fn code_block(lang: String, code: String) -> Self {
-        Self { lang, inline: false, highlight: true, code, file: None, high_line: vec![] }
+        Self {
+            lang,
+            inline: false,
+            highlight: true,
+            code,
+            ..Default::default()
+        }
     }
 }

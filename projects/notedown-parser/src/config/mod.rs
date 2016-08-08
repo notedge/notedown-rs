@@ -1,4 +1,3 @@
-use notedown_ast::utils::{Position, Range};
 use notedown_pest::Span;
 use url::Url;
 
