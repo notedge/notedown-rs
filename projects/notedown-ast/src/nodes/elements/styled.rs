@@ -28,6 +28,8 @@ pub enum TextNode {
     Raw(String),
     Emoji(char),
     Escaped(char),
+    SoftNewline,
+    HardNewline,
 }
 
 impl Display for StyleNode {

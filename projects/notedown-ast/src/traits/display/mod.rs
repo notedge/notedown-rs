@@ -78,6 +78,8 @@ impl Display for TextNode {
                 f.write_char(*c)
             }
             Self::Emoji(c) => f.write_char(*c),
+            TextNode::SoftNewline => f.write_char('\n'),
+            TextNode::HardNewline => f.write_char('\n'),
         }
     }
 }

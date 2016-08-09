@@ -89,10 +89,6 @@ impl ASTKind {
         Delimiter::HorizontalRule.into_node(range)
     }
     #[inline]
-    pub fn br(range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: todo!(), range }
-    }
-    #[inline]
     pub fn code_inline(code: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
         CodeNode::code_inline(code.into()).into_node(range)
     }
@@ -111,6 +107,15 @@ impl ASTKind {
     pub fn emoji(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
         TextNode::emoji(s.into()).into_node(range)
     }
+    /// aka `<br>`
+    #[inline]
+    pub fn hard_break(range: Option<OffsetRange>) -> ASTNode {
+        TextNode::HardNewline.into_node(range)
+    }
+    #[inline]
+    pub fn soft_break(range: Option<OffsetRange>) -> ASTNode {
+        TextNode::SoftNewline.into_node(range)
+    }
     #[inline]
     pub fn strong(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
         StyleNode { kind: StyleKind::Strong, children }.into_node(range)
@@ -122,6 +127,10 @@ impl ASTKind {
     #[inline]
     pub fn emphasis(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
         StyleNode { kind: StyleKind::Emphasis, children }.into_node(range)
+    }
+    #[inline]
+    pub fn marking(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Highlight, children }.into_node(range)
     }
     #[inline]
     pub fn underline(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
