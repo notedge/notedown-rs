@@ -4,7 +4,7 @@ use crate::{nodes::ASTKind, traits::Slugify, ASTNode};
 
 impl TableNode {
     fn last_at_level(&mut self, depth: u8) -> &mut TableNode {
-        if depth == 0 || self.children.len() == 0 { self } else { self.children.last_mut().unwrap().last_at_level(depth - 1) }
+        if depth == 0 || self.children.is_empty() { self } else { self.children.last_mut().unwrap().last_at_level(depth - 1) }
     }
 }
 

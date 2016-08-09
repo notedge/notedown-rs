@@ -4,10 +4,6 @@ mod typing;
 pub use self::typing::ValueType;
 use super::*;
 
-pub type Set = IndexSet<Literal<Value>>;
-pub type Array = BTreeMap<BigUint, Literal<Value>>;
-pub type Object = IndexMap<String, Literal<Value>>;
-
 #[derive(Clone, Debug)]
 pub enum Value {
     /// - `None`: It doesn't look like anything to me

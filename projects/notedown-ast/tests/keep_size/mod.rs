@@ -25,6 +25,6 @@ fn keep_size() {
     show_size!(MathNode);
     show_size!(TextNode);
 
-    assert_eq!(size_of::<ASTNode>(), 48);
+    assert_eq!(size_of::<ASTNode>(), 56);
     assert_eq!(size_of::<ASTKind>(), 32);
 }

@@ -72,7 +72,7 @@ impl StyleKind {
 
 impl StyleNode {
     #[inline]
-    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::StyledSpan(Box::new(self)), range }
     }
     #[inline]
@@ -92,7 +92,7 @@ impl StyleNode {
 
 impl TextNode {
     #[inline]
-    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::TextSpan(Box::new(self)), range }
     }
     #[inline]

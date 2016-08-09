@@ -1,5 +1,5 @@
-use std::ops::RangeInclusive;
 use crate::nodes::*;
+use std::ops::RangeInclusive;
 
 /// # Code Block
 ///
@@ -16,7 +16,7 @@ use crate::nodes::*;
 /// following code
 /// another code
 /// ```
-///
+/// 
 /// // You can also add additional parameters
 /// ```lang {
 ///     key = args
@@ -58,7 +58,8 @@ impl Display for CodeNode {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         if self.inline {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)
-        } else {
+        }
+        else {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = self.lang, body = self.code)
         }
     }
@@ -66,7 +67,7 @@ impl Display for CodeNode {
 
 impl CodeNode {
     #[inline]
-    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::CodeNode(Box::new(self)), range }
     }
     #[inline]
@@ -109,25 +110,13 @@ impl CodeNode {
     /// ```
     #[inline]
     pub fn code_inline(code: String) -> Self {
-        Self {
-            lang: String::from("text"),
-            inline: true,
-            highlight: false,
-            code,
-            ..Default::default()
-        }
+        Self { lang: String::from("text"), inline: true, highlight: false, code, ..Default::default() }
     }
     /// ```notedown
     /// `s`
     /// ```
     #[inline]
     pub fn code_block(lang: String, code: String) -> Self {
-        Self {
-            lang,
-            inline: false,
-            highlight: true,
-            code,
-            ..Default::default()
-        }
+        Self { lang, inline: false, highlight: true, code, ..Default::default() }
     }
 }

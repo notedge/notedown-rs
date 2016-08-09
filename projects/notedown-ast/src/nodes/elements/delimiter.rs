@@ -7,7 +7,7 @@ pub enum Delimiter {
 
 impl Delimiter {
     #[inline]
-    pub fn into_node(self, range: Option<(u32, u32)>) -> ASTNode {
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::Delimiter(Box::new(self)), range }
     }
 }

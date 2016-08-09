@@ -1,8 +1,9 @@
-use lsp_types::Url;
 use std::{
     error::Error,
     fmt::{self, Debug, Display, Formatter},
+    ops::Range,
 };
+use yggdrasil_shared::records::Url;
 
 mod error_custom;
 
@@ -10,9 +11,9 @@ pub type Result<T> = std::result::Result<T, NoteError>;
 
 #[derive(Debug)]
 pub struct NoteError {
-    kind: Box<NoteErrorKind>,
-    file: Option<Url>,
-    range: (u32, u32),
+    pub kind: Box<NoteErrorKind>,
+    pub file: Option<Url>,
+    pub range: Option<Range<usize>>,
 }
 
 #[derive(Debug)]
@@ -32,12 +33,12 @@ impl NoteError {
         self.file = Some(url);
         return self;
     }
-    pub fn set_range(mut self, range: (u32, u32)) -> Self {
-        self.range = range;
+    pub fn set_range(mut self, start: usize, end: usize) -> Self {
+        self.range = Some(Range { start, end });
         return self;
     }
     pub fn unreachable() -> Self {
-        Self { kind: Box::new(NoteErrorKind::Unreachable), file: None, range: (0, 0) }
+        Self { kind: Box::new(NoteErrorKind::Unreachable), file: None, range: None }
     }
 
     // pub fn structure_error(msg: impl Into<String>, start: Option<usize>, end: Option<usize>) -> NoteError {
@@ -54,25 +55,28 @@ impl NoteError {
     ///
     pub fn type_mismatch(msg: impl Into<String>) -> NoteError {
         let kind = NoteErrorKind::TypeMismatch(msg.into());
-        Self { kind: Box::new(kind), file: None, range: (0, 0) }
+        Self { kind: Box::new(kind), file: None, range: None }
     }
     ///
     pub fn runtime_error(msg: impl Into<String>) -> NoteError {
         let kind = NoteErrorKind::RuntimeError(msg.into());
-        Self { kind: Box::new(kind), file: None, range: (0, 0) }
+        Self { kind: Box::new(kind), file: None, range: None }
     }
 }
 
 impl Error for NoteError {}
 
 impl Display for NoteError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let path = match &self.file {
             Some(s) => s.path(),
             None => "<Anonymous>",
         };
-        writeln!(f, "at ({}, {}) of {}", self.range.0, self.range.1, path)?;
-        write!(f, "{:indent$}{}", "", self.kind, indent = 4)
+        match &self.range {
+            Some(s) => writeln!(f, "at ({}, {}) of {}", s.start, s.end, path)?,
+            None => writeln!(f, "at {}", path)?,
+        }
+        write!(f, "{:indent$}{}", self.kind, indent = 4)
     }
 }
 

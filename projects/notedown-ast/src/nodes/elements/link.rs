@@ -50,6 +50,4 @@ pub enum SmartLink {
     Reference { tag: String },
 }
 
-impl SmartLink {
-
-}
+impl SmartLink {}

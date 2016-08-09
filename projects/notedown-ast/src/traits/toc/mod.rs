@@ -1,4 +1,4 @@
-use lsp_types::Range;
+use yggdrasil_shared::records::LSPRange;
 
 mod toc;
 
@@ -10,7 +10,7 @@ pub trait TableOfContent {
 pub struct TableNode {
     pub level: u8,
     pub detail: String,
-    pub range: Range,
+    pub range: LSPRange,
     pub children: Vec<TableNode>,
 }
 

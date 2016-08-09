@@ -1,6 +1,5 @@
 use super::*;
 
-
 impl Display for SmartLink {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match self {
