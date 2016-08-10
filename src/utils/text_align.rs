@@ -20,7 +20,8 @@ pub fn dedent_less_than(text: &str, max: usize) -> String {
                 .skip_while(|c| {
                     if max == 0 {
                         false
-                    } else {
+                    }
+                    else {
                         max -= 1;
                         c.is_whitespace()
                     }
