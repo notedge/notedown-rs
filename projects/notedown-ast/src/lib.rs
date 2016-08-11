@@ -1,4 +1,5 @@
 #![allow(clippy::needless_return)]
+#![feature(box_syntax)]
 
 mod command;
 mod errors;

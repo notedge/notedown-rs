@@ -75,7 +75,7 @@ impl StyleKind {
 impl StyleNode {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::StyledSpan(Box::new(self)), range }
+        ASTNode { value: ASTKind::StyledSpan(box self), range }
     }
     #[inline]
     pub fn new(children: ASTNodes, style: &str) -> Self {
@@ -95,7 +95,7 @@ impl StyleNode {
 impl TextNode {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::TextSpan(Box::new(self)), range }
+        ASTNode { value: ASTKind::TextSpan(box self), range }
     }
     #[inline]
     pub fn new(children: String) -> Self {

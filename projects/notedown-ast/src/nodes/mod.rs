@@ -1,10 +1,12 @@
 mod elements;
 mod literal;
 mod value;
+mod link;
 
 pub use self::{
     elements::*,
     literal::Literal,
+    link::SmartLink,
     value::{Value, ValueType},
 };
 pub use indexmap::map::{Keys, Values};

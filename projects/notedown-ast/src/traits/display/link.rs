@@ -35,6 +35,7 @@ impl Display for SmartLink {
             Self::Path { .. } => unimplemented!(),
             Self::PathWithText { .. } => unimplemented!(),
             Self::TagInline { .. } => unimplemented!(),
+            Self::Image(_)  => unimplemented!(),
         }
     }
 }

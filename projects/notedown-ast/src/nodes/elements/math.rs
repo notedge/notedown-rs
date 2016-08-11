@@ -57,7 +57,7 @@ impl MathNode {
         Self { kind: MathKind::Display, raw, ..Self::default() }
     }
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::MathNode(Box::new(self)), range }
+        ASTNode { value: ASTKind::MathNode(box self), range }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         f.write_str(self.kind.surround_begin())?;

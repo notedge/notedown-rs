@@ -68,7 +68,7 @@ impl Display for CodeNode {
 impl CodeNode {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::CodeNode(Box::new(self)), range }
+        ASTNode { value: ASTKind::CodeNode(box self), range }
     }
     #[inline]
     pub fn set_language(mut self, lang: String) -> Self {

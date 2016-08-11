@@ -2,7 +2,6 @@ mod code_block;
 mod command;
 mod delimiter;
 mod header;
-mod link;
 mod list;
 mod math;
 mod styled;
@@ -13,7 +12,6 @@ pub use self::{
     command::{Command, CommandKind},
     delimiter::Delimiter,
     header::Header,
-    link::SmartLink,
     list::ListView,
     math::{MathKind, MathNode},
     styled::{StyleKind, StyleNode, TextNode},

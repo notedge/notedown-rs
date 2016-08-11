@@ -1,3 +1,9 @@
+mod image_link;
+mod hyper_link;
+
+use super::*;
+pub use self::image_link::{ImageLink, ImageLayout};
+
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum SmartLink {
@@ -48,6 +54,32 @@ pub enum SmartLink {
     /// text [^tag] text text text
     /// ```
     Reference { tag: String },
+    Image(Box<ImageLink>),
 }
 
-impl SmartLink {}
+impl SmartLink {
+    #[inline]
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+        ASTNode { value: ASTKind::LinkNode(box self), range }
+    }
+}
+
+impl ASTKind {
+    #[inline]
+    pub fn image_link(self, src: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        ImageLink {
+            src: src.into(),
+            ..Default::default()
+        }.into_node(range)
+    }
+    #[inline]
+    pub fn hyper_link(self, src: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        ImageLink {
+            src: src.into(),
+            ..Default::default()
+        }.into_node(range)
+    }
+
+
+
+}

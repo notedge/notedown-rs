@@ -20,6 +20,6 @@ impl Display for Header {
 impl Header {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::Header(Box::new(self)), range }
+        ASTNode { value: ASTKind::Header(box self), range }
     }
 }
