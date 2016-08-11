@@ -1,12 +1,12 @@
 mod elements;
+mod link;
 mod literal;
 mod value;
-mod link;
 
 pub use self::{
     elements::*,
-    literal::Literal,
     link::SmartLink,
+    literal::Literal,
     value::{Value, ValueType},
 };
 pub use indexmap::map::{Keys, Values};
@@ -53,7 +53,7 @@ pub enum ASTKind {
     MathNode(Box<MathNode>),
     /// block: ``` a ```
     /// span: `` `code`  ``
-    LinkNode(Box<SmartLink>),
+    LinkNode(SmartLink),
     /// span
     TextSpan(Box<TextNode>),
     /// span

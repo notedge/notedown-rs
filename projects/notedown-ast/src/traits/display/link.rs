@@ -27,15 +27,11 @@ impl Display for SmartLink {
             //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", img_to, bind, alt),
             //     }
             // }
-            Self::Bare { link } => Display::fmt(link, f),
-            Self::EMail { link } => Display::fmt(link, f),
-            Self::Reciprocal { .. } => unimplemented!(),
-            Self::TagBlock { .. } => unimplemented!(),
             Self::Reference { .. } => unimplemented!(),
-            Self::Path { .. } => unimplemented!(),
-            Self::PathWithText { .. } => unimplemented!(),
-            Self::TagInline { .. } => unimplemented!(),
-            Self::Image(_)  => unimplemented!(),
+            Self::Image(_) => unimplemented!(),
+            Self::Normal(_) => unimplemented!(),
+            Self::EMail(_) => unimplemented!(),
+            Self::TwoWay(_) => unimplemented!(),
         }
     }
 }

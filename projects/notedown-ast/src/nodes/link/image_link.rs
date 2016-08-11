@@ -18,7 +18,6 @@ pub struct ImageLink {
     pub layout: Option<ImageLayout>,
 }
 
-
 impl ImageLink {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
