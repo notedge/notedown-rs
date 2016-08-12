@@ -15,11 +15,12 @@ const NON_URL: &AsciiSet = &CONTROLS
     .add(b'+')
     .add(b',')
     .add(b'-')
+    //  .add(b':')
     .add(b';')
     .add(b'<')
     .add(b'=')
     .add(b'>')
-    .add(b'?')
+    //  .add(b'?')
     .add(b'@')
     .add(b'[')
     .add(b'\\')
@@ -32,12 +33,12 @@ const NON_URL: &AsciiSet = &CONTROLS
     .add(b'}')
     .add(b'~');
 
-pub fn url_encode(input: &str) -> String {
-    percent_encode(input.as_bytes(), NON_URL).to_string()
+pub fn url_encode(text: &str) -> String {
+    percent_encode(text.as_bytes(), NON_URL).to_string()
 }
 
-pub fn url_decode(input: &str) -> Option<String> {
-    match percent_decode(input.as_bytes()).decode_utf8() {
+pub fn url_decode(text: &str) -> Option<String> {
+    match percent_decode(text.as_bytes()).decode_utf8() {
         Ok(cow) => Some(cow.to_string()),
         Err(_) => None,
     }
