@@ -14,7 +14,7 @@ pub struct ImageLink {
     pub size: Option<(usize, usize)>,
     /// 0: left
     /// 1: center
-    /// 2:
+    /// 2: right
     pub layout: Option<ImageLayout>,
 }
 

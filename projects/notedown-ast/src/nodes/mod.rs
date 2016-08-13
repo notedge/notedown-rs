@@ -5,11 +5,11 @@ mod value;
 
 pub use self::{
     elements::*,
-    link::SmartLink,
+    link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, SmartLink, TagReference, TwoWayLink},
     literal::Literal,
     value::{Value, ValueType},
 };
-pub use indexmap::map::{Keys, Values};
+
 use indexmap::{map::IndexMap, set::IndexSet};
 use num::{BigInt, BigUint};
 use std::{
