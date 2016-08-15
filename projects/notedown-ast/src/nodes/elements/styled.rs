@@ -1,5 +1,6 @@
 use super::*;
 
+#[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum StyleKind {
     Plain = 0,
@@ -11,9 +12,14 @@ pub enum StyleKind {
     Underline = 21,
     Undercover = 22,
     Highlight = 23,
+    Color(u8, u8, u8, u8) = 24,
+    // HTMLColor(String) = 25,
 
     Delete = 31,
     Insert = 32,
+
+    Sub = 41,
+    Super = 42,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -32,11 +38,6 @@ pub enum TextNode {
     HardNewline,
 }
 
-impl Display for StyleNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        self.surround(f)
-    }
-}
 
 impl From<&str> for StyleKind {
     fn from(style: &str) -> Self {
@@ -53,7 +54,7 @@ impl From<&str> for StyleKind {
 }
 
 impl StyleKind {
-    pub fn surround(&self) -> &'static str {
+    pub fn surround_in(&self) -> &'static str {
         match self {
             Self::Plain => "",
             Self::Italic => "*",
@@ -68,6 +69,29 @@ impl StyleKind {
             Self::Insert => {
                 unimplemented!()
             }
+            StyleKind::Color(_, _, _, _) => {unimplemented!()}
+            StyleKind::Sub => {unimplemented!()}
+            StyleKind::Super => {unimplemented!()}
+        }
+    }
+    pub fn surround_out(&self) -> &'static str {
+        match self {
+            Self::Plain => "",
+            Self::Italic => "*",
+            Self::Strong => "**",
+            Self::Emphasis => "***",
+            Self::Underline => "~",
+            Self::Delete => "~~",
+            Self::Undercover => "~~~",
+            Self::Highlight => {
+                unimplemented!()
+            }
+            Self::Insert => {
+                unimplemented!()
+            }
+            Self::Color(_, _, _, _) => {unimplemented!()}
+            Self::Sub => {unimplemented!()}
+            Self::Super => {unimplemented!()}
         }
     }
 }
@@ -80,15 +104,6 @@ impl StyleNode {
     #[inline]
     pub fn new(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
-    }
-    pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let s = self.kind.surround();
-        f.write_str(s)?;
-        for child in &self.children {
-            write!(f, "{}", child.value)?;
-        }
-        f.write_str(s)?;
-        Ok(())
     }
 }
 
@@ -111,10 +126,7 @@ impl TextNode {
             Some('\\') => {}
             _ => return None,
         }
-        match s.next() {
-            Some(c) => Some(Self::Escaped(c)),
-            None => None,
-        }
+        s.next().map(Self::Escaped)
     }
     pub fn escaped_char(char: char) -> Self {
         Self::Escaped(char)

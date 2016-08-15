@@ -1,9 +1,10 @@
 mod link;
 mod value;
 
-use crate::nodes::{ASTKind, Delimiter, ListView, Literal, SmartLink, TextNode, Value, ValueType};
+use crate::nodes::{ASTKind, Delimiter, ListView, Literal, SmartLink, TextNode, Value, ValueType, StyleNode};
 use itertools::Itertools;
 use std::fmt::{self, Display, Formatter, Write};
+use std::fmt::Debug;
 
 impl<T: Display> Display for Literal<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -81,6 +82,17 @@ impl Display for TextNode {
             TextNode::SoftNewline => f.write_char('\n'),
             TextNode::HardNewline => f.write_char('\n'),
         }
+    }
+}
+
+impl Display for StyleNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.write_str(self.kind.surround_in())?;
+        for child in &self.children {
+            write!(f, "{}", child.value)?;
+        }
+        f.write_str(self.kind.surround_out())?;
+        Ok(())
     }
 }
 

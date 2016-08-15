@@ -14,7 +14,7 @@ pub use self::{
 use super::*;
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Eq, PartialEq, Hash)]
 pub enum SmartLink {
     EMail(Box<EmailLink>),
     Normal(Box<HyperLink>),
