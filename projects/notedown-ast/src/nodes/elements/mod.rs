@@ -2,19 +2,17 @@ mod code_block;
 mod command;
 mod delimiter;
 mod header;
-mod list;
 mod math;
 mod styled;
-mod table;
+mod text;
 
 pub use self::{
     code_block::CodeNode,
     command::{Command, CommandKind},
     delimiter::Delimiter,
     header::Header,
-    list::ListView,
     math::{MathKind, MathNode},
-    styled::{StyleKind, StyleNode, TextNode},
-    table::TableView,
+    styled::{StyleKind, StyleNode},
+    text::TextNode
 };
 use super::*;

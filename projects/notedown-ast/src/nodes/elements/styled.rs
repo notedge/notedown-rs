@@ -28,17 +28,6 @@ pub struct StyleNode {
     pub children: ASTNodes,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum TextNode {
-    Normal(String),
-    Raw(String),
-    Emoji(char),
-    Escaped(char),
-    SoftNewline,
-    HardNewline,
-}
-
-
 impl From<&str> for StyleKind {
     fn from(style: &str) -> Self {
         match style {
@@ -107,32 +96,3 @@ impl StyleNode {
     }
 }
 
-impl TextNode {
-    #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
-        ASTNode { value: ASTKind::TextSpan(box self), range }
-    }
-    #[inline]
-    pub fn new(children: String) -> Self {
-        Self::Normal(children)
-    }
-    #[inline]
-    pub fn raw(children: String) -> Self {
-        Self::Raw(children)
-    }
-    pub fn escaped(string: String) -> Option<Self> {
-        let mut s = string.chars().peekable();
-        match s.next() {
-            Some('\\') => {}
-            _ => return None,
-        }
-        s.next().map(Self::Escaped)
-    }
-    pub fn escaped_char(char: char) -> Self {
-        Self::Escaped(char)
-    }
-
-    pub fn emoji(_: String) -> Self {
-        unimplemented!()
-    }
-}

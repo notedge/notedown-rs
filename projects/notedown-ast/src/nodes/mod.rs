@@ -2,13 +2,18 @@ mod elements;
 mod link;
 mod literal;
 mod value;
+mod list;
+mod table;
 
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, SmartLink, TagReference, TwoWayLink},
     literal::Literal,
     value::{Value, ValueType},
+    list::ListView,
+    table::TableView
 };
+
 
 use indexmap::{map::IndexMap, set::IndexSet};
 use num::{BigInt, BigUint};

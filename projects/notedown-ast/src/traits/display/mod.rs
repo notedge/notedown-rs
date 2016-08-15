@@ -81,6 +81,12 @@ impl Display for TextNode {
             Self::Emoji(c) => f.write_char(*c),
             TextNode::SoftNewline => f.write_char('\n'),
             TextNode::HardNewline => f.write_char('\n'),
+            TextNode::CheckBox(b) => {
+                match b {
+                    true => {f.write_str("[x]")},
+                    false => f.write_str("[ ]")
+                }
+            }
         }
     }
 }
