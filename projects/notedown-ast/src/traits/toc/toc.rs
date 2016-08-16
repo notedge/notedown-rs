@@ -1,6 +1,7 @@
 use super::*;
 
 use crate::{nodes::ASTKind, traits::Slugify, ASTNode};
+use std::ops::Range;
 
 impl TableNode {
     fn last_at_level(&mut self, depth: u8) -> &mut TableNode {
@@ -9,7 +10,7 @@ impl TableNode {
 }
 
 impl TableOfContent for ASTNode {
-    fn table_of_content(&self, config: TableConfig) -> TableNode {
+    fn table_of_content(&self, config: &TableConfig) -> TableNode {
         let mut root = TableNode::default();
         let mut toc_ignore = false;
         if let ASTKind::Statements(terms) = &self.value {
@@ -25,7 +26,11 @@ impl TableOfContent for ASTNode {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new = TableNode { level, detail: header.slugify(), range: todo!(), children: vec![] };
+                        let range = match &self.range {
+                            Some(s) => {config.text.get_lsp_range(s.start, s.end)},
+                            None => {Default::default()}
+                        };
+                        let new = TableNode { level, detail: header.slugify(), range, children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {
