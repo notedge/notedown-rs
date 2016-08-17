@@ -34,19 +34,19 @@ impl ContextAware for ASTNode {
 impl ContextAware for ASTKind {
     fn context_aware(&self, offset: u32) -> ContextKind {
         match self {
-            ASTKind::Statements(children) => children.context_aware(offset),
-            ASTKind::Header { .. } => unimplemented!(),
-            ASTKind::Paragraph(children) => children.context_aware(offset),
-            ASTKind::TableView { .. } => unimplemented!(),
-            ASTKind::ListView { .. } => unimplemented!(),
-            ASTKind::TextSpan(_) => unimplemented!(),
-            ASTKind::MathNode(_) => ContextKind::Math,
-            ASTKind::Command { .. } => unimplemented!(),
-            ASTKind::Value { .. } => unimplemented!(),
-            ASTKind::Delimiter(_) => unimplemented!(),
-            ASTKind::CodeNode(_) => unimplemented!(),
-            ASTKind::LinkNode(_) => unimplemented!(),
-            ASTKind::StyledSpan(_) => unimplemented!(),
+            Self::Statements(children) => children.context_aware(offset),
+            Self::Header { .. } => unimplemented!(),
+            Self::Paragraph(children) => children.context_aware(offset),
+            Self::TableView { .. } => unimplemented!(),
+            Self::ListView { .. } => unimplemented!(),
+            Self::TextSpan(_) => unimplemented!(),
+            Self::MathNode(_) => ContextKind::Math,
+            Self::Command { .. } => unimplemented!(),
+            Self::Value { .. } => unimplemented!(),
+            Self::Delimiter(_) => unimplemented!(),
+            Self::CodeNode(_) => unimplemented!(),
+            Self::LinkNode(_) => unimplemented!(),
+            Self::StyledSpan(_) => unimplemented!(),
         }
     }
 }

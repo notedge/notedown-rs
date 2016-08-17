@@ -44,3 +44,23 @@ impl TextNode {
         unimplemented!()
     }
 }
+
+impl ASTKind {
+    #[inline]
+    pub fn text(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        TextNode::Normal(s.into()).into_node(range)
+    }
+    #[inline]
+    pub fn emoji(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        TextNode::emoji(s.into()).into_node(range)
+    }
+    /// aka `<br>`
+    #[inline]
+    pub fn hard_break(range: Option<OffsetRange>) -> ASTNode {
+        TextNode::HardNewline.into_node(range)
+    }
+    #[inline]
+    pub fn soft_break(range: Option<OffsetRange>) -> ASTNode {
+        TextNode::SoftNewline.into_node(range)
+    }
+}

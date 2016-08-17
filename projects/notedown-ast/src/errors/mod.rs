@@ -24,8 +24,8 @@ pub enum NoteErrorKind {
     RuntimeError(String),
     /// A forbidden cst_node encountered
     Unreachable,
-    /* #[error(transparent)]
-     * UnknownError(#[from] anyhow::Error), */
+    // #[error(transparent)]
+    // UnknownError(#[from] anyhow::Error),
 }
 
 impl NoteError {

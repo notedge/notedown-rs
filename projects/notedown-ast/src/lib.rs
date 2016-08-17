@@ -1,5 +1,6 @@
 #![allow(clippy::needless_return)]
 #![feature(box_syntax)]
+#![feature(map_first_last)]
 #![feature(arbitrary_enum_discriminant)]
 
 mod command;

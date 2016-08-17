@@ -103,4 +103,3 @@ impl ASTKind {
         CodeNode::code_block(language.into(), code.into()).into_node(range)
     }
 }
-

@@ -6,19 +6,20 @@ pub enum StyleKind {
     Plain = 0,
 
     Italic = 11,
-    Strong = 12,
-    Emphasis = 13,
+    Emphasis = 12,
+    Strong = 13,
+    ItalicBold = 14,
 
     Underline = 21,
     Undercover = 22,
-    Highlight = 23,
+    Marking = 23,
     Color(u8, u8, u8, u8) = 24,
     // HTMLColor(String) = 25,
     Delete = 31,
     Insert = 32,
 
-    Sub = 41,
-    Super = 42,
+    Subscript = 41,
+    Superscript = 42,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -51,21 +52,17 @@ impl StyleKind {
             Self::Underline => "~",
             Self::Delete => "~~",
             Self::Undercover => "~~~",
-            Self::Highlight => {
+            Self::Marking => {
                 unimplemented!()
             }
             Self::Insert => {
                 unimplemented!()
             }
-            StyleKind::Color(_, _, _, _) => {
+            Self::Color(_, _, _, _) => {
                 unimplemented!()
             }
-            StyleKind::Sub => {
-                unimplemented!()
-            }
-            StyleKind::Super => {
-                unimplemented!()
-            }
+            Self::Subscript => "<sub>",
+            Self::Superscript => "<sup>",
         }
     }
     pub fn surround_out(&self) -> &'static str {
@@ -77,7 +74,7 @@ impl StyleKind {
             Self::Underline => "~",
             Self::Delete => "~~",
             Self::Undercover => "~~~",
-            Self::Highlight => {
+            Self::Marking => {
                 unimplemented!()
             }
             Self::Insert => {
@@ -86,12 +83,8 @@ impl StyleKind {
             Self::Color(_, _, _, _) => {
                 unimplemented!()
             }
-            Self::Sub => {
-                unimplemented!()
-            }
-            Self::Super => {
-                "<super/>"
-            }
+            Self::Subscript => "</sub>",
+            Self::Superscript => "</sup>",
         }
     }
 }
@@ -104,5 +97,63 @@ impl StyleNode {
     #[inline]
     pub fn new(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
+    }
+}
+
+macro_rules! styled_node {
+    ($name:tt => $t:tt) => {
+        #[inline]
+        pub fn $name(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+            StyleNode { kind: StyleKind::$t, children }.into_node(range)
+        }
+    };
+}
+
+impl ASTKind {
+    styled_node![strong2 => Strong];
+
+    #[inline]
+    pub fn strong(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Strong, children }.into_node(range)
+    }
+    #[inline]
+    pub fn italic(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Italic, children }.into_node(range)
+    }
+    #[inline]
+    pub fn italic_bold(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::ItalicBold, children }.into_node(range)
+    }
+    #[inline]
+    pub fn emphasis(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Emphasis, children }.into_node(range)
+    }
+    #[inline]
+    pub fn marking(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Marking, children }.into_node(range)
+    }
+    #[inline]
+    pub fn underline(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Underline, children }.into_node(range)
+    }
+    #[inline]
+    pub fn undercover(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Undercover, children }.into_node(range)
+    }
+    #[inline]
+    pub fn delete(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Delete, children }.into_node(range)
+    }
+    #[inline]
+    pub fn insert(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Insert, children }.into_node(range)
+    }
+    #[inline]
+    pub fn subscript(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Subscript, children }.into_node(range)
+    }
+    #[inline]
+    pub fn superscript(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+        StyleNode { kind: StyleKind::Superscript, children }.into_node(range)
     }
 }

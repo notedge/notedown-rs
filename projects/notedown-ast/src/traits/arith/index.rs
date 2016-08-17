@@ -48,9 +48,20 @@ impl Index<BigInt> for Value {
             }
             Self::Array(v) => {
                 let out = if index.is_negative() {
-                    // v.last_key_value()
-                    // let max = v.keys().next_back();
-                    todo!()
+                    match v.last_key_value() {
+                        None => None,
+                        Some((max, _)) => match index.neg().to_biguint() {
+                            None => None,
+                            Some(i) => {
+                                if &i < max {
+                                    v.get(&(max - i))
+                                }
+                                else {
+                                    None
+                                }
+                            }
+                        },
+                    }
                 }
                 else {
                     index.to_biguint().and_then(|i| v.get(&i))
