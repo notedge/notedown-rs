@@ -1,10 +1,9 @@
 mod link;
 mod value;
 
-use crate::nodes::{ASTKind, Delimiter, ListView, Literal, SmartLink, TextNode, Value, ValueType, StyleNode};
+use crate::nodes::{ASTKind, Delimiter, ListView, Literal, SmartLink, StyleNode, TextNode, Value, ValueType};
 use itertools::Itertools;
-use std::fmt::{self, Display, Formatter, Write};
-use std::fmt::Debug;
+use std::fmt::{self, Debug, Display, Formatter, Write};
 
 impl<T: Display> Display for Literal<T> {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -81,12 +80,10 @@ impl Display for TextNode {
             Self::Emoji(c) => f.write_char(*c),
             TextNode::SoftNewline => f.write_char('\n'),
             TextNode::HardNewline => f.write_char('\n'),
-            TextNode::CheckBox(b) => {
-                match b {
-                    true => {f.write_str("[x]")},
-                    false => f.write_str("[ ]")
-                }
-            }
+            TextNode::CheckBox(b) => match b {
+                true => f.write_str("[x]"),
+                false => f.write_str("[ ]"),
+            },
         }
     }
 }

@@ -14,7 +14,6 @@ pub enum StyleKind {
     Highlight = 23,
     Color(u8, u8, u8, u8) = 24,
     // HTMLColor(String) = 25,
-
     Delete = 31,
     Insert = 32,
 
@@ -58,9 +57,15 @@ impl StyleKind {
             Self::Insert => {
                 unimplemented!()
             }
-            StyleKind::Color(_, _, _, _) => {unimplemented!()}
-            StyleKind::Sub => {unimplemented!()}
-            StyleKind::Super => {unimplemented!()}
+            StyleKind::Color(_, _, _, _) => {
+                unimplemented!()
+            }
+            StyleKind::Sub => {
+                unimplemented!()
+            }
+            StyleKind::Super => {
+                unimplemented!()
+            }
         }
     }
     pub fn surround_out(&self) -> &'static str {
@@ -78,9 +83,15 @@ impl StyleKind {
             Self::Insert => {
                 unimplemented!()
             }
-            Self::Color(_, _, _, _) => {unimplemented!()}
-            Self::Sub => {unimplemented!()}
-            Self::Super => {unimplemented!()}
+            Self::Color(_, _, _, _) => {
+                unimplemented!()
+            }
+            Self::Sub => {
+                unimplemented!()
+            }
+            Self::Super => {
+                "<super/>"
+            }
         }
     }
 }
@@ -95,4 +106,3 @@ impl StyleNode {
         Self { kind: StyleKind::from(style), children }
     }
 }
-

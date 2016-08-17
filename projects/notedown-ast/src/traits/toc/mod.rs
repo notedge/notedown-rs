@@ -1,22 +1,29 @@
-use yggdrasil_shared::records::{LSPRange, TextIndex};
+use crate::{nodes::ASTKind, traits::Slugify, ASTNode};
+use std::ops::Range;
+use yggdrasil_shared::records::{
+    lsp_types::{DocumentSymbol, SymbolKind},
+    TextIndex,
+};
 
-mod toc;
+mod visit_ast;
 
 pub trait TableOfContent {
     fn table_of_content(&self, config: &TableConfig) -> TableNode;
+    fn table_of_content_lsp(&self, config: &TableConfig, _text: &TextIndex) -> DocumentSymbol {
+        let nodes = self.table_of_content(config);
+        return DocumentSymbol::from(nodes);
+    }
 }
 
 #[derive(Debug)]
 pub struct TableNode {
     pub level: u8,
     pub detail: String,
-    pub range: LSPRange,
+    pub range: Range<usize>,
     pub children: Vec<TableNode>,
 }
 
-
 pub struct TableConfig {
-    pub text: TextIndex,
     pub max_depth: u8,
 }
 

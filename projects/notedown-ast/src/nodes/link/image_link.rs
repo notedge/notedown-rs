@@ -7,7 +7,7 @@ pub enum ImageLayout {
     Right,
 }
 
-#[derive(Clone, Default, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Default, Eq, PartialEq, Hash)]
 pub struct ImageLink {
     pub src: String,
     pub alt: Option<String>,

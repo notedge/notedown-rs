@@ -5,7 +5,7 @@ use std::{
 };
 use yggdrasil_shared::records::Url;
 
-mod error_custom;
+mod error_std;
 
 pub type Result<T> = std::result::Result<T, NoteError>;
 

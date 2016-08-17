@@ -1,7 +1,6 @@
 use super::*;
 use crate::nodes::{EmailLink, HyperLink, ImageLink, TagReference, TwoWayLink};
 
-
 impl Debug for SmartLink {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
@@ -44,9 +43,27 @@ impl Display for ImageLink {
     }
 }
 
+impl Debug for ImageLink {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        let w = &mut f.debug_struct("ImageLink");
+        w.field("src", &self.src);
+        if let Some(s) = &self.alt {
+            w.field("alt", &s);
+        }
+        if let Some(s) = &self.size {
+            w.field("width", &s.0);
+            w.field("height", &s.1);
+        }
+        if let Some(s) = &self.layout {
+            w.field("layout", &s);
+        }
+        w.finish()
+    }
+}
+
 impl Debug for HyperLink {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-       let w = &mut f.debug_struct("HyperLink");
+        let w = &mut f.debug_struct("HyperLink");
         w.field("src", &self.src);
         w.field("is_bare", &self.is_bare);
         if let Some(s) = &self.text {
