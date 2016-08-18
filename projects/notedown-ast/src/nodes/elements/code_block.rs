@@ -120,3 +120,14 @@ impl CodeNode {
         Self { lang, inline: false, highlight: true, code, ..Default::default() }
     }
 }
+
+impl ASTKind {
+    #[inline]
+    pub fn code_inline(code: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        CodeNode::code_inline(code.into()).into_node(range)
+    }
+    #[inline]
+    pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        CodeNode::code_block(language.into(), code.into()).into_node(range)
+    }
+}

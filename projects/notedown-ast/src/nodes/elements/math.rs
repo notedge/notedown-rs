@@ -47,15 +47,6 @@ impl MathKind {
 }
 
 impl MathNode {
-    pub fn block(raw: String) -> Self {
-        Self { kind: MathKind::BlockDisplay, raw, ..Self::default() }
-    }
-    pub fn inline(raw: String) -> Self {
-        Self { kind: MathKind::Inline, raw, ..Self::default() }
-    }
-    pub fn display(raw: String) -> Self {
-        Self { kind: MathKind::Display, raw, ..Self::default() }
-    }
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::MathNode(box self), range }
     }
@@ -89,3 +80,30 @@ impl MathNode {
         return self;
     }
 }
+
+macro_rules! math_node {
+    ($name:tt => $t:tt) => {
+        impl MathNode {
+            #[inline]
+            pub fn $name(math: String) -> Self {
+                Self { kind: MathKind::$t, raw: math, ..Default::default() }
+            }
+        }
+
+        impl ASTKind {
+            #[inline]
+            pub fn $name(math: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+                MathNode::$name(math.into()).into_node(range)
+            }
+        }
+    };
+    ($($name:tt => $t:tt),+ $(,)?) => (
+        $(math_node!($name=>$t);)+
+    );
+}
+
+math_node![
+    math_block => BlockDisplay,
+    math_inline => Inline,
+    math_display => Display,
+];

@@ -5,8 +5,7 @@ use super::*;
 pub enum StyleKind {
     Plain = 0,
 
-    Italic = 11,
-    Emphasis = 12,
+    Emphasis = 11,
     Strong = 13,
     ItalicBold = 14,
 
@@ -31,9 +30,9 @@ pub struct StyleNode {
 impl From<&str> for StyleKind {
     fn from(style: &str) -> Self {
         match style {
-            "*" | "i" | "italic" => Self::Italic,
+            "*" | "i" | "italic" | "em" => Self::Emphasis,
             "**" | "b" | "bold" => Self::Strong,
-            "***" | "em" => Self::Emphasis,
+            "***" => Self::ItalicBold,
             "~" | "u" | "underline" => Self::Underline,
             "~~" | "s" => Self::Delete,
             "~~~" => Self::Undercover,
@@ -46,9 +45,9 @@ impl StyleKind {
     pub fn surround_in(&self) -> &'static str {
         match self {
             Self::Plain => "",
-            Self::Italic => "*",
+            Self::Emphasis => "*",
             Self::Strong => "**",
-            Self::Emphasis => "***",
+            Self::ItalicBold => "***",
             Self::Underline => "~",
             Self::Delete => "~~",
             Self::Undercover => "~~~",
@@ -68,9 +67,9 @@ impl StyleKind {
     pub fn surround_out(&self) -> &'static str {
         match self {
             Self::Plain => "",
-            Self::Italic => "*",
+            Self::Emphasis => "*",
             Self::Strong => "**",
-            Self::Emphasis => "***",
+            Self::ItalicBold => "***",
             Self::Underline => "~",
             Self::Delete => "~~",
             Self::Undercover => "~~~",
@@ -107,53 +106,24 @@ macro_rules! styled_node {
             StyleNode { kind: StyleKind::$t, children }.into_node(range)
         }
     };
+    ($($name:tt => $t:tt),+ $(,)?) => (
+        $(styled_node!($name=>$t);)+
+    );
 }
 
 impl ASTKind {
-    styled_node![strong2 => Strong];
-
-    #[inline]
-    pub fn strong(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Strong, children }.into_node(range)
-    }
-    #[inline]
-    pub fn italic(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Italic, children }.into_node(range)
-    }
-    #[inline]
-    pub fn italic_bold(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::ItalicBold, children }.into_node(range)
-    }
-    #[inline]
-    pub fn emphasis(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Emphasis, children }.into_node(range)
-    }
-    #[inline]
-    pub fn marking(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Marking, children }.into_node(range)
-    }
-    #[inline]
-    pub fn underline(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Underline, children }.into_node(range)
-    }
-    #[inline]
-    pub fn undercover(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Undercover, children }.into_node(range)
-    }
-    #[inline]
-    pub fn delete(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Delete, children }.into_node(range)
-    }
-    #[inline]
-    pub fn insert(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Insert, children }.into_node(range)
-    }
-    #[inline]
-    pub fn subscript(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Subscript, children }.into_node(range)
-    }
-    #[inline]
-    pub fn superscript(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-        StyleNode { kind: StyleKind::Superscript, children }.into_node(range)
-    }
+    styled_node![
+        bold        => Strong,
+        strong      => Strong,
+        italic      => Emphasis,
+        emphasis    => Emphasis,
+        italic_bold => ItalicBold,
+        marking     => Marking,
+        underline   => Underline,
+        undercover  => Undercover,
+        delete      => Delete,
+        insert      => Insert,
+        subscript   => Subscript,
+        superscript => Superscript,
+    ];
 }
