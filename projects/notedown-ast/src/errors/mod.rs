@@ -40,29 +40,23 @@ impl NoteError {
     pub fn unreachable() -> Self {
         Self { kind: Box::new(NoteErrorKind::Unreachable), file: None, range: None }
     }
-
-    // pub fn structure_error(msg: impl Into<String>, start: Option<usize>, end: Option<usize>) -> NoteError {
-    //     Self::StructureError { error: msg.into(), start, end }
-    // }
-    // ///
-    // pub fn unexpected_token(msg: impl Into<String>, start: Option<usize>, end: Option<usize>) -> NoteError {
-    //     Self::UnexpectedToken { error: msg.into(), start, end }
-    // }
-    // ///
-    // pub fn language_error(msg: impl Into<String>) -> NoteError {
-    //     Self::LanguageError { error: msg.into() }
-    // }
-    ///
-    pub fn type_mismatch(msg: impl Into<String>) -> NoteError {
-        let kind = NoteErrorKind::TypeMismatch(msg.into());
-        Self { kind: Box::new(kind), file: None, range: None }
-    }
-    ///
-    pub fn runtime_error(msg: impl Into<String>) -> NoteError {
-        let kind = NoteErrorKind::RuntimeError(msg.into());
-        Self { kind: Box::new(kind), file: None, range: None }
-    }
 }
+macro_rules! error_msg {
+    ($name:ident => $t:ident) => {
+        pub fn $name(msg: impl Into<String>) -> NoteError {
+            let kind = NoteErrorKind::$t(msg.into());
+            Self { kind: Box::new(kind), file: None, range: None }
+        }
+    };
+    ($($name:ident => $t:ident),+ $(,)?) => (
+        impl NoteError { $(error_msg!($name=>$t);)+ }
+    );
+}
+
+error_msg![
+    type_mismatch => TypeMismatch,
+    runtime_error => RuntimeError,
+];
 
 impl Error for NoteError {}
 

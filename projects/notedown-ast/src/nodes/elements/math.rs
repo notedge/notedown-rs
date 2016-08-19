@@ -103,7 +103,7 @@ macro_rules! math_node {
 }
 
 math_node![
-    math_block => BlockDisplay,
-    math_inline => Inline,
+    math_inline  => Inline,
     math_display => Display,
+    math_block   => BlockDisplay,
 ];

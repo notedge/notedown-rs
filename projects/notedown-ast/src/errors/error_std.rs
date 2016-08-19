@@ -1,13 +1,19 @@
 use super::*;
 
-impl From<std::io::Error> for NoteError {
-    fn from(e: std::io::Error) -> Self {
-        Self { kind: Box::new(NoteErrorKind::IOError(e)), file: None, range: None }
-    }
+macro_rules! error_wrap {
+    ($t:ty => $name:ident) => {
+        impl From<$t> for NoteError {
+            fn from(e: $t) -> Self {
+                Self { kind: Box::new(NoteErrorKind::$name(e)), file: None, range: None }
+            }
+        }
+    };
+    ($($t:ty => $name:ident),+ $(,)?) => (
+        $(error_wrap!($t=>$name);)+
+    );
 }
 
-impl From<std::fmt::Error> for NoteError {
-    fn from(e: std::fmt::Error) -> Self {
-        Self { kind: Box::new(NoteErrorKind::FormatError(e)), file: None, range: None }
-    }
-}
+error_wrap![
+    std::io::Error  => IOError,
+    std::fmt::Error => FormatError,
+];

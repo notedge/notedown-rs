@@ -101,9 +101,18 @@ impl StyleNode {
 
 macro_rules! styled_node {
     ($name:tt => $t:tt) => {
-        #[inline]
-        pub fn $name(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
-            StyleNode { kind: StyleKind::$t, children }.into_node(range)
+        impl StyleNode {
+            #[inline]
+            pub fn $name(children: ASTNodes) -> Self {
+                Self { kind: StyleKind::$t, children }
+            }
+        }
+
+        impl ASTKind {
+            #[inline]
+            pub fn $name(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+                StyleNode::$name(children).into_node(range)
+            }
         }
     };
     ($($name:tt => $t:tt),+ $(,)?) => (
@@ -111,19 +120,17 @@ macro_rules! styled_node {
     );
 }
 
-impl ASTKind {
-    styled_node![
-        bold        => Strong,
-        strong      => Strong,
-        italic      => Emphasis,
-        emphasis    => Emphasis,
-        italic_bold => ItalicBold,
-        marking     => Marking,
-        underline   => Underline,
-        undercover  => Undercover,
-        delete      => Delete,
-        insert      => Insert,
-        subscript   => Subscript,
-        superscript => Superscript,
-    ];
-}
+styled_node![
+    bold        => Strong,
+    strong      => Strong,
+    italic      => Emphasis,
+    emphasis    => Emphasis,
+    italic_bold => ItalicBold,
+    marking     => Marking,
+    underline   => Underline,
+    undercover  => Undercover,
+    delete      => Delete,
+    insert      => Insert,
+    subscript   => Subscript,
+    superscript => Superscript,
+];
