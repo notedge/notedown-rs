@@ -1,0 +1,11 @@
+[workspace]
+members = ["projects/*"]
+default-members = [
+    "projects/notedown-lsp",
+]
+exclude = [
+    "projects/.DS_Store",
+]
+
+[profile.release]
+lto = true
