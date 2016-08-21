@@ -1,7 +1,8 @@
 mod link;
 mod value;
+mod list;
 
-use crate::nodes::{ASTKind, Delimiter, ListView, Literal, SmartLink, StyleNode, TextNode, Value, ValueType};
+use crate::nodes::{ASTKind, Delimiter, Literal, SmartLink, StyleNode, TextNode, Value, ValueType};
 use itertools::Itertools;
 use std::fmt::{self, Debug, Display, Formatter, Write};
 
@@ -34,27 +35,7 @@ impl Display for ASTKind {
     }
 }
 
-impl Display for ListView {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        match self {
-            Self::QuoteList { style, body } => {
-                writeln!(f, "QuoteList")?;
-                writeln!(f, "{:?}", style)?;
-                writeln!(f, "{:?}", body)?;
-            }
-            Self::OrderedList { .. } => {
-                writeln!(f, "OrderedList")?;
-            }
-            Self::OrderlessList { .. } => {
-                writeln!(f, "OrderlessList")?;
-            }
-            Self::Details { .. } => {
-                writeln!(f, "Details")?;
-            }
-        }
-        Ok(())
-    }
-}
+
 
 impl Display for Delimiter {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {

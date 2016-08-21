@@ -1,9 +1,32 @@
 use super::*;
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Eq, PartialEq, Hash)]
 pub enum ListView {
-    QuoteList { style: String, body: ASTNodes },
-    OrderedList { head: usize, body: ASTNodes },
-    OrderlessList { body: ASTNodes },
-    Details { summary: ASTNodes, body: ASTNodes },
+    Quote(Box<QuoteList>),
+    Ordered(Box<OrderedList>),
+    Orderless(Box<OrderlessList>),
+    Details(Box<DetailsList>),
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct QuoteList {
+    style: String,
+    body: ASTNodes,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct OrderedList {
+    head: usize,
+    body: ASTNodes,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct OrderlessList {
+    body: ASTNodes,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub struct DetailsList {
+    summary: ASTNodes,
+    body: ASTNodes,
 }

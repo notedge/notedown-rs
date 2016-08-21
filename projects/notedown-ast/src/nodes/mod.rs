@@ -8,7 +8,7 @@ mod value;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, SmartLink, TagReference, TwoWayLink},
-    list::ListView,
+    list::{ListView, DetailsList, OrderedList, OrderlessList, QuoteList},
     literal::Literal,
     table::TableView,
     value::{Value, ValueType},
@@ -48,7 +48,7 @@ pub enum ASTKind {
     ///
     TableView(Box<TableView>),
     ///
-    ListView(Box<ListView>),
+    ListView(ListView),
     /// block: ``` a ```
     /// span: `` `code`  ``
     CodeNode(Box<CodeNode>),

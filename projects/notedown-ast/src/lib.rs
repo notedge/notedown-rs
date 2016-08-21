@@ -8,7 +8,7 @@ mod errors;
 pub mod nodes;
 pub mod traits;
 
-pub use errors::{NoteError, Result};
+pub use errors::{NoteError, Result, NoteErrorKind};
 pub use nodes::{ASTKind, ASTNode, ASTNodes};
 
 pub mod utils {
