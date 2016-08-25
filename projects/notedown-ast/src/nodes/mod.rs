@@ -8,7 +8,7 @@ mod value;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, SmartLink, TagReference, TwoWayLink},
-    list::{ListDetailedNode, ListView, OrderedList, OrderlessList, QuoteList},
+    list::{ListDetailedNode, ListPrefixSymbol, ListSimpleNode, ListView},
     literal::Literal,
     table::TableView,
     value::{Value, ValueType},

@@ -1,5 +1,5 @@
 use super::*;
-use crate::nodes::{ListDetailedNode, ListView, OrderedList, OrderlessList, QuoteList};
+use crate::nodes::{ListDetailedNode, ListSimpleNode, ListView};
 
 impl Debug for ListView {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -23,17 +23,7 @@ impl Display for ListView {
     }
 }
 
-impl Display for QuoteList {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
-    }
-}
-impl Display for OrderedList {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
-    }
-}
-impl Display for OrderlessList {
+impl Display for ListSimpleNode {
     fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }

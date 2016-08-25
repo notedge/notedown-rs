@@ -45,10 +45,12 @@ pub enum ListView {
 pub enum ListPrefixSymbol {
     /// ```note
     /// -
-    /// -
-    /// -
     /// ```
     Hyphen,
+    /// ```note
+    /// >
+    /// ```
+    Quote,
     /// ```note
     /// >+ Summary Open
     /// ```
@@ -57,13 +59,20 @@ pub enum ListPrefixSymbol {
     /// >- Summary Open
     /// ```
     SummaryClosed,
+    /// Single, serial number from the beginning
     /// ```note
     /// 1.
     /// 2.
-    /// 3.1.
-    /// 3.2.
+    /// 3.
     /// ```
-    ArabicNumerals { prefix_number: Vec<usize>, number: usize },
+    Arabic,
+    /// Complex, multi-layered, not serial number from the beginning
+    /// ```note
+    /// 4.4.
+    /// 4.5.
+    /// 4.6.
+    /// ```
+    ArabicNest { prefix_number: Vec<usize>, number: usize },
     /// ```note
     /// I.
     /// II.
@@ -73,12 +82,24 @@ pub enum ListPrefixSymbol {
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct ListItem {
-    prefix: ListPrefixSymbol,
+    prefix: Literal<ListPrefixSymbol>,
     rest: ASTNodes,
 }
 
 impl Default for ListPrefixSymbol {
     fn default() -> Self {
         Self::Hyphen
+    }
+}
+
+impl From<ListView> for ASTNode {
+    fn from(node: ListView) -> Self {
+        Self { value: ASTKind::ListView(node), range: None }
+    }
+}
+
+impl From<ASTNodes> for ListItem {
+    fn from(node: ASTNodes) -> Self {
+        Self { prefix: Default::default(), rest: node }
     }
 }
