@@ -33,12 +33,12 @@ const NON_URL: &AsciiSet = &CONTROLS
     .add(b'}')
     .add(b'~');
 
-pub fn url_encode(text: &str) -> String {
-    percent_encode(text.as_bytes(), NON_URL).to_string()
+pub fn url_encode(text: impl AsRef<str>) -> String {
+    percent_encode(text.as_ref().as_bytes(), NON_URL).to_string()
 }
 
-pub fn url_decode(text: &str) -> Option<String> {
-    match percent_decode(text.as_bytes()).decode_utf8() {
+pub fn url_decode(text: impl AsRef<str>) -> Option<String> {
+    match percent_decode(text.as_ref().as_bytes()).decode_utf8() {
         Ok(cow) => Some(cow.to_string()),
         Err(_) => None,
     }

@@ -1,11 +1,11 @@
-fn unescape(text: &str) {
+fn unescape(text: impl AsRef<str>) {
     unimplemented!()
 }
 
-fn unescape_utf8(text: &str) {
+fn unescape_utf8(text: impl AsRef<str>) {
     unimplemented!()
 }
 
-fn unescape_only(text: &str, c: char) {
+fn unescape_only(text: impl AsRef<str>, c: char) {
     unimplemented!()
 }
