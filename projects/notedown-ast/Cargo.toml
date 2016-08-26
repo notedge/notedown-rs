@@ -14,8 +14,8 @@ yggdrasil-shared = "0.1.5"
 num = "0.4.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
-dashmap = {version = "*", optional = true}
-image = {version = "*", optional = true}
+dashmap = { version = "4.0.2", optional = true }
+image = { version = "0.23.14", optional = true }
 
 [dev-dependencies]
 
