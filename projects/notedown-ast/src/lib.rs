@@ -6,10 +6,14 @@
 mod command;
 mod errors;
 pub mod nodes;
+mod store;
 pub mod traits;
 
-pub use errors::{NoteError, Result, NoteErrorKind};
-pub use nodes::{ASTKind, ASTNode, ASTNodes};
+pub use self::{
+    errors::{NoteError, NoteErrorKind, Result},
+    nodes::{ASTKind, ASTNode, ASTNodes},
+    store::*,
+};
 
 pub mod utils {
     pub use text_utils::*;

@@ -14,9 +14,11 @@ yggdrasil-shared = "0.1.5"
 num = "0.4.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
+dashmap = {version = "*", optional = true}
+image = {version = "*", optional = true}
 
 [dev-dependencies]
 
 [features]
-default = []
-web = []
+default = ["storage"]
+storage = ["dashmap", "image"]
