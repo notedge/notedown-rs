@@ -6,14 +6,17 @@
 mod command;
 mod errors;
 pub mod nodes;
+#[cfg(feature = "storage")]
 mod store;
 pub mod traits;
 
 pub use self::{
     errors::{NoteError, NoteErrorKind, Result},
     nodes::{ASTKind, ASTNode, ASTNodes},
-    store::*,
 };
+
+#[cfg(feature = "storage")]
+pub use self::store::*;
 
 pub mod utils {
     pub use text_utils::*;

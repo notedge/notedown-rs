@@ -1,6 +1,6 @@
 [package]
 name = "notedown_ast"
-version = "0.13.5"
+version = "0.13.6"
 authors = ["Aster <192607617@qq.com>"]
 description = "notedown ast and converter"
 repository = "https://github.com/notedge/notedown-rs"
@@ -14,10 +14,13 @@ yggdrasil-shared = "0.1.5"
 num = "0.4.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
-notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
+#notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
+dashmap = "4.0.2"
 
 [dev-dependencies]
 
 [features]
-default = ["storage"]
-storage = ["notedown-image"]
+default = []
+storage = []
+
+

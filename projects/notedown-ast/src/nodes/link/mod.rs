@@ -1,6 +1,7 @@
 mod hyper_link;
 mod image_link;
 mod other;
+mod rd;
 mod reference;
 mod two_way;
 
@@ -14,13 +15,49 @@ pub use self::{
 use super::*;
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
+/// - `[<RD>]`: Resource Descriptor
+///
+/// ```note
+/// [./relative-path]: 使用相对路径
+/// [file://]: 使用绝对路径
+/// [https://]: 使用远程 url 路径
+/// [id/path]: 使用默认储存库
+/// [@storage/id/path]: 使用具体的某个储存库
+/// ```
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum SmartLink {
+    /// ```note
+    /// [name@example.com](options)
+    /// ```
     EMail(Box<EmailLink>),
+    /// ```note
+    /// [<RD>](options)
+    /// [describe][<RD>](options)
+    /// ```
     Normal(Box<HyperLink>),
+    /// ```note
+    /// [<RD>](options)
+    /// [!text][<RD>](opts)
+    /// ```
     Image(Box<ImageLink>),
-    TwoWay(Box<TwoWayLink>),
+    /// ## Tag Definition Block
+    /// ```note
+    /// [^tag-define]:
+    ///     text text text
+    ///     text text text
+    /// ```
+    /// ## Tag Reference Inline
+    /// ```note
+    /// [<RD>](opts)
+    /// [^tag-name](options)
+    /// [^tag-name][<RD>](opts)
+    /// ```
     Reference(Box<TagReference>),
+    /// ```note
+    /// [[<RD>](options)]
+    /// [[text][<RD>](opts)]
+    /// ```
+    TwoWay(Box<TwoWayLink>),
 }
 
 impl SmartLink {

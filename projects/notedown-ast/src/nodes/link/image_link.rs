@@ -7,6 +7,10 @@ pub enum ImageLayout {
     Right,
 }
 
+/// ```note
+/// [!! storage]
+/// [./path/path.png : alt text ]
+/// ```
 #[derive(Clone, Default, Eq, PartialEq, Hash)]
 pub struct ImageLink {
     pub src: String,

@@ -17,9 +17,9 @@ pub struct HyperLink {
     /// [alt-text: link]
     /// ```
     pub text: Option<String>,
-
+    ///
     pub download: Option<String>,
-
+    ///
     pub target: Option<HyperLinkTarget>,
 }
 

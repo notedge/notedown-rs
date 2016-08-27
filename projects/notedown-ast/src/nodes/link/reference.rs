@@ -17,7 +17,7 @@ pub struct TagReference {
     /// ## Tag Inline
     /// Quote a number while defining
     /// ```note
-    /// text [^tag: text text text] text
+    /// text [^tag][text text text] text
     /// ```
     pub text: Vec<String>,
 }
