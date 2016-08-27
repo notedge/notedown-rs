@@ -14,11 +14,10 @@ yggdrasil-shared = "0.1.5"
 num = "0.4.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
-dashmap = { version = "4.0.2", optional = true }
-image = { version = "0.23.14", optional = true }
+notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
 
 [dev-dependencies]
 
 [features]
 default = ["storage"]
-storage = ["dashmap", "image"]
+storage = ["notedown-image"]

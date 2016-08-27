@@ -1,6 +1,9 @@
-use dashmap::{mapref::one::Ref, DashMap};
-use image::{error::ImageFormatHint, ImageFormat};
-use std::collections::hash_map::RandomState;
+mod image_local;
+use crate::Result;
+use dashmap::DashMap;
+use image::{io::Reader, DynamicImage, ImageFormat};
+
+pub use self::image_local::ImageLocal;
 use url::Url;
 
 pub struct ImageStorage {
@@ -17,32 +20,17 @@ pub struct ImageRecord {
     sm_ms: Option<Url>,
 }
 
-pub enum ImageLocal {
-    External { source: Url },
-    Managed { png: Vec<u8>, source: Option<Url> },
-}
-
-impl ImageLocal {
-    #[inline]
-    pub fn get_path(&self) -> Option<&Url> {
-        match self {
-            Self::External { source } => Some(source),
-            Self::Managed { source: Some(source), .. } => Some(source),
-            _ => None,
-        }
-    }
-}
-
 impl ImageRecord {
     #[inline]
     pub fn get_local_path(&self) -> Option<&Url> {
         self.local.get_path()
     }
     #[inline]
-    pub fn update(&mut self, f: Option<ImageFormat>) {
+    pub fn update(&mut self, f: Option<ImageFormat>) -> Result<DynamicImage> {
+        let path = self.get_local_path().ok_or(())?.to_file_path()?;
         match f {
-            Some(format) => ImageReader::open("myimage.png")?.decode()?,
-            None => {}
+            Some(format) => Ok(Reader::open(path)?.decode()?),
+            None => Ok(Reader::open(path)?.decode()?),
         }
     }
     #[inline]
@@ -52,10 +40,10 @@ impl ImageRecord {
 }
 
 impl ImageStorage {
-    pub fn get_image_png(&self, _name: &str) {}
+    pub fn get_image_png(&self, name: &str) {}
     #[inline]
-    pub fn get_image_local_path(&self, name: &str) -> Option<&Url> {
-        self.kv_store.get(name).and_then(|f| f.get_local_path())
+    pub fn get_image_local_path(&self, name: &str) -> Option<Url> {
+        self.kv_store.get(name).and_then(|f| f.get_local_path().cloned())
     }
     pub fn get_image_www() {}
 }
