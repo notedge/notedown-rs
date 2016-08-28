@@ -6,5 +6,7 @@ pub mod utils;
 pub use config::ParserConfig;
 pub use error::{Error, Result};
 
-pub use notedown_ast::{ASTKind, ASTNode, nodes::{CommandKind, SmartLink}};
-pub use parser::AST;
+pub use notedown_ast::{
+    nodes::{CommandKind, SmartLink},
+    ASTKind, ASTNode,
+};

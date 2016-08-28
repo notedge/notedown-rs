@@ -15,7 +15,7 @@ num = "0.4.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
 #notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
-dashmap = "4.0.2"
+dashmap = "5.0.0"
 
 [dev-dependencies]
 

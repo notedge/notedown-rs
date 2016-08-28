@@ -61,17 +61,25 @@ impl ImageLink {
     // \label{fig:figure1label}
     // \end{figure}
     pub fn set_options(&mut self, options: CommandOptions) -> Vec<NoteError> {
+        let mut options = options;
         let mut errors = vec![];
-        options.get_string_key("src").map(|f| self.set_src(f));
-        options.get_string_key("source").map(|f| self.set_src(f));
 
         self.parse_layout(&options, &mut errors);
 
         options.get_string_key("alt").map(|f| self.set_alt(f));
         options.get_string_key("caption").map(|f| self.set_alt(f));
         options.get_string_key("description").map(|f| self.set_alt(f));
-        self.options = Some(options.clone());
+        self.options = Some(options);
         return errors;
+    }
+
+    fn parse_source(&mut self, options: &CommandOptions, errors: &mut Vec<NoteError>) {
+        let value = match options.get_key("layout") {
+            None => return,
+            Some(s) => s.value.to_owned(),
+        };
+        options.get_string_key("src").map(|f| self.set_src(f));
+        options.get_string_key("source").map(|f| self.set_src(f));
     }
 
     fn parse_layout(&mut self, options: &CommandOptions, errors: &mut Vec<NoteError>) {

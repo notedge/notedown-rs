@@ -26,6 +26,10 @@ impl CommandOptions {
         self.args.get(index)
     }
     #[inline]
+    pub fn extract_index(&mut self, index: &BigUint) -> Option<Literal<Value>> {
+        self.args.remove(index)
+    }
+    #[inline]
     pub fn get_bool_index(&self, index: &BigUint) -> Option<bool> {
         self.get_index(index).and_then(|f| bool::try_from(f.value.to_owned()).ok())
     }
@@ -37,6 +41,10 @@ impl CommandOptions {
     pub fn get_key(&self, key: &str) -> Option<&Literal<Value>> {
         // let mut v: std::collections::BTreeMap<String, Literal<Value>>;
         self.kvs.get(key)
+    }
+    #[inline]
+    pub fn extract_key(&mut self, key: &str) -> Option<Literal<Value>> {
+        self.kvs.remove(key)
     }
     #[inline]
     pub fn get_bool_key(&self, key: &str) -> Option<bool> {
