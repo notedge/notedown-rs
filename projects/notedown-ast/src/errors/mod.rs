@@ -1,10 +1,12 @@
 use std::{
+    convert::Infallible,
     error::Error,
     fmt::{self, Debug, Display, Formatter},
     ops::Range,
 };
 use yggdrasil_shared::records::Url;
 
+mod error_custom;
 mod error_std;
 
 pub type Result<T> = std::result::Result<T, NoteError>;
@@ -24,8 +26,8 @@ pub enum NoteErrorKind {
     RuntimeError(String),
     /// A forbidden cst_node encountered
     Unreachable,
-    // #[error(transparent)]
-    // UnknownError(#[from] anyhow::Error),
+    /* #[error(transparent)]
+     * UnknownError(#[from] anyhow::Error), */
 }
 
 impl NoteError {

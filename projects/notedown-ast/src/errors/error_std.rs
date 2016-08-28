@@ -17,3 +17,9 @@ error_wrap![
     std::io::Error  => IOError,
     std::fmt::Error => FormatError,
 ];
+
+impl From<Infallible> for NoteError {
+    fn from(_: Infallible) -> Self {
+        Self::unreachable()
+    }
+}

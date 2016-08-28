@@ -1,9 +1,10 @@
 use super::*;
-use crate::nodes::{EmailLink, HyperLink, ImageLink, TagReference, TwoWayLink};
+use crate::nodes::{EmailLink, HyperLink, ImageLink, ResourceDescriptor, TagReference, TwoWayLink};
 
 impl Debug for SmartLink {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
+            Self::ExternalResource(v) => Debug::fmt(v, f),
             Self::Reference(v) => Debug::fmt(v, f),
             Self::Image(v) => Debug::fmt(v, f),
             Self::Normal(v) => Debug::fmt(v, f),
@@ -21,7 +22,14 @@ impl Display for SmartLink {
             Self::Normal(v) => Display::fmt(v, f),
             Self::EMail(v) => Display::fmt(v, f),
             Self::TwoWay(v) => Display::fmt(v, f),
+            Self::ExternalResource(v) => Display::fmt(v, f),
         }
+    }
+}
+
+impl Display for ResourceDescriptor {
+    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
     }
 }
 

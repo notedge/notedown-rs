@@ -1,11 +1,15 @@
 use super::*;
-use std::{cmp::Ordering, ops::Range};
+use std::{
+    cmp::Ordering,
+    ops::{Deref, Range},
+};
 
+/// Used to represent a node with positions
 #[derive(Clone, Eq)]
 pub struct Literal<T> {
-    ///
+    /// The actual value
     pub value: T,
-    //
+    // The Start offset and end offset
     pub range: Option<Range<usize>>,
 }
 
@@ -47,5 +51,13 @@ impl<T: PartialOrd> PartialOrd for Literal<T> {
 impl<T: Ord> Ord for Literal<T> {
     fn cmp(&self, other: &Self) -> Ordering {
         self.value.cmp(&other.value)
+    }
+}
+
+impl<T> Deref for Literal<T> {
+    type Target = T;
+
+    fn deref(&self) -> &Self::Target {
+        &self.value
     }
 }

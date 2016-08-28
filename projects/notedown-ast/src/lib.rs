@@ -3,7 +3,7 @@
 #![feature(map_first_last)]
 #![feature(arbitrary_enum_discriminant)]
 
-mod command;
+pub mod command;
 mod errors;
 pub mod nodes;
 #[cfg(feature = "storage")]

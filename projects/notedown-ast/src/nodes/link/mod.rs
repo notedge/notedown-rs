@@ -9,23 +9,26 @@ pub use self::{
     hyper_link::{HyperLink, HyperLinkTarget},
     image_link::{ImageLayout, ImageLink},
     other::EmailLink,
+    rd::ResourceDescriptor,
     reference::TagReference,
     two_way::TwoWayLink,
 };
 use super::*;
+use crate::command::CommandOptions;
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
-/// - `[<RD>]`: Resource Descriptor
-///
-/// ```note
-/// [./relative-path]: 使用相对路径
-/// [file://]: 使用绝对路径
-/// [https://]: 使用远程 url 路径
-/// [id/path]: 使用默认储存库
-/// [@storage/id/path]: 使用具体的某个储存库
-/// ```
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum SmartLink {
+    /// - `[<RD>]`: Resource Descriptor
+    ///
+    /// ```note
+    /// [./relative-path]: 使用相对路径
+    /// [file://]: 使用绝对路径
+    /// [https://]: 使用远程 url 路径
+    /// [id/path]: 使用默认储存库
+    /// [@storage/id/path]: 使用具体的某个储存库
+    /// ```
+    ExternalResource(Box<ResourceDescriptor>),
     /// ```note
     /// [name@example.com](options)
     /// ```
@@ -37,7 +40,7 @@ pub enum SmartLink {
     Normal(Box<HyperLink>),
     /// ```note
     /// [<RD>](options)
-    /// [!text][<RD>](opts)
+    /// [!image-alt][<RD>](opts)
     /// ```
     Image(Box<ImageLink>),
     /// ## Tag Definition Block

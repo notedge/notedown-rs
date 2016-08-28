@@ -1,5 +1,6 @@
 mod arith;
 mod context;
+mod convert;
 mod display;
 mod slugify;
 mod toc;
