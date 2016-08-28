@@ -54,8 +54,8 @@ impl Display for ImageLink {
 impl Debug for ImageLink {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let w = &mut f.debug_struct("ImageLink");
-        w.field("src", &self.src);
-        if let Some(s) = &self.alt {
+        w.field("src", &self.source);
+        if let Some(s) = &self.description {
             w.field("alt", &s);
         }
         if let Some(s) = &self.size {

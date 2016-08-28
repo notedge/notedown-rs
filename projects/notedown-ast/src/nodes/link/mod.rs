@@ -73,11 +73,11 @@ impl SmartLink {
 impl ASTKind {
     #[inline]
     pub fn image_link(src: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        ImageLink { src: src.into(), ..Default::default() }.into_node(range)
+        ImageLink { source: src.into(), ..Default::default() }.into_node(range)
     }
     #[inline]
     pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        ImageLink { src: src.into(), alt: Some(alt.into()), ..Default::default() }.into_node(range)
+        ImageLink { source: src.into(), description: Some(alt.into()), ..Default::default() }.into_node(range)
     }
     #[inline]
     pub fn hyper_link(src: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {

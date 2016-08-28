@@ -21,6 +21,8 @@ pub struct HyperLink {
     pub download: Option<String>,
     ///
     pub target: Option<HyperLinkTarget>,
+    ///
+    pub options: Option<CommandOptions>,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
@@ -35,5 +37,18 @@ impl HyperLink {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         SmartLink::Normal(box self).into_node(range)
+    }
+    #[inline]
+    pub fn set_text(&mut self, msg: impl Into<String>) {
+        self.text = Some(msg.into());
+    }
+
+    pub fn parse_options(mut self) -> Self {
+        let options = match &mut self.options {
+            None => return self,
+            Some(s) => s,
+        };
+        options.get_string_key("text").map(|f| self.set_text(f));
+        return self;
     }
 }
