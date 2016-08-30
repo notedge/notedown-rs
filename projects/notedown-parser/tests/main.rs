@@ -2,6 +2,8 @@
 
 use notedown_ast::Result;
 use notedown_parser::NotedownParser;
+mod normal;
+mod simple;
 mod style;
 // mod text;
 

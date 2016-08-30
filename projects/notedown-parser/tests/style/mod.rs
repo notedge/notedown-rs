@@ -1,6 +1,5 @@
 // use notedown_ast::WriteHTML;
 
-mod easy;
 // mod normal;
 // mod test_code;
 // mod test_escaping;

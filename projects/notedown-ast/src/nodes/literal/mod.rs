@@ -24,7 +24,7 @@ impl<T: Debug> Debug for Literal<T> {
         let w = &mut f.debug_struct("ASTNode");
         w.field("kind", &self.value);
         if let Some(s) = &self.range {
-            w.field("range", &format!("{}-{}", s.start, s.end));
+            w.field("range", s);
         }
         w.finish()
     }
