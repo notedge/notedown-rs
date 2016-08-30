@@ -1,6 +1,8 @@
+use nom::IResult;
+
 pub mod parser;
-mod value;
-pub type MarkdownText = Vec<NotedownInline>;
+
+pub type MarkdownText = Vec<MarkdownInline>;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum Markdown {
@@ -12,7 +14,7 @@ pub enum Markdown {
 }
 
 #[derive(Clone, Debug, PartialEq)]
-pub enum NotedownInline {
+pub enum MarkdownInline {
     Link(String, String),
     Image(String, String),
     InlineCode(String),
@@ -20,3 +22,7 @@ pub enum NotedownInline {
     Italic(String),
     Plaintext(String),
 }
+
+// pub fn markdown(md: &str) -> IResult<&str, Vec<Markdown>> {
+//     parser::parse_markdown(md)
+// }

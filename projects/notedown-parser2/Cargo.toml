@@ -16,5 +16,4 @@ nom_locate = "4.0.0"
 notedown_ast = {version = "*", path = "../notedown-ast"}
 
 [dev-dependencies]
-pest_generator = "2.1.3"
-quote = "1.0.10"
+
