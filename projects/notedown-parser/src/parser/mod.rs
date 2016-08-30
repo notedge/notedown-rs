@@ -1,17 +1,17 @@
 mod regroup;
 
 use crate::{
-    error::Error::FileNotFound,
+    
     parser::regroup::{regroup_list_view, regroup_table_view},
     ParserConfig, Result,
 };
 use notedown_ast::{
-    nodes::{CodeNode, Command},
+    nodes::{CodeNode, },
     ASTKind, ASTNode,
 };
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
-use std::fs;
-use url::Url;
+
+
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -24,10 +24,7 @@ macro_rules! debug_cases {
 
 impl ParserConfig {
     pub fn parse(&mut self, input: &str) -> Result<ASTNode> {
-        if let Some(s) = input.as_url() {
-            self.file_url = Some(s)
-        }
-        let input = input.as_text()?.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
+        let input = input.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)
     }
@@ -278,104 +275,6 @@ impl ParserConfig {
     }
     fn parse_escaped(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
-        let c = match pairs.as_str().chars().next() {
-            None => '\\',
-            Some(s) => s,
-        };
-        ASTKind::escaped(c)
+        ASTKind::escaped(pairs.as_str(), r)
     }
 }
-
-// fn parse_table_align(input: &str) -> Vec<u8> {
-// let pairs = NoteDownParser::parse(Rule::TableMode, input).unwrap_or_else(|e| panic!("{}", e));
-// let mut codes = vec![];
-// let mut text = String::new();
-// for pair in pairs {
-// match pair.as_rule() {
-// Rule::EOI => continue,
-// Rule::WHITE_SPACE => text.push(' '),
-// Rule::TableRest => text.push_str(pair.as_str()),
-// Rule::TableMark => {
-// let mut code = 0;
-// if text.contains(":-") {
-// code += 1 << 0
-// }
-// if text.contains("-:") {
-// code += 1 << 1
-// }
-// codes.push(code);
-// text = String::new();
-// }
-// _ => debug_cases!(pair),
-// };
-// }
-// return codes;
-// }
-//
-// #[derive(Debug)]
-// pub enum List {
-// Quote,
-// Ordered,
-// Orderless,
-// }
-//
-// impl List {
-// pub fn get_type(input: &str) -> (usize, List) {
-// let pairs = List::parse_pairs(input);
-// let mut i = 0;
-// let mut m = List::Quote;
-// for pair in pairs {
-// match pair.as_rule() {
-// Rule::WHITE_SPACE => i += 1,
-// Rule::ListMark => match pair.as_str() {
-// ">" => m = List::Quote,
-// "-" => m = List::Orderless,
-// _ => m = List::Ordered,
-// },
-// _ => return (i, m),
-// };
-// }
-// return (i, m);
-// }
-// pub fn trim_indent(line: &str, _indent: usize, ty: &List) -> (bool, String) {
-// let mut new = false;
-// let mut vec: VecDeque<_> = List::parse_pairs(line).into_iter().collect();
-// match ty {
-// List::Quote => match vec[0].as_rule() {
-// Rule::ListMark => match vec[0].as_str() {
-// ">" => {
-// vec.pop_front();
-// }
-// _ => (),
-// },
-// _ => (),
-// },
-// List::Ordered => match vec[0].as_rule() {
-// Rule::ListMark => match vec[0].as_str() {
-// "-" | ">" => (),
-// _ => {
-// vec.pop_front();
-// new = true
-// }
-// },
-// _ => (),
-// },
-// List::Orderless => match vec[0].as_rule() {
-// Rule::ListMark => match vec[0].as_str() {
-// "-" => {
-// vec.pop_front();
-// new = true
-// }
-// _ => (),
-// },
-// _ => (),
-// },
-// }
-// let v: Vec<&str> = vec.iter().map(|x| x.as_str()).collect();
-// return (new, v.join(""));
-// }
-// fn parse_pairs(input: &str) -> Pairs<Rule> {
-// let p = NoteDownParser::parse(Rule::ListMode, input).unwrap_or_else(|e| panic!("{}", e));
-// p.into_iter().next().unwrap().into_inner()
-// }
-// }

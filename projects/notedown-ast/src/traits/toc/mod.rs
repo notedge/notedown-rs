@@ -8,9 +8,20 @@ use yggdrasil_shared::records::{
 mod visit_ast;
 
 pub trait TableOfContent {
-    fn table_of_content(&self, config: &TableConfig) -> TableNode;
-    fn table_of_content_lsp(&self, config: &TableConfig, _text: &TextIndex) -> DocumentSymbol {
-        let nodes = self.table_of_content(config);
+    fn toc_configurable(&self, config: &TableConfig) -> TableNode;
+    #[inline]
+    fn toc(&self) -> TableNode {
+        let cfg = TableConfig::default();
+        self.toc_configurable(&cfg)
+    }
+    #[inline]
+    fn toc_lsp(&self, text: &TextIndex) -> DocumentSymbol {
+        let cfg = TableConfig::default();
+        self.toc_lsp_configurable(&cfg, text)
+    }
+    #[inline]
+    fn toc_lsp_configurable(&self, config: &TableConfig, _text: &TextIndex) -> DocumentSymbol {
+        let nodes = self.toc_configurable(config);
         return DocumentSymbol::from(nodes);
     }
 }
@@ -25,6 +36,12 @@ pub struct TableNode {
 
 pub struct TableConfig {
     pub max_depth: u8,
+}
+
+impl Default for TableConfig {
+    fn default() -> Self {
+        Self { max_depth: u8::MAX }
+    }
 }
 
 impl Default for TableNode {

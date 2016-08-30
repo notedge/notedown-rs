@@ -1,6 +1,6 @@
 mod link;
-mod value;
 mod list;
+mod value;
 
 use crate::nodes::{ASTKind, Delimiter, Literal, SmartLink, StyleNode, TextNode, Value, ValueType};
 use itertools::Itertools;
@@ -35,8 +35,6 @@ impl Display for ASTKind {
     }
 }
 
-
-
 impl Display for Delimiter {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
@@ -65,6 +63,7 @@ impl Display for TextNode {
                 true => f.write_str("[x]"),
                 false => f.write_str("[ ]"),
             },
+            Self::Empty => Ok(()),
         }
     }
 }

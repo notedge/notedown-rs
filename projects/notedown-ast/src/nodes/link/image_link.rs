@@ -12,19 +12,25 @@ pub enum ImageLayout {
 /// ```note
 /// [!! storage]
 /// [./path/path.png : alt text ]
+/// [!description][source][link](options)
 /// ```
 #[derive(Clone, Default, Eq, PartialEq, Hash)]
 pub struct ImageLink {
+    ///
     pub source: String,
     /// alt in html
     pub description: Option<String>,
+    /// alt in html
+    pub link: Option<String>,
+    /// force to use caption ignore global setting
     pub force_caption: Option<bool>,
+    /// force to use layout ignore global setting
     /// -1: left
     /// 0: center
     /// 1: right
     pub layout: Option<ImageLayout>,
+    /// force to use layout ignore global setting
     pub size: Option<(usize, usize)>,
-    pub link: Option<String>,
     pub options: Option<CommandOptions>,
 }
 
@@ -54,38 +60,29 @@ impl ImageLink {
         self.layout = Some(layout);
     }
 
-    /// \begin{figure}[htp]
-    // \centering % 图片居中
-    // \includegraphics[width = 8.3cm]{figures/figure_1.png}
-    // \caption{The caption of this figure.}
-    // \label{fig:figure1label}
-    // \end{figure}
     pub fn set_options(&mut self, options: CommandOptions) -> Vec<NoteError> {
         let mut options = options;
         let mut errors = vec![];
 
-        self.parse_layout(&options, &mut errors);
+        options.extract_string_key("src").map(|f| self.set_src(f));
+        options.extract_string_key("source").map(|f| self.set_src(f));
 
-        options.get_string_key("alt").map(|f| self.set_alt(f));
-        options.get_string_key("caption").map(|f| self.set_alt(f));
-        options.get_string_key("description").map(|f| self.set_alt(f));
+        self.parse_layout(&mut options, &mut errors);
+
+        options.extract_string_key("alt").map(|f| self.set_alt(f));
+        options.extract_string_key("caption").map(|f| self.set_alt(f));
+        options.extract_string_key("description").map(|f| self.set_alt(f));
+
+        options.extract_bool_key("force_caption").map(|f| self.force_caption = Some(f));
+
         self.options = Some(options);
         return errors;
     }
 
-    fn parse_source(&mut self, options: &CommandOptions, errors: &mut Vec<NoteError>) {
-        let value = match options.get_key("layout") {
+    fn parse_layout(&mut self, options: &mut CommandOptions, errors: &mut Vec<NoteError>) {
+        let value = match options.extract_key("layout") {
             None => return,
-            Some(s) => s.value.to_owned(),
-        };
-        options.get_string_key("src").map(|f| self.set_src(f));
-        options.get_string_key("source").map(|f| self.set_src(f));
-    }
-
-    fn parse_layout(&mut self, options: &CommandOptions, errors: &mut Vec<NoteError>) {
-        let value = match options.get_key("layout") {
-            None => return,
-            Some(s) => s.value.to_owned(),
+            Some(s) => s.value,
         };
         match value {
             Value::Integer(i) if i.is_negative() => self.layout = Some(ImageLayout::Left),

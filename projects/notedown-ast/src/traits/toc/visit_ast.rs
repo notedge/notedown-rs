@@ -7,7 +7,7 @@ impl TableNode {
 }
 
 impl TableOfContent for ASTNode {
-    fn table_of_content(&self, config: &TableConfig) -> TableNode {
+    fn toc_configurable(&self, config: &TableConfig) -> TableNode {
         let mut root = TableNode::default();
         let mut toc_ignore = false;
         if let ASTKind::Statements(terms) = &self.value {

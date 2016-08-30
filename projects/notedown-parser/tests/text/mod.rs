@@ -1,4 +1,5 @@
 use crate::parse;
+use notedown_ast::traits::TableOfContent;
 
 #[test]
 fn test_header() {
@@ -24,7 +25,9 @@ fn test_header() {
     ### Title 3.2
     ### Title 3.3
     "#;
-    println!("{:#?}", parse(input).toc(9))
+
+    let config = TableConfig {};
+    println!("{:#?}", parse(input).toc_configurable(9))
 }
 
 #[test]

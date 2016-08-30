@@ -3,8 +3,10 @@ use super::*;
 #[repr(u8)]
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum TextNode {
-    Raw(String) = 0,
-    Normal(String) = 1,
+    Empty = 0,
+
+    Raw(String) = 1,
+    Normal(String) = 2,
 
     Emoji(char) = 11,
     Escaped(char) = 12,
@@ -36,9 +38,6 @@ impl TextNode {
         }
         s.next().map(Self::Escaped)
     }
-    pub fn escaped_char(char: char) -> Self {
-        Self::Escaped(char)
-    }
 
     pub fn emoji(_: String) -> Self {
         unimplemented!()
@@ -46,14 +45,6 @@ impl TextNode {
 }
 
 impl ASTKind {
-    #[inline]
-    pub fn text(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        TextNode::Normal(s.into()).into_node(range)
-    }
-    #[inline]
-    pub fn emoji(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        TextNode::emoji(s.into()).into_node(range)
-    }
     /// aka `<br>`
     #[inline]
     pub fn hard_break(range: Option<OffsetRange>) -> ASTNode {
@@ -62,5 +53,25 @@ impl ASTKind {
     #[inline]
     pub fn soft_break(range: Option<OffsetRange>) -> ASTNode {
         TextNode::SoftNewline.into_node(range)
+    }
+    #[inline]
+    pub fn text(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+        TextNode::Normal(s.into()).into_node(range)
+    }
+    #[inline]
+    pub fn emoji(text: &str, range: Option<OffsetRange>) -> ASTNode {
+        let c = match text.chars().next() {
+            None => return TextNode::Empty.into_node(range),
+            Some(s) => s,
+        };
+        TextNode::Escaped(c).into_node(range)
+    }
+    #[inline]
+    pub fn escaped(text: &str, range: Option<OffsetRange>) -> ASTNode {
+        let c = match text.chars().next() {
+            None => '\\',
+            Some(s) => s,
+        };
+        TextNode::Escaped(c).into_node(range)
     }
 }

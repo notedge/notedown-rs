@@ -1,7 +1,7 @@
 use std::{
     convert::Infallible,
     error::Error,
-    fmt::{self, write, Debug, Display, Formatter},
+    fmt::{self, Debug, Display, Formatter},
     ops::Range,
     path::Path,
 };

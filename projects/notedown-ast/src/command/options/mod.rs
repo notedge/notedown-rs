@@ -51,7 +51,15 @@ impl CommandOptions {
         self.get_key(key).and_then(|f| bool::try_from(f.value.to_owned()).ok())
     }
     #[inline]
+    pub fn extract_bool_key(&mut self, key: &str) -> Option<bool> {
+        self.extract_key(key).and_then(|f| bool::try_from(f.value).ok())
+    }
+    #[inline]
     pub fn get_string_key(&self, key: &str) -> Option<String> {
         self.get_key(key).and_then(|f| String::try_from(f.value.to_owned()).ok())
+    }
+    #[inline]
+    pub fn extract_string_key(&mut self, key: &str) -> Option<String> {
+        self.extract_key(key).and_then(|f| String::try_from(f.value).ok())
     }
 }
