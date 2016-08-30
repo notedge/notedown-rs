@@ -1,17 +1,11 @@
 mod regroup;
 
 use crate::{
-    
     parser::regroup::{regroup_list_view, regroup_table_view},
-    ParserConfig, Result,
+    NotedownParser, Result,
 };
-use notedown_ast::{
-    nodes::{CodeNode, },
-    ASTKind, ASTNode,
-};
+use notedown_ast::{nodes::CodeNode, ASTKind, ASTNode};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
-
-
 
 macro_rules! debug_cases {
     ($i:ident) => {{
@@ -22,8 +16,8 @@ macro_rules! debug_cases {
     }};
 }
 
-impl ParserConfig {
-    pub fn parse(&mut self, input: &str) -> Result<ASTNode> {
+impl NotedownParser {
+    pub fn parse(&self, input: &str) -> Result<ASTNode> {
         let input = input.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)

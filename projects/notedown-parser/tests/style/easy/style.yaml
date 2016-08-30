@@ -1,0 +1,266 @@
+ASTNode {
+    kind: Statements(
+        [
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "1-5",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: Emphasis,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "斜体 Italic",
+                                                ),
+                                            ),
+                                            range: "6-19",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "5-20",
+                        },
+                    ],
+                ),
+                range: "1-20",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "22-26",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: Strong,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "粗体 Bold",
+                                                ),
+                                            ),
+                                            range: "28-39",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "26-41",
+                        },
+                    ],
+                ),
+                range: "22-41",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "43-47",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: ItalicBold,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "斜粗体 Bold-Italic",
+                                                ),
+                                            ),
+                                            range: "50-71",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "47-74",
+                        },
+                    ],
+                ),
+                range: "43-74",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "76-80",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: Underline,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "下划线 Underline",
+                                                ),
+                                            ),
+                                            range: "81-100",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "80-101",
+                        },
+                    ],
+                ),
+                range: "76-101",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "103-107",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: Undercover,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "删除线 Strikethrough",
+                                                ),
+                                            ),
+                                            range: "109-132",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "107-134",
+                        },
+                    ],
+                ),
+                range: "103-134",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "136-140",
+                        },
+                        ASTNode {
+                            kind: StyledSpan(
+                                StyleNode {
+                                    kind: Undercover,
+                                    children: [
+                                        ASTNode {
+                                            kind: TextSpan(
+                                                Normal(
+                                                    "数据删除 Undercover",
+                                                ),
+                                            ),
+                                            range: "143-166",
+                                        },
+                                    ],
+                                },
+                            ),
+                            range: "140-169",
+                        },
+                    ],
+                ),
+                range: "136-169",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "171-175",
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "代码 code",
+                                ),
+                            ),
+                            range: "175-188",
+                        },
+                    ],
+                ),
+                range: "171-188",
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "190-194",
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "code`escape",
+                                ),
+                            ),
+                            range: "194-209",
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "\n",
+                                ),
+                            ),
+                            range: "209-210",
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                Normal(
+                                    "    ",
+                                ),
+                            ),
+                            range: "210-214",
+                        },
+                    ],
+                ),
+                range: "190-214",
+            },
+        ],
+    ),
+}

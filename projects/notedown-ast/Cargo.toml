@@ -16,6 +16,8 @@ itertools = "0.10.3"
 indexmap = "1.7.0"
 #notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
 dashmap = "5.0.0"
+pest = { version = "2.1.3", optional = true }
+
 
 [dev-dependencies]
 

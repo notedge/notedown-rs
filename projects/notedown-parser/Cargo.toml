@@ -10,8 +10,13 @@ edition = "2021"
 publish = false
 
 [dependencies]
-notedown_ast = {version = "0.13", path = "../notedown-ast"}
+
 notedown-pest = {version = "1.0", path = "../notedown-pest"}
 url = "2.2.2"
+
+[dependencies.notedown_ast]
+version = "0.13"
+path = "../notedown-ast"
+features = ["pest"]
 
 [dev-dependencies]

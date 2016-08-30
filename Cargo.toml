@@ -2,12 +2,13 @@
 members = ["projects/*"]
 default-members = [
     "projects/notedown-ast",
+    "projects/notedown-pest",
     "projects/notedown-parser",
     "projects/notedown-parser2",
     "projects/notedown-plugin",
 ]
 exclude = [
-    "projects/notedown-pest",
+
 ]
 
 [profile.release]

@@ -1,15 +1,18 @@
-use notedown_ast::ASTNode;
-use notedown_parser::{ParserConfig};
+#![allow(unused_must_use)]
 
-mod html;
-mod text;
+use notedown_ast::Result;
+use notedown_parser::NotedownParser;
+mod style;
+// mod text;
 
 #[test]
 fn ready() {
     println!("it, works!")
 }
 
-pub fn parse(s: &str) -> ASTNode {
-    let mut cfg = ParserConfig::default();
-    cfg.parse(s).unwrap_or_default()
+pub fn check_ast(source: &str, target: &str) -> Result<()> {
+    let cfg = NotedownParser::default();
+    let out = cfg.parse(source)?;
+    assert_eq!(format!("{:#?}", out), target);
+    Ok(())
 }
