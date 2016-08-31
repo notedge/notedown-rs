@@ -87,9 +87,9 @@ fn test_table() {
 #[test]
 fn test_quote() {
     let input = r#"
-    > - 1
-    >   2
-    > - 3
+> - 1
+>   2
+> - 3
     "#;
     check_ast(input, include_str!("quote.yaml"));
 }

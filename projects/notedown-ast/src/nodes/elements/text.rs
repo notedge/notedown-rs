@@ -1,7 +1,7 @@
 use super::*;
 
 #[repr(u8)]
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Eq, PartialEq, Hash)]
 pub enum TextNode {
     Empty = 0,
 

@@ -6,11 +6,9 @@ ASTNode {
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "1-5",
+                            range: 1..5,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -20,15 +18,13 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "5-8",
+                            range: 5..8,
                         },
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    " ",
-                                ),
+                                " ",
                             ),
-                            range: "8-9",
+                            range: 8..9,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -38,22 +34,20 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "9-16",
+                            range: 9..16,
                         },
                     ],
                 ),
-                range: "1-16",
+                range: 1..16,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "18-22",
+                            range: 18..22,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -63,15 +57,13 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "22-29",
+                            range: 22..29,
                         },
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    " ",
-                                ),
+                                " ",
                             ),
-                            range: "29-30",
+                            range: 29..30,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -81,22 +73,20 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "30-33",
+                            range: 30..33,
                         },
                     ],
                 ),
-                range: "18-33",
+                range: 18..33,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "35-39",
+                            range: 35..39,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -106,15 +96,13 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "39-46",
+                            range: 39..46,
                         },
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    " ",
-                                ),
+                                " ",
                             ),
-                            range: "46-47",
+                            range: 46..47,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -124,22 +112,20 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "47-54",
+                            range: 47..54,
                         },
                     ],
                 ),
-                range: "35-54",
+                range: 35..54,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "56-60",
+                            range: 56..60,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -149,27 +135,23 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: "60-67",
+                            range: 60..67,
                         },
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "\n",
-                                ),
+                                "\n",
                             ),
-                            range: "67-68",
+                            range: 67..68,
                         },
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "68-72",
+                            range: 68..72,
                         },
                     ],
                 ),
-                range: "56-72",
+                range: 56..72,
             },
         ],
     ),

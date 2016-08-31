@@ -1,5 +1,4 @@
 mod code_block;
-mod command;
 mod delimiter;
 mod header;
 mod math;
@@ -8,7 +7,6 @@ mod text;
 
 pub use self::{
     code_block::CodeNode,
-    command::{Command, CommandKind},
     delimiter::Delimiter,
     header::Header,
     math::{MathKind, MathNode},

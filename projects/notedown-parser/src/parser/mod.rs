@@ -46,6 +46,7 @@ impl NotedownParser {
                 }
                 Rule::Code => self.parse_code_block(pair),
                 Rule::CommandBlock => self.parse_command_block(pair),
+                Rule::CommandLine => self.parse_command_line(pair),
                 _ => debug_cases!(pair),
             };
             // println!("{:?}", code);
@@ -155,6 +156,18 @@ impl NotedownParser {
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::Escape => continue,
+                Rule::SYMBOL => cmd = pair.as_str().to_string(),
+                _ => debug_cases!(pair),
+            };
+        }
+        unimplemented!()
+    }
+    pub fn parse_command_line(&self, pairs: Pair<Rule>) -> ASTNode {
+        let r = self.get_position(pairs.as_span());
+        let mut cmd = String::new();
+        for pair in pairs.into_inner() {
+            match pair.as_rule() {
+                Rule::Escape | Rule::Colon => continue,
                 Rule::SYMBOL => cmd = pair.as_str().to_string(),
                 _ => debug_cases!(pair),
             };

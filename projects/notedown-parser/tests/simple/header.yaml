@@ -8,16 +8,14 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 1",
-                                    ),
+                                    "Title 1",
                                 ),
-                                range: "2-9",
+                                range: 2..9,
                             },
                         ],
                     },
                 ),
-                range: "0-9",
+                range: 0..9,
             },
             ASTNode {
                 kind: Header(
@@ -26,16 +24,14 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 2",
-                                    ),
+                                    "Title 2",
                                 ),
-                                range: "13-20",
+                                range: 13..20,
                             },
                         ],
                     },
                 ),
-                range: "10-20",
+                range: 10..20,
             },
             ASTNode {
                 kind: Header(
@@ -44,16 +40,14 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 3",
-                                    ),
+                                    "Title 3",
                                 ),
-                                range: "25-32",
+                                range: 25..32,
                             },
                         ],
                     },
                 ),
-                range: "21-32",
+                range: 21..32,
             },
             ASTNode {
                 kind: Header(
@@ -62,16 +56,14 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 4",
-                                    ),
+                                    "Title 4",
                                 ),
-                                range: "38-45",
+                                range: 38..45,
                             },
                         ],
                     },
                 ),
-                range: "33-45",
+                range: 33..45,
             },
             ASTNode {
                 kind: Header(
@@ -80,16 +72,14 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 5",
-                                    ),
+                                    "Title 5",
                                 ),
-                                range: "52-59",
+                                range: 52..59,
                             },
                         ],
                     },
                 ),
-                range: "46-59",
+                range: 46..59,
             },
             ASTNode {
                 kind: Header(
@@ -98,31 +88,27 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title 6",
-                                    ),
+                                    "Title 6",
                                 ),
-                                range: "67-74",
+                                range: 67..74,
                             },
                         ],
                     },
                 ),
-                range: "60-74",
+                range: 60..74,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "####### Title 7",
-                                ),
+                                "####### Title 7",
                             ),
-                            range: "75-90",
+                            range: 75..90,
                         },
                     ],
                 ),
-                range: "75-90",
+                range: 75..90,
             },
             ASTNode {
                 kind: Header(
@@ -131,11 +117,9 @@ ASTNode {
                         children: [
                             ASTNode {
                                 kind: TextSpan(
-                                    Normal(
-                                        "Title ",
-                                    ),
+                                    "Title ",
                                 ),
-                                range: "94-100",
+                                range: 94..100,
                             },
                             ASTNode {
                                 kind: StyledSpan(
@@ -144,36 +128,32 @@ ASTNode {
                                         children: [
                                             ASTNode {
                                                 kind: TextSpan(
-                                                    Normal(
-                                                        "bold",
-                                                    ),
+                                                    "bold",
                                                 ),
-                                                range: "102-106",
+                                                range: 102..106,
                                             },
                                         ],
                                     },
                                 ),
-                                range: "100-108",
+                                range: 100..108,
                             },
                         ],
                     },
                 ),
-                range: "92-108",
+                range: 92..108,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                Normal(
-                                    "    ",
-                                ),
+                                "    ",
                             ),
-                            range: "109-113",
+                            range: 109..113,
                         },
                     ],
                 ),
-                range: "109-113",
+                range: 109..113,
             },
         ],
     ),

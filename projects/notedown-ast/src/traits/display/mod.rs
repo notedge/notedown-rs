@@ -43,6 +43,27 @@ impl Display for Delimiter {
     }
 }
 
+impl Debug for TextNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Normal(s) => Debug::fmt(s, f),
+            Self::Raw(s) => Debug::fmt(s, f),
+            Self::Escaped(c) => {
+                write!(f, "TextNode::Escaped({})", c)
+            }
+            Self::Emoji(c) => f.write_char(*c),
+            Self::SoftNewline => f.write_str("TextNode::SoftNewline"),
+            Self::HardNewline => f.write_str("TextNode::HardNewline"),
+            Self::CheckBox(b) => {
+                let w = &mut f.debug_struct("TextNode::CheckBox");
+                w.field("complete", b);
+                w.finish()
+            }
+            Self::Empty => f.write_str("TextNode::Empty"),
+        }
+    }
+}
+
 impl Display for TextNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
@@ -57,9 +78,9 @@ impl Display for TextNode {
                 f.write_char(*c)
             }
             Self::Emoji(c) => f.write_char(*c),
-            TextNode::SoftNewline => f.write_char('\n'),
-            TextNode::HardNewline => f.write_char('\n'),
-            TextNode::CheckBox(b) => match b {
+            Self::SoftNewline => f.write_char('\n'),
+            Self::HardNewline => f.write_char('\n'),
+            Self::CheckBox(b) => match b {
                 true => f.write_str("[x]"),
                 false => f.write_str("[ ]"),
             },

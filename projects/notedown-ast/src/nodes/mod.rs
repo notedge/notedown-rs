@@ -14,6 +14,7 @@ pub use self::{
     value::{Value, ValueType},
 };
 
+use crate::command::Command;
 use indexmap::{map::IndexMap, set::IndexSet};
 use num::{BigInt, BigUint};
 use std::{
