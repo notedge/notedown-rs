@@ -1,6 +1,9 @@
 mod options;
 
-use crate::nodes::{Array, Object};
+use crate::{
+    nodes::{Array, Object, OffsetRange},
+    ASTKind, ASTNode,
+};
 pub use options::CommandOptions;
 use std::{
     fmt,
@@ -63,7 +66,26 @@ impl Hash for Command {
 }
 
 impl Command {
+    #[inline]
     pub fn is(&self, rhs: impl AsRef<str>) -> bool {
         self.cmd.as_str() == rhs.as_ref()
+    }
+    #[inline]
+    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+        ASTNode { value: ASTKind::Command(box self), range }
+    }
+}
+
+impl Command {
+    #[inline]
+    pub fn command_line(cmd: String, _: String) -> Command {
+        Self { cmd, kind: CommandKind::Inline, args: Default::default(), kvs: Default::default() }
+    }
+}
+
+impl ASTKind {
+    #[inline]
+    pub fn command_line(cmd: impl Into<String>, content: impl Into<String>, r: Option<OffsetRange>) -> ASTNode {
+        Command::command_line(cmd.into(), content.into()).into_node(r)
     }
 }

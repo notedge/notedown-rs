@@ -2,7 +2,7 @@ use crate::parser::ASTNode;
 
 pub fn regroup_list_view(lists: &[(usize, &str, Vec<ASTNode>)]) -> Vec<ASTNode> {
     println!("{:#?}", lists);
-    vec![]
+    todo!()
 }
 
 pub fn regroup_table_view(table: &[Vec<Vec<ASTNode>>]) -> Vec<ASTNode> {
@@ -11,5 +11,5 @@ pub fn regroup_table_view(table: &[Vec<Vec<ASTNode>>]) -> Vec<ASTNode> {
             println!("{:?}", item)
         }
     }
-    vec![]
+    todo!()
 }

@@ -28,21 +28,22 @@ use std::ops::RangeInclusive;
 /// ````
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct CodeNode {
-    lang: String,
-    inline: bool,
-    highlight: bool,
-    code: String,
-    show_file_name: Option<String>,
+    pub inline: bool,
+    pub highlight: bool,
+    pub language: String,
+    pub code: String,
+    pub show_file_name: Option<String>,
     /// None means not show line_number
-    show_line_number: Option<usize>,
-    highlight_lines: Vec<RangeInclusive<usize>>,
-    hide_lines: Vec<RangeInclusive<usize>>,
+    /// usize means starts with n
+    pub show_line_number: Option<usize>,
+    pub highlight_lines: Vec<RangeInclusive<usize>>,
+    pub hide_lines: Vec<RangeInclusive<usize>>,
 }
 
 impl Default for CodeNode {
     fn default() -> Self {
         Self {
-            lang: String::from("text"),
+            language: String::from("text"),
             code: String::new(),
             inline: false,
             highlight: false,
@@ -60,7 +61,7 @@ impl Display for CodeNode {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)
         }
         else {
-            write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = self.lang, body = self.code)
+            write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`".repeat(3), lang = self.language, body = self.code)
         }
     }
 }
@@ -72,7 +73,7 @@ impl CodeNode {
     }
     #[inline]
     pub fn set_language(mut self, lang: String) -> Self {
-        self.lang = lang;
+        self.language = lang;
         return self;
     }
 
@@ -110,14 +111,14 @@ impl CodeNode {
     /// ```
     #[inline]
     pub fn code_inline(code: String) -> Self {
-        Self { lang: String::from("text"), inline: true, highlight: false, code, ..Default::default() }
+        Self { language: String::from("text"), inline: true, highlight: false, code, ..Default::default() }
     }
     /// ```notedown
     /// `s`
     /// ```
     #[inline]
     pub fn code_block(lang: String, code: String) -> Self {
-        Self { lang, inline: false, highlight: true, code, ..Default::default() }
+        Self { language: lang, inline: false, highlight: true, code, ..Default::default() }
     }
 }
 

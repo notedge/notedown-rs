@@ -4,7 +4,7 @@ use crate::{
     parser::regroup::{regroup_list_view, regroup_table_view},
     NotedownParser, Result,
 };
-use notedown_ast::{nodes::CodeNode, ASTKind, ASTNode};
+use notedown_ast::{command::Command, nodes::CodeNode, ASTKind, ASTNode};
 use notedown_pest::{NoteDownParser, Pair, Pairs, Parser, Rule};
 
 macro_rules! debug_cases {
@@ -165,14 +165,16 @@ impl NotedownParser {
     pub fn parse_command_line(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
         let mut cmd = String::new();
+        let mut rest = String::new();
         for pair in pairs.into_inner() {
             match pair.as_rule() {
                 Rule::Escape | Rule::Colon => continue,
                 Rule::SYMBOL => cmd = pair.as_str().to_string(),
+                Rule::RestOfLine => rest = pair.as_str().to_string(),
                 _ => debug_cases!(pair),
             };
         }
-        unimplemented!()
+        ASTKind::command_line(cmd, rest, r)
     }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());
