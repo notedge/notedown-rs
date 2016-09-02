@@ -8,9 +8,9 @@ fn test_url_decode() {
 }
 
 #[test]
+#[rustfmt::skip]
 fn test_url_decode_2() {
-    const INPUT: &str =
-        "https://bbs.emath.ac.cn/forum.php?mod=viewthread&tid=246&extra=page%3D2%26filter%3Ddigest%26digest%3D1";
+    const INPUT: &str = "https://bbs.emath.ac.cn/forum.php?mod=viewthread&tid=246&extra=page%3D2%26filter%3Ddigest%26digest%3D1";
     const OUTPUT: &str = "https://bbs.emath.ac.cn/forum.php?mod=viewthread&tid=246&extra=page=2&filter=digest&digest=1";
     debug_assert_eq!(url_decode(INPUT), Some(String::from(OUTPUT)))
 }

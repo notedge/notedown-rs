@@ -1,5 +1,6 @@
 use textwrap;
 
+/// Removes common leading whitespace from each line.
 pub fn dedent(text: impl AsRef<str>) -> String {
     textwrap::dedent(text.as_ref())
 }
@@ -17,7 +18,8 @@ pub fn indent_with(text: impl AsRef<str>, prefix: &str) -> String {
 /// Removes at most n leading whitespace from each line
 pub fn dedent_less_than(text: impl AsRef<str>, max: usize) -> String {
     // https://stackoverflow.com/questions/60337455/how-to-trim-space-less-than-n-times
-    text.as_ref().lines()
+    text.as_ref()
+        .lines()
         .map(|line| {
             let mut max = max;
             line.chars()
