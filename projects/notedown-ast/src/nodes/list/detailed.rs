@@ -15,12 +15,12 @@ use super::*;
 /// </details>
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct ListDetailedNode {
+pub struct DetailedList {
     summary: ListItem,
     body: Vec<ListItem>,
 }
 
-impl ListDetailedNode {
+impl DetailedList {
     pub fn is_open(&self) -> bool {
         matches!(self.summary.prefix.value, ListPrefixSymbol::SummaryOpen)
     }

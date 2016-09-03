@@ -1,9 +1,12 @@
 use super::*;
 
 mod detailed;
-mod simple;
+mod ordered;
+mod orderless;
+mod prefix;
+mod quote;
 
-pub use self::{detailed::ListDetailedNode, simple::ListSimpleNode};
+pub use self::{detailed::DetailedList, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol, quote::QuoteList};
 
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum ListView {
@@ -16,7 +19,7 @@ pub enum ListView {
     ///
     /// > part4
     /// ```
-    Quote(Box<ListSimpleNode>),
+    Quote(Box<QuoteList>),
     /// ## Ordered List
     /// ```note
     /// 1.1. part1
@@ -26,7 +29,7 @@ pub enum ListView {
     ///
     /// 1.4. part4
     /// ```
-    Ordered(Box<ListSimpleNode>),
+    Ordered(Box<OrderedList>),
     /// ## Orderless List
     /// ```note
     /// - part1
@@ -36,60 +39,15 @@ pub enum ListView {
     ///
     /// - part4
     /// ```
-    Orderless(Box<ListSimpleNode>),
+    Orderless(Box<OrderlessList>),
 
-    Details(Box<ListDetailedNode>),
-}
-
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum ListPrefixSymbol {
-    /// ```note
-    /// -
-    /// ```
-    Hyphen,
-    /// ```note
-    /// >
-    /// ```
-    Quote,
-    /// ```note
-    /// >+ Summary Open
-    /// ```
-    SummaryOpen,
-    /// ```note
-    /// >- Summary Open
-    /// ```
-    SummaryClosed,
-    /// Single, serial number from the beginning
-    /// ```note
-    /// 1.
-    /// 2.
-    /// 3.
-    /// ```
-    Arabic,
-    /// Complex, multi-layered, not serial number from the beginning
-    /// ```note
-    /// 4.4.
-    /// 4.5.
-    /// 4.6.
-    /// ```
-    ArabicNest { prefix_number: Vec<usize>, number: usize },
-    /// ```note
-    /// I.
-    /// II.
-    /// ```
-    RomanNumerals,
+    Details(Box<DetailedList>),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct ListItem {
-    prefix: Literal<ListPrefixSymbol>,
-    rest: ASTNodes,
-}
-
-impl Default for ListPrefixSymbol {
-    fn default() -> Self {
-        Self::Hyphen
-    }
+    pub prefix: Literal<ListPrefixSymbol>,
+    pub rest: ASTNodes,
 }
 
 impl From<ListView> for ASTNode {
