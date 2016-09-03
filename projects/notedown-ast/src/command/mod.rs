@@ -23,9 +23,6 @@ pub enum CommandKind {
     /// )
     /// ```
     Normal,
-
-    /// `[]`
-    SmartLink,
     /// ````md
     /// ```cmd(arg=1)
     /// body text
