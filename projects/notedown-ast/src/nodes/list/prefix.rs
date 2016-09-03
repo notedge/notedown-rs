@@ -2,6 +2,7 @@ use super::*;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ListPrefixSymbol {
+    Unknown,
     /// ```note
     /// -
     /// ```
@@ -31,7 +32,10 @@ pub enum ListPrefixSymbol {
     /// 4.5.
     /// 4.6.
     /// ```
-    ArabicNest { prefix_number: Vec<usize>, number: usize },
+    ArabicNest {
+        prefix_number: Vec<usize>,
+        number: usize,
+    },
     /// ```note
     /// I.
     /// II.
@@ -42,6 +46,15 @@ pub enum ListPrefixSymbol {
 impl Default for ListPrefixSymbol {
     fn default() -> Self {
         Self::Hyphen
+    }
+}
+
+impl ListPrefixSymbol {
+    pub fn parse(input: &str) -> Self {
+        match input {
+            s if s.starts_with(">") => Self::Quote,
+            _ => Self::Unknown,
+        }
     }
 }
 

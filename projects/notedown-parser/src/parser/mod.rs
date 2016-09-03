@@ -18,7 +18,7 @@ macro_rules! debug_cases {
 
 impl NotedownParser {
     pub fn parse(&self, input: &str) -> Result<ASTNode> {
-        let input = input.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
+        // let input = input.replace("\r\n", "\n").replace("\\\n", "").replace("\t", &" ".repeat(self.tab_size));
         let pairs = NoteDownParser::parse(Rule::program, &input)?;
         self.parse_program(pairs)
     }
@@ -82,7 +82,7 @@ impl NotedownParser {
                 _ => debug_cases!(pair),
             };
         }
-        return regroup_list_view(&list_terms);
+        return regroup_list_view(list_terms);
     }
     fn parse_table(&self, pairs: Pair<Rule>) -> Vec<ASTNode> {
         // let r = self.get_position(pairs.as_span());
@@ -202,6 +202,7 @@ impl NotedownParser {
         pairs.into_inner().map(|pair| self.parse_span_term(pair)).collect()
     }
     fn parse_span_term(&self, pair: Pair<Rule>) -> ASTNode {
+        let r = self.get_position(pair.as_span());
         match pair.as_rule() {
             Rule::EOI => ASTNode::default(),
             Rule::Style => self.parse_styled_text(pair),
@@ -213,6 +214,7 @@ impl NotedownParser {
             Rule::WHITE_SPACE | Rule::LINE_SEPARATOR => self.parse_normal_text(pair),
             Rule::Escaped => self.parse_escaped(pair),
             Rule::CommandBlock => self.parse_command_block(pair),
+            Rule::URL => ASTKind::bare_link(pair.as_str(), r),
             _ => debug_cases!(pair),
         }
     }

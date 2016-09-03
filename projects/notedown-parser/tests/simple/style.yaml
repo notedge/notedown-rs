@@ -5,12 +5,6 @@ ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 1..5,
-                        },
-                        ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
                                     kind: Emphasis,
@@ -19,26 +13,20 @@ ASTNode {
                                             kind: TextSpan(
                                                 "斜体 Italic",
                                             ),
-                                            range: 6..19,
+                                            range: 1..14,
                                         },
                                     ],
                                 },
                             ),
-                            range: 5..20,
+                            range: 0..15,
                         },
                     ],
                 ),
-                range: 1..20,
+                range: 0..15,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 22..26,
-                        },
                         ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
@@ -48,26 +36,20 @@ ASTNode {
                                             kind: TextSpan(
                                                 "粗体 Bold",
                                             ),
-                                            range: 28..39,
+                                            range: 19..30,
                                         },
                                     ],
                                 },
                             ),
-                            range: 26..41,
+                            range: 17..32,
                         },
                     ],
                 ),
-                range: 22..41,
+                range: 17..32,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 43..47,
-                        },
                         ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
@@ -77,26 +59,20 @@ ASTNode {
                                             kind: TextSpan(
                                                 "斜粗体 Bold-Italic",
                                             ),
-                                            range: 50..71,
+                                            range: 37..58,
                                         },
                                     ],
                                 },
                             ),
-                            range: 47..74,
+                            range: 34..61,
                         },
                     ],
                 ),
-                range: 43..74,
+                range: 34..61,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 76..80,
-                        },
                         ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
@@ -106,26 +82,20 @@ ASTNode {
                                             kind: TextSpan(
                                                 "下划线 Underline",
                                             ),
-                                            range: 81..100,
+                                            range: 64..83,
                                         },
                                     ],
                                 },
                             ),
-                            range: 80..101,
+                            range: 63..84,
                         },
                     ],
                 ),
-                range: 76..101,
+                range: 63..84,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 103..107,
-                        },
                         ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
@@ -135,26 +105,20 @@ ASTNode {
                                             kind: TextSpan(
                                                 "删除线 Strikethrough",
                                             ),
-                                            range: 109..132,
+                                            range: 88..111,
                                         },
                                     ],
                                 },
                             ),
-                            range: 107..134,
+                            range: 86..113,
                         },
                     ],
                 ),
-                range: 103..134,
+                range: 86..113,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 136..140,
-                        },
                         ASTNode {
                             kind: StyledSpan(
                                 StyleNode {
@@ -164,66 +128,42 @@ ASTNode {
                                             kind: TextSpan(
                                                 "数据删除 Undercover",
                                             ),
-                                            range: 143..166,
+                                            range: 118..141,
                                         },
                                     ],
                                 },
                             ),
-                            range: 140..169,
+                            range: 115..144,
                         },
                     ],
                 ),
-                range: 136..169,
+                range: 115..144,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 171..175,
-                        },
                         ASTNode {
                             kind: TextSpan(
                                 "代码 code",
                             ),
-                            range: 175..188,
+                            range: 146..159,
                         },
                     ],
                 ),
-                range: 171..188,
+                range: 146..159,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
                             kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 190..194,
-                        },
-                        ASTNode {
-                            kind: TextSpan(
                                 "code`escape",
                             ),
-                            range: 194..209,
-                        },
-                        ASTNode {
-                            kind: TextSpan(
-                                "\n",
-                            ),
-                            range: 209..210,
-                        },
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 210..214,
+                            range: 161..176,
                         },
                     ],
                 ),
-                range: 190..214,
+                range: 161..176,
             },
         ],
     ),

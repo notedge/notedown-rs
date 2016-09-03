@@ -1,7 +1,13 @@
 use crate::parser::ASTNode;
+use notedown_ast::{nodes::ListItem, ASTNodes};
 
-pub fn regroup_list_view(lists: &[(usize, &str, Vec<ASTNode>)]) -> Vec<ASTNode> {
+/// ident:usize
+/// kind: &str
+/// term: ASTNodes
+pub fn regroup_list_view(lists: Vec<(usize, &str, ASTNodes)>) -> Vec<ASTNode> {
     println!("{:#?}", lists);
+    ListItem { prefix: Default::default(), rest: vec![] };
+
     todo!()
 }
 

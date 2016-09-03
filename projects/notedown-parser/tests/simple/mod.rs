@@ -2,7 +2,7 @@ use crate::check_ast;
 
 #[test]
 fn test_header() {
-    let input = r#"\
+    let input = r#"
 # Title 1
 ## Title 2
 ### Title 3
@@ -29,47 +29,30 @@ in culpa qui officia deserunt mollit anim id est laborum.
 }
 
 #[test]
-fn test_style() {
-    let input = r#"
-    *斜体 Italic*
-
-    **粗体 Bold**
-
-    ***斜粗体 Bold-Italic***
-
-    ~下划线 Underline~
-
-    ~~删除线 Strikethrough~~
-
-    ~~~数据删除 Undercover~~~
-
-    `代码 code`
-
-    ``code`escape``
-    "#;
-    check_ast(input, include_str!("style.yaml"));
+fn style() {
+    check_ast(include_str!("style.note"), include_str!("style.yaml"));
 }
 #[test]
 fn test_math() {
     let input = r#"
-    $x$ $$x^2$$
+$x$ $$x^2$$
 
-    $$x^2$$ $x$
+$$x^2$$ $x$
 
-    $$x^2$$ $$x^2$$
+$$x^2$$ $$x^2$$
 
-    $$x^4$$
+$$x^4$$
     "#;
     check_ast(input, include_str!("math.yaml"));
 }
 #[test]
 fn test_function() {
     let input = r#"
-    \title: Test
-    \date: 2018-01-08
-    \netease[song][22724727]
-    \netease{"song", 28629058, autoplay = true}
-    \link[https://github.com/nyar-lang/notedown-rs]
+\title: Test
+\date: 2018-01-08
+\netease[song][22724727]
+\netease{"song", 28629058, autoplay = true}
+\link[https://github.com/nyar-lang/notedown-rs]
     "#;
     check_ast(input, include_str!("math.yaml"));
 }
@@ -77,9 +60,9 @@ fn test_function() {
 #[test]
 fn test_table() {
     let input = r#"
-    |name | age | level
-    :-|-:
-    aster | 17
+|name | age | level
+:-|-:
+aster | 17
     "#;
     check_ast(input, include_str!("math.yaml"));
 }
@@ -97,12 +80,12 @@ fn test_quote() {
 #[test]
 fn test_url() {
     let input = r#"
-    https://www.zhihu.com/question/311834230/answer/595009063
-    http://mathworld.wolfram.com/PrimeFormulas.style
+https://www.zhihu.com/question/311834230/answer/595009063
+http://mathworld.wolfram.com/PrimeFormulas.style
 
-    Page210
-    http://read.pudn.com/downloads133/ebook/566944/%E9%AB%98%E6%95%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A5%A5%E7%A7%98.pdf
-    ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf
+Page210
+http://read.pudn.com/downloads133/ebook/566944/%E9%AB%98%E6%95%88%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%A5%A5%E7%A7%98.pdf
+ftp://www.m-hikari.com/ams/ams-2012/ams-73-76-2012/kaddouraAMS73-76-2012.pdf
     "#;
     check_ast(input, include_str!("url.yaml"));
 }

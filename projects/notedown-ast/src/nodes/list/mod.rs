@@ -1,12 +1,15 @@
 use super::*;
 
 mod detailed;
+mod item;
 mod ordered;
 mod orderless;
 mod prefix;
 mod quote;
 
-pub use self::{detailed::DetailedList, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol, quote::QuoteList};
+pub use self::{
+    detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol, quote::QuoteList,
+};
 
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum ListView {
@@ -44,20 +47,22 @@ pub enum ListView {
     Details(Box<DetailedList>),
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub struct ListItem {
-    pub prefix: Literal<ListPrefixSymbol>,
-    pub rest: ASTNodes,
-}
-
 impl From<ListView> for ASTNode {
     fn from(node: ListView) -> Self {
         Self { value: ASTKind::ListView(node), range: None }
     }
 }
 
-impl From<ASTNodes> for ListItem {
-    fn from(node: ASTNodes) -> Self {
-        Self { prefix: Default::default(), rest: node }
-    }
+macro_rules! list_view {
+    (@ASTKind => $name:ident) => {
+        #[inline]
+        pub fn $name(children: Vec<ListItem>) -> ASTNode {
+            ListView::$name(children).into()
+        }
+    };
+    ($($name:ident),+ $(,)?) => (
+        impl ASTKind { $(list_view!(@ASTKind => $name);)+ }
+    );
 }
+
+list_view![ordered_list, orderless_list];

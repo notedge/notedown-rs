@@ -5,10 +5,53 @@ ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
-                            kind: TextSpan(
-                                "    ",
+                            kind: MathNode(
+                                MathNode {
+                                    kind: Inline,
+                                    raw: "x",
+                                    format: None,
+                                },
                             ),
-                            range: 1..5,
+                            range: 1..4,
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                " ",
+                            ),
+                            range: 4..5,
+                        },
+                        ASTNode {
+                            kind: MathNode(
+                                MathNode {
+                                    kind: Display,
+                                    raw: "x^2",
+                                    format: None,
+                                },
+                            ),
+                            range: 5..12,
+                        },
+                    ],
+                ),
+                range: 1..12,
+            },
+            ASTNode {
+                kind: Paragraph(
+                    [
+                        ASTNode {
+                            kind: MathNode(
+                                MathNode {
+                                    kind: Display,
+                                    raw: "x^2",
+                                    format: None,
+                                },
+                            ),
+                            range: 14..21,
+                        },
+                        ASTNode {
+                            kind: TextSpan(
+                                " ",
+                            ),
+                            range: 21..22,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -18,38 +61,16 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: 5..8,
-                        },
-                        ASTNode {
-                            kind: TextSpan(
-                                " ",
-                            ),
-                            range: 8..9,
-                        },
-                        ASTNode {
-                            kind: MathNode(
-                                MathNode {
-                                    kind: Display,
-                                    raw: "x^2",
-                                    format: None,
-                                },
-                            ),
-                            range: 9..16,
+                            range: 22..25,
                         },
                     ],
                 ),
-                range: 1..16,
+                range: 14..25,
             },
             ASTNode {
                 kind: Paragraph(
                     [
                         ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 18..22,
-                        },
-                        ASTNode {
                             kind: MathNode(
                                 MathNode {
                                     kind: Display,
@@ -57,36 +78,13 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: 22..29,
+                            range: 27..34,
                         },
                         ASTNode {
                             kind: TextSpan(
                                 " ",
                             ),
-                            range: 29..30,
-                        },
-                        ASTNode {
-                            kind: MathNode(
-                                MathNode {
-                                    kind: Inline,
-                                    raw: "x",
-                                    format: None,
-                                },
-                            ),
-                            range: 30..33,
-                        },
-                    ],
-                ),
-                range: 18..33,
-            },
-            ASTNode {
-                kind: Paragraph(
-                    [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 35..39,
+                            range: 34..35,
                         },
                         ASTNode {
                             kind: MathNode(
@@ -96,37 +94,15 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: 39..46,
-                        },
-                        ASTNode {
-                            kind: TextSpan(
-                                " ",
-                            ),
-                            range: 46..47,
-                        },
-                        ASTNode {
-                            kind: MathNode(
-                                MathNode {
-                                    kind: Display,
-                                    raw: "x^2",
-                                    format: None,
-                                },
-                            ),
-                            range: 47..54,
+                            range: 35..42,
                         },
                     ],
                 ),
-                range: 35..54,
+                range: 27..42,
             },
             ASTNode {
                 kind: Paragraph(
                     [
-                        ASTNode {
-                            kind: TextSpan(
-                                "    ",
-                            ),
-                            range: 56..60,
-                        },
                         ASTNode {
                             kind: MathNode(
                                 MathNode {
@@ -135,23 +111,23 @@ ASTNode {
                                     format: None,
                                 },
                             ),
-                            range: 60..67,
+                            range: 44..51,
                         },
                         ASTNode {
                             kind: TextSpan(
                                 "\n",
                             ),
-                            range: 67..68,
+                            range: 51..52,
                         },
                         ASTNode {
                             kind: TextSpan(
                                 "    ",
                             ),
-                            range: 68..72,
+                            range: 52..56,
                         },
                     ],
                 ),
-                range: 56..72,
+                range: 44..56,
             },
         ],
     ),

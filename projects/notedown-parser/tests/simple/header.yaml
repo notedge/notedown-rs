@@ -10,12 +10,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 1",
                                 ),
-                                range: 2..9,
+                                range: 3..10,
                             },
                         ],
                     },
                 ),
-                range: 0..9,
+                range: 1..10,
             },
             ASTNode {
                 kind: Header(
@@ -26,12 +26,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 2",
                                 ),
-                                range: 13..20,
+                                range: 14..21,
                             },
                         ],
                     },
                 ),
-                range: 10..20,
+                range: 11..21,
             },
             ASTNode {
                 kind: Header(
@@ -42,12 +42,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 3",
                                 ),
-                                range: 25..32,
+                                range: 26..33,
                             },
                         ],
                     },
                 ),
-                range: 21..32,
+                range: 22..33,
             },
             ASTNode {
                 kind: Header(
@@ -58,12 +58,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 4",
                                 ),
-                                range: 38..45,
+                                range: 39..46,
                             },
                         ],
                     },
                 ),
-                range: 33..45,
+                range: 34..46,
             },
             ASTNode {
                 kind: Header(
@@ -74,12 +74,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 5",
                                 ),
-                                range: 52..59,
+                                range: 53..60,
                             },
                         ],
                     },
                 ),
-                range: 46..59,
+                range: 47..60,
             },
             ASTNode {
                 kind: Header(
@@ -90,12 +90,12 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title 6",
                                 ),
-                                range: 67..74,
+                                range: 68..75,
                             },
                         ],
                     },
                 ),
-                range: 60..74,
+                range: 61..75,
             },
             ASTNode {
                 kind: Paragraph(
@@ -104,11 +104,11 @@ ASTNode {
                             kind: TextSpan(
                                 "####### Title 7",
                             ),
-                            range: 75..90,
+                            range: 76..91,
                         },
                     ],
                 ),
-                range: 75..90,
+                range: 76..91,
             },
             ASTNode {
                 kind: Header(
@@ -119,7 +119,7 @@ ASTNode {
                                 kind: TextSpan(
                                     "Title ",
                                 ),
-                                range: 94..100,
+                                range: 95..101,
                             },
                             ASTNode {
                                 kind: StyledSpan(
@@ -130,17 +130,17 @@ ASTNode {
                                                 kind: TextSpan(
                                                     "bold",
                                                 ),
-                                                range: 102..106,
+                                                range: 103..107,
                                             },
                                         ],
                                     },
                                 ),
-                                range: 100..108,
+                                range: 101..109,
                             },
                         ],
                     },
                 ),
-                range: 92..108,
+                range: 93..109,
             },
             ASTNode {
                 kind: Paragraph(
@@ -149,11 +149,11 @@ ASTNode {
                             kind: TextSpan(
                                 "    ",
                             ),
-                            range: 109..113,
+                            range: 110..114,
                         },
                     ],
                 ),
-                range: 109..113,
+                range: 110..114,
             },
         ],
     ),
