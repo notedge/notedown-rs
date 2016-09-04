@@ -3,18 +3,18 @@ use super::*;
 #[repr(u8)]
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum TextNode {
-    Empty = 0,
+    Empty,
 
-    Raw(String) = 1,
-    Normal(String) = 2,
+    Normal(String),
+    HTMLRawInline(String),
 
-    Emoji(char) = 11,
-    Escaped(char) = 12,
+    Emoji(char),
+    Escaped(char),
 
-    SoftNewline = 21,
-    HardNewline = 22,
+    SoftNewline,
+    HardNewline,
 
-    CheckBox(bool) = 31,
+    CheckBox(bool),
 }
 
 impl TextNode {
@@ -28,7 +28,7 @@ impl TextNode {
     }
     #[inline]
     pub fn raw(children: String) -> Self {
-        Self::Raw(children)
+        Self::HTMLRawInline(children)
     }
     pub fn escaped(string: String) -> Option<Self> {
         let mut s = string.chars().peekable();

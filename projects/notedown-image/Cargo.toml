@@ -15,4 +15,4 @@ dashmap = "5.0.0"
 url = "2.2.2"
 
 [dev-dependencies]
-notedown_ast = { version = "0.13", path = "../notedown-ast" }
+notedown_ast = { version = "*", path = "../notedown-ast" }

@@ -53,6 +53,35 @@ impl From<ListView> for ASTNode {
     }
 }
 
+impl ListView {
+    pub fn children(&self) -> &Vec<ListItem> {
+        match self {
+            Self::Quote(v) => &v.children,
+            Self::Ordered(v) => &v.children,
+            Self::Orderless(v) => &v.children,
+            Self::Details(v) => &v.body,
+        }
+    }
+
+    pub fn children_mut(&mut self) -> &mut Vec<ListItem> {
+        match self {
+            Self::Quote(v) => &mut v.children,
+            Self::Ordered(v) => &mut v.children,
+            Self::Orderless(v) => &mut v.children,
+            Self::Details(v) => &mut v.body,
+        }
+    }
+}
+
+impl ASTKind {
+    pub fn as_list_view(&self) -> Option<ListView> {
+        match self {
+            ASTKind::ListView(v) => Some(v.to_owned()),
+            _ => None,
+        }
+    }
+}
+
 macro_rules! list_view {
     (@ASTKind => $name:ident) => {
         #[inline]

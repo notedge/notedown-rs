@@ -39,6 +39,7 @@ impl Display for Delimiter {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::HorizontalRule => f.write_str("---"),
+            Self::HTMLRawBlock(s) => f.write_str(s),
         }
     }
 }
@@ -47,7 +48,7 @@ impl Debug for TextNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(s) => Debug::fmt(s, f),
-            Self::Raw(s) => Debug::fmt(s, f),
+            Self::HTMLRawInline(s) => Debug::fmt(s, f),
             Self::Escaped(c) => {
                 write!(f, "TextNode::Escaped({})", c)
             }
@@ -70,7 +71,7 @@ impl Display for TextNode {
             Self::Normal(_) => {
                 unimplemented!()
             }
-            Self::Raw(_) => {
+            Self::HTMLRawInline(_) => {
                 unimplemented!()
             }
             Self::Escaped(c) => {

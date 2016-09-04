@@ -16,8 +16,8 @@ use super::*;
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct DetailedList {
-    summary: ListItem,
-    body: Vec<ListItem>,
+    pub summary: ListItem,
+    pub body: Vec<ListItem>,
 }
 
 impl DetailedList {
