@@ -1,42 +1,96 @@
-use std::{intrinsics::transmute,};
-use std::collections::VecDeque;
+use crate::TextError;
+use std::intrinsics::transmute;
 
-// Takes in a string with backslash escapes written out with literal backslash characters and
-// converts it to a string with the proper escaped characters.
-pub fn unescape(text: impl AsRef<str>)-> Option<String> {
-    let mut queue : VecDeque<_> = String::from(text.as_ref()).chars().collect();
-    let mut out = String::with_capacity(text.as_ref().len());
-    while let Some(c) = queue.pop_front() {
+
+/// Takes in a string with backslash escapes written out with literal backslash characters and
+/// converts it to a string with the proper escaped characters.
+///
+/// | Escape | Unicode | Description                    |
+///  | ------ | ------- | ------------------------------ |
+///  | \b     | \u{08}  | Backspace                      |
+///  | \v     | \u{0B}  | Vertical tab                   |
+///  | \f     | \u{0C}  | Form feed                      |
+///  | \n     | \u{0A}  | Newline                        |
+///  | \r     | \u{0D}  | Carriage return                |
+///  | \t     | \u{09}  | Tab                            |
+///  | \\     | \u{5C}  | Backslash                      |
+///  | \'     | \u{27}  | Single quote                   |
+///  | \"     | \u{22}  | Double quote                   |
+///  | \$     | \u{24}  | Dollar sign (sh compatibility) |
+///  | \`     | \u{60}  | Backtick (sh compatibility)    |
+///  | other  | self    | Just remove `\`                |
+pub fn unescape(text: impl AsRef<str>) -> Result<String, TextError> {
+    let text = text.as_ref();
+    let mut out = String::with_capacity(text.len());
+    let mut chars = text.chars().enumerate();
+    while let Some((index, c)) = chars.next() {
         if c != '\\' {
             out.push(c);
             continue;
         }
-        match queue.pop_front() {
-            Some('b') => out.push('\u{0008}'),
-            Some('f') => out.push('\u{000C}'),
-            Some('n') => out.push('\n'),
-            Some('r') => out.push('\r'),
-            Some('t') => out.push('\t'),
-            Some('\'') => out.push('\''),
-            Some('\"') => out.push('\"'),
-            Some('\\') => out.push('\\'),
-            _ => return None
-        };
+        if let Some(next) = chars.next() {
+            match escape_chars(next.1) {
+                Some(c) => out.push(c),
+                None => {
+                    let t = Box::from(format!("\\{}", next.1).as_ref());
+                    return Err(TextError::UnescapeError(index, t));
+                }
+            }
+        }
     }
-    Some(out)
+    Ok(out)
 }
 
+/// unchecked version of unescape
+pub unsafe fn unescape_unchecked(text: impl AsRef<str>) -> String {
+    let text = text.as_ref();
+    let mut out = String::with_capacity(text.len());
+    let mut chars = text.chars();
+    while let Some(c) = chars.next() {
+        if c != '\\' {
+            out.push(c);
+            continue;
+        }
+        if let Some(next) = chars.next() {
+            match escape_chars(next) {
+                Some(c) => out.push(c),
+                None => out.push(next),
+            }
+        }
+    }
+    return out;
+}
+
+
+fn escape_chars(c: char) -> Option<char> {
+    match c {
+        'b' => Some('\u{0008}'),
+        'f' => Some('\u{000C}'),
+        'n' => Some('\n'),
+        'r' => Some('\r'),
+        't' => Some('\t'),
+        '\'' => Some('\''),
+        '\"' => Some('\"'),
+        '\\' => Some('\\'),
+        _ => None,
+    }
+}
+
+#[allow(unused_variables)]
 pub fn unescape_utf8(text: impl AsRef<str>) {
     unimplemented!()
 }
-
+#[allow(unused_variables)]
 pub fn unescape_only(text: impl AsRef<str>, c: char) {
     unimplemented!()
 }
 
+/// unescape \U{xx xx xx}
 pub fn unescape_hex_chars(text: impl AsRef<str>) -> Option<String> {
     unsafe { unescape_unicode_char(text.as_ref(), 16) }
 }
+
+/// unescape \u{xx xx xx}
 pub fn unescape_dec_chars(text: impl AsRef<str>) -> Option<String> {
     unsafe { unescape_unicode_char(text.as_ref(), 10) }
 }

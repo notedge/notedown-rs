@@ -1,6 +1,6 @@
 [package]
 name = "text-utils"
-version = "0.2.2"
+version = "0.2.4"
 authors = ["Aster <192607617@qq.com>"]
 description = "Create a record to store any type of value"
 repository = "https://github.com/GalAster/text-utils-rs"

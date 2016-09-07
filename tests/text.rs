@@ -1,4 +1,6 @@
-use text_utils::{dedent, dedent_less_than, indent, indent_with, unescape_dec_chars, unescape_hex_chars};
+use text_utils::{
+    dedent, dedent_less_than, indent, indent_with, unescape, unescape_dec_chars, unescape_hex_chars, unescape_unchecked,
+};
 
 #[test]
 fn test_dedent() {
@@ -49,7 +51,15 @@ fn test_indent_with() {
 }
 
 #[test]
-fn test() {
+fn unescape_chars() {
     println!("{}", unescape_dec_chars("56 53").unwrap_or_default());
     println!("{}", unescape_hex_chars("56 53").unwrap_or_default());
+}
+
+#[test]
+fn unescape_ascii() {
+    const INPUT: &str = "\\b\\c";
+
+    println!("{:?}", unescape(INPUT));
+    println!("{:?}", unsafe { unescape_unchecked(INPUT) });
 }
