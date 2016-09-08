@@ -1,14 +1,19 @@
 [package]
 name = "text-utils"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Aster <192607617@qq.com>"]
-description = "Create a record to store any type of value"
 repository = "https://github.com/GalAster/text-utils-rs"
+documentation = "https://docs.rs/text-utils/0.2.4/tokio/"
+description = """
+Text utils for unescaping and align
+"""
+categories = []
 keywords = ["text", "utils"]
 readme = "README.md"
 license = "MPL-2.0"
 edition = "2018"
 exclude = ["/tests/*"]
+
 
 [dependencies]
 textwrap = "0.11"
