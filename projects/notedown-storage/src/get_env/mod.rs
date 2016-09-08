@@ -7,7 +7,7 @@ use std::{
 pub static NOTEDOWN_ROOT: &str = "NOTEDOWN_ROOT";
 
 pub fn set_root_path<P: AsRef<Path>>(path: P) -> Result<()> {
-    Ok(std::env::set_var(NOTEDOWN_ROOT, path.as_ref().display()))
+    Ok(std::env::set_var(NOTEDOWN_ROOT, path.as_ref().display().to_string()))
 }
 
 pub fn get_root_path() -> Result<PathBuf> {
