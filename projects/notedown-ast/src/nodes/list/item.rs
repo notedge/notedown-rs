@@ -12,6 +12,4 @@ impl From<ASTNodes> for ListItem {
     }
 }
 
-impl ListItem {
-    pub fn new(prefix: &str) {}
-}
+impl ListItem {}

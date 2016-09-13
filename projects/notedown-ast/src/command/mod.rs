@@ -47,6 +47,16 @@ pub struct Command {
     pub kvs: Object,
 }
 
+/// ```md
+/// \cmd: args
+/// ```
+pub struct InlineCommand {}
+
+pub struct ExternalCommand {
+    data: Vec<u8>,
+    options: CommandOptions,
+}
+
 impl Display for Command {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let a = self.args.values().map(|v| format!("{}", v));

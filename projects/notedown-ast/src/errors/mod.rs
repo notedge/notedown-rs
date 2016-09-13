@@ -7,9 +7,9 @@ use std::{
 };
 use yggdrasil_shared::records::Url;
 
+mod error_3rd;
 mod error_custom;
 mod error_std;
-mod error_3rd;
 
 pub type Result<T> = std::result::Result<T, NoteError>;
 
@@ -24,12 +24,16 @@ pub struct NoteError {
 pub enum NoteErrorKind {
     IOError(std::io::Error),
     FormatError(std::fmt::Error),
+    SyntaxError(String),
     TypeMismatch(String),
     RuntimeError(String),
+    UndefinedVariable {
+        name: String,
+    },
     /// A forbidden cst_node encountered
     Unreachable,
-    // #[error(transparent)]
-    // UnknownError(#[from] anyhow::Error),
+    /* #[error(transparent)]
+     * UnknownError(#[from] anyhow::Error), */
 }
 
 impl NoteError {
@@ -65,9 +69,17 @@ macro_rules! error_msg {
 }
 
 error_msg![
+    syntax_error => SyntaxError,
     type_mismatch => TypeMismatch,
     runtime_error => RuntimeError,
 ];
+
+impl NoteError {
+    pub fn undefined_variable(name: impl Into<String>) -> NoteError {
+        let kind = NoteErrorKind::UndefinedVariable { name: name.into() };
+        Self { kind: Box::new(kind), file: None, range: None }
+    }
+}
 
 impl Error for NoteError {}
 
@@ -94,13 +106,20 @@ impl Display for NoteErrorKind {
             Self::FormatError(e) => {
                 write!(f, "{}", e)
             }
+            Self::SyntaxError(msg) => {
+                f.write_str("SyntaxError: ")?;
+                f.write_str(msg)
+            }
             Self::TypeMismatch(msg) => {
-                f.write_str("TypeMismatch: ")?;
+                f.write_str("TypeError: ")?;
                 f.write_str(msg)
             }
             Self::RuntimeError(msg) => {
-                f.write_str("TypeMismatch: ")?;
+                f.write_str("RuntimeError: ")?;
                 f.write_str(msg)
+            }
+            Self::UndefinedVariable { name } => {
+                write!(f, "RuntimeError: Variable {} not found in scope", name)
             }
             Self::Unreachable => {
                 f.write_str("InternalError: ")?;
