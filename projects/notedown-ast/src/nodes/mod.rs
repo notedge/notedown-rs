@@ -53,11 +53,11 @@ pub enum ASTKind {
     /// block: ``` a ```
     /// span: `` `code`  ``
     CodeNode(Box<CodeNode>),
-    /// block: ``` a ```
-    /// span: `` `code`  ``
+    /// - block: `$$ x^2 $$`
+    /// - span: `math $ x^2 $`
     MathNode(Box<MathNode>),
-    /// block: ``` a ```
-    /// span: `` `code`  ``
+    /// - block: ``` a ```
+    /// - span: `` `code`  ``
     LinkNode(SmartLink),
     /// span
     TextSpan(Box<TextNode>),

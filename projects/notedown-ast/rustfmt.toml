@@ -5,5 +5,7 @@ max_width = 144
 imports_granularity = "Crate"
 use_small_heuristics = "Max"
 control_brace_style = "ClosingNextLine"
+match_arm_leading_pipes = "Preserve"
+format_macro_matchers = true
 normalize_comments = true
 format_code_in_doc_comments = true

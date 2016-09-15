@@ -1,7 +1,13 @@
+mod escaped;
+mod external;
+mod normal;
 mod options;
+mod traits;
+mod xml;
 
+use self::xml::{XMLCommand, XMLCommandKind};
 use crate::{
-    nodes::{Array, Object, OffsetRange},
+    nodes::{Array, Literal, Object, OffsetRange},
     ASTKind, ASTNode,
 };
 pub use options::CommandOptions;
@@ -9,6 +15,7 @@ use std::{
     fmt,
     fmt::{Display, Formatter},
     hash::{Hash, Hasher},
+    ops::Range,
 };
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq)]
@@ -29,47 +36,33 @@ pub enum CommandKind {
     /// ```
     /// ````
     CodeBlock,
-    /// ```md
-    /// <cmd arg=1>body text</cmd>
-    /// ```
-    OpenClose,
-    /// ```md
-    /// `<cmd arg=1/>`
-    /// ```
-    SelfClose,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Command {
-    pub cmd: String,
-    pub kind: CommandKind,
-    pub args: Array,
-    pub kvs: Object,
+pub enum Command {
+    /// ```md
+    /// \cmd: args
+    /// ```
+    Normal(NormalCommand),
+    Escaped(),
+    XML(XMLCommand),
+    External(ExternalCommand),
 }
 
 /// ```md
-/// \cmd: args
+/// \cmd[][](): args
 /// ```
-pub struct InlineCommand {}
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct NormalCommand {
+    pub cmd: String,
+    pub options: CommandOptions,
+    pub rest: Literal<String>,
+}
 
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ExternalCommand {
+    cmd: String,
     data: Vec<u8>,
-    options: CommandOptions,
-}
-
-impl Display for Command {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        let a = self.args.values().map(|v| format!("{}", v));
-        let kv = self.kvs.iter().map(|(k, v)| format!("{} = {}", k, v));
-        write!(f, "\\{}({})", self.cmd, a.chain(kv).collect::<Vec<_>>().join(", "))
-    }
-}
-
-impl Hash for Command {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.cmd.hash(state);
-        todo!()
-    }
 }
 
 impl Command {
