@@ -10,6 +10,7 @@ use tower_lsp::lsp_types::{
     CompletionItem,
     CompletionItemKind::{self, *},
 };
+use std::collections::VecDeque;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {
@@ -19,6 +20,14 @@ pub struct DocumentString {
 }
 
 impl DocumentString {
+    pub fn new(cmd:&str, short:&str, long:&str) -> DocumentString {
+        Self {
+            cmd: String::from(cmd.trim()),
+            short: String::from(short.trim()),
+            long: String::from(long.trim()),
+        }
+    }
+
     pub fn command(&self) -> CompletionItem {
         build_command(&self.cmd, &self.short, &self.long)
     }
@@ -30,15 +39,38 @@ impl DocumentString {
     }
 }
 
+fn load_md_doc(input: &str) -> Vec<DocumentString> {
+    let mut out = VecDeque::new();
+    let mut cmd = "";
+    let mut short = "";
+    let mut long = String::new();
+    let mut lines = input.lines();
+    while let Some(line) = lines.next() {
+        if line.starts_with("# ") {
+            out.push_back(DocumentString::new(cmd, short, &long));
+            cmd = &line[2..line.len()];
+            short = lines.next().unwrap();
+            long = String::new()
+        }
+        else {
+            long.push_str(line);
+            long.push('\n');
+        }
+    }
+    out.push_back(DocumentString::new(cmd, short, &long));
+    out.pop_front();
+    return Vec::from(out);
+}
+
+
 pub fn complete_commands() -> Vec<CompletionItem> {
-    let raw = include_str!("command.yaml");
-    let parsed: Vec<DocumentString> = serde_yaml::from_str(raw).unwrap();
+    let parsed = load_md_doc(include_str!("command.md"));
     parsed.iter().map(|doc| doc.command()).collect()
 }
 
 pub fn complete_components() -> Vec<CompletionItem> {
-    let open_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("open_close.yaml")).unwrap();
-    let self_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("self_close.yaml")).unwrap();
+    let open_close= load_md_doc(include_str!("open_close.md"));
+    let self_close= load_md_doc(include_str!("self_close.md"));
     open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
 }
 
@@ -76,14 +108,9 @@ pub fn list_completion_kinds() -> Vec<CompletionItem> {
     ]
 }
 
-
 #[test]
 fn check_yaml() {
-    let command: Vec<DocumentString> = serde_yaml::from_str(include_str!("command.yaml")).unwrap();
-    let open_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("open_close.yaml")).unwrap();
-    let self_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("self_close.yaml")).unwrap();
-
-    println!("{:#?}", command);
-    println!("{:#?}", open_close);
-    println!("{:#?}", self_close);
+    println!("{:#?}", load_md_doc(include_str!("command.md")));
+    println!("{:#?}", load_md_doc(include_str!("open_close.md")));
+    println!("{:#?}", load_md_doc(include_str!("self_close.md")));
 }

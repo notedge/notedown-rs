@@ -11,20 +11,15 @@ edition = "2018"
 
 [dependencies]
 async-trait = "0.1"
-bytes = "0.5"
-dashmap = "3.5.1"
 futures = { version = "0.3", features = ["compat"] }
 jsonrpc-core = "14.0"
 jsonrpc-derive = "14.0"
 log = "0.4"
-# lsp-types = { version = "0.82", features = ["proposed"] }
-nom = { version = "5.1", default-features = false, features = ["std"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-serde_yaml = "0.8"
-tiny-keccak = { version = "2.0", features = ["keccak"] }
 tokio = { version = "0.2", features = ["rt-core", "io-std", "macros", "test-util"] }
 tokio-util = { version = "0.3", features = ["codec"] }
+# lsp-types = { version = "0.82", features = ["proposed"] }
 tower-lsp = "0.13"
 tower-service = "0.3"
 tower-test = "0.3"
