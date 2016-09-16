@@ -2,11 +2,16 @@ mod command;
 mod open_close;
 mod self_close;
 
-use tower_lsp::lsp_types::{CompletionItem, CompletionItemKind::{self, *}};
 use command::build_command;
-use self_close::build_self_close;
 use open_close::build_open_close;
+use self_close::build_self_close;
+use serde::{Deserialize, Serialize};
+use tower_lsp::lsp_types::{
+    CompletionItem,
+    CompletionItemKind::{self, *},
+};
 
+#[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {
     cmd: String,
     short: String,
@@ -26,46 +31,16 @@ impl DocumentString {
 }
 
 pub fn complete_commands() -> Vec<CompletionItem> {
-    vec![
-        build_command(
-            "comment",
-            "Some comment text will not appear in the rendering result",
-            "`\\comment: something will not shown`
-               `\\comment[some tips not shown]`",
-        ),
-        build_command(
-            "img",
-            "Some comment text will not appear in the rendering result",
-            "`\\img: something will not shown`
-               `\\img[some tips not shown]`",
-        ),
-    ]
+    let raw = include_str!("command.yaml");
+    let parsed: Vec<DocumentString> = serde_yaml::from_str(raw).unwrap();
+    parsed.iter().map(|doc| doc.command()).collect()
 }
 
-
-pub fn complete_self_close() -> Vec<CompletionItem> {
-    vec![
-        build_self_close(
-            "img",
-            "Some comment text will not appear in the rendering result",
-            "`\\img: something will not shown`
-               `\\img[some tips not shown]`",
-        )
-    ]
+pub fn complete_components() -> Vec<CompletionItem> {
+    let open_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("open_close.yaml")).unwrap();
+    let self_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("self_close.yaml")).unwrap();
+    open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
 }
-
-
-pub fn complete_open_close() -> Vec<CompletionItem> {
-    vec![
-        build_open_close(
-            "comment",
-            "Some comment text will not appear in the rendering result",
-            "`\\img: something will not shown`
-               `\\img[some tips not shown]`",
-        )
-    ]
-}
-
 
 pub fn list_completion_kinds() -> Vec<CompletionItem> {
     fn item(e: CompletionItemKind) -> CompletionItem {
@@ -99,4 +74,16 @@ pub fn list_completion_kinds() -> Vec<CompletionItem> {
         item(Operator),
         item(TypeParameter),
     ]
+}
+
+
+#[test]
+fn check_yaml() {
+    let command: Vec<DocumentString> = serde_yaml::from_str(include_str!("command.yaml")).unwrap();
+    let open_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("open_close.yaml")).unwrap();
+    let self_close: Vec<DocumentString> = serde_yaml::from_str(include_str!("self_close.yaml")).unwrap();
+
+    println!("{:#?}", command);
+    println!("{:#?}", open_close);
+    println!("{:#?}", self_close);
 }

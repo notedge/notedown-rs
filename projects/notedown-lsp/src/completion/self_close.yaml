@@ -1,0 +1,14 @@
+- cmd: img
+  short: Embed images in documents
+  long: |
+    - smart link
+
+    ```notedown
+    [some/path.png]
+    ```
+
+    - xml mode
+
+    ```notedown
+    <img link="./some/path.png"/>
+    ```

@@ -1,4 +1,4 @@
-use crate::completion::{complete_commands, list_completion_kinds};
+use crate::completion::{complete_commands, list_completion_kinds, complete_components};
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
 
 mod completion;
@@ -6,33 +6,6 @@ mod completion;
 #[derive(Debug)]
 struct Backend {
     client: Client,
-}
-
-fn c2() -> CompletionItem {
-    CompletionItem {
-        label: "<comment>".to_string(),
-        kind: Some(CompletionItemKind::Class),
-        detail: Some("Some comment text will not appear in the rendering result".to_string()),
-        documentation: Some(Documentation::MarkupContent(MarkupContent {
-            kind: MarkupKind::Markdown,
-            value: "`\\comment: something will not shown`
-                    `\\comment[some tips not shown]`\
-                    "
-                .to_string(),
-        })),
-        deprecated: None,
-        preselect: None,
-        sort_text: None,
-        filter_text: None,
-        insert_text: Some("<comment>$0<comment/>".to_string()),
-        insert_text_format: Some(InsertTextFormat::Snippet),
-        text_edit: None,
-        // text_edit: Some(CompletionTextEdit::Edit(TextEdit { range, new_text: "\\comment".to_string() })),
-        additional_text_edits: None,
-        command: None,
-        data: None,
-        tags: None,
-    }
 }
 
 #[tower_lsp::async_trait]
@@ -87,22 +60,18 @@ impl LanguageServer for Backend {
     async fn completion(&self, cp: CompletionParams) -> Result<Option<CompletionResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", cp)).await;
         let mut items = vec![];
-
-        match cp.context {
-            None => (),
-            Some(s) => match s.trigger_kind {
+        if let Some(s) = cp.context {
+            match s.trigger_kind {
                 CompletionTriggerKind::Invoked => (),
                 CompletionTriggerKind::TriggerCharacter => match s.trigger_character.unwrap().as_str() {
                     "\\" => items = complete_commands(),
-                    "<" => items = vec![c2()],
+                    "<" => items = complete_components(),
                     "." => items = list_completion_kinds(),
                     _ => (),
                 },
                 CompletionTriggerKind::TriggerForIncompleteCompletions => (),
-            },
+            }
         };
-        // const lineTextBefore = document.lineAt(position.line).text.substring(0, position.character);
-        // const lineTextAfter = document.lineAt(position.line).text.substring(position.character);
         Ok(Some(CompletionResponse::Array(items)))
     }
 
