@@ -11,13 +11,9 @@ pub struct CommandOptions {
     kvs: Object,
 }
 
-impl Hash for CommandOptions {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        self.args.hash(state);
-        for i in &self.kvs {
-            i.hash(state)
-        }
-    }
+#[derive(Clone, Default, Eq, PartialEq)]
+pub struct CommandPattern {
+    patterns: Vec<Literal<String>>,
 }
 
 impl CommandOptions {

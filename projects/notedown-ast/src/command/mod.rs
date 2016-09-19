@@ -10,7 +10,7 @@ use crate::{
     nodes::{Array, Literal, Object, OffsetRange},
     ASTKind, ASTNode,
 };
-pub use options::CommandOptions;
+pub use options::{CommandOptions, CommandPattern};
 use std::{
     fmt,
     fmt::{Display, Formatter},
@@ -38,7 +38,7 @@ pub enum CommandKind {
     CodeBlock,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub enum Command {
     /// ```md
     /// \cmd: args
@@ -47,22 +47,6 @@ pub enum Command {
     Escaped(),
     XML(XMLCommand),
     External(ExternalCommand),
-}
-
-/// ```md
-/// \cmd[][](): args
-/// ```
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct NormalCommand {
-    pub cmd: String,
-    pub options: CommandOptions,
-    pub rest: Literal<String>,
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct ExternalCommand {
-    cmd: String,
-    data: Vec<u8>,
 }
 
 impl Command {

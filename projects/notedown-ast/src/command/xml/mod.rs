@@ -24,12 +24,12 @@ pub enum XMLCommandKind {
 /// ```md
 /// <cmd[][] arg=1>body text</cmd>
 /// ```
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct XMLCommand {
     /// `cmd`
     pub cmd: String,
     pub kind: XMLCommandKind,
-    pub literal: Vec<Literal<String>>,
+    pub literal: CommandPattern,
     pub options: CommandOptions,
     pub body: ASTNodes,
 }
