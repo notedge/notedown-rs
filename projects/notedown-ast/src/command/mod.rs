@@ -5,38 +5,24 @@ mod options;
 mod traits;
 mod xml;
 
-use self::xml::{XMLCommand, XMLCommandKind};
+pub use self::xml::{XMLCommand, XMLCommandKind};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-    nodes::{Literal, OffsetRange},
+    nodes::{Array, Literal, Object, OffsetRange, Value},
     ASTKind, ASTNode,
 };
-pub use options::{CommandOptions, CommandPattern};
-use std::{
-    fmt,
-    fmt::{Display, Formatter},
-    hash::{Hash, Hasher},
-    ops::Range,
-};
+use num::BigUint;
+use std::ops::Range;
 
-#[derive(Copy, Clone, Debug, Eq, PartialEq)]
-pub enum CommandKind {
-    /// ```md
-    /// \cmd: args
-    /// ```
-    Inline,
-    /// ```md
-    /// \cmd(
-    ///     arg = 1
-    /// )
-    /// ```
-    Normal,
-    /// ````md
-    /// ```cmd(arg=1)
-    /// body text
-    /// ```
-    /// ````
-    CodeBlock,
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct CommandOptions {
+    args: Array,
+    kvs: Object,
+}
+
+#[derive(Clone, Default, Eq, PartialEq)]
+pub struct CommandPattern {
+    pts: Vec<Literal<String>>,
 }
 
 #[derive(Clone, Eq, PartialEq)]

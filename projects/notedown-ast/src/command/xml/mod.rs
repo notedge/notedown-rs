@@ -1,6 +1,7 @@
 use super::*;
 use crate::ASTNodes;
 
+#[derive(Clone, Eq, PartialEq)]
 pub enum XMLCommandKind {
     OpenClose {
         /// `|``<cmd`
@@ -54,12 +55,12 @@ impl XMLCommandKind {
 }
 
 impl XMLCommand {
-    pub fn open_close(body: ASTNodes, literal: Vec<Literal<String>>, options: CommandOptions) -> Self {
+    pub fn open_close(body: ASTNodes, literal: CommandPattern, options: CommandOptions) -> Self {
         let kind = XMLCommandKind::OpenClose { start: 0, middle: 0, end: 0 };
         Self { cmd: "".to_string(), kind, pattern: literal, options, body }
     }
 
-    pub fn self_close(literal: Vec<Literal<String>>, options: CommandOptions) -> Self {
+    pub fn self_close(literal: CommandPattern, options: CommandOptions) -> Self {
         let kind = XMLCommandKind::SelfClose { start: 0, end: 0 };
         Self { cmd: "".to_string(), kind, pattern: literal, options, body: vec![] }
     }

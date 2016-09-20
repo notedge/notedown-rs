@@ -1,8 +1,10 @@
 use super::*;
 
-/// ```md
-/// \cmd[][](): args
+/// ````md
+/// ```cmd(arg=1)
+/// body text
 /// ```
+/// ````
 #[derive(Clone, Eq, PartialEq)]
 pub struct EscapedCommand {
     pub cmd: String,

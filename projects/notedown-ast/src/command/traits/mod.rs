@@ -1,14 +1,22 @@
 mod show;
 use super::*;
-use std::fmt::{Debug, Write};
+use std::{
+    fmt,
+    fmt::{Debug, Display, Formatter},
+    hash::{Hash, Hasher},
+};
 
 impl Hash for Command {
+    /// command with the same name considered to be the same
     fn hash<H: Hasher>(&self, state: &mut H) {
-        match self {
-            Self::Normal(v) => v.hash(state),
-            Self::Escaped(v) => v.hash(state),
-            Self::XML(v) => v.hash(state),
-            Self::External(v) => v.hash(state),
+        self.command().hash(state)
+    }
+}
+
+impl Hash for CommandPattern {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        for i in &self.pts {
+            i.value.hash(state)
         }
     }
 }

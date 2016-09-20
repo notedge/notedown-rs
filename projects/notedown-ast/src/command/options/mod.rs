@@ -1,20 +1,4 @@
-use crate::nodes::{Array, Literal, Object, Value};
-use num::BigUint;
-use std::{
-    convert::TryFrom,
-    hash::{Hasher},
-};
-
-#[derive(Clone, Default, Eq, PartialEq)]
-pub struct CommandOptions {
-    args: Array,
-    kvs: Object,
-}
-
-#[derive(Clone, Default, Eq, PartialEq)]
-pub struct CommandPattern {
-    patterns: Vec<Literal<String>>,
-}
+use super::*;
 
 impl CommandOptions {
     #[inline]
@@ -63,14 +47,14 @@ impl CommandOptions {
 impl CommandPattern {
     #[inline]
     pub fn get_view(&self) -> Vec<String> {
-        self.patterns.iter().map(|s| s.value).collect()
+        self.pts.iter().cloned().map(|s| s.value).collect()
     }
     #[inline]
     pub fn get_length(&self) -> usize {
-        self.patterns.len()
+        self.pts.len()
     }
     #[inline]
     pub fn is_empty(&self) -> bool {
-        self.patterns.is_empty()
+        self.pts.is_empty()
     }
 }

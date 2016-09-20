@@ -12,6 +12,12 @@ impl Debug for Command {
     }
 }
 
+impl Debug for CommandPattern {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        f.debug_list().entries(self.pts.iter().cloned().map(|s| s.value)).finish()
+    }
+}
+
 impl Debug for NormalCommand {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let w = &mut f.debug_struct("Command");
@@ -42,7 +48,7 @@ impl Debug for XMLCommand {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &self.kind.to_string());
         if !self.pattern.is_empty() {
-            w.field("literal", &self.pattern.iter().map(|f| f.value));
+            w.field("pattern", &self.pattern);
         }
         w.finish()
     }
@@ -69,9 +75,34 @@ impl Display for Command {
     }
 }
 
+impl Display for CommandPattern {
+    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+        for i in &self.pts {
+            write!(f, "[{}]", i)?;
+        }
+        Ok(())
+    }
+}
+
+impl Display for CommandOptions {
+    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+        todo!()
+    }
+}
+
 impl Display for NormalCommand {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        match self.kind {
+            NormalCommandKind::OneLine => {
+                write!(f, "\\{}", self.cmd)?;
+                write!(f, "{}", self.pattern)?;
+                write!(f, "{}", self.options)?;
+                write!(f, ": {}", self.body.value)
+            }
+            NormalCommandKind::MultiLine => {
+                todo!()
+            }
+        }
     }
 }
 
@@ -85,13 +116,13 @@ impl Display for NormalCommandKind {
 }
 
 impl Display for EscapedCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }
 }
 
 impl Display for XMLCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }
 }
@@ -107,6 +138,6 @@ impl Display for XMLCommandKind {
 
 impl Display for ExternalCommand {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        write!(f, "\\external[{}][{}bytes]", self.cmd, self.data.len())
     }
 }

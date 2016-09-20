@@ -9,6 +9,11 @@ pub enum NormalCommandKind {
 /// ```md
 /// \cmd[][](): args
 /// ```
+/// ```md
+/// \cmd(
+///     arg = 1
+/// )
+/// ```
 #[derive(Clone, Eq, PartialEq)]
 pub struct NormalCommand {
     pub cmd: String,
