@@ -2,7 +2,7 @@ use crate::nodes::{Array, Literal, Object, Value};
 use num::BigUint;
 use std::{
     convert::TryFrom,
-    hash::{Hash, Hasher},
+    hash::{Hasher},
 };
 
 #[derive(Clone, Default, Eq, PartialEq)]
@@ -57,5 +57,20 @@ impl CommandOptions {
     #[inline]
     pub fn extract_string_key(&mut self, key: &str) -> Option<String> {
         self.extract_key(key).and_then(|f| String::try_from(f.value).ok())
+    }
+}
+
+impl CommandPattern {
+    #[inline]
+    pub fn get_view(&self) -> Vec<String> {
+        self.patterns.iter().map(|s| s.value).collect()
+    }
+    #[inline]
+    pub fn get_length(&self) -> usize {
+        self.patterns.len()
+    }
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.patterns.is_empty()
     }
 }

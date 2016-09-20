@@ -7,7 +7,8 @@ mod xml;
 
 use self::xml::{XMLCommand, XMLCommandKind};
 use crate::{
-    nodes::{Array, Literal, Object, OffsetRange},
+    command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
+    nodes::{Literal, OffsetRange},
     ASTKind, ASTNode,
 };
 pub use options::{CommandOptions, CommandPattern};
@@ -44,7 +45,7 @@ pub enum Command {
     /// \cmd: args
     /// ```
     Normal(NormalCommand),
-    Escaped(),
+    Escaped(EscapedCommand),
     XML(XMLCommand),
     External(ExternalCommand),
 }
@@ -52,24 +53,19 @@ pub enum Command {
 impl Command {
     #[inline]
     pub fn is(&self, rhs: impl AsRef<str>) -> bool {
-        self.cmd.as_str() == rhs.as_ref()
+        self.command().eq(rhs.as_ref())
+    }
+    #[inline]
+    pub fn command(&self) -> &str {
+        match self {
+            Self::Normal(v) => v.cmd.as_str(),
+            Self::Escaped(v) => v.cmd.as_str(),
+            Self::XML(v) => v.cmd.as_str(),
+            Self::External(v) => v.cmd.as_str(),
+        }
     }
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::Command(box self), range }
-    }
-}
-
-impl Command {
-    #[inline]
-    pub fn command_line(cmd: String, _: String) -> Command {
-        Self { cmd, kind: CommandKind::Inline, args: Default::default(), kvs: Default::default() }
-    }
-}
-
-impl ASTKind {
-    #[inline]
-    pub fn command_line(cmd: impl Into<String>, content: impl Into<String>, r: Option<OffsetRange>) -> ASTNode {
-        Command::command_line(cmd.into(), content.into()).into_node(r)
     }
 }

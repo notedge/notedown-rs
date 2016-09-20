@@ -1,6 +1,10 @@
 use super::*;
 
-pub struct NormalCommandKind {}
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum NormalCommandKind {
+    OneLine,
+    MultiLine,
+}
 
 /// ```md
 /// \cmd[][](): args
@@ -11,5 +15,5 @@ pub struct NormalCommand {
     pub kind: NormalCommandKind,
     pub options: CommandOptions,
     pub pattern: CommandPattern,
-    pub rest: Literal<String>,
+    pub body: Literal<String>,
 }

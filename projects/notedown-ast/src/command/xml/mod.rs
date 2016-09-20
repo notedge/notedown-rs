@@ -29,7 +29,7 @@ pub struct XMLCommand {
     /// `cmd`
     pub cmd: String,
     pub kind: XMLCommandKind,
-    pub literal: CommandPattern,
+    pub pattern: CommandPattern,
     pub options: CommandOptions,
     pub body: ASTNodes,
 }
@@ -56,12 +56,12 @@ impl XMLCommandKind {
 impl XMLCommand {
     pub fn open_close(body: ASTNodes, literal: Vec<Literal<String>>, options: CommandOptions) -> Self {
         let kind = XMLCommandKind::OpenClose { start: 0, middle: 0, end: 0 };
-        Self { cmd: "".to_string(), kind, literal, options, body }
+        Self { cmd: "".to_string(), kind, pattern: literal, options, body }
     }
 
     pub fn self_close(literal: Vec<Literal<String>>, options: CommandOptions) -> Self {
         let kind = XMLCommandKind::SelfClose { start: 0, end: 0 };
-        Self { cmd: "".to_string(), kind, literal, options, body: vec![] }
+        Self { cmd: "".to_string(), kind, pattern: literal, options, body: vec![] }
     }
 }
 
