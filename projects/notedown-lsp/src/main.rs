@@ -1,7 +1,16 @@
-use crate::completion::{complete_commands, list_completion_kinds, complete_components};
+use crate::{
+    completion::{complete_commands, complete_components, list_completion_kinds},
+    diagnostic::comma_problems,
+};
+use serde_json::Value;
+use std::collections::HashMap;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
 
 mod completion;
+mod diagnostic;
+mod io;
+
+struct AST {}
 
 #[derive(Debug)]
 struct Backend {
@@ -37,6 +46,9 @@ impl LanguageServer for Backend {
                     work_done_progress_options: Default::default(),
                 }),
                 document_highlight_provider: Some(false),
+                // semantic_highlighting: None,
+                document_symbol_provider: Some(true),
+                document_formatting_provider: Some(true),
                 workspace_symbol_provider: Some(true),
                 execute_command_provider: Some(ExecuteCommandOptions {
                     commands: vec!["dummy.do_something".to_string()],
@@ -48,15 +60,37 @@ impl LanguageServer for Backend {
         };
         return Ok(init);
     }
-
     async fn initialized(&self, _: InitializedParams) {
         self.client.log_message(MessageType::Info, "Notedown server initialized!").await;
     }
-
     async fn shutdown(&self) -> Result<()> {
         Ok(())
     }
-
+    async fn did_change_configuration(&self, params: DidChangeConfigurationParams) {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+    }
+    async fn symbol(&self, params: WorkspaceSymbolParams) -> Result<Option<Vec<SymbolInformation>>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+    async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+    async fn did_open(&self, p: DidOpenTextDocumentParams) {
+        self.check_the_file(p.text_document.uri).await
+    }
+    // 不要把东西都做这里面, 太卡了
+    async fn did_change(&self, p: DidChangeTextDocumentParams) {
+        self.client.log_message(MessageType::Info, format!("{:#?}", p)).await;
+    }
+    // 所有的检查在保存之后做
+    async fn did_save(&self, p: DidSaveTextDocumentParams) {
+        self.check_the_file(p.text_document.uri).await
+    }
+    async fn did_close(&self, p: DidCloseTextDocumentParams) {
+        self.check_the_file(p.text_document.uri).await
+    }
     async fn completion(&self, cp: CompletionParams) -> Result<Option<CompletionResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", cp)).await;
         let mut items = vec![];
@@ -66,7 +100,7 @@ impl LanguageServer for Backend {
                 CompletionTriggerKind::TriggerCharacter => match s.trigger_character.unwrap().as_str() {
                     "\\" => items = complete_commands(),
                     "<" => items = complete_components(),
-                    "." => items = list_completion_kinds(),
+                    "[" => items = list_completion_kinds(),
                     _ => (),
                 },
                 CompletionTriggerKind::TriggerForIncompleteCompletions => (),
@@ -74,13 +108,94 @@ impl LanguageServer for Backend {
         };
         Ok(Some(CompletionResponse::Array(items)))
     }
-
-    // async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
-    //    Ok(params)
-    //}
-
-    async fn hover(&self, _: HoverParams) -> Result<Option<Hover>> {
+    async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
+        Ok(params)
+    }
+    async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(Some(Hover { contents: HoverContents::Scalar(MarkedString::String("You're hovering!".to_string())), range: None }))
+    }
+    async fn signature_help(&self, params: SignatureHelpParams) -> Result<Option<SignatureHelp>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    /// 当光标在位置 x 时, 哪些内容要被选中
+    async fn document_highlight(&self, _: DocumentHighlightParams) -> Result<Option<Vec<DocumentHighlight>>> {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", hp)).await;
+        Ok(None)
+    }
+
+    async fn document_symbol(&self, _: DocumentSymbolParams) -> Result<Option<DocumentSymbolResponse>> {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", sp)).await;
+        let tree: Vec<DocumentSymbol> = vec![DocumentSymbol {
+            name: "unimplemented!".to_string(),
+            detail: None,
+            kind: SymbolKind::File,
+            deprecated: None,
+            range: Default::default(),
+            selection_range: Default::default(),
+            children: Some(vec![
+                DocumentSymbol {
+                    name: "Package".to_string(),
+                    detail: Some("text text text".to_string()),
+                    kind: SymbolKind::Package,
+                    deprecated: None,
+                    range: Default::default(),
+                    selection_range: Default::default(),
+                    children: None,
+                },
+                DocumentSymbol {
+                    name: "Module".to_string(),
+                    detail: None,
+                    kind: SymbolKind::Module,
+                    deprecated: None,
+                    range: Default::default(),
+                    selection_range: Default::default(),
+                    children: None,
+                },
+                DocumentSymbol {
+                    name: "Namespace".to_string(),
+                    detail: None,
+                    kind: SymbolKind::Namespace,
+                    deprecated: None,
+                    range: Default::default(),
+                    selection_range: Default::default(),
+                    children: None,
+                },
+            ]),
+        }];
+        Ok(Some(DocumentSymbolResponse::Nested(tree)))
+    }
+
+    async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    async fn code_lens(&self, params: CodeLensParams) -> Result<Option<Vec<CodeLens>>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    async fn document_link(&self, params: DocumentLinkParams) -> Result<Option<Vec<DocumentLink>>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    async fn document_color(&self, params: DocumentColorParams) -> Result<Vec<ColorInformation>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(vec![])
+    }
+
+    async fn formatting(&self, params: DocumentFormattingParams) -> Result<Option<Vec<TextEdit>>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    async fn rename(&self, params: RenameParams) -> Result<Option<WorkspaceEdit>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
     }
 }
 

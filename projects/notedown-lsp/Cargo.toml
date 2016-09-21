@@ -10,6 +10,7 @@ license = "MPL-2.0"
 edition = "2018"
 
 [dependencies]
+notedown_parser = "0.7.3"
 async-trait = "0.1"
 futures = { version = "0.3", features = ["compat"] }
 jsonrpc-core = "14.0"
@@ -23,4 +24,3 @@ tokio-util = { version = "0.3", features = ["codec"] }
 tower-lsp = "0.13"
 tower-service = "0.3"
 tower-test = "0.3"
-
