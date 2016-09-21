@@ -2,6 +2,7 @@ mod elements;
 mod link;
 mod list;
 mod literal;
+mod quote;
 mod table;
 mod value;
 
