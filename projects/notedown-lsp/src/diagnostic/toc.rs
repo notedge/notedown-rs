@@ -1,5 +1,6 @@
-use notedown_parser::{notedown_ast::utils::TOC, AST};
+use notedown_parser::{AST};
 use tower_lsp::lsp_types::{DocumentSymbol, Position, Range, SymbolKind};
+use notedown_parser::utils::TOC;
 
 pub trait ToToc {
     fn to_toc(&self) -> DocumentSymbol;
@@ -11,6 +12,7 @@ impl ToToc for AST {
     }
 }
 
+
 impl ToToc for TOC {
     fn to_toc(&self) -> DocumentSymbol {
         let (a, b, x, y) = self.range.as_tuple();
@@ -20,8 +22,9 @@ impl ToToc for TOC {
             0 => None,
             _ => Some(self.children.iter().map(ToToc::to_toc).collect()),
         };
+        #[allow(deprecated)]
         DocumentSymbol {
-            name: String::from("TOC"),
+            name: self.detail.to_owned(),
             detail: Some(self.detail.to_owned()),
             kind: SymbolKind::Namespace,
             deprecated: None,

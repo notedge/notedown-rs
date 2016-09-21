@@ -1,16 +1,13 @@
 use crate::{
-    completion::{complete_commands, complete_components, list_completion_kinds},
-    diagnostic::comma_problems,
+    completion::{complete_commands, complete_components, list_completion_kinds}
 };
 use serde_json::Value;
-use std::collections::HashMap;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
+use crate::diagnostic::document_symbol_provider;
 
 mod completion;
 mod diagnostic;
 mod io;
-
-struct AST {}
 
 #[derive(Debug)]
 struct Backend {
@@ -20,7 +17,7 @@ struct Backend {
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
     async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
-        let server_info = ServerInfo { name: "Notedown LSP".to_string(), version: Some("V1".to_string()) };
+        let server_info = ServerInfo { name: String::from("Notedown LSP"), version: Some("V1".to_string()) };
         let completion_trigger = vec![".", "\\", "[", "<"];
         let completion = CompletionOptions {
             resolve_provider: Some(false),
@@ -126,46 +123,9 @@ impl LanguageServer for Backend {
         Ok(None)
     }
 
-    async fn document_symbol(&self, _: DocumentSymbolParams) -> Result<Option<DocumentSymbolResponse>> {
+    async fn document_symbol(&self, params: DocumentSymbolParams) -> Result<Option<DocumentSymbolResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", sp)).await;
-        let tree: Vec<DocumentSymbol> = vec![DocumentSymbol {
-            name: "unimplemented!".to_string(),
-            detail: None,
-            kind: SymbolKind::File,
-            deprecated: None,
-            range: Default::default(),
-            selection_range: Default::default(),
-            children: Some(vec![
-                DocumentSymbol {
-                    name: "Package".to_string(),
-                    detail: Some("text text text".to_string()),
-                    kind: SymbolKind::Package,
-                    deprecated: None,
-                    range: Default::default(),
-                    selection_range: Default::default(),
-                    children: None,
-                },
-                DocumentSymbol {
-                    name: "Module".to_string(),
-                    detail: None,
-                    kind: SymbolKind::Module,
-                    deprecated: None,
-                    range: Default::default(),
-                    selection_range: Default::default(),
-                    children: None,
-                },
-                DocumentSymbol {
-                    name: "Namespace".to_string(),
-                    detail: None,
-                    kind: SymbolKind::Namespace,
-                    deprecated: None,
-                    range: Default::default(),
-                    selection_range: Default::default(),
-                    children: None,
-                },
-            ]),
-        }];
-        Ok(Some(DocumentSymbolResponse::Nested(tree)))
+        Ok(document_symbol_provider(params))
     }
 
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
