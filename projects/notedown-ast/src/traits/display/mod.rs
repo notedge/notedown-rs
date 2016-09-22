@@ -1,8 +1,9 @@
 mod link;
 mod list;
+mod quote;
 mod value;
 
-use crate::nodes::{ASTKind, Delimiter, Literal, SmartLink, StyleNode, TextNode, Value, ValueType};
+use crate::nodes::{ASTKind, Delimiter, Literal, SmartLink, StyleNode, TextKind, Value, ValueType};
 use itertools::Itertools;
 use std::fmt::{self, Debug, Display, Formatter, Write};
 
@@ -29,6 +30,7 @@ impl Display for ASTKind {
             ASTKind::MathNode(inner) => Display::fmt(inner, f),
             ASTKind::CodeNode(inner) => Display::fmt(inner, f),
             ASTKind::LinkNode(inner) => Display::fmt(inner, f),
+            ASTKind::QuoteNode(inner) => Display::fmt(inner, f),
             ASTKind::Command(inner) => Display::fmt(inner, f),
             ASTKind::Value(inner) => Display::fmt(inner, f),
         }
@@ -44,7 +46,7 @@ impl Display for Delimiter {
     }
 }
 
-impl Debug for TextNode {
+impl Debug for TextKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(s) => Debug::fmt(s, f),
@@ -65,7 +67,7 @@ impl Debug for TextNode {
     }
 }
 
-impl Display for TextNode {
+impl Display for TextKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(_) => {

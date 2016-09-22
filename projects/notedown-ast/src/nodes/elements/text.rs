@@ -2,7 +2,7 @@ use super::*;
 
 #[repr(u8)]
 #[derive(Clone, Eq, PartialEq, Hash)]
-pub enum TextNode {
+pub enum TextKind {
     Empty,
 
     Normal(String),
@@ -17,7 +17,7 @@ pub enum TextNode {
     CheckBox(bool),
 }
 
-impl TextNode {
+impl TextKind {
     #[inline]
     pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
         ASTNode { value: ASTKind::TextSpan(box self), range }
@@ -48,23 +48,23 @@ impl ASTKind {
     /// aka `<br>`
     #[inline]
     pub fn hard_break(range: Option<OffsetRange>) -> ASTNode {
-        TextNode::HardNewline.into_node(range)
+        TextKind::HardNewline.into_node(range)
     }
     #[inline]
     pub fn soft_break(range: Option<OffsetRange>) -> ASTNode {
-        TextNode::SoftNewline.into_node(range)
+        TextKind::SoftNewline.into_node(range)
     }
     #[inline]
     pub fn text(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        TextNode::Normal(s.into()).into_node(range)
+        TextKind::Normal(s.into()).into_node(range)
     }
     #[inline]
     pub fn emoji(text: &str, range: Option<OffsetRange>) -> ASTNode {
         let c = match text.chars().next() {
-            None => return TextNode::Empty.into_node(range),
+            None => return TextKind::Empty.into_node(range),
             Some(s) => s,
         };
-        TextNode::Escaped(c).into_node(range)
+        TextKind::Escaped(c).into_node(range)
     }
     #[inline]
     pub fn escaped(text: &str, range: Option<OffsetRange>) -> ASTNode {
@@ -72,6 +72,6 @@ impl ASTKind {
             None => '\\',
             Some(s) => s,
         };
-        TextNode::Escaped(c).into_node(range)
+        TextKind::Escaped(c).into_node(range)
     }
 }

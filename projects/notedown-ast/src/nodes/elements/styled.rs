@@ -3,6 +3,7 @@ use super::*;
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum StyleKind {
+    /// Transparent type, do nothing
     Plain = 0,
 
     Emphasis = 11,

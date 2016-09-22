@@ -47,6 +47,7 @@ impl ContextAware for ASTKind {
             Self::CodeNode(_) => unimplemented!(),
             Self::LinkNode(_) => unimplemented!(),
             Self::StyledSpan(_) => unimplemented!(),
+            Self::QuoteNode(_) => unimplemented!(),
         }
     }
 }

@@ -18,6 +18,6 @@ impl ASTKind {
         Delimiter::HTMLRawBlock(msg.into()).into_node(range)
     }
     pub fn raw_html_block(msg: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
-        TextNode::HTMLRawInline(msg.into()).into_node(range)
+        TextKind::HTMLRawInline(msg.into()).into_node(range)
     }
 }

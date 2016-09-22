@@ -11,6 +11,6 @@ pub use self::{
     header::Header,
     math::{MathKind, MathNode},
     styled::{StyleKind, StyleNode},
-    text::TextNode,
+    text::TextKind,
 };
 use super::*;
