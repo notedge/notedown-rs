@@ -1,5 +1,0 @@
-- cmd: comment
-  short: Some comment text will not appear in the rendering result
-  long: |
-    `\comment: something will not shown`
-    `\comment[some tips not shown]`
