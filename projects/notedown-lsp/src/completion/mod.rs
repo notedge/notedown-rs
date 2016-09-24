@@ -6,11 +6,11 @@ use command::build_command;
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
+use std::collections::VecDeque;
 use tower_lsp::lsp_types::{
     CompletionItem,
     CompletionItemKind::{self, *},
 };
-use std::collections::VecDeque;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {
@@ -20,12 +20,8 @@ pub struct DocumentString {
 }
 
 impl DocumentString {
-    pub fn new(cmd:&str, short:&str, long:&str) -> DocumentString {
-        Self {
-            cmd: String::from(cmd.trim()),
-            short: String::from(short.trim()),
-            long: String::from(long.trim()),
-        }
+    pub fn new(cmd: &str, short: &str, long: &str) -> DocumentString {
+        Self { cmd: String::from(cmd.trim()), short: String::from(short.trim()), long: String::from(long.trim()) }
     }
 
     pub fn command(&self) -> CompletionItem {
@@ -62,15 +58,14 @@ fn load_md_doc(input: &str) -> Vec<DocumentString> {
     return Vec::from(out);
 }
 
-
 pub fn complete_commands() -> Vec<CompletionItem> {
     let parsed = load_md_doc(include_str!("command.md"));
     parsed.iter().map(|doc| doc.command()).collect()
 }
 
 pub fn complete_components() -> Vec<CompletionItem> {
-    let open_close= load_md_doc(include_str!("open_close.md"));
-    let self_close= load_md_doc(include_str!("self_close.md"));
+    let open_close = load_md_doc(include_str!("open_close.md"));
+    let self_close = load_md_doc(include_str!("self_close.md"));
     open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
 }
 
