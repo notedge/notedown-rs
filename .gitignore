@@ -8,6 +8,4 @@ target/
 Cargo.lock
 
 # Special
-projects/notedown-yew-preview
-time-travel.sh
-*.nb
+time-travel.*

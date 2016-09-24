@@ -1,7 +1,8 @@
 use super::*;
 
-impl Display for QuoteNode {
+impl Display for QuoteBlock {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        todo!()
+        writeln!(f, "< quote>")?;
+        writeln!(f, "</quote>")
     }
 }
