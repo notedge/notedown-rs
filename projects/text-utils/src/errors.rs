@@ -1,10 +1,4 @@
-extern crate percent_encoding;
-extern crate textwrap;
-
-mod utils;
-
 use std::fmt::{self, Debug, Formatter};
-pub use utils::*;
 
 pub enum TextError {
     UnescapeError(usize, Box<str>),

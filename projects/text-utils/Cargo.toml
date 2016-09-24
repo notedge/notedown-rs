@@ -1,6 +1,6 @@
 [package]
 name = "text-utils"
-version = "0.2.5"
+version = "0.3.0"
 authors = ["Aster <192607617@qq.com>"]
 repository = "https://github.com/GalAster/text-utils-rs"
 documentation = "https://docs.rs/text-utils/0.2.4/tokio/"
@@ -18,3 +18,4 @@ exclude = ["/tests/*"]
 [dependencies]
 textwrap = "0.11"
 percent-encoding = "2.1.0"
+slugify = "0.1.0"
