@@ -68,7 +68,7 @@ impl Display for CodeNode {
 
 impl CodeNode {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::CodeNode(box self), range }
     }
     #[inline]
@@ -124,11 +124,11 @@ impl CodeNode {
 
 impl ASTKind {
     #[inline]
-    pub fn code_inline(code: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+    pub fn code_inline(code: impl Into<String>, range: MaybeRanged) -> ASTNode {
         CodeNode::code_inline(code.into()).into_node(range)
     }
     #[inline]
-    pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+    pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: MaybeRanged) -> ASTNode {
         CodeNode::code_block(language.into(), code.into()).into_node(range)
     }
 }

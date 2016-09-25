@@ -8,7 +8,7 @@ mod xml;
 pub use self::xml::{XMLCommand, XMLCommandKind};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-    nodes::{Array, Literal, Object, OffsetRange, Value},
+    nodes::{Array, Literal, MaybeRanged, Object, Value},
     ASTKind, ASTNode,
 };
 use num::BigUint;
@@ -51,7 +51,7 @@ impl Command {
         }
     }
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::Command(box self), range }
     }
 }

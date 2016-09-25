@@ -26,9 +26,11 @@ use std::{
     ops::Range,
 };
 
-pub type OffsetRange = Range<usize>;
+/// Maybe have ast position
+pub type MaybeRanged = Option<Range<usize>>;
 /// Represents an AST object with position
 pub type ASTNode = Literal<ASTKind>;
+/// Represents a list of AST objects with position
 pub type ASTNodes = Vec<Literal<ASTKind>>;
 pub type Set = IndexSet<Literal<Value>>;
 pub type Array = BTreeMap<BigUint, Literal<Value>>;
@@ -82,23 +84,23 @@ impl Default for ASTKind {
 
 impl ASTKind {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: self, range }
     }
     #[inline]
-    pub fn statements(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+    pub fn statements(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Statements(children), range }
     }
     #[inline]
-    pub fn paragraph(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+    pub fn paragraph(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Paragraph(children), range }
     }
     #[inline]
-    pub fn header(children: ASTNodes, level: u8, range: Option<OffsetRange>) -> ASTNode {
+    pub fn header(children: ASTNodes, level: u8, range: MaybeRanged) -> ASTNode {
         Header { level, children }.into_node(range)
     }
     #[inline]
-    pub fn hr(range: Option<OffsetRange>) -> ASTNode {
+    pub fn hr(range: MaybeRanged) -> ASTNode {
         Delimiter::HorizontalRule.into_node(range)
     }
 }

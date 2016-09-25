@@ -1,8 +1,8 @@
-Notedown Render with Rust
+Notedown Core with Rust
 =========================
 
+### Related Projects
 
-
-### Sub projects
-
-- notedown-ast
+- [notedown-ast](): Notedown AST
+- [notedown-rt](): Notedown Runtime & Plugin Manager
+- [notedown-pm](): Notedown Package Manager

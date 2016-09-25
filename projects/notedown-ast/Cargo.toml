@@ -1,9 +1,10 @@
 [package]
 name = "notedown_ast"
-version = "0.14.3"
+version = "0.14.4"
 authors = ["Aster <192607617@qq.com>"]
 description = "notedown ast and converter"
 repository = "https://github.com/notedge/notedown-rs"
+documentation = "https://docs.rs/notedown_ast"
 readme = "../../readme.md"
 license = "MPL-2.0"
 edition = "2021"
