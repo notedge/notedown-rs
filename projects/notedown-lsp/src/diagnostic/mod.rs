@@ -1,12 +1,14 @@
 mod toc;
+mod document_symbol;
 pub use toc::ToToc;
 
+pub use document_symbol::document_symbol_provider;
 use crate::{io::read_url, Backend};
 use tower_lsp::lsp_types::*;
 
 impl Backend {
     pub async fn check_the_file(&self, url: Url) {
-        self.client.publish_diagnostics(url, comma_problems(&url), None).await
+        self.client.publish_diagnostics(url.clone(), comma_problems(&url), None).await
     }
 }
 
