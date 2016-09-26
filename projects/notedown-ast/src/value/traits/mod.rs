@@ -1,21 +1,5 @@
-mod methods;
-mod typing;
-
-pub use self::typing::ValueType;
 use super::*;
-
-#[derive(Clone, Debug)]
-pub enum Value {
-    /// - `None`: It doesn't look like anything to me
-    Null,
-    Boolean(bool),
-    Integer(BigInt),
-    Decimal(f64),
-    String(String),
-    Set(Set),
-    Array(Array),
-    Object(Object),
-}
+use std::hash::{Hash, Hasher};
 
 impl Hash for Value {
     fn hash<H: Hasher>(&self, state: &mut H) {
@@ -57,17 +41,5 @@ impl PartialEq for Value {
             (Self::Object(l), Self::Object(r)) => l == r,
             _ => false,
         }
-    }
-}
-
-impl Value {
-    pub fn integer(value: impl Into<BigInt>) -> Self {
-        Self::Integer(value.into())
-    }
-    pub fn decimal(value: impl Into<f64>) -> Self {
-        Self::Decimal(value.into())
-    }
-    pub fn string(value: impl Into<String>) -> Self {
-        Self::String(value.into())
     }
 }

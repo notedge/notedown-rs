@@ -2,7 +2,7 @@ mod add;
 mod index;
 mod mul;
 
-use crate::{nodes::Value, NoteError, Result};
+use crate::{NoteError, Result, Value};
 use num::{BigInt, Signed, ToPrimitive};
 use std::ops::{Add, Div, Mul, Neg, Shr, Sub};
 

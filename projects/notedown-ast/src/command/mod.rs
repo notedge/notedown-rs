@@ -8,8 +8,9 @@ mod xml;
 pub use self::xml::{XMLCommand, XMLCommandKind};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-    nodes::{Array, Literal, MaybeRanged, Object, Value},
-    ASTKind, ASTNode,
+    nodes::{Literal, MaybeRanged},
+    value::*,
+    ASTKind, ASTNode, Value,
 };
 use num::BigUint;
 use std::ops::Range;

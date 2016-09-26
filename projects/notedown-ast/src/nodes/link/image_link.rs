@@ -1,6 +1,4 @@
 use super::*;
-use crate::NoteError;
-use num::{Signed, Zero};
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ImageLayout {

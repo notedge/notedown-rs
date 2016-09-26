@@ -1,4 +1,4 @@
-use super::*;
+use crate::NoteError;
 use num::{bigint::TryFromBigIntError, BigInt};
 
 impl From<TryFromBigIntError<BigInt>> for NoteError {

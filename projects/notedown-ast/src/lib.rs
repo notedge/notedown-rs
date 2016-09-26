@@ -9,10 +9,13 @@ pub mod nodes;
 #[cfg(feature = "storage")]
 mod store;
 pub mod traits;
+pub mod value;
 
 pub use self::{
+    command::Command,
     errors::{NoteError, NoteErrorKind, Result},
     nodes::{ASTKind, ASTNode, ASTNodes},
+    value::Value,
 };
 
 #[cfg(feature = "storage")]
