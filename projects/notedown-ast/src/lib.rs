@@ -9,6 +9,8 @@ pub mod nodes;
 #[cfg(feature = "storage")]
 mod store;
 pub mod traits;
+#[deny(missing_docs)]
+/// Value and value types of notedown
 pub mod value;
 
 pub use self::{
@@ -22,6 +24,7 @@ pub use self::{
 pub use self::store::*;
 
 pub mod utils {
-    pub use text_utils::*;
+    pub use itertools;
+    pub use text_utils;
     pub use yggdrasil_shared::records::*;
 }

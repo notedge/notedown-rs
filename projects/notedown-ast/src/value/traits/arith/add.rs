@@ -1,4 +1,6 @@
 use super::*;
+use num::FromPrimitive;
+use rust_decimal::Decimal;
 
 impl Add for Value {
     type Output = Result<Self>;
@@ -11,10 +13,12 @@ impl Add for Value {
         let out = match (self, other) {
             (Self::String(lhs), Self::String(rhs)) => Self::String(lhs + &rhs),
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs + &rhs),
-            (Self::Integer(lhs), Self::Decimal(rhs)) | (Self::Decimal(rhs), Self::Integer(lhs)) => match lhs.to_f64() {
-                Some(s) => Self::Decimal(s + rhs),
-                None => return fail_int2dec(lhs),
-            },
+            (Self::Integer(int), Self::Decimal(dec)) | (Self::Decimal(dec), Self::Integer(int)) => {
+                match int.to_i128().and_then(|s| Decimal::from_i128(s)) {
+                    Some(s) => Self::Decimal(s + dec),
+                    None => return fail_int2dec(int),
+                }
+            }
             (Self::Decimal(lhs), Self::Decimal(rhs)) => Self::Decimal(lhs + rhs),
             _ => return type_mismatch,
         };
@@ -38,6 +42,7 @@ impl Shr for Value {
 }
 
 impl Value {
+    /// join a value to the string
     pub fn string_join(lhs: String, other: Value) -> Result<Self> {
         let msg = format!("Can not apply `++` on lhs: `String`, rhs: {}", other.get_type_name());
         let type_mismatch = Err(NoteError::type_mismatch(msg));
@@ -78,10 +83,12 @@ impl Sub for Value {
 
         let out = match (self, other) {
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs - rhs),
-            (Self::Integer(lhs), Self::Decimal(rhs)) | (Self::Decimal(rhs), Self::Integer(lhs)) => match lhs.to_f64() {
-                Some(s) => Self::Decimal(s - rhs),
-                None => return fail_int2dec(lhs),
-            },
+            (Self::Integer(int), Self::Decimal(dec)) | (Self::Decimal(dec), Self::Integer(int)) => {
+                match int.to_i128().and_then(|s| Decimal::from_i128(s)) {
+                    Some(s) => Self::Decimal(s - dec),
+                    None => return fail_int2dec(int),
+                }
+            }
             (Self::Decimal(lhs), Self::Decimal(rhs)) => Self::Decimal(lhs - rhs),
             _ => return type_mismatch,
         };

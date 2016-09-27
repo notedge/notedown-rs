@@ -82,23 +82,21 @@ impl MathNode {
 }
 
 macro_rules! math_node {
-    ($name:tt => $t:tt) => {
-        impl MathNode {
-            #[inline]
-            pub fn $name(math: String) -> Self {
-                Self { kind: MathKind::$t, raw: math, ..Default::default() }
-            }
+    (@MathNode => $name:tt => $t:tt) => {
+        #[inline]
+        pub fn $name(math: String) -> Self {
+            Self { kind: MathKind::$t, raw: math, ..Default::default() }
         }
-
-        impl ASTKind {
-            #[inline]
-            pub fn $name(math: impl Into<String>, range: MaybeRanged) -> ASTNode {
-                MathNode::$name(math.into()).into_node(range)
-            }
+    };
+    (@ASTKind => $name:tt => $t:tt) => {
+        #[inline]
+        pub fn $name(math: impl Into<String>, range: MaybeRanged) -> ASTNode {
+            MathNode::$name(math.into()).into_node(range)
         }
     };
     ($($name:tt => $t:tt),+ $(,)?) => (
-        $(math_node!($name=>$t);)+
+        impl MathNode {$(math_node!(@MathNode => $name=>$t);)+}
+        impl ASTKind {$(math_node!(@ASTKind => $name=>$t);)+}
     );
 }
 

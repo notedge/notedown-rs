@@ -13,6 +13,7 @@ edition = "2021"
 text-utils = "0.3.0"
 yggdrasil-shared = "0.1.5"
 num = "0.4.0"
+rust_decimal  = "1.19.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
 #notedown-image = { version = "0.1", path = "../notedown-image", optional = true }

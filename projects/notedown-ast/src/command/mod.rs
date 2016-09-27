@@ -17,8 +17,8 @@ use std::ops::Range;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct CommandOptions {
-    args: Array,
-    kvs: Object,
+    args: SparseArray,
+    kvs: OrderedMap,
 }
 
 #[derive(Clone, Default, Eq, PartialEq)]
