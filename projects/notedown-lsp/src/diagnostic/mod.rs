@@ -1,9 +1,8 @@
 mod toc;
-mod document_symbol;
+
 pub use toc::ToToc;
 
-pub use document_symbol::document_symbol_provider;
-use crate::{io::read_url, Backend};
+use crate::{io::read_url};
 use tower_lsp::lsp_types::*;
 
 
@@ -13,6 +12,7 @@ pub fn diagnostics_provider(url: &Url)-> Vec<Diagnostic> {
     return vec![]
 }
 
+#[allow(dead_code)]
 pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
     let mut out = vec![];
     for (line, s) in read_url(&url).lines().enumerate() {

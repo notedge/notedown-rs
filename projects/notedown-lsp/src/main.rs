@@ -3,12 +3,13 @@ use crate::{
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
-use crate::diagnostic::{document_symbol_provider, diagnostics_provider};
+use crate::diagnostic::{diagnostics_provider};
+use crate::hint::{document_symbol_provider, code_action_provider, hover_provider, code_lens_provider};
 
 mod completion;
 mod diagnostic;
 mod io;
-mod code_action;
+mod hint;
 
 #[derive(Debug)]
 struct Backend {
@@ -88,8 +89,8 @@ impl LanguageServer for Backend {
     }
 
     // 不要把东西都做这里面, 太卡了
-    async fn did_change(&self, p: DidChangeTextDocumentParams) {
-        self.client.log_message(MessageType::Info, format!("{:#?}", p)).await;
+    async fn did_change(&self, _: DidChangeTextDocumentParams) {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", p)).await;
     }
     // 所有的检查在保存之后做
     async fn did_save(&self, p: DidSaveTextDocumentParams) {
@@ -120,12 +121,7 @@ impl LanguageServer for Backend {
     }
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
         //self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(Some(Hover { contents: HoverContents::Scalar(MarkedString::LanguageString(
-            LanguageString {
-                language: "yaml".to_string(),
-                value: format!("{:#?}", params)
-            }
-        )), range: None }))
+        Ok(hover_provider(params))
     }
     async fn signature_help(&self, params: SignatureHelpParams) -> Result<Option<SignatureHelp>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
@@ -142,53 +138,15 @@ impl LanguageServer for Backend {
         // self.client.log_message(MessageType::Info, format!("{:#?}", sp)).await;
         Ok(document_symbol_provider(params))
     }
-
+    /// Alt 键列出可执行的命令
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        let act = CodeActionOrCommand::CodeAction(
-            CodeAction {
-                title: "GG1".to_string(),
-                kind: Some(CodeActionKind::SOURCE_ORGANIZE_IMPORTS),
-                diagnostics: None,
-                edit: None,
-                command: None,
-                is_preferred: Some(true)
-            }
-        );
-        let cmd = CodeActionOrCommand::Command(
-            Command {
-                title: format!("{:#?}", params),
-                command: "fffff".to_string(),
-                arguments: None
-            }
-        );
-        Ok(Some(vec![
-            act,cmd
-        ]))
+        Ok(code_action_provider(params))
     }
-
+    /// 单独一行的特殊注释
     async fn code_lens(&self, params: CodeLensParams) -> Result<Option<Vec<CodeLens>>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        let len = CodeLens{
-            range: Range{
-                start: Position {
-                    line: 0,
-                    character: 0
-                },
-                end: Position {
-                    line: 1,
-                    character: 1
-                }
-            },
-            command: Some( Command {
-                title: format!("{:#?}", params),
-                command: "GGGGGGGGGGGGg".to_string(),
-                arguments: None
-            }),
-            data: Some(Value::String("lens".to_string()))
-        };
-
-        Ok(Some(vec![len]))
+        Ok(code_lens_provider(params))
     }
 
     async fn document_link(&self, params: DocumentLinkParams) -> Result<Option<Vec<DocumentLink>>> {
