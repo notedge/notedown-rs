@@ -8,6 +8,7 @@ use crate::diagnostic::{document_symbol_provider, diagnostics_provider};
 mod completion;
 mod diagnostic;
 mod io;
+mod code_action;
 
 #[derive(Debug)]
 struct Backend {
@@ -42,6 +43,14 @@ impl LanguageServer for Backend {
                     retrigger_characters: None,
                     work_done_progress_options: Default::default(),
                 }),
+                code_action_provider: Some(
+                    CodeActionProviderCapability::Simple(true)
+                ),
+                code_lens_provider:Some(
+                    CodeLensOptions {
+                        resolve_provider: None
+                    }
+                ),
                 document_highlight_provider: Some(false),
                 // semantic_highlighting: None,
                 document_symbol_provider: Some(true),
@@ -77,6 +86,7 @@ impl LanguageServer for Backend {
     async fn did_open(&self, p: DidOpenTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
     }
+
     // 不要把东西都做这里面, 太卡了
     async fn did_change(&self, p: DidChangeTextDocumentParams) {
         self.client.log_message(MessageType::Info, format!("{:#?}", p)).await;
@@ -109,8 +119,13 @@ impl LanguageServer for Backend {
         Ok(params)
     }
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(Some(Hover { contents: HoverContents::Scalar(MarkedString::String("You're hovering!".to_string())), range: None }))
+        //self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(Some(Hover { contents: HoverContents::Scalar(MarkedString::LanguageString(
+            LanguageString {
+                language: "yaml".to_string(),
+                value: format!("{:#?}", params)
+            }
+        )), range: None }))
     }
     async fn signature_help(&self, params: SignatureHelpParams) -> Result<Option<SignatureHelp>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
@@ -129,13 +144,51 @@ impl LanguageServer for Backend {
     }
 
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(None)
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        let act = CodeActionOrCommand::CodeAction(
+            CodeAction {
+                title: "GG1".to_string(),
+                kind: Some(CodeActionKind::SOURCE_ORGANIZE_IMPORTS),
+                diagnostics: None,
+                edit: None,
+                command: None,
+                is_preferred: Some(true)
+            }
+        );
+        let cmd = CodeActionOrCommand::Command(
+            Command {
+                title: format!("{:#?}", params),
+                command: "fffff".to_string(),
+                arguments: None
+            }
+        );
+        Ok(Some(vec![
+            act,cmd
+        ]))
     }
 
     async fn code_lens(&self, params: CodeLensParams) -> Result<Option<Vec<CodeLens>>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(None)
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        let len = CodeLens{
+            range: Range{
+                start: Position {
+                    line: 0,
+                    character: 0
+                },
+                end: Position {
+                    line: 1,
+                    character: 1
+                }
+            },
+            command: Some( Command {
+                title: format!("{:#?}", params),
+                command: "GGGGGGGGGGGGg".to_string(),
+                arguments: None
+            }),
+            data: Some(Value::String("lens".to_string()))
+        };
+
+        Ok(Some(vec![len]))
     }
 
     async fn document_link(&self, params: DocumentLinkParams) -> Result<Option<Vec<DocumentLink>>> {
