@@ -6,10 +6,11 @@ pub use document_symbol::document_symbol_provider;
 use crate::{io::read_url, Backend};
 use tower_lsp::lsp_types::*;
 
-impl Backend {
-    pub async fn check_the_file(&self, url: Url) {
-        self.client.publish_diagnostics(url.clone(), comma_problems(&url), None).await
-    }
+
+
+pub fn diagnostics_provider(url: &Url)-> Vec<Diagnostic> {
+    let _ = url;
+    return vec![]
 }
 
 pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {

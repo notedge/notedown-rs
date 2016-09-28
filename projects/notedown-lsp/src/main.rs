@@ -3,7 +3,7 @@ use crate::{
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
-use crate::diagnostic::document_symbol_provider;
+use crate::diagnostic::{document_symbol_provider, diagnostics_provider};
 
 mod completion;
 mod diagnostic;
@@ -156,6 +156,12 @@ impl LanguageServer for Backend {
     async fn rename(&self, params: RenameParams) -> Result<Option<WorkspaceEdit>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(None)
+    }
+}
+
+impl Backend {
+    pub async fn check_the_file(&self, url: Url) {
+        self.client.publish_diagnostics(url.clone(), diagnostics_provider(&url), None).await
     }
 }
 

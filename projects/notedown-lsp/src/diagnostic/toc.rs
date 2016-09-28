@@ -16,8 +16,8 @@ impl ToToc for AST {
 impl ToToc for TOC {
     fn to_toc(&self) -> DocumentSymbol {
         let (a, b, x, y) = self.range.as_tuple();
-        let start = Position { line: a, character: b };
-        let end = Position { line: x, character: y };
+        let start = Position { line: a.saturating_sub(1), character: b.saturating_sub(1) };
+        let end = Position { line: x.saturating_sub(1), character: y.saturating_sub(1) };
         let children = match self.children.len() {
             0 => None,
             _ => Some(self.children.iter().map(ToToc::to_toc).collect()),
@@ -25,11 +25,11 @@ impl ToToc for TOC {
         #[allow(deprecated)]
         DocumentSymbol {
             name: self.detail.to_owned(),
-            detail: Some(self.detail.to_owned()),
-            kind: SymbolKind::Namespace,
+            detail: Some(format!("H{}",self.level)),
+            kind: SymbolKind::Number,
             deprecated: None,
             range: Range { start, end },
-            selection_range: Range { start, end: start },
+            selection_range: Range { start, end },
             children,
         }
     }
