@@ -36,7 +36,7 @@ pub struct ImageLink {
 
 impl ImageLink {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         SmartLink::Image(box self).into_node(range)
     }
     #[inline]

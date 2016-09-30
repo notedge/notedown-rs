@@ -14,7 +14,7 @@ impl Default for NotedownParser {
 }
 
 impl NotedownParser {
-    pub fn get_position(&self, s: Span) -> Option<Range<usize>> {
+    pub fn get_position(&self, s: Span) -> MaybeRanged {
         Some(Range { start: s.start(), end: s.end() })
     }
 }

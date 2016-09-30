@@ -47,7 +47,7 @@ impl MathKind {
 }
 
 impl MathNode {
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::MathNode(box self), range }
     }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
@@ -92,7 +92,7 @@ macro_rules! math_node {
 
         impl ASTKind {
             #[inline]
-            pub fn $name(math: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+            pub fn $name(math: impl Into<String>, range: MaybeRanged) -> ASTNode {
                 MathNode::$name(math.into()).into_node(range)
             }
         }

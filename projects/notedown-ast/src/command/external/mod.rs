@@ -22,7 +22,7 @@ impl Command {
 
 impl ASTKind {
     #[inline]
-    pub fn command_line(cmd: String, data: Vec<u8>, r: Option<OffsetRange>) -> ASTNode {
+    pub fn command_line(cmd: String, data: Vec<u8>, r: MaybeRanged) -> ASTNode {
         Command::command_link(cmd, data).into_node(r)
     }
 }

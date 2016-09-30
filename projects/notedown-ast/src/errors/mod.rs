@@ -1,3 +1,4 @@
+use crate::nodes::MaybeRanged;
 use std::{
     convert::Infallible,
     error::Error,
@@ -17,7 +18,7 @@ pub type Result<T> = std::result::Result<T, NoteError>;
 pub struct NoteError {
     pub kind: Box<NoteErrorKind>,
     pub file: Option<Url>,
-    pub range: Option<Range<usize>>,
+    pub range: MaybeRanged,
 }
 
 #[derive(Debug)]
@@ -32,8 +33,8 @@ pub enum NoteErrorKind {
     },
     /// A forbidden cst_node encountered
     Unreachable,
-    /* #[error(transparent)]
-     * UnknownError(#[from] anyhow::Error), */
+    // #[error(transparent)]
+    // UnknownError(#[from] anyhow::Error),
 }
 
 impl NoteError {

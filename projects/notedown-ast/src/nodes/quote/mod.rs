@@ -10,7 +10,7 @@ pub struct QuoteBlock {
 
 impl QuoteBlock {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::QuoteNode(box self), range }
     }
     #[inline]

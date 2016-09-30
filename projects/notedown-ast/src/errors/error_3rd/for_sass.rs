@@ -52,6 +52,6 @@ impl From<ParseError> for NoteError {
     }
 }
 
-fn get_range(_: &SourcePos) -> Option<Range<usize>> {
+fn get_range(_: &SourcePos) -> MaybeRanged {
     None
 }

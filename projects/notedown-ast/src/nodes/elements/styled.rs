@@ -91,7 +91,7 @@ impl StyleKind {
 
 impl StyleNode {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::StyledSpan(box self), range }
     }
     #[inline]
@@ -111,7 +111,7 @@ macro_rules! styled_node {
 
         impl ASTKind {
             #[inline]
-            pub fn $name(children: ASTNodes, range: Option<OffsetRange>) -> ASTNode {
+            pub fn $name(children: ASTNodes, range: MaybeRanged) -> ASTNode {
                 StyleNode::$name(children).into_node(range)
             }
         }

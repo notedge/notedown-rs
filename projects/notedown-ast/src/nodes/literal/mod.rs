@@ -1,8 +1,5 @@
 use super::*;
-use std::{
-    cmp::Ordering,
-    ops::{Deref, Range},
-};
+use std::{cmp::Ordering, ops::Deref};
 
 /// Used to represent a node with positions
 #[derive(Clone, Eq)]
@@ -10,7 +7,7 @@ pub struct Literal<T> {
     /// The actual value
     pub value: T,
     // The Start offset and end offset
-    pub range: Option<Range<usize>>,
+    pub range: MaybeRanged,
 }
 
 impl<T: Default> Default for Literal<T> {

@@ -19,7 +19,7 @@ pub enum TextKind {
 
 impl TextKind {
     #[inline]
-    pub fn into_node(self, range: Option<OffsetRange>) -> ASTNode {
+    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
         ASTNode { value: ASTKind::TextSpan(box self), range }
     }
     #[inline]
@@ -47,19 +47,19 @@ impl TextKind {
 impl ASTKind {
     /// aka `<br>`
     #[inline]
-    pub fn hard_break(range: Option<OffsetRange>) -> ASTNode {
+    pub fn hard_break(range: MaybeRanged) -> ASTNode {
         TextKind::HardNewline.into_node(range)
     }
     #[inline]
-    pub fn soft_break(range: Option<OffsetRange>) -> ASTNode {
+    pub fn soft_break(range: MaybeRanged) -> ASTNode {
         TextKind::SoftNewline.into_node(range)
     }
     #[inline]
-    pub fn text(s: impl Into<String>, range: Option<OffsetRange>) -> ASTNode {
+    pub fn text(s: impl Into<String>, range: MaybeRanged) -> ASTNode {
         TextKind::Normal(s.into()).into_node(range)
     }
     #[inline]
-    pub fn emoji(text: &str, range: Option<OffsetRange>) -> ASTNode {
+    pub fn emoji(text: &str, range: MaybeRanged) -> ASTNode {
         let c = match text.chars().next() {
             None => return TextKind::Empty.into_node(range),
             Some(s) => s,
@@ -67,7 +67,7 @@ impl ASTKind {
         TextKind::Escaped(c).into_node(range)
     }
     #[inline]
-    pub fn escaped(text: &str, range: Option<OffsetRange>) -> ASTNode {
+    pub fn escaped(text: &str, range: MaybeRanged) -> ASTNode {
         let c = match text.chars().next() {
             None => '\\',
             Some(s) => s,

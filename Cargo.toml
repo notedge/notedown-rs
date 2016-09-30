@@ -5,7 +5,7 @@ default-members = [
 #    "projects/notedown-pest",
 #    "projects/notedown-parser",
 #    "projects/notedown-parser2",
-    "projects/notedown-plugin",
+#    "projects/notedown-plugin",
     "projects/text-utils",
 ]
 exclude = [
