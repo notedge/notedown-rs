@@ -1,4 +1,6 @@
-use crate::nodes::MaybeRanged;
+mod error_3rd;
+mod error_std;
+
 use std::{
     convert::Infallible,
     error::Error,
@@ -8,17 +10,14 @@ use std::{
 };
 use yggdrasil_shared::records::Url;
 
-mod error_3rd;
-mod error_custom;
-mod error_std;
-
+/// All result about notedown
 pub type Result<T> = std::result::Result<T, NoteError>;
 
 #[derive(Debug)]
 pub struct NoteError {
     pub kind: Box<NoteErrorKind>,
     pub file: Option<Url>,
-    pub range: MaybeRanged,
+    pub range: Option<Range<usize>>,
 }
 
 #[derive(Debug)]

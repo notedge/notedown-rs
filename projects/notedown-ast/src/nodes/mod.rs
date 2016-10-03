@@ -4,7 +4,6 @@ mod list;
 mod literal;
 mod quote;
 mod table;
-mod value;
 
 pub use self::{
     elements::*,
@@ -13,14 +12,9 @@ pub use self::{
     literal::Literal,
     quote::QuoteBlock,
     table::TableView,
-    value::{Value, ValueType},
 };
-
-use crate::command::Command;
-use indexmap::{map::IndexMap, set::IndexSet};
-use num::{BigInt, BigUint};
+use crate::{Command, Value};
 use std::{
-    collections::{BTreeMap, BTreeSet},
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
     ops::Range,
@@ -32,9 +26,6 @@ pub type MaybeRanged = Option<Range<usize>>;
 pub type ASTNode = Literal<ASTKind>;
 /// Represents a list of AST objects with position
 pub type ASTNodes = Vec<Literal<ASTKind>>;
-pub type Set = IndexSet<Literal<Value>>;
-pub type Array = BTreeMap<BigUint, Literal<Value>>;
-pub type Object = IndexMap<String, Literal<Value>>;
 
 /// - Block:
 /// - Span: Text, Styled

@@ -3,7 +3,7 @@ mod list;
 mod quote;
 mod value;
 
-use crate::nodes::*;
+use crate::{nodes::*, value::*};
 use itertools::Itertools;
 use std::fmt::{self, Debug, Display, Formatter, Write};
 

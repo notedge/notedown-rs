@@ -1,4 +1,4 @@
-use crate::{nodes::Value, NoteError};
+use crate::{NoteError, Value};
 use std::convert::TryFrom;
 
 macro_rules! from_value {
