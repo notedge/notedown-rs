@@ -2,14 +2,12 @@ mod toc;
 
 pub use toc::ToToc;
 
-use crate::{io::read_url};
+use crate::io::read_url;
 use tower_lsp::lsp_types::*;
 
-
-
-pub fn diagnostics_provider(url: &Url)-> Vec<Diagnostic> {
+pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
     let _ = url;
-    return vec![]
+    return vec![];
 }
 
 #[allow(dead_code)]

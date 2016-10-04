@@ -24,3 +24,4 @@ tokio-util = { version = "0.3", features = ["codec"] }
 tower-lsp = "0.13"
 tower-service = "0.3"
 tower-test = "0.3"
+clipboard = "0.5"
