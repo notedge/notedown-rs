@@ -1,14 +1,14 @@
 use super::*;
 
-impl TableNode {
-    fn last_at_level(&mut self, depth: u8) -> &mut TableNode {
+impl TocNode {
+    fn last_at_level(&mut self, depth: u8) -> &mut TocNode {
         if depth == 0 || self.children.is_empty() { self } else { self.children.last_mut().unwrap().last_at_level(depth - 1) }
     }
 }
 
 impl TableOfContent for ASTNode {
-    fn toc_configurable(&self, config: &TableConfig) -> TableNode {
-        let mut root = TableNode::default();
+    fn toc_configurable(&self, config: &TocConfig) -> TocNode {
+        let mut root = TocNode::default();
         let mut toc_ignore = false;
         if let ASTKind::Statements(terms) = &self.value {
             for term in terms {
@@ -24,7 +24,7 @@ impl TableOfContent for ASTNode {
                         }
                         let parent = root.last_at_level(level - 1);
                         let new =
-                            TableNode { level, detail: header.slugify(), range: self.range.to_owned().unwrap_or_default(), children: vec![] };
+                            TocNode { level, detail: header.slugify(), range: self.range.to_owned().unwrap_or_default(), children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {
@@ -40,9 +40,9 @@ impl TableOfContent for ASTNode {
     }
 }
 
-impl From<TableNode> for DocumentSymbol {
+impl From<TocNode> for DocumentSymbol {
     #[allow(deprecated)]
-    fn from(node: TableNode) -> Self {
+    fn from(node: TocNode) -> Self {
         DocumentSymbol {
             name: "".to_string(),
             detail: Some(node.detail),

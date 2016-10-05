@@ -7,44 +7,56 @@ use yggdrasil_shared::records::{
 
 mod visit_ast;
 
+/// Information about table of content
 pub trait TableOfContent {
-    fn toc_configurable(&self, config: &TableConfig) -> TableNode;
+    /// Get table of content from element with config
+    fn toc_configurable(&self, config: &TocConfig) -> TocNode;
+    /// Get table of content from element
     #[inline]
-    fn toc(&self) -> TableNode {
-        let cfg = TableConfig::default();
+    fn toc(&self) -> TocNode {
+        let cfg = TocConfig::default();
         self.toc_configurable(&cfg)
     }
+    /// Get table of content from element in lsp form
     #[inline]
     fn toc_lsp(&self, text: &TextIndex) -> DocumentSymbol {
-        let cfg = TableConfig::default();
+        let cfg = TocConfig::default();
         self.toc_lsp_configurable(&cfg, text)
     }
+    /// Get table of content from element in lsp form with config
     #[inline]
-    fn toc_lsp_configurable(&self, config: &TableConfig, _text: &TextIndex) -> DocumentSymbol {
+    fn toc_lsp_configurable(&self, config: &TocConfig, _text: &TextIndex) -> DocumentSymbol {
         let nodes = self.toc_configurable(config);
         return DocumentSymbol::from(nodes);
     }
 }
 
-#[derive(Debug)]
-pub struct TableNode {
-    pub level: u8,
-    pub detail: String,
-    pub range: Range<usize>,
-    pub children: Vec<TableNode>,
-}
-
-pub struct TableConfig {
+/// Config of table of content
+pub struct TocConfig {
+    /// Calculate the level from the root, 0 means infinite, and root it self is the first level
     pub max_depth: u8,
 }
 
-impl Default for TableConfig {
+/// Node of table of content
+#[derive(Debug)]
+pub struct TocNode {
+    /// Depth of the node from root
+    pub level: u8,
+    /// Addition information of the node
+    pub detail: String,
+    /// Range of this node
+    pub range: Range<usize>,
+    /// Children elements of the node
+    pub children: Vec<TocNode>,
+}
+
+impl Default for TocConfig {
     fn default() -> Self {
         Self { max_depth: u8::MAX }
     }
 }
 
-impl Default for TableNode {
+impl Default for TocNode {
     fn default() -> Self {
         Self { level: 0, detail: String::from("ROOT"), range: Default::default(), children: vec![] }
     }

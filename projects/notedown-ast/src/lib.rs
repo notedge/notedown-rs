@@ -6,8 +6,8 @@
 pub mod command;
 mod errors;
 pub mod nodes;
-#[cfg(feature = "storage")]
-mod store;
+#[deny(missing_docs)]
+/// Traits for notedown
 pub mod traits;
 #[deny(missing_docs)]
 /// Value and value types of notedown
@@ -20,11 +20,9 @@ pub use self::{
     value::Value,
 };
 
-#[cfg(feature = "storage")]
-pub use self::store::*;
-
 pub mod utils {
     pub use itertools;
+    pub use lsp_types;
     pub use text_utils;
     pub use yggdrasil_shared::records::*;
 }
