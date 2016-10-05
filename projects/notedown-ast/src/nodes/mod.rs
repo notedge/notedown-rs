@@ -27,7 +27,10 @@ pub type ASTNode = Literal<ASTKind>;
 /// Represents a list of AST objects with position
 pub type ASTNodes = Vec<Literal<ASTKind>>;
 
-/// - Block:
+/// ## ASTKing
+/// Typed info of the Node
+/// 
+/// - Block: Statements, Paragraph
 /// - Span: Text, Styled
 /// - Node: Code, Math, Link, Command
 ///

@@ -101,23 +101,21 @@ impl StyleNode {
 }
 
 macro_rules! styled_node {
-    ($name:tt => $t:tt) => {
-        impl StyleNode {
-            #[inline]
-            pub fn $name(children: ASTNodes) -> Self {
-                Self { kind: StyleKind::$t, children }
-            }
+    (@StyleNode => $name:tt => $t:tt) => {
+        #[inline]
+        pub fn $name(children: ASTNodes) -> Self {
+            Self { kind: StyleKind::$t, children }
         }
-
-        impl ASTKind {
-            #[inline]
-            pub fn $name(children: ASTNodes, range: MaybeRanged) -> ASTNode {
-                StyleNode::$name(children).into_node(range)
-            }
+    };
+    (@ASTKind => $name:tt => $t:tt) => {
+        #[inline]
+        pub fn $name(children: ASTNodes, range: MaybeRanged) -> ASTNode {
+            StyleNode::$name(children).into_node(range)
         }
     };
     ($($name:tt => $t:tt),+ $(,)?) => (
-        $(styled_node!($name=>$t);)+
+        impl StyleNode { $(styled_node!(@StyleNode => $name=>$t);)+ }
+        impl ASTKind {$(styled_node!(@ASTKind => $name=>$t);)+ }
     );
 }
 
