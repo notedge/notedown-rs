@@ -1,18 +1,23 @@
 use super::*;
 
+/// ## Quote List
+/// ```note
+/// > part1
+/// > part2
+///   part2
+/// > part3
+///
+/// > part4
+/// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct QuoteBlock {
-    style: Option<String>,
-    head: ASTNodes,
-    body: ASTNodes,
-    quote: Option<String>,
+    pub style: Option<String>,
+    pub head: ASTNodes,
+    pub body: ASTNodes,
+    pub quote: Option<String>,
 }
 
 impl QuoteBlock {
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::QuoteNode(box self), range }
-    }
     #[inline]
     pub fn quote() -> Self {
         Self { style: None, head: vec![], body: vec![], quote: None }

@@ -1,6 +1,6 @@
 [package]
 name = "notedown_ast"
-version = "0.14.5"
+version = "0.14.6"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Abstract Syntax Tree"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-ast"
@@ -10,7 +10,7 @@ license = "MPL-2.0"
 edition = "2021"
 
 [dependencies]
-text-utils = "0.3.0"
+text-utils = "0.3.1"
 yggdrasil-shared = "0.1.5"
 num = "0.4.0"
 rust_decimal  = "1.19.0"
@@ -25,6 +25,5 @@ rsass = { version = "0.23.0", optional = true }
 
 [features]
 default = []
-storage = []
 
 
