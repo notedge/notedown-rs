@@ -1,7 +1,6 @@
 use crate::TextError;
 use std::intrinsics::transmute;
 
-
 /// Takes in a string with backslash escapes written out with literal backslash characters and
 /// converts it to a string with the proper escaped characters.
 ///
@@ -61,7 +60,6 @@ pub unsafe fn unescape_unchecked(text: impl AsRef<str>) -> String {
     return out;
 }
 
-
 fn escape_chars(c: char) -> Option<char> {
     match c {
         'b' => Some('\u{0008}'),
@@ -76,10 +74,12 @@ fn escape_chars(c: char) -> Option<char> {
     }
 }
 
+/// unescape_utf8
 #[allow(unused_variables)]
 pub fn unescape_utf8(text: impl AsRef<str>) {
     unimplemented!()
 }
+/// unescape_only
 #[allow(unused_variables)]
 pub fn unescape_only(text: impl AsRef<str>, c: char) {
     unimplemented!()

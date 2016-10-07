@@ -1,5 +1,3 @@
-use textwrap;
-
 /// Removes common leading whitespace from each line.
 pub fn dedent(text: impl AsRef<str>) -> String {
     textwrap::dedent(text.as_ref())
@@ -39,7 +37,7 @@ pub fn dedent_less_than(text: impl AsRef<str>, max: usize) -> String {
         .join("\n")
 }
 
-// Calculate how much space the first line has
+/// Calculate how much space the first line has
 pub fn indent_count(text: impl AsRef<str>) -> usize {
     let mut spaces = 0;
     for c in text.as_ref().chars() {
