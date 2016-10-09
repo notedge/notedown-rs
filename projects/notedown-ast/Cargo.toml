@@ -1,6 +1,6 @@
 [package]
 name = "notedown_ast"
-version = "0.14.7"
+version = "0.14.8"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Abstract Syntax Tree"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-ast"
@@ -13,11 +13,9 @@ edition = "2021"
 text-utils = "0.3.1"
 yggdrasil-shared = "0.1.5"
 num = "0.4.0"
-rust_decimal  = "1.19.0"
+rust_decimal = "1.19.0"
 itertools = "0.10.3"
 indexmap = "1.7.0"
-#notedown-image = { version = "0.1", path = "../notedown-image", optional = true }
-dashmap = "5.0.0"
 pest = { version = "2.1.3", optional = true }
 rsass = { version = "0.23.0", optional = true }
 

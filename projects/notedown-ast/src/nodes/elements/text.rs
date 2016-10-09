@@ -19,10 +19,6 @@ pub enum TextKind {
 
 impl TextKind {
     #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::TextSpan(box self), range }
-    }
-    #[inline]
     pub fn new(children: String) -> Self {
         Self::Normal(children)
     }

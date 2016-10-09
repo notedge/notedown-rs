@@ -13,7 +13,7 @@ pub use self::{
     quote::QuoteBlock,
     table::TableView,
 };
-use crate::{Command, Value};
+use crate::{traits::IntoASTNode, Command, Value};
 use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
@@ -78,20 +78,12 @@ impl Default for ASTKind {
 
 impl ASTKind {
     #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: self, range }
-    }
-    #[inline]
     pub fn statements(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Statements(children), range }
     }
     #[inline]
     pub fn paragraph(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Paragraph(children), range }
-    }
-    #[inline]
-    pub fn header(children: ASTNodes, level: u8, range: MaybeRanged) -> ASTNode {
-        Header { level, children }.into_node(range)
     }
     #[inline]
     pub fn hr(range: MaybeRanged) -> ASTNode {
