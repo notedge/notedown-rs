@@ -1,8 +1,9 @@
+mod collections;
 mod methods;
 mod traits;
 mod typing;
 
-pub use self::typing::ValueType;
+pub use self::{collections::*, typing::ValueType};
 use crate::nodes::Literal;
 use indexmap::{IndexMap, IndexSet};
 use num::{BigInt, BigUint};
@@ -13,8 +14,6 @@ use std::collections::{BTreeMap, BTreeSet};
 pub type SparseArray = BTreeMap<BigUint, Literal<Value>>;
 /// Ordered set of values
 pub type OrderedSet = IndexSet<Literal<Value>>;
-/// Ordered map of key value pairs
-pub type OrderedMap = IndexMap<String, Literal<Value>>;
 
 ///
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -34,7 +33,7 @@ pub enum Value {
     /// Array of values
     Array(SparseArray),
     /// Ordered map of key value pairs
-    Object(OrderedMap),
+    Object(Box<OrderedMap>),
 }
 
 impl Value {

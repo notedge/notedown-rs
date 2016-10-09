@@ -1,3 +1,4 @@
+mod as_element;
 mod elements;
 mod link;
 mod list;
@@ -8,7 +9,7 @@ mod table;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
-    list::{DetailedList, ListItem, ListPrefixSymbol, ListView, OrderedList, OrderlessList},
+    list::{DetailedList, ListItem, ListPrefixSymbol, ListView},
     literal::Literal,
     quote::QuoteBlock,
     table::TableView,
@@ -51,7 +52,7 @@ pub enum ASTKind {
     /// - block only
     TableView(Box<TableView>),
     /// - block only
-    ListView(ListView),
+    ListView(Box<ListView>),
     /// - block only
     QuoteNode(Box<QuoteBlock>),
     /// - block + inline

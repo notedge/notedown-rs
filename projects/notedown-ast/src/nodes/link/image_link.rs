@@ -62,23 +62,23 @@ impl ImageLink {
         let mut options = options;
         let mut errors = vec![];
 
-        options.extract_string_key("src").map(|f| self.set_src(f));
-        options.extract_string_key("source").map(|f| self.set_src(f));
+        options.kvs.extract_string("src").map(|f| self.set_src(f));
+        options.kvs.extract_string("source").map(|f| self.set_src(f));
 
         self.parse_layout(&mut options, &mut errors);
 
-        options.extract_string_key("alt").map(|f| self.set_alt(f));
-        options.extract_string_key("caption").map(|f| self.set_alt(f));
-        options.extract_string_key("description").map(|f| self.set_alt(f));
+        options.kvs.extract_string("alt").map(|f| self.set_alt(f));
+        options.kvs.extract_string("caption").map(|f| self.set_alt(f));
+        options.kvs.extract_string("description").map(|f| self.set_alt(f));
 
-        options.extract_bool_key("force_caption").map(|f| self.force_caption = Some(f));
+        options.kvs.extract_bool("force_caption").map(|f| self.force_caption = Some(f));
 
         self.options = Some(options);
         return errors;
     }
 
     fn parse_layout(&mut self, options: &mut CommandOptions, errors: &mut Vec<NoteError>) {
-        let value = match options.extract_key("layout") {
+        let value = match options.kvs.extract("layout") {
             None => return,
             Some(s) => s.value,
         };
