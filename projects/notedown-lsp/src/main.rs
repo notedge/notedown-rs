@@ -1,17 +1,19 @@
+#![feature(once_cell)]
+
 use crate::{
+    commands::{command_provider, server_commands},
     completion::{complete_commands, complete_components, list_completion_kinds},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
-use crate::commands::{command_provider, server_commands};
 
+mod commands;
 mod completion;
 mod diagnostic;
 mod hint;
 mod io;
-mod commands;
 
 #[derive(Debug)]
 struct Backend {
@@ -45,9 +47,7 @@ impl LanguageServer for Backend {
                     retrigger_characters: None,
                     work_done_progress_options: Default::default(),
                 }),
-                selection_range_provider: Some(
-                    SelectionRangeProviderCapability::Simple(true)
-                ),
+                selection_range_provider: Some(SelectionRangeProviderCapability::Simple(true)),
                 code_action_provider: Some(CodeActionProviderCapability::Simple(true)),
                 code_lens_provider: Some(CodeLensOptions { resolve_provider: None }),
                 document_highlight_provider: Some(false),
@@ -77,8 +77,8 @@ impl LanguageServer for Backend {
         Ok(None)
     }
     async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(command_provider(params, &self.client))
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(command_provider(params, &self.client).await)
     }
     async fn did_open(&self, p: DidOpenTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
@@ -165,10 +165,7 @@ impl LanguageServer for Backend {
         Ok(None)
     }
 
-    async fn selection_range(
-        &self,
-        params: SelectionRangeParams,
-    ) -> Result<Option<Vec<SelectionRange>>> {
+    async fn selection_range(&self, params: SelectionRangeParams) -> Result<Option<Vec<SelectionRange>>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(None)
     }
