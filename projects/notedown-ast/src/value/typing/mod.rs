@@ -57,7 +57,7 @@ impl Value {
         // let input: BTreeMap<String, Literal<Value>>;
         let mut count = BTreeMap::new();
         for (k, v) in input {
-            count.insert(k.to_owned(), v.value.get_type());
+            count.insert(k.to_owned(), v.get_type());
         }
         ValueType::Object(count)
     }

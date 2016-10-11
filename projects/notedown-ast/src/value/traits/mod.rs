@@ -20,8 +20,9 @@ impl Hash for Value {
             }
             Self::Array(v) => v.hash(state),
             Self::Object(v) => {
-                v.len().hash(state);
-                for e in v {
+                let iter = v.iter();
+                iter.len().hash(state);
+                for e in iter {
                     e.hash(state);
                 }
             }
