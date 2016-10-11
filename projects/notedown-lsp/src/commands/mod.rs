@@ -10,14 +10,30 @@ pub fn server_commands() -> ExecuteCommandOptions {
 
 static SERVER_COMMANDS: SyncLazy<HashSet<&'static str>> = SyncLazy::new(|| {
     let mut s = HashSet::new();
-    s.insert("vscode-notedown.injectPaste");
+    s.insert("vscode-notedown.inner.read-clipboard");
+    s.insert("vscode-notedown.inner.get-web-view");
     s.insert("vscode-notedown.rawPaste");
     s.insert("vscode-notedown.image.save2local");
     return s;
 });
 
 pub async fn command_provider(p: ExecuteCommandParams, c: &Client) -> Option<Value> {
-    c.show_message(MessageType::Log, format!("{:#?}", p.command)).await;
+    // c.show_message(MessageType::Log, format!("{:#?}", p.command)).await;
+    match p.command.as_ref() {
+        "vscode-notedown.inner.read-clipboard" => read_clipboard(c).await,
+        "vscode-notedown.inner.get-web-view"=> get_web_view().await,
+        _ => {
+            let err = format!("Unknown command: {}", p.command);
+            c.show_message(MessageType::Error, err).await;
+            return None;
+        }
+    }
+}
+
+async fn read_clipboard(c: &Client) -> Option<Value> {
+    // TODO: base64
+    // TODO: HTML
+    // TODO: Image
     let mut ctx: ClipboardContext = match ClipboardProvider::new() {
         Ok(o) => o,
         Err(e) => {
@@ -33,26 +49,47 @@ pub async fn command_provider(p: ExecuteCommandParams, c: &Client) -> Option<Val
             return None;
         }
     };
-    c.show_message(MessageType::Info, s).await;
-    return None;
+    return Some(Value::String(s));
 
     // c.apply_edit();
     //
     //
     // WorkspaceEdit {
     // changes: None,
-    // document_changes: Some(DocumentChanges::Edits(vec![]) )
+    // document_changes: Some(DocumentChanges::Edits(vec![])),
     // };
     //
     // TextDocumentEdit {
     // text_document: VersionedTextDocumentIdentifier { uri: (), version: None },
-    // edits: vec![
-    //
-    // ]
+    // edits: vec![],
     // };
-    // TextEdit{
+    // TextEdit {
     // range: Default::default(),
-    // new_text: "".to_string()
+    // new_text: "".to_string(),
     // };
     //
+}
+
+async fn get_web_view() -> Option<Value> {
+    let head = r#"
+        <meta charset="utf-8"/>
+        <title>Notedown editor</title>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+
+        <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+    "#;
+    let html = format!(
+        r#"
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>{head}</head>
+    <body>body</body>
+    </html>
+    "#,
+        head = head
+    );
+    return Some(Value::String(html));
 }
