@@ -48,7 +48,7 @@ impl Value {
     }
     fn check_list_type(&self, input: &SparseArray) -> ValueType {
         let mut count = BTreeSet::new();
-        for v in input.values() {
+        for v in input.iter() {
             count.insert(v.get_type());
         }
         ValueType::List(count)

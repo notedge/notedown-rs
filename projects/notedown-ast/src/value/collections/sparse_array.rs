@@ -1,6 +1,5 @@
 use super::*;
-use num::Zero;
-use std::collections::btree_map::{Iter, Keys};
+use num::One;
 
 impl SparseArray {
     /// TODO: doc
@@ -36,28 +35,37 @@ impl SparseArray {
 impl SparseArray {
     /// TODO: doc
     #[inline]
-    pub fn iter(&self) -> Iter<'_, BigUint, Literal<Value>> {
-        self.inner.iter()
+    #[allow(mutable_borrow_reservation_conflict)]
+    pub fn push(&mut self, value: Literal<Value>) {
+        let last = self.inner.last_key_value().map(|f| f.0);
+        match last {
+            None => self.insert(BigUint::one(), value),
+            Some(s) => self.inner.insert(s + 1u8, value),
+        };
     }
     /// TODO: doc
     #[inline]
-    pub fn keys(&self) -> Keys<'_, BigUint, Literal<Value>> {
-        self.inner.keys()
-    }
-    /// TODO: doc
-    #[inline]
-    pub fn values(&self) -> SparseArrayValues {
-        SparseArrayValues { current: BigUint::zero(), default: &self.default, inner: &self.inner }
+    pub fn insert(&mut self, index: BigUint, value: Literal<Value>) -> Option<Literal<Value>> {
+        self.inner.insert(index, value)
     }
 }
+
+impl SparseArray {
+    /// Return an iterator over array with default value if not set
+    #[inline]
+    pub fn iter(&self) -> SparseArrayIter {
+        SparseArrayIter { current: BigUint::one(), default: &self.default, inner: &self.inner }
+    }
+}
+
 /// Wrapper type of [`SparseArray::values`]
-pub struct SparseArrayValues<'a> {
+pub struct SparseArrayIter<'a> {
     current: BigUint,
     default: &'a Value,
     inner: &'a BTreeMap<BigUint, Literal<Value>>,
 }
 
-impl<'a> Iterator for SparseArrayValues<'a> {
+impl<'a> Iterator for SparseArrayIter<'a> {
     type Item = &'a Value;
     #[inline]
     fn next(&mut self) -> Option<Self::Item> {
