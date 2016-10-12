@@ -10,8 +10,6 @@ use num::{BigInt, BigUint};
 use rust_decimal::Decimal;
 use std::collections::{BTreeMap, BTreeSet};
 
-/// Sparse representation of the array, the subscript can be any non-zero integer
-pub type SparseArray = BTreeMap<BigUint, Literal<Value>>;
 /// Ordered set of values
 pub type OrderedSet = IndexSet<Literal<Value>>;
 
@@ -31,9 +29,15 @@ pub enum Value {
     /// Ordered set of values
     Set(OrderedSet),
     /// Array of values
-    Array(SparseArray),
+    Array(Box<SparseArray>),
     /// Ordered map of key value pairs
     Object(Box<OrderedMap>),
+}
+
+impl Default for Value {
+    fn default() -> Self {
+        Self::Null
+    }
 }
 
 impl Value {
