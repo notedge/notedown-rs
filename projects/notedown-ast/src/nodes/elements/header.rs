@@ -1,4 +1,4 @@
-use crate::{nodes::*, traits::Slugify};
+use crate::nodes::*;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Header {
@@ -25,8 +25,8 @@ impl Display for Header {
     }
 }
 
-#[allow(missing_docs)]
 impl Header {
+    /// Basic constructor
     #[inline]
     pub fn new(children: ASTNodes, level: u8) -> Self {
         let mut new = Self::default();
@@ -36,7 +36,7 @@ impl Header {
         new.set_level(level);
         new
     }
-
+    /// Level must between 1 - 6
     #[inline]
     pub fn set_level(&mut self, level: u8) -> &mut Self {
         let level = match level {
@@ -47,6 +47,7 @@ impl Header {
         self.level = level;
         self
     }
+    /// Id must slugify
     #[inline]
     pub fn set_id(&mut self, id: String) -> &mut Self {
         self.id = Some(id.slugify());
@@ -55,6 +56,7 @@ impl Header {
 }
 
 impl ASTKind {
+    /// Construct a header node
     #[inline]
     pub fn header(children: ASTNodes, level: u8, range: MaybeRanged) -> ASTNode {
         Header::new(children, level).into_node(range)

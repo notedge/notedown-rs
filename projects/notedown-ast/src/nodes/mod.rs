@@ -14,13 +14,13 @@ pub use self::{
     quote::QuoteBlock,
     table::TableView,
 };
+pub use crate::traits::Slugify;
 use crate::{traits::IntoASTNode, Command, Value};
 use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
     ops::Range,
 };
-
 /// Maybe have ast position
 pub type MaybeRanged = Option<Range<usize>>;
 /// Represents an AST object with position
