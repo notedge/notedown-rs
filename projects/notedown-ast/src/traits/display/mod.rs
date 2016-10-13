@@ -50,6 +50,7 @@ impl Debug for TextKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(s) => Debug::fmt(s, f),
+            Self::Raw(s) => Debug::fmt(s, f),
             Self::HTMLRawInline(s) => Debug::fmt(s, f),
             Self::Escaped(c) => {
                 write!(f, "TextNode::Escaped({})", c)
@@ -88,6 +89,7 @@ impl Display for TextKind {
                 false => f.write_str("[ ]"),
             },
             Self::Empty => Ok(()),
+            Self::Raw(_) => Ok(()),
         }
     }
 }

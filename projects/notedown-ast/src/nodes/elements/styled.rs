@@ -1,30 +1,40 @@
 use super::*;
 
+///
 #[repr(u8)]
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum StyleKind {
     /// Transparent type, do nothing
     Plain = 0,
-
+    ///
     Emphasis = 11,
+    ///
     Strong = 13,
+    ///
     ItalicBold = 14,
-
+    ///
     Underline = 21,
+    ///
     Undercover = 22,
+    ///
     Marking = 23,
+    ///
     Color(u8, u8, u8, u8) = 24,
-    // HTMLColor(String) = 25,
+    ///
     Delete = 31,
+    ///
     Insert = 32,
-
+    ///
     Subscript = 41,
+    ///
     Superscript = 42,
 }
-
+///
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct StyleNode {
+    ///
     pub kind: StyleKind,
+    ///
     pub children: ASTNodes,
 }
 
@@ -43,6 +53,7 @@ impl From<&str> for StyleKind {
 }
 
 impl StyleKind {
+    ///
     pub fn surround_in(&self) -> &'static str {
         match self {
             Self::Plain => "",
@@ -65,6 +76,7 @@ impl StyleKind {
             Self::Superscript => "<sup>",
         }
     }
+    ///
     pub fn surround_out(&self) -> &'static str {
         match self {
             Self::Plain => "",
@@ -90,10 +102,7 @@ impl StyleKind {
 }
 
 impl StyleNode {
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::StyledSpan(box self), range }
-    }
+    /// Constructor of [`StyleNode`]
     #[inline]
     pub fn new(children: ASTNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
@@ -102,12 +111,14 @@ impl StyleNode {
 
 macro_rules! styled_node {
     (@StyleNode => $name:tt => $t:tt) => {
+        /// Constructor of [`StyleNode`]
         #[inline]
         pub fn $name(children: ASTNodes) -> Self {
             Self { kind: StyleKind::$t, children }
         }
     };
     (@ASTKind => $name:tt => $t:tt) => {
+        /// Constructor of [`StyleNode`]
         #[inline]
         pub fn $name(children: ASTNodes, range: MaybeRanged) -> ASTNode {
             StyleNode::$name(children).into_node(range)
