@@ -1,10 +1,14 @@
 mod context;
 mod display;
+mod into_node;
 mod slugify;
 mod toc;
 
-pub use context::ContextKind;
-pub use toc::{TableOfContent, TocNode};
+pub use self::{
+    context::ContextKind,
+    into_node::IntoASTNode,
+    toc::{TableOfContent, TocNode},
+};
 
 /// Slugify the element of notedown
 pub trait Slugify {

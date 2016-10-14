@@ -8,7 +8,7 @@ mod table;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
-    list::{DetailedList, ListItem, ListPrefixSymbol, ListView, OrderedList, OrderlessList, QuoteList},
+    list::{DetailedList, ListItem, ListPrefixSymbol, ListView, OrderedList, OrderlessList},
     literal::Literal,
     quote::QuoteBlock,
     table::TableView,
@@ -29,7 +29,7 @@ pub type ASTNodes = Vec<Literal<ASTKind>>;
 
 /// ## ASTKing
 /// Typed info of the Node
-/// 
+///
 /// - Block: Statements, Paragraph
 /// - Span: Text, Styled
 /// - Node: Code, Math, Link, Command

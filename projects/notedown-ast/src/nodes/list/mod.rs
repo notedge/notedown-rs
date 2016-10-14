@@ -5,24 +5,11 @@ mod item;
 mod ordered;
 mod orderless;
 mod prefix;
-mod quote;
 
-pub use self::{
-    detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol, quote::QuoteList,
-};
+pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol};
 
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum ListView {
-    /// ## Quote List
-    /// ```note
-    /// > part1
-    /// > part2
-    ///   part2
-    /// > part3
-    ///
-    /// > part4
-    /// ```
-    Quote(Box<QuoteList>),
     /// ## Ordered List
     /// ```note
     /// 1.1. part1
@@ -56,7 +43,6 @@ impl From<ListView> for ASTNode {
 impl ListView {
     pub fn children(&self) -> &Vec<ListItem> {
         match self {
-            Self::Quote(v) => &v.children,
             Self::Ordered(v) => &v.children,
             Self::Orderless(v) => &v.children,
             Self::Details(v) => &v.body,
@@ -65,7 +51,6 @@ impl ListView {
 
     pub fn children_mut(&mut self) -> &mut Vec<ListItem> {
         match self {
-            Self::Quote(v) => &mut v.children,
             Self::Ordered(v) => &mut v.children,
             Self::Orderless(v) => &mut v.children,
             Self::Details(v) => &mut v.body,
