@@ -1,12 +1,11 @@
-mod html_escape;
+mod emoji;
+mod html;
 mod table_align;
 mod text_align;
 mod text_escape;
+mod urls;
 
-pub use html_escape::*;
-pub use table_align::*;
-pub use text_align::*;
-pub use text_escape::*;
+pub use self::{emoji::*, html::*, table_align::*, text_align::*, text_escape::*};
 
 /// capitalize first letter
 pub fn capitalize_first_letter(text: impl AsRef<str>) -> String {

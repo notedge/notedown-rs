@@ -46,7 +46,7 @@ impl Display for Delimiter {
     }
 }
 
-impl Debug for TextKind {
+impl Debug for TextSpan {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(s) => Debug::fmt(s, f),
@@ -68,7 +68,7 @@ impl Debug for TextKind {
     }
 }
 
-impl Display for TextKind {
+impl Display for TextSpan {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::Normal(_) => {

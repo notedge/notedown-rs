@@ -13,6 +13,6 @@ pub use self::{
     header::Header,
     math::{MathKind, MathNode},
     styled::{StyleKind, StyleNode},
-    text::TextKind,
+    text::TextSpan,
 };
 use super::*;

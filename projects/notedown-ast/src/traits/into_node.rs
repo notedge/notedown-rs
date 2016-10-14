@@ -49,7 +49,7 @@ into_node_boxed![
     ListView   => ListView,
     CodeNode   => CodeNode ,
     MathNode   => MathNode,
-    TextKind   => TextSpan,
+    TextSpan   => TextSpan,
     StyleNode  => StyledSpan,
     Command    => Command,
     Value      => Value,

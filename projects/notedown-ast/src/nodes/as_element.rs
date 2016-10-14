@@ -7,7 +7,7 @@ impl ASTKind {
             _ => None,
         }
     }
-    pub fn as_list_text(&self) -> Option<TextKind> {
+    pub fn as_list_text(&self) -> Option<TextSpan> {
         match self {
             ASTKind::TextSpan(v) => Some((**v).to_owned()),
             _ => None,

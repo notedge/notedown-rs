@@ -62,7 +62,7 @@ pub enum ASTKind {
     /// - block + inline
     LinkNode(SmartLink),
     /// - inline only
-    TextSpan(Box<TextKind>),
+    TextSpan(Box<TextSpan>),
     /// - inline only
     StyledSpan(Box<StyleNode>),
     /// - context sensitive

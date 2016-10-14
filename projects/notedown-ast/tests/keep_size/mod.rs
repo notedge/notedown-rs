@@ -1,5 +1,5 @@
 use notedown_ast::{
-    nodes::{ListView, MathNode, SmartLink, TableView, TextKind},
+    nodes::{ListView, MathNode, SmartLink, TableView, TextSpan},
     ASTKind, ASTNode, Value,
 };
 use std::mem::size_of;
@@ -23,7 +23,7 @@ fn keep_size() {
     show_size!(TableView);
     show_size!(SmartLink);
     show_size!(MathNode);
-    show_size!(TextKind);
+    show_size!(TextSpan);
 
     assert_eq!(size_of::<ASTNode>(), 56);
     assert_eq!(size_of::<ASTKind>(), 32);
