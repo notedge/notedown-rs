@@ -1,6 +1,11 @@
 use std::fmt::{self, Debug, Formatter};
 
+/// Result of text progress
+pub type Result<T> = std::result::Result<T, TextError>;
+
+/// Error of text progress
 pub enum TextError {
+    /// UnescapeError
     UnescapeError(usize, Box<str>),
 }
 

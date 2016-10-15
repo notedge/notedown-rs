@@ -8,7 +8,7 @@ pub use table_align::*;
 pub use text_align::*;
 pub use text_escape::*;
 
-
+/// capitalize first letter
 pub fn capitalize_first_letter(text: impl AsRef<str>) -> String {
     let text = text.as_ref();
     let mut c = text.chars();
