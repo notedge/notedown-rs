@@ -1,4 +1,4 @@
-use crate::TextError;
+use crate::{Result, TextError};
 use std::intrinsics::transmute;
 
 /// Takes in a string with backslash escapes written out with literal backslash characters and
@@ -18,7 +18,7 @@ use std::intrinsics::transmute;
 ///  | \$     | \u{24}  | Dollar sign (sh compatibility) |
 ///  | \`     | \u{60}  | Backtick (sh compatibility)    |
 ///  | other  | self    | Just remove `\`                |
-pub fn unescape(text: impl AsRef<str>) -> Result<String, TextError> {
+pub fn unescape(text: impl AsRef<str>) -> Result<String> {
     let text = text.as_ref();
     let mut out = String::with_capacity(text.len());
     let mut chars = text.chars().enumerate();
@@ -31,8 +31,7 @@ pub fn unescape(text: impl AsRef<str>) -> Result<String, TextError> {
             match escape_chars(next.1) {
                 Some(c) => out.push(c),
                 None => {
-                    let t = Box::from(format!("\\{}", next.1).as_ref());
-                    return Err(TextError::UnescapeError(index, t));
+                    return TextError::unescape_error(index, format!("\\{}", next.1));
                 }
             }
         }
@@ -41,6 +40,11 @@ pub fn unescape(text: impl AsRef<str>) -> Result<String, TextError> {
 }
 
 /// unchecked version of unescape
+///
+///
+/// ### Safety
+///
+/// transmute unescape_unicode_char
 pub unsafe fn unescape_unchecked(text: impl AsRef<str>) -> String {
     let text = text.as_ref();
     let mut out = String::with_capacity(text.len());

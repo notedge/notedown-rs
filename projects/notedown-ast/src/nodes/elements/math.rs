@@ -10,9 +10,9 @@ pub enum MathKind {
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct MathNode {
-    kind: MathKind,
-    raw: String,
-    format: Option<String>,
+    pub kind: MathKind,
+    pub raw: String,
+    pub format: Option<String>,
 }
 
 impl Default for MathNode {

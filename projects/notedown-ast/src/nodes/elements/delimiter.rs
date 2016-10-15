@@ -6,13 +6,6 @@ pub enum Delimiter {
     HTMLRawBlock(String),
 }
 
-impl Delimiter {
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::Delimiter(box self), range }
-    }
-}
-
 impl ASTKind {
     pub fn raw_html_inline(msg: impl Into<String>, range: MaybeRanged) -> ASTNode {
         Delimiter::HTMLRawBlock(msg.into()).into_node(range)
