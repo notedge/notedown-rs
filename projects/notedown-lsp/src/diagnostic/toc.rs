@@ -25,7 +25,7 @@ impl ToToc for TOC {
         #[allow(deprecated)]
         DocumentSymbol {
             name: self.detail.to_owned(),
-            detail: Some(format!("H{}",self.level)),
+            detail: Some(format!("H{}",self.children.len())),
             kind: SymbolKind::Number,
             deprecated: None,
             range: Range { start, end },
