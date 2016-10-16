@@ -1,10 +1,12 @@
 [package]
 name = "notedown_ast"
-version = "0.14.10"
+version = "0.14.11"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Abstract Syntax Tree"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-ast"
 documentation = "https://docs.rs/notedown_ast"
+categories = ["text-processing", "template-engine"]
+keywords = ["text", "utils"]
 readme = "../../readme.md"
 license = "MPL-2.0"
 edition = "2021"

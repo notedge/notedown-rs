@@ -1,3 +1,4 @@
+mod plugin;
 mod vm;
 
-pub use vm::{VMFileSystem, VM};
+pub use vm::{NoteVM, VMFileSystem};
