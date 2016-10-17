@@ -46,6 +46,7 @@ into_node_boxed![
     QuoteBlock => QuoteNode,
     Header     => Header,
     Delimiter  => Delimiter,
+    ListView   => ListView,
     CodeNode   => CodeNode ,
     MathNode   => MathNode,
     TextKind   => TextSpan,

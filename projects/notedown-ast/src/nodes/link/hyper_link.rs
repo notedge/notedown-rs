@@ -48,7 +48,7 @@ impl HyperLink {
             None => return self,
             Some(s) => s,
         };
-        options.get_string_key("text").map(|f| self.set_text(f));
+        options.kvs.get_string("text").map(|f| self.set_text(f));
         return self;
     }
 }
