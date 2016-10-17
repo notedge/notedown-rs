@@ -23,3 +23,9 @@ impl From<Infallible> for NoteError {
         Self::unreachable()
     }
 }
+
+impl From<()> for NoteError {
+    fn from(_: ()) -> Self {
+        Self::unreachable()
+    }
+}

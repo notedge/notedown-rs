@@ -1,3 +1,5 @@
+#[cfg(feature = "globset")]
+mod for_globset;
 mod for_num;
 #[cfg(feature = "pest")]
 mod for_pest;
