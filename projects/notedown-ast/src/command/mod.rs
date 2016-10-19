@@ -10,9 +10,8 @@ use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
     nodes::{Literal, MaybeRanged},
     value::*,
-    ASTKind, ASTNode, Value,
+    ASTKind, ASTNode,
 };
-use num::BigUint;
 use std::ops::Range;
 
 #[derive(Clone, Debug, Default, Eq, PartialEq)]

@@ -63,7 +63,7 @@ impl OrderedMap {
 impl<'a> IntoIterator for &'a OrderedMap {
     type Item = (&'a String, &'a Value);
     type IntoIter = OrderedMapIter<'a>;
-
+    #[inline]
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
     }

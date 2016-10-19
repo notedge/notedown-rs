@@ -67,7 +67,7 @@ impl Index<BigInt> for Value {
                     index.to_biguint().and_then(|i| v.get(&i))
                 };
                 match out {
-                    Some(s) => Ok(s.value.to_owned()),
+                    Some(s) => Ok(s.to_owned()),
                     None => Err(NoteError::runtime_error(format!("Index `{}` of `Array` out of range.", index))),
                 }
             }
