@@ -1,6 +1,8 @@
+mod meta;
 mod state;
 
-use self::state::FileState;
+pub use self::{meta::FileMeta, state::FileState};
+
 use async_std::{fs::File, io::ReadExt};
 use dashmap::{mapref::one::Ref, DashMap, DashSet};
 use globset::{Glob, GlobSet, GlobSetBuilder};
@@ -9,8 +11,9 @@ use notedown_ast::{
     ASTNode, NoteError, Result,
 };
 use std::path::{Path, PathBuf};
+use yggdrasil_shared::records::Url;
 
-pub type Parser = fn(&str, &mut FileState) -> Result<ASTNode>;
+pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
 pub struct VMFileSystem {
     workspace_root: Url,

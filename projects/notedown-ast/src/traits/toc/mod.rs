@@ -1,9 +1,5 @@
 use crate::{nodes::ASTKind, traits::Slugify, ASTNode};
 use std::ops::Range;
-use yggdrasil_shared::records::{
-    lsp_types::{DocumentSymbol, SymbolKind},
-    TextIndex,
-};
 
 mod visit_ast;
 
@@ -16,18 +12,6 @@ pub trait TableOfContent {
     fn toc(&self) -> TocNode {
         let cfg = TocConfig::default();
         self.toc_configurable(&cfg)
-    }
-    /// Get table of content from element in lsp form
-    #[inline]
-    fn toc_lsp(&self, text: &TextIndex) -> DocumentSymbol {
-        let cfg = TocConfig::default();
-        self.toc_lsp_configurable(&cfg, text)
-    }
-    /// Get table of content from element in lsp form with config
-    #[inline]
-    fn toc_lsp_configurable(&self, config: &TocConfig, _text: &TextIndex) -> DocumentSymbol {
-        let nodes = self.toc_configurable(config);
-        return DocumentSymbol::from(nodes);
     }
 }
 
