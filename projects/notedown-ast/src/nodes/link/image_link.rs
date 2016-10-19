@@ -80,7 +80,7 @@ impl ImageLink {
     fn parse_layout(&mut self, options: &mut CommandOptions, errors: &mut Vec<NoteError>) {
         let value = match options.kvs.extract("layout") {
             None => return,
-            Some(s) => s.value,
+            Some(s) => s,
         };
         match value {
             Value::Integer(i) if i.is_negative() => self.layout = Some(ImageLayout::Left),

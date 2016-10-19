@@ -80,7 +80,7 @@ impl Index<BigInt> for Value {
                     index.to_usize().and_then(|i| v.values().nth(i))
                 };
                 match out {
-                    Some(s) => Ok(s.value.to_owned()),
+                    Some(s) => Ok(s.to_owned()),
                     None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` out of range.", index))),
                 }
             }
@@ -96,7 +96,7 @@ impl Index<String> for Value {
             Self::Object(v) => {
                 // let v : BTreeMap<String, Literal<Value>>;
                 match v.get(index) {
-                    Some(s) => Ok(s.value.to_owned()),
+                    Some(s) => Ok(s.to_owned()),
                     None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` not found.", index))),
                 }
             }
