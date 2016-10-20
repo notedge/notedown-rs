@@ -4,13 +4,10 @@ mod state;
 pub use self::{meta::FileMeta, state::FileState};
 
 use async_std::{fs::File, io::ReadExt};
-use dashmap::{mapref::one::Ref, DashMap, DashSet};
+use dashmap::DashMap;
 use globset::{Glob, GlobSet, GlobSetBuilder};
-use notedown_ast::{
-    utils::{lsp_types::TextEdit, Url},
-    ASTNode, NoteError, Result,
-};
-use std::path::{Path, PathBuf};
+use notedown_ast::{ASTNode, NoteError, Result};
+use std::path::Path;
 use yggdrasil_shared::records::Url;
 
 pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
