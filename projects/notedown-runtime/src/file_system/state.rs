@@ -9,6 +9,12 @@ pub struct FileState {
     meta: FileMeta,
 }
 
+impl PartialEq for FileState {
+    fn eq(&self, other: &Self) -> bool {
+        self.fingerprint.eq(&other.fingerprint)
+    }
+}
+
 impl FileState {
     pub async fn load_file(&mut self, path: &Path) -> Result<()> {
         let mut file = File::open(path).await?;

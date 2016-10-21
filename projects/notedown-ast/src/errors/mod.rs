@@ -66,6 +66,20 @@ impl NoteError {
         Self { kind: Box::new(NoteErrorKind::Unreachable), level: DiagnosticLevel::None, file: None, range: None }
     }
 }
+
+impl NoteError {
+    /// Deprecated or obsolete code.
+    /// Clients are allowed to rendered diagnostics with this tag strike through.
+    pub fn is_deprecated(&self) -> bool {
+        false
+    }
+    /// Unused or unnecessary code.
+    /// Clients are allowed to render diagnostics with this tag faded out instead of having an error squiggle.
+    pub fn is_unnecessary(&self) -> bool {
+        false
+    }
+}
+
 macro_rules! error_msg {
     ($name:ident => $t:ident) => {
         pub fn $name(msg: impl Into<String>) -> NoteError {
