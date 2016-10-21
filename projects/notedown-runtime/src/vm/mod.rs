@@ -1,6 +1,6 @@
 use crate::VMFileSystem;
+use notedown_ast::utils::lsp_types::Url;
 use std::path::Path;
-use yggdrasil_shared::records::Url;
 
 mod diagnostic;
 

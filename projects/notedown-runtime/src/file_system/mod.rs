@@ -4,11 +4,12 @@ mod state;
 pub use self::{meta::FileMeta, state::FileState};
 
 use async_std::{fs::File, io::ReadExt};
-use dashmap::DashMap;
 use globset::{Glob, GlobSet, GlobSetBuilder};
-use notedown_ast::{ASTNode, NoteError, Result};
+use notedown_ast::{
+    utils::{lsp_types::Url, DashMap},
+    ASTNode, NoteError, Result,
+};
 use std::path::Path;
-use yggdrasil_shared::records::Url;
 
 pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
@@ -39,14 +40,10 @@ impl VMFileSystem {
         todo!()
     }
     #[inline]
-    pub async fn update_ast(&mut self, url: Url, parser: fn(&str) -> Result<ASTNode>) -> Result<()> {
-        match self.file_cache.get(&url) {
+    pub async fn update_ast(&mut self, url: Url, parser: &Parser) -> Result<()> {
+        match self.file_cache.get_mut(&url) {
             None => Err(NoteError::runtime_error("TODO")),
-            Some(s) => {
-                let ast = parser(s.value())?;
-                self.cache_ast.insert(url, ast);
-                Ok(())
-            }
+            Some(mut s) => s.value_mut().update_ast(parser).await,
         }
     }
 

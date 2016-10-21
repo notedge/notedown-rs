@@ -1,21 +1,21 @@
 use super::*;
 use notedown_ast::{
-    traits::TocNode,
-    utils::{lsp_types::Diagnostic, TextIndex},
+    traits::{TocConfig, TocNode},
+    utils::{
+        lsp_types::{Diagnostic, DocumentSymbol, DocumentSymbolParams, SymbolKind},
+        TextIndex,
+    },
 };
 
 pub struct FileMeta {
-    pub error: Vec<NoteError>,
-    pub warn: Vec<NoteError>,
-    pub info: Vec<NoteError>,
-    pub hint: Vec<NoteError>,
+    pub errors: Vec<NoteError>,
     pub toc: TocNode,
 }
 
 impl FileMeta {
     #[inline]
     pub fn clear(&mut self) {
-        self.error.clear();
+        self.errors.clear();
         self.toc = TocNode::default()
     }
 }
@@ -37,12 +37,8 @@ pub enum DiagnosticTag2 {
 }
 
 impl FileMeta {
-    pub fn as_lsp_diagnostic(&self, index: &TextIndex) -> Diagnostic {
-        let out = Vec::with_capacity(self.error.len() + self.hint.len() + self.warn.len() + self.info.len());
-        for i in self.error {
-            Diagnostic { range: Default::default(), severity: None, code: None, code_description: None, source: index.get_lsp_range(i.range), message: "".to_string(), related_information: None, tags: None, data: None }
-        }
-        unimplemented!()
+    pub fn as_lsp_diagnostics(&self, index: &TextIndex) -> Vec<Diagnostic> {
+        self.errors.iter().map(|f| f.build_diagnostic(index)).collect()
     }
     pub fn as_lsp_toc(&self) -> DocumentSymbolParams {
         todo!()
@@ -55,6 +51,7 @@ impl FileMeta {
     }
     /// Get table of content from element in lsp form with config
     #[inline]
+    #[allow(deprecated)]
     fn toc_lsp_configurable(&self, config: &TocConfig, index: &TextIndex) -> DocumentSymbol {
         let nodes = self.toc_configurable(config);
         DocumentSymbol {
