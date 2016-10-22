@@ -11,7 +11,7 @@ pub fn build_command(cmd: &str, short: &str, long: &str) -> CompletionItem {
         preselect: None,
         sort_text: Some(format!("0{}", cmd)),
         filter_text: None,
-        insert_text: Some(format!("\\{}",cmd)),
+        insert_text: Some(format!("\\{}", cmd)),
         insert_text_format: None,
         text_edit: None,
         additional_text_edits: None,

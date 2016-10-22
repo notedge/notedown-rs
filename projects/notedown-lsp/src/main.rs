@@ -1,10 +1,12 @@
 #![feature(once_cell)]
+#![feature(extend_one)]
 
 use crate::{
     commands::{command_provider, server_commands},
     completion::{completion_provider, COMPLETION_OPTIONS},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
+    io::{init_storage_states, FileStateUpdate, FILE_STORAGE},
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
@@ -78,15 +80,17 @@ impl LanguageServer for Backend {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(command_provider(params, &self.client).await)
     }
-    async fn did_open(&self, p: DidOpenTextDocumentParams) {
-        self.check_the_file(p.text_document.uri).await
+    async fn did_open(&self, params: DidOpenTextDocumentParams) {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        FILE_STORAGE.get().write().await.update(params);
+        self.client.log_message(MessageType::Info, format!("Count: {:#?}", FILE_STORAGE.get().read().await)).await;
     }
     // 不要把东西都做这里面, 太卡了
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
-        let _ = params;
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        FILE_STORAGE.get().write().await.update(params);
+        self.client.log_message(MessageType::Info, format!("Count: {:#?}", FILE_STORAGE.get().read().await)).await;
     }
-
     // 所有的检查在保存之后做
     async fn did_save(&self, p: DidSaveTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
@@ -165,9 +169,9 @@ impl Backend {
 
 #[tokio::main]
 async fn main() {
-    let stdin = tokio::io::stdin();
+    let std_in = tokio::io::stdin();
     let stdout = tokio::io::stdout();
-
+    init_storage_states();
     let (service, messages) = LspService::new(|client| Backend { client });
-    Server::new(stdin, stdout).interleave(messages).serve(service).await;
+    Server::new(std_in, stdout).interleave(messages).serve(service).await;
 }
