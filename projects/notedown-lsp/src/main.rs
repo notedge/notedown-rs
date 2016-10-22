@@ -1,15 +1,17 @@
 use crate::{
-    completion::{complete_commands, complete_components, list_completion_kinds}
+    completion::{complete_commands, complete_components, list_completion_kinds},
+    diagnostic::diagnostics_provider,
+    hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
-use crate::diagnostic::{diagnostics_provider};
-use crate::hint::{document_symbol_provider, code_action_provider, hover_provider, code_lens_provider};
+use crate::commands::command_provider;
 
 mod completion;
 mod diagnostic;
-mod io;
 mod hint;
+mod io;
+mod commands;
 
 #[derive(Debug)]
 struct Backend {
@@ -32,6 +34,14 @@ impl LanguageServer for Backend {
                 change_notifications: Some(WorkspaceFolderCapabilityChangeNotifications::Bool(true)),
             }),
         };
+        let server_commands = ExecuteCommandOptions {
+            commands: vec![
+                "vscode-notedown.injectPaste".to_string(),
+                "vscode-notedown.rawPaste".to_string(),
+                "vscode-notedown.image.save2local".to_string(),
+            ],
+            work_done_progress_options: Default::default(),
+        };
 
         let init = InitializeResult {
             server_info: Some(server_info),
@@ -44,23 +54,14 @@ impl LanguageServer for Backend {
                     retrigger_characters: None,
                     work_done_progress_options: Default::default(),
                 }),
-                code_action_provider: Some(
-                    CodeActionProviderCapability::Simple(true)
-                ),
-                code_lens_provider:Some(
-                    CodeLensOptions {
-                        resolve_provider: None
-                    }
-                ),
+                code_action_provider: Some(CodeActionProviderCapability::Simple(true)),
+                code_lens_provider: Some(CodeLensOptions { resolve_provider: None }),
                 document_highlight_provider: Some(false),
                 // semantic_highlighting: None,
                 document_symbol_provider: Some(true),
                 document_formatting_provider: Some(true),
                 workspace_symbol_provider: Some(true),
-                execute_command_provider: Some(ExecuteCommandOptions {
-                    commands: vec!["dummy.do_something".to_string()],
-                    work_done_progress_options: Default::default(),
-                }),
+                execute_command_provider: Some(server_commands),
                 workspace: Some(ws),
                 ..ServerCapabilities::default()
             },
@@ -82,7 +83,7 @@ impl LanguageServer for Backend {
     }
     async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(None)
+        Ok(command_provider(params))
     }
     async fn did_open(&self, p: DidOpenTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
@@ -120,7 +121,7 @@ impl LanguageServer for Backend {
         Ok(params)
     }
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
-        //self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(hover_provider(params))
     }
     async fn signature_help(&self, params: SignatureHelpParams) -> Result<Option<SignatureHelp>> {
