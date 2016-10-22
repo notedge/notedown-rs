@@ -1,10 +1,17 @@
-use crate::nodes::*;
+use crate::{nodes::*, traits::Slugify};
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Header {
     pub level: u8,
+    pub hide_in_toc: bool,
     pub id: Option<String>,
     pub children: Vec<ASTNode>,
+}
+
+impl Default for Header {
+    fn default() -> Self {
+        Self { level: 0, hide_in_toc: false, id: None, children: vec![] }
+    }
 }
 
 impl Display for Header {
@@ -21,15 +28,35 @@ impl Display for Header {
 #[allow(missing_docs)]
 impl Header {
     #[inline]
+    pub fn new(children: ASTNodes, level: u8) -> Self {
+        let mut new = Self::default();
+        let id = children.slugify();
+        new.children = children;
+        new.id = Some(id);
+        new.set_level(level);
+        new
+    }
+
+    #[inline]
+    pub fn set_level(&mut self, level: u8) -> &mut Self {
+        let level = match level {
+            n if n < 1 => 1,
+            n if n > 6 => 6,
+            n => n,
+        };
+        self.level = level;
+        self
+    }
+    #[inline]
+    pub fn set_id(&mut self, id: String) -> &mut Self {
+        self.id = Some(id.slugify());
+        self
+    }
+}
+
+impl ASTKind {
+    #[inline]
     pub fn header(children: ASTNodes, level: u8, range: MaybeRanged) -> ASTNode {
-        Header { level, id: None, children }.into_node(range)
-    }
-    #[inline]
-    pub fn get_id(&self) -> Option<String> {
-        self.id.to_owned()
-    }
-    #[inline]
-    pub fn set_id(&mut self, id: String) {
-        self.id = Some(id);
+        Header::new(children, level).into_node(range)
     }
 }

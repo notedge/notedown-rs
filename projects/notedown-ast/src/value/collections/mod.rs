@@ -19,6 +19,7 @@ pub struct LiteralPair {
 }
 
 /// Sparse representation of the array, the subscript can be any non-zero integer
+/// 1-index
 #[derive(Clone, Default, Debug, Eq, PartialEq, Hash)]
 pub struct SparseArray {
     default: Value,
