@@ -1,3 +1,4 @@
+#[deny(missing_debug_implementations)]
 mod code_block;
 mod delimiter;
 mod header;

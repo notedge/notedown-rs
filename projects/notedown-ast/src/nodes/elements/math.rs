@@ -1,3 +1,4 @@
+#[deny(missing_docs)]
 use super::*;
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
@@ -8,16 +9,29 @@ pub enum MathKind {
     BlockDisplay,
 }
 
+#[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
+pub enum MathBackend {
+    LaTeX = 0,
+    AsciiMath,
+    MathML,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct MathNode {
     pub kind: MathKind,
     pub raw: String,
-    pub format: Option<String>,
+    pub format: MathBackend,
+}
+
+impl Default for MathBackend {
+    fn default() -> Self {
+        Self::LaTeX
+    }
 }
 
 impl Default for MathNode {
     fn default() -> Self {
-        Self { kind: MathKind::BlockDisplay, raw: String::new(), format: None }
+        Self { kind: MathKind::BlockDisplay, raw: String::new(), format: Default::default() }
     }
 }
 
@@ -47,9 +61,6 @@ impl MathKind {
 }
 
 impl MathNode {
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::MathNode(box self), range }
-    }
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         f.write_str(self.kind.surround_begin())?;
         f.write_str(&self.raw)?;
@@ -59,25 +70,21 @@ impl MathNode {
 }
 
 impl MathNode {
-    pub fn get_text(&self) -> String {
-        self.raw.to_owned()
+    /// Parse given format string
+    /// do nothing if parse failed
+    pub fn set_format(&mut self, s: &str) -> &mut Self {
+        MathBackend::new(s).map(|f| self.format = f);
+        self
     }
-    pub fn get_format(&self) -> String {
-        match &self.format {
-            Some(s) => s.to_owned(),
-            None => "LaTeX".to_string(),
+}
+
+impl MathBackend {
+    pub fn new(s: &str) -> Option<Self> {
+        match s.to_ascii_lowercase().as_str() {
+            "tex" | "latex" => Some(Self::LaTeX),
+            "ascii" => Some(Self::AsciiMath),
+            _ => None,
         }
-    }
-    pub fn set_format(mut self, s: String) -> Self {
-        self.format = Some(s);
-        return self;
-    }
-    pub fn get_kind(&self) -> MathKind {
-        self.kind
-    }
-    pub fn set_kind(mut self, kind: MathKind) -> Self {
-        self.kind = kind;
-        return self;
     }
 }
 
