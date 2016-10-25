@@ -9,12 +9,9 @@ use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, lazy::SyncLazy};
-use tower_lsp::lsp_types::{
-    CompletionItem,
-    CompletionItemKind::{self, *},
-    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
-    WorkDoneProgressOptions,
-};
+use tower_lsp::lsp_types::{CompletionItem, CompletionItemKind::{self, *}, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind, WorkDoneProgressOptions, Position};
+use crate::io::FILE_STORAGE;
+
 
 pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
     let completion_trigger = vec!['.', '\\', '[', '<'];
@@ -26,8 +23,21 @@ pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
 });
 
 pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
+    let text = FILE_STORAGE.get().read().await.read(&p.text_document_position.text_document.uri);
+    match text {
+        Some(s) => {
+            completion_provider_dynamic(s, p.text_document_position.position)
+        },
+        None => {
+            let c = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
+            completion_provider_static(c)
+        }
+    }
+}
+
+fn completion_provider_dynamic(text: String, position: Position) -> Option<CompletionResponse> {
     let mut items = vec![];
-    match p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next()) {
+    match c {
         Some('<') => items = complete_components(),
         Some('\\') => {
             items.extend(complete_commands());
@@ -36,8 +46,22 @@ pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
         _ => return None,
     };
     Some(CompletionResponse::Array(items))
-    // Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }))
 }
+
+
+fn completion_provider_static(c: Option<char>) -> Option<CompletionResponse> {
+    let mut items = vec![];
+    match c {
+        Some('<') => items = complete_components(),
+        Some('\\') => {
+            items.extend(complete_commands());
+            items.extend(complete_table());
+        }
+        _ => return None,
+    };
+    Some(CompletionResponse::Array(items))
+}
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {
