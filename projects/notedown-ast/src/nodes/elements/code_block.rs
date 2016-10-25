@@ -28,15 +28,22 @@ use std::ops::RangeInclusive;
 /// ````
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct CodeNode {
+    ///
     pub inline: bool,
+    ///
     pub highlight: bool,
+    ///
     pub language: String,
+    ///
     pub code: String,
+    ///
     pub show_file_name: Option<String>,
     /// None means not show line_number
     /// usize means starts with n
     pub show_line_number: Option<usize>,
+    ///
     pub highlight_lines: Vec<RangeInclusive<usize>>,
+    ///
     pub hide_lines: Vec<RangeInclusive<usize>>,
 }
 
@@ -67,37 +74,31 @@ impl Display for CodeNode {
 }
 
 impl CodeNode {
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::CodeNode(box self), range }
-    }
-    #[inline]
-    pub fn set_language(mut self, lang: String) -> Self {
-        self.language = lang;
-        return self;
-    }
-
+    /// TODO: doc
     #[inline]
     pub fn set_file_name(mut self, name: String) -> Self {
         self.show_file_name = Some(name);
         return self;
     }
+    /// TODO: doc
     #[inline]
     pub fn clear_highlight_line(mut self) -> Self {
         self.highlight_lines.clear();
         return self;
     }
+    /// TODO: doc
     #[inline]
     pub fn set_highlight_line(mut self, lines: Vec<RangeInclusive<usize>>) -> Self {
         self.highlight_lines = lines;
         return self;
     }
-
+    /// TODO: doc
     #[inline]
     pub fn add_highlight_line(mut self, line: usize) -> Self {
         self.highlight_lines.push(RangeInclusive::new(line, line));
         return self;
     }
+    /// TODO: doc
     #[inline]
     pub fn add_highlight_range(mut self, lines: RangeInclusive<usize>) -> Self {
         self.highlight_lines.push(lines);
@@ -123,10 +124,12 @@ impl CodeNode {
 }
 
 impl ASTKind {
+    /// TODO: doc
     #[inline]
     pub fn code_inline(code: impl Into<String>, range: MaybeRanged) -> ASTNode {
         CodeNode::code_inline(code.into()).into_node(range)
     }
+    /// TODO: doc
     #[inline]
     pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: MaybeRanged) -> ASTNode {
         CodeNode::code_block(language.into(), code.into()).into_node(range)

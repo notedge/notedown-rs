@@ -1,25 +1,37 @@
-#[deny(missing_docs)]
 use super::*;
 
+/// Supported math modes
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum MathKind {
+    /// Math surround by `$` inline
     Inline,
+    /// Math surround by `$$` inline
     Display,
+    /// Math surround by `$` blocked
     BlockInline,
+    /// Math surround by `$$` blocked
     BlockDisplay,
 }
 
+/// Supported math backends
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum MathBackend {
+    ///
     LaTeX = 0,
+    ///
     AsciiMath,
+    ///
     MathML,
 }
 
+///
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct MathNode {
+    ///
     pub kind: MathKind,
+    ///
     pub raw: String,
+    ///
     pub format: MathBackend,
 }
 
@@ -42,6 +54,7 @@ impl Display for MathNode {
 }
 
 impl MathKind {
+    /// TODO: doc
     pub fn surround_begin(&self) -> &'static str {
         match self {
             Self::Inline => "$",
@@ -50,6 +63,7 @@ impl MathKind {
             Self::BlockDisplay => "\n\n$$",
         }
     }
+    /// TODO: doc
     pub fn surround_end(&self) -> &'static str {
         match self {
             Self::Inline => "$",
@@ -61,6 +75,7 @@ impl MathKind {
 }
 
 impl MathNode {
+    /// TODO: doc
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         f.write_str(self.kind.surround_begin())?;
         f.write_str(&self.raw)?;
@@ -79,6 +94,7 @@ impl MathNode {
 }
 
 impl MathBackend {
+    ///
     pub fn new(s: &str) -> Option<Self> {
         match s.to_ascii_lowercase().as_str() {
             "tex" | "latex" => Some(Self::LaTeX),
@@ -90,12 +106,14 @@ impl MathBackend {
 
 macro_rules! math_node {
     (@MathNode => $name:tt => $t:tt) => {
+        /// Constructor of [`MathNode`]
         #[inline]
         pub fn $name(math: String) -> Self {
             Self { kind: MathKind::$t, raw: math, ..Default::default() }
         }
     };
     (@ASTKind => $name:tt => $t:tt) => {
+        /// Constructor of [`MathNode`]
         #[inline]
         pub fn $name(math: impl Into<String>, range: MaybeRanged) -> ASTNode {
             MathNode::$name(math.into()).into_node(range)

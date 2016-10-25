@@ -1,10 +1,18 @@
 use crate::nodes::*;
 
+/// ```note
+/// \args(id = "custom-id")
+/// # head1
+/// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Header {
+    ///
     pub level: u8,
+    ///
     pub hide_in_toc: bool,
+    ///
     pub id: Option<String>,
+    ///
     pub children: Vec<ASTNode>,
 }
 
