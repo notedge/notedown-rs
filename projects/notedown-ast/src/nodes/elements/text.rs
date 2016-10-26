@@ -1,9 +1,10 @@
 use super::*;
+use crate::{NoteError, Result};
 
 ///
 #[repr(u8)]
 #[derive(Clone, Eq, PartialEq, Hash)]
-pub enum TextKind {
+pub enum TextSpan {
     ///
     Empty,
     ///
@@ -12,8 +13,9 @@ pub enum TextKind {
     Raw(String),
     ///
     HTMLRawInline(String),
-    ///
-    Emoji(char),
+    /// The Unicode codepoint sequence of this emoji.
+    /// The actual/rendered emoji.
+    Emoji(&'static str),
     ///
     Escaped(char),
     ///
@@ -24,64 +26,63 @@ pub enum TextKind {
     CheckBox(bool),
 }
 
-impl TextKind {
-    ///
-    #[inline]
-    pub fn new(children: String) -> Self {
-        Self::Normal(children)
-    }
-    ///
-    #[inline]
-    pub fn raw(children: String) -> Self {
-        Self::HTMLRawInline(children)
-    }
-    ///
-    pub fn escaped(string: String) -> Option<Self> {
-        let mut s = string.chars().peekable();
-        match s.next() {
-            Some('\\') => {}
-            _ => return None,
-        }
-        s.next().map(Self::Escaped)
-    }
-    ///
-    pub fn emoji(_: String) -> Self {
-        unimplemented!()
+impl Default for TextSpan {
+    fn default() -> Self {
+        Self::Empty
     }
 }
 
 impl ASTKind {
-    /// aka `<br>`
+    /// Aka. `<br>`
     #[inline]
     pub fn hard_break(range: MaybeRanged) -> ASTNode {
-        TextKind::HardNewline.into_node(range)
+        TextSpan::HardNewline.into_node(range)
     }
-    ///
+    /// Aka. `\n`
     #[inline]
     pub fn soft_break(range: MaybeRanged) -> ASTNode {
-        TextKind::SoftNewline.into_node(range)
+        TextSpan::SoftNewline.into_node(range)
     }
     ///
     #[inline]
     pub fn text(s: impl Into<String>, range: MaybeRanged) -> ASTNode {
-        TextKind::Normal(s.into()).into_node(range)
+        TextSpan::Normal(s.into()).into_node(range)
     }
     ///
     #[inline]
-    pub fn emoji(text: &str, range: MaybeRanged) -> ASTNode {
-        let c = match text.chars().next() {
-            None => return TextKind::Empty.into_node(range),
-            Some(s) => s,
-        };
-        TextKind::Escaped(c).into_node(range)
+    pub fn text_raw(s: impl Into<String>, range: MaybeRanged) -> ASTNode {
+        TextSpan::Raw(s.into()).into_node(range)
     }
-    ///
+    /// Constructor of [`TextSpan::Escaped`]
     #[inline]
-    pub fn escaped(text: &str, range: MaybeRanged) -> ASTNode {
+    pub fn escaped(text: &str, range: MaybeRanged) -> Result<ASTNode> {
         let c = match text.chars().next() {
             None => '\\',
             Some(s) => s,
         };
-        TextKind::Escaped(c).into_node(range)
+        Ok(TextSpan::Escaped(c).into_node(range))
+    }
+    /// Constructor of [`TextSpan::Escaped`]
+    #[inline]
+    pub fn escaped_char(c: char, range: MaybeRanged) -> ASTNode {
+        TextSpan::Escaped(c).into_node(range)
+    }
+    /// Constructor of [`TextSpan::Normal`]
+    #[inline]
+    pub fn escaped_html(c: char, range: MaybeRanged) -> Result<ASTNode> {
+        todo!()
+    }
+    /// Constructor of [`TextSpan::Emoji`]
+    #[inline]
+    pub fn emoji(text: &str, range: MaybeRanged) -> Result<ASTNode> {
+        match text_utils::parse_emoji(text) {
+            None => Err(NoteError::syntax_error(format!(""))),
+            Some(s) => TextSpan::Emoji(s.grapheme),
+        }
+    }
+    /// Constructor of [`TextSpan::Emoji`]
+    #[inline]
+    pub fn emoji_char(c: char, range: MaybeRanged) -> ASTNode {
+        TextSpan::Emoji(c).into_node(range)
     }
 }

@@ -16,6 +16,6 @@ impl ASTKind {
     }
     /// Inset raw html block
     pub fn raw_html_block(msg: impl Into<String>, range: MaybeRanged) -> ASTNode {
-        TextKind::HTMLRawInline(msg.into()).into_node(range)
+        TextSpan::HTMLRawInline(msg.into()).into_node(range)
     }
 }
