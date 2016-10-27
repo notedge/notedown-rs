@@ -5,7 +5,7 @@ use crate::{
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
-use crate::commands::command_provider;
+use crate::commands::{command_provider, server_commands};
 
 mod completion;
 mod diagnostic;
@@ -34,15 +34,6 @@ impl LanguageServer for Backend {
                 change_notifications: Some(WorkspaceFolderCapabilityChangeNotifications::Bool(true)),
             }),
         };
-        let server_commands = ExecuteCommandOptions {
-            commands: vec![
-                "vscode-notedown.injectPaste".to_string(),
-                "vscode-notedown.rawPaste".to_string(),
-                "vscode-notedown.image.save2local".to_string(),
-            ],
-            work_done_progress_options: Default::default(),
-        };
-
         let init = InitializeResult {
             server_info: Some(server_info),
             capabilities: ServerCapabilities {
@@ -54,6 +45,9 @@ impl LanguageServer for Backend {
                     retrigger_characters: None,
                     work_done_progress_options: Default::default(),
                 }),
+                selection_range_provider: Some(
+                    SelectionRangeProviderCapability::Simple(true)
+                ),
                 code_action_provider: Some(CodeActionProviderCapability::Simple(true)),
                 code_lens_provider: Some(CodeLensOptions { resolve_provider: None }),
                 document_highlight_provider: Some(false),
@@ -61,7 +55,7 @@ impl LanguageServer for Backend {
                 document_symbol_provider: Some(true),
                 document_formatting_provider: Some(true),
                 workspace_symbol_provider: Some(true),
-                execute_command_provider: Some(server_commands),
+                execute_command_provider: Some(server_commands()),
                 workspace: Some(ws),
                 ..ServerCapabilities::default()
             },
@@ -71,6 +65,7 @@ impl LanguageServer for Backend {
     async fn initialized(&self, _: InitializedParams) {
         self.client.log_message(MessageType::Info, "Notedown server initialized!").await;
     }
+
     async fn shutdown(&self) -> Result<()> {
         Ok(())
     }
@@ -83,16 +78,17 @@ impl LanguageServer for Backend {
     }
     async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(command_provider(params))
+        Ok(command_provider(params, &self.client))
     }
     async fn did_open(&self, p: DidOpenTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
     }
-
     // 不要把东西都做这里面, 太卡了
-    async fn did_change(&self, _: DidChangeTextDocumentParams) {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", p)).await;
+    async fn did_change(&self, params: DidChangeTextDocumentParams) {
+        let _ = params;
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
     }
+
     // 所有的检查在保存之后做
     async fn did_save(&self, p: DidSaveTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
@@ -128,7 +124,6 @@ impl LanguageServer for Backend {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(None)
     }
-
     /// 当光标在位置 x 时, 哪些内容要被选中
     async fn document_highlight(&self, _: DocumentHighlightParams) -> Result<Option<Vec<DocumentHighlight>>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", hp)).await;
@@ -139,6 +134,7 @@ impl LanguageServer for Backend {
         // self.client.log_message(MessageType::Info, format!("{:#?}", sp)).await;
         Ok(document_symbol_provider(params))
     }
+
     /// Alt 键列出可执行的命令
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
@@ -149,7 +145,6 @@ impl LanguageServer for Backend {
         // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(code_lens_provider(params))
     }
-
     async fn document_link(&self, params: DocumentLinkParams) -> Result<Option<Vec<DocumentLink>>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(None)
@@ -166,6 +161,14 @@ impl LanguageServer for Backend {
     }
 
     async fn rename(&self, params: RenameParams) -> Result<Option<WorkspaceEdit>> {
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        Ok(None)
+    }
+
+    async fn selection_range(
+        &self,
+        params: SelectionRangeParams,
+    ) -> Result<Option<Vec<SelectionRange>>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(None)
     }
