@@ -55,7 +55,7 @@ impl Debug for TextSpan {
             Self::Escaped(c) => {
                 write!(f, "TextNode::Escaped({})", c)
             }
-            Self::Emoji(c) => f.write_char(*c),
+            Self::Emoji(emoji) => write!(f, "TextNode::Emoji({})", emoji),
             Self::SoftNewline => f.write_str("TextNode::SoftNewline"),
             Self::HardNewline => f.write_str("TextNode::HardNewline"),
             Self::CheckBox(b) => {
@@ -81,7 +81,7 @@ impl Display for TextSpan {
                 f.write_char('\\')?;
                 f.write_char(*c)
             }
-            Self::Emoji(c) => f.write_char(*c),
+            Self::Emoji(emoji) => f.write_str(emoji),
             Self::SoftNewline => f.write_char('\n'),
             Self::HardNewline => f.write_char('\n'),
             Self::CheckBox(b) => match b {

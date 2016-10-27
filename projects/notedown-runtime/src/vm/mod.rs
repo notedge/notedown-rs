@@ -1,24 +1,22 @@
+use crate::vm::file_system::VMFileSystem;
 use dashmap::DashSet;
-use notedown_ast::utils::Url;
+use notedown_ast::{
+    utils::{lsp_types::Diagnostic, Url},
+    NoteError,
+};
 use std::path::{Path, PathBuf};
 
-pub struct VM {}
+mod file_system;
 
-pub struct VMFileSystem {
-    root: Url,
-    files: DashSet<Url>,
+pub struct VMDiagnostic {
+    diag: Vec<NoteError>,
 }
 
-impl VMFileSystem {
-    pub fn new() {}
-    pub fn load(&self) {}
+pub struct NoteVM {
+    diag: VMDiagnostic,
+    fs: VMFileSystem,
 }
 
-impl VMFileSystem {
-    pub fn insert_path(&mut self, _: PathBuf) {}
-    pub fn insert_url(&mut self, _: PathBuf) {}
-    pub fn insert_pattern() {}
-
-    pub fn remove() {}
-    pub fn remove_files() {}
+impl NoteVM {
+    pub fn run() {}
 }

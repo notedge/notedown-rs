@@ -69,20 +69,20 @@ impl ASTKind {
     }
     /// Constructor of [`TextSpan::Normal`]
     #[inline]
-    pub fn escaped_html(c: char, range: MaybeRanged) -> Result<ASTNode> {
+    pub fn escaped_html(_: char, _: MaybeRanged) -> Result<ASTNode> {
         todo!()
     }
     /// Constructor of [`TextSpan::Emoji`]
     #[inline]
     pub fn emoji(text: &str, range: MaybeRanged) -> Result<ASTNode> {
         match text_utils::parse_emoji(text) {
-            None => Err(NoteError::syntax_error(format!(""))),
-            Some(s) => TextSpan::Emoji(s.grapheme),
+            None => {
+                let msg = format!("{} can not be parsed as emoji", text);
+                let mut error = NoteError::syntax_error(msg);
+                error.range = range;
+                Err(error)
+            }
+            Some(s) => Ok(TextSpan::Emoji(s.grapheme).into_node(range)),
         }
-    }
-    /// Constructor of [`TextSpan::Emoji`]
-    #[inline]
-    pub fn emoji_char(c: char, range: MaybeRanged) -> ASTNode {
-        TextSpan::Emoji(c).into_node(range)
     }
 }
