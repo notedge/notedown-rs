@@ -1,4 +1,4 @@
-pub use self::file_system::VMFileSystem;
+pub use self::{diagnostic::FileMeta, file_system::VMFileSystem};
 
 use notedown_ast::{
     utils::{lsp_types::Diagnostic, Url},
@@ -9,17 +9,7 @@ use std::path::{Path, PathBuf};
 mod diagnostic;
 mod file_system;
 
-pub struct VMDiagnostic {
-    diag: Vec<NoteError>,
-}
-
-impl VMDiagnostic {
-    pub async fn publish_diagnostic_lsp() -> Diagnostic {}
-    pub async fn publish_hint_lsp() {}
-}
-
 pub struct NoteVM {
-    pub hints: VMDiagnostic,
     pub fs: VMFileSystem,
 }
 
