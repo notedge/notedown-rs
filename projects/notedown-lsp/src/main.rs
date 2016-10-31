@@ -2,7 +2,7 @@
 
 use crate::{
     commands::{command_provider, server_commands},
-    completion::{complete_commands, complete_components, list_completion_kinds},
+    completion::{complete_commands, complete_components, completion_provider, list_completion_kinds},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
 };
@@ -96,22 +96,9 @@ impl LanguageServer for Backend {
     async fn did_close(&self, p: DidCloseTextDocumentParams) {
         self.check_the_file(p.text_document.uri).await
     }
-    async fn completion(&self, cp: CompletionParams) -> Result<Option<CompletionResponse>> {
+    async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", cp)).await;
-        let mut items = vec![];
-        if let Some(s) = cp.context {
-            match s.trigger_kind {
-                CompletionTriggerKind::Invoked => (),
-                CompletionTriggerKind::TriggerCharacter => match s.trigger_character.unwrap().as_str() {
-                    "\\" => items = complete_commands(),
-                    "<" => items = complete_components(),
-                    "[" => items = list_completion_kinds(),
-                    _ => (),
-                },
-                CompletionTriggerKind::TriggerForIncompleteCompletions => (),
-            }
-        };
-        Ok(Some(CompletionResponse::Array(items)))
+        Ok(completion_provider(params))
     }
     async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
         Ok(params)

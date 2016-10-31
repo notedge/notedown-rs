@@ -1,6 +1,7 @@
 mod command;
 mod open_close;
 mod self_close;
+mod structural;
 
 use command::build_command;
 use open_close::build_open_close;
@@ -10,7 +11,30 @@ use std::collections::VecDeque;
 use tower_lsp::lsp_types::{
     CompletionItem,
     CompletionItemKind::{self, *},
+    CompletionParams, CompletionResponse, CompletionTriggerKind, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
 };
+
+pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
+    let _ = p;
+    let mut items = vec![];
+    // p.context.and_then(|e|e.trigger_character)
+    if let Some(s) = p.context {
+        match s.trigger_kind {
+            CompletionTriggerKind::Invoked => (),
+            CompletionTriggerKind::TriggerCharacter => {
+                let key = s.trigger_character.unwrap().as_str();
+                match key {
+                    "\\" => items = complete_commands(),
+                    "<" => items = complete_components(),
+                    "[" => items = list_completion_kinds(),
+                    _ => (),
+                }
+            }
+            CompletionTriggerKind::TriggerForIncompleteCompletions => (),
+        }
+    };
+    Some(CompletionResponse::Array(items))
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {

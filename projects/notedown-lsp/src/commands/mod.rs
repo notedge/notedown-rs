@@ -21,7 +21,7 @@ pub async fn command_provider(p: ExecuteCommandParams, c: &Client) -> Option<Val
     // c.show_message(MessageType::Log, format!("{:#?}", p.command)).await;
     match p.command.as_ref() {
         "vscode-notedown.inner.read-clipboard" => read_clipboard(c).await,
-        "vscode-notedown.inner.get-web-view"=> get_web_view().await,
+        "vscode-notedown.inner.get-web-view" => get_web_view().await,
         _ => {
             let err = format!("Unknown command: {}", p.command);
             c.show_message(MessageType::Error, err).await;

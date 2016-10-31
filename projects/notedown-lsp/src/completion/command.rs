@@ -1,4 +1,4 @@
-use tower_lsp::lsp_types::{CompletionItem, CompletionItemKind, Documentation, MarkupContent, MarkupKind};
+use super::*;
 
 pub fn build_command(cmd: &str, short: &str, long: &str) -> CompletionItem {
     let doc = MarkupContent { kind: MarkupKind::Markdown, value: String::from(long) };
