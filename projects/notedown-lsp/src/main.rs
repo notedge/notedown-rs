@@ -77,7 +77,7 @@ impl LanguageServer for Backend {
         Ok(None)
     }
     async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(command_provider(params, &self.client).await)
     }
     async fn did_open(&self, p: DidOpenTextDocumentParams) {
