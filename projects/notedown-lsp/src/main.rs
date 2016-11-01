@@ -2,7 +2,7 @@
 
 use crate::{
     commands::{command_provider, server_commands},
-    completion::{complete_commands, complete_components, completion_provider, list_completion_kinds},
+    completion::{completion_provider, COMPLETION_OPTIONS},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
 };
@@ -23,12 +23,10 @@ struct Backend {
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
     async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
-        let server_info = ServerInfo { name: String::from("Notedown LSP"), version: Some("V1".to_string()) };
-        let completion_trigger = vec![".", "\\", "[", "<"];
-        let completion = CompletionOptions {
-            resolve_provider: Some(false),
-            trigger_characters: Some(completion_trigger.iter().map(ToString::to_string).collect()),
-            work_done_progress_options: WorkDoneProgressOptions { work_done_progress: Some(true) },
+        let server_info = ServerInfo {
+            name: format!("Notedown LSP"),
+            // should read from cargo.toml
+            version: Some(format!("V{}", env!("CARGO_PKG_VERSION"))),
         };
         let ws = WorkspaceCapability {
             workspace_folders: Some(WorkspaceFolderCapability {
@@ -39,9 +37,9 @@ impl LanguageServer for Backend {
         let init = InitializeResult {
             server_info: Some(server_info),
             capabilities: ServerCapabilities {
-                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::Incremental)),
+                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::Full)),
                 hover_provider: Some(HoverProviderCapability::Simple(true)),
-                completion_provider: Some(completion),
+                completion_provider: Some(COMPLETION_OPTIONS.clone()),
                 signature_help_provider: Some(SignatureHelpOptions {
                     trigger_characters: None,
                     retrigger_characters: None,
@@ -97,7 +95,7 @@ impl LanguageServer for Backend {
         self.check_the_file(p.text_document.uri).await
     }
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", cp)).await;
+        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(completion_provider(params))
     }
     async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {

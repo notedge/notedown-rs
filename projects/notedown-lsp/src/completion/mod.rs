@@ -7,33 +7,57 @@ use command::build_command;
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
-use std::collections::VecDeque;
+use std::{collections::VecDeque, lazy::SyncLazy};
 use tower_lsp::lsp_types::{
-    CompletionItem,
+    CompletionContext, CompletionItem,
     CompletionItemKind::{self, *},
-    CompletionParams, CompletionResponse, CompletionTriggerKind, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
+    CompletionList, CompletionOptions, CompletionParams, CompletionResponse, CompletionTriggerKind, Documentation,
+    InsertTextFormat, MarkupContent, MarkupKind, WorkDoneProgressOptions,
 };
 
+pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
+    let completion_trigger = vec![".", "\\", "[", "<", "a", "b", "c", "t"];
+    CompletionOptions {
+        resolve_provider: Some(true),
+        trigger_characters: Some(completion_trigger.iter().map(ToString::to_string).collect()),
+        work_done_progress_options: WorkDoneProgressOptions { work_done_progress: Some(true) },
+    }
+});
+
 pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
-    let _ = p;
     let mut items = vec![];
-    // p.context.and_then(|e|e.trigger_character)
-    if let Some(s) = p.context {
-        match s.trigger_kind {
-            CompletionTriggerKind::Invoked => (),
-            CompletionTriggerKind::TriggerCharacter => {
-                let key = s.trigger_character.unwrap().as_str();
-                match key {
-                    "\\" => items = complete_commands(),
-                    "<" => items = complete_components(),
-                    "[" => items = list_completion_kinds(),
-                    _ => (),
+    // let s = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
+
+    match p.context {
+        None => (),
+        Some(s) => {
+            let c = s.trigger_character.and_then(|e| e.chars().next()).unwrap_or_default();
+            match s.trigger_kind {
+                CompletionTriggerKind::Invoked => (),
+                CompletionTriggerKind::TriggerCharacter => {
+                    match c {
+                        '\\' => items = complete_commands(),
+                        '<' => items = complete_components(),
+                        '[' => items = list_completion_kinds(),
+                        _ => (),
+                    };
+                    return Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }));
+                }
+                CompletionTriggerKind::TriggerForIncompleteCompletions => {
+                    match c {
+                        '\\' => items = complete_commands(),
+                        '<' => items = complete_components(),
+                        '[' => items = list_completion_kinds(),
+                        _ => (),
+                    };
+                    return Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }));
                 }
             }
-            CompletionTriggerKind::TriggerForIncompleteCompletions => (),
         }
-    };
-    Some(CompletionResponse::Array(items))
+    }
+
+    // Some(CompletionResponse::Array(items))
+    return None;
 }
 
 #[derive(Debug, Serialize, Deserialize)]
