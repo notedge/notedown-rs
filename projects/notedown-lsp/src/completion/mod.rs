@@ -3,61 +3,40 @@ mod open_close;
 mod self_close;
 mod structural;
 
+use crate::completion::structural::complete_table;
 use command::build_command;
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, lazy::SyncLazy};
 use tower_lsp::lsp_types::{
-    CompletionContext, CompletionItem,
+    CompletionItem,
     CompletionItemKind::{self, *},
-    CompletionList, CompletionOptions, CompletionParams, CompletionResponse, CompletionTriggerKind, Documentation,
-    InsertTextFormat, MarkupContent, MarkupKind, WorkDoneProgressOptions,
+    CompletionList, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
+    MarkupKind, WorkDoneProgressOptions,
 };
 
 pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
-    let completion_trigger = vec![".", "\\", "[", "<", "a", "b", "c", "t"];
+    let completion_trigger = vec!['.', '\\', '[', '<'];
     CompletionOptions {
-        resolve_provider: Some(true),
+        resolve_provider: Some(false),
         trigger_characters: Some(completion_trigger.iter().map(ToString::to_string).collect()),
-        work_done_progress_options: WorkDoneProgressOptions { work_done_progress: Some(true) },
+        work_done_progress_options: WorkDoneProgressOptions { work_done_progress: Some(false) },
     }
 });
 
 pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
     let mut items = vec![];
-    // let s = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
-
-    match p.context {
-        None => (),
-        Some(s) => {
-            let c = s.trigger_character.and_then(|e| e.chars().next()).unwrap_or_default();
-            match s.trigger_kind {
-                CompletionTriggerKind::Invoked => (),
-                CompletionTriggerKind::TriggerCharacter => {
-                    match c {
-                        '\\' => items = complete_commands(),
-                        '<' => items = complete_components(),
-                        '[' => items = list_completion_kinds(),
-                        _ => (),
-                    };
-                    return Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }));
-                }
-                CompletionTriggerKind::TriggerForIncompleteCompletions => {
-                    match c {
-                        '\\' => items = complete_commands(),
-                        '<' => items = complete_components(),
-                        '[' => items = list_completion_kinds(),
-                        _ => (),
-                    };
-                    return Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }));
-                }
-            }
+    match p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next()) {
+        Some('<') => items = complete_components(),
+        Some('\\') => {
+            items.extend(complete_commands());
+            items.extend(complete_table());
         }
-    }
-
-    // Some(CompletionResponse::Array(items))
-    return None;
+        _ => return None,
+    };
+    Some(CompletionResponse::Array(items))
+    // Some(CompletionResponse::List(CompletionList { is_incomplete: true, items }))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -117,11 +96,11 @@ pub fn complete_components() -> Vec<CompletionItem> {
     open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
 }
 
-pub fn list_completion_kinds() -> Vec<CompletionItem> {
+#[allow(dead_code)]
+fn list_completion_kinds() -> Vec<CompletionItem> {
     fn item(e: CompletionItemKind) -> CompletionItem {
         CompletionItem { label: format!("{:?}", e), kind: Some(e), ..CompletionItem::default() }
     }
-
     vec![
         item(Text),
         item(Method),

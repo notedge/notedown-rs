@@ -99,6 +99,7 @@ impl LanguageServer for Backend {
         Ok(completion_provider(params))
     }
     async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         Ok(params)
     }
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
