@@ -2,6 +2,7 @@ use std::{collections::VecDeque, fs};
 use tower_lsp::lsp_types::{TextDocumentPositionParams, Url};
 use unicode_xid::UnicodeXID;
 mod global;
+pub use global::{init_storage_states, FileStateUpdate, FILE_STORAGE};
 
 pub fn read_url(url: &Url) -> String {
     url.to_file_path().ok().and_then(|e| fs::read_to_string(e).ok()).unwrap_or_default()

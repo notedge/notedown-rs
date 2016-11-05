@@ -12,8 +12,8 @@ use std::{collections::VecDeque, lazy::SyncLazy};
 use tower_lsp::lsp_types::{
     CompletionItem,
     CompletionItemKind::{self, *},
-    CompletionList, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent,
-    MarkupKind, WorkDoneProgressOptions,
+    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
+    WorkDoneProgressOptions,
 };
 
 pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
