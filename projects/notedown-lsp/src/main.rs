@@ -41,7 +41,7 @@ impl LanguageServer for Backend {
             capabilities: ServerCapabilities {
                 text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::Full)),
                 hover_provider: Some(HoverProviderCapability::Simple(true)),
-                completion_provider: Some(COMPLETION_OPTIONS.clone()),
+                completion_provider: Some(COMPLETION_OPTIONS.to_owned()),
                 signature_help_provider: Some(SignatureHelpOptions {
                     trigger_characters: None,
                     retrigger_characters: None,
@@ -101,7 +101,7 @@ impl LanguageServer for Backend {
     }
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        Ok(completion_provider(params))
+        Ok(completion_provider(params).await)
     }
     async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
         // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;

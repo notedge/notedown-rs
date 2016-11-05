@@ -1,8 +1,10 @@
 use state::Storage;
-use std::collections::HashMap;
+use std::{
+    collections::HashMap,
+    fmt::{self, Debug, Formatter},
+};
 use tokio::sync::RwLock;
 use tower_lsp::lsp_types::{Url, *};
-use std::fmt::{Debug,Formatter,self};
 
 pub static FILE_STORAGE: Storage<RwLock<FileStateMap>> = Storage::new();
 
@@ -71,7 +73,6 @@ impl FileStateUpdate<DidCloseTextDocumentParams> for FileStateMap {
     }
 }
 
-
 impl FileStateMap {
     fn update_versioned(&mut self, url: &Url, version: usize, content: String) {
         let new = FileState { version, text: content };
@@ -84,9 +85,6 @@ impl FileStateMap {
     }
     pub fn read(&self, url: &Url) -> Option<String> {
         self.inner.get(url).map(|e| e.text.to_owned())
-    }
-    pub fn count(&self) -> usize {
-        self.inner.len()
     }
 }
 
