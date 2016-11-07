@@ -39,19 +39,3 @@ impl TableOfContent for ASTNode {
         return root;
     }
 }
-
-impl From<TocNode> for DocumentSymbol {
-    #[allow(deprecated)]
-    fn from(node: TocNode) -> Self {
-        DocumentSymbol {
-            name: "".to_string(),
-            detail: Some(node.detail),
-            kind: SymbolKind::NAMESPACE,
-            tags: None,
-            deprecated: None,
-            range: Default::default(),
-            selection_range: Default::default(),
-            children: None,
-        }
-    }
-}

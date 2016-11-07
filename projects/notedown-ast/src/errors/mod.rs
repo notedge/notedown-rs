@@ -8,7 +8,7 @@ use std::{
     ops::Range,
     path::Path,
 };
-use yggdrasil_shared::records::Url;
+use url::Url;
 
 /// All result about notedown
 pub type Result<T> = std::result::Result<T, NoteError>;

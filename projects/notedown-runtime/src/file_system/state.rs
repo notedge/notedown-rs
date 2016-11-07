@@ -1,5 +1,4 @@
 use super::*;
-use crate::vm::FileMeta;
 use ropey::Rope;
 
 pub struct FileState {
@@ -24,6 +23,7 @@ impl FileState {
     #[inline]
     pub async fn update_ast(&mut self, parse: Parser) -> Result<()> {
         let text: String = self.text.chars().collect();
-        parse(&text).map(|new| self.ast = new)
+        self.meta.clear();
+        parse(&text, &mut self.meta).map(|new| self.ast = new)
     }
 }

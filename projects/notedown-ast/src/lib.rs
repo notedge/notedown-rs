@@ -23,7 +23,5 @@ pub use self::{
 pub mod utils {
     pub use indexmap;
     pub use itertools;
-    pub use lsp_types;
     pub use text_utils;
-    pub use yggdrasil_shared::records::*;
 }

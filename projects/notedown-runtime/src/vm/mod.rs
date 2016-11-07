@@ -1,10 +1,8 @@
-pub use self::{diagnostic::FileMeta, file_system::VMFileSystem};
+pub use self::file_system::VMFileSystem;
 
-use notedown_ast::{
-    utils::{lsp_types::Diagnostic, Url},
-    NoteError,
-};
+use notedown_ast::NoteError;
 use std::path::{Path, PathBuf};
+use yggdrasil_shared::records::Url;
 
 mod diagnostic;
 mod file_system;
