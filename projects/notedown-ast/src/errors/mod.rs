@@ -16,6 +16,7 @@ pub type Result<T> = std::result::Result<T, NoteError>;
 #[derive(Debug)]
 pub struct NoteError {
     pub kind: Box<NoteErrorKind>,
+    pub level: DiagnosticLevel,
     pub file: Option<Url>,
     pub range: Option<Range<usize>>,
 }
@@ -36,6 +37,15 @@ pub enum NoteErrorKind {
     // UnknownError(#[from] anyhow::Error),
 }
 
+#[derive(Debug, Copy, Clone)]
+pub enum DiagnosticLevel {
+    None = 0,
+    Error = 1,
+    Warning = 2,
+    Information = 3,
+    Hint = 4,
+}
+
 impl NoteError {
     #[inline]
     pub fn set_path(&mut self, path: impl AsRef<Path>) {
@@ -53,14 +63,14 @@ impl NoteError {
     }
     #[inline]
     pub fn unreachable() -> Self {
-        Self { kind: Box::new(NoteErrorKind::Unreachable), file: None, range: None }
+        Self { kind: Box::new(NoteErrorKind::Unreachable), level: DiagnosticLevel::None, file: None, range: None }
     }
 }
 macro_rules! error_msg {
     ($name:ident => $t:ident) => {
         pub fn $name(msg: impl Into<String>) -> NoteError {
             let kind = NoteErrorKind::$t(msg.into());
-            Self { kind: Box::new(kind), file: None, range: None }
+            Self { kind: Box::new(kind), level: DiagnosticLevel::None, file: None, range: None }
         }
     };
     ($($name:ident => $t:ident),+ $(,)?) => (
@@ -77,7 +87,7 @@ error_msg![
 impl NoteError {
     pub fn undefined_variable(name: impl Into<String>) -> NoteError {
         let kind = NoteErrorKind::UndefinedVariable { name: name.into() };
-        Self { kind: Box::new(kind), file: None, range: None }
+        Self { kind: Box::new(kind), level: DiagnosticLevel::None, file: None, range: None }
     }
 }
 

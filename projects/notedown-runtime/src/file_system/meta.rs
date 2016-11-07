@@ -1,8 +1,7 @@
 use super::*;
-use notedown_ast::traits::TocNode;
-use yggdrasil_shared::records::{
-    lsp_types::{Diagnostic, DocumentSymbol, DocumentSymbolParams, SymbolKind},
-    TextIndex,
+use notedown_ast::{
+    traits::TocNode,
+    utils::{lsp_types::Diagnostic, TextIndex},
 };
 
 pub struct FileMeta {

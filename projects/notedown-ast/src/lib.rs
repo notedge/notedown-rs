@@ -5,6 +5,8 @@
 
 pub mod command;
 mod errors;
+#[cfg(feature = "lsp")]
+mod language_server;
 pub mod nodes;
 #[deny(missing_docs)]
 /// Traits for notedown
