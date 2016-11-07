@@ -24,4 +24,8 @@ pub mod utils {
     pub use indexmap;
     pub use itertools;
     pub use text_utils;
+    #[cfg(feature = "lsp")]
+    pub use yggdrasil_shared::records::lsp_types;
+    #[cfg(feature = "lsp")]
+    pub use yggdrasil_shared::records::{LSPPosition, LSPRange, TextIndex};
 }
