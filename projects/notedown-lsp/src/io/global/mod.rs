@@ -2,6 +2,7 @@ use state::Storage;
 use std::collections::HashMap;
 use tokio::sync::RwLock;
 use tower_lsp::lsp_types::{Url, *};
+use std::fmt::{Debug,Formatter,self};
 
 pub static FILE_STORAGE: Storage<RwLock<FileStateMap>> = Storage::new();
 
@@ -9,7 +10,7 @@ pub trait FileStateUpdate<T> {
     fn update(&mut self, p: T);
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct FileStateMap {
     inner: HashMap<Url, FileState>,
 }
@@ -18,6 +19,12 @@ pub struct FileStateMap {
 pub struct FileState {
     version: usize,
     text: String,
+}
+
+impl Debug for FileStateMap {
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        self.inner.fmt(f)
+    }
 }
 
 impl Default for FileStateMap {
@@ -50,6 +57,21 @@ impl FileStateUpdate<DidChangeTextDocumentParams> for FileStateMap {
     }
 }
 
+impl FileStateUpdate<DidSaveTextDocumentParams> for FileStateMap {
+    fn update(&mut self, p: DidSaveTextDocumentParams) {
+        // do nothing
+        let _ = p;
+    }
+}
+
+impl FileStateUpdate<DidCloseTextDocumentParams> for FileStateMap {
+    fn update(&mut self, p: DidCloseTextDocumentParams) {
+        // do nothing
+        let _ = p;
+    }
+}
+
+
 impl FileStateMap {
     fn update_versioned(&mut self, url: &Url, version: usize, content: String) {
         let new = FileState { version, text: content };
@@ -68,6 +90,6 @@ impl FileStateMap {
     }
 }
 
-pub fn init_storage_states() {
+pub fn initialize_global_storages() {
     FILE_STORAGE.set(RwLock::new(FileStateMap::default()));
 }

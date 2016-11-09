@@ -6,7 +6,7 @@ use crate::{
     completion::{completion_provider, COMPLETION_OPTIONS},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
-    io::{init_storage_states, FileStateUpdate, FILE_STORAGE},
+    io::{initialize_global_storages, FileStateUpdate, FILE_STORAGE},
 };
 use serde_json::Value;
 use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
@@ -81,22 +81,23 @@ impl LanguageServer for Backend {
         Ok(command_provider(params, &self.client).await)
     }
     async fn did_open(&self, params: DidOpenTextDocumentParams) {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.check_the_file(&params.text_document.uri).await;
         FILE_STORAGE.get().write().await.update(params);
-        self.client.log_message(MessageType::Info, format!("Count: {:#?}", FILE_STORAGE.get().read().await)).await;
     }
-    // 不要把东西都做这里面, 太卡了
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
         FILE_STORAGE.get().write().await.update(params);
-        self.client.log_message(MessageType::Info, format!("Count: {:#?}", FILE_STORAGE.get().read().await)).await;
     }
-    // 所有的检查在保存之后做
-    async fn did_save(&self, p: DidSaveTextDocumentParams) {
-        self.check_the_file(p.text_document.uri).await
+    async fn did_save(&self, params: DidSaveTextDocumentParams) {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.check_the_file(&params.text_document.uri).await;
+        FILE_STORAGE.get().write().await.update(params);
     }
-    async fn did_close(&self, p: DidCloseTextDocumentParams) {
-        self.check_the_file(p.text_document.uri).await
+    async fn did_close(&self, params: DidCloseTextDocumentParams) {
+        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.check_the_file(&params.text_document.uri).await;
+        FILE_STORAGE.get().write().await.update(params);
     }
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
@@ -162,7 +163,7 @@ impl LanguageServer for Backend {
 }
 
 impl Backend {
-    pub async fn check_the_file(&self, url: Url) {
+    pub async fn check_the_file(&self, url: &Url) {
         self.client.publish_diagnostics(url.clone(), diagnostics_provider(&url), None).await
     }
 }
@@ -171,7 +172,7 @@ impl Backend {
 async fn main() {
     let std_in = tokio::io::stdin();
     let stdout = tokio::io::stdout();
-    init_storage_states();
+    initialize_global_storages();
     let (service, messages) = LspService::new(|client| Backend { client });
     Server::new(std_in, stdout).interleave(messages).serve(service).await;
 }
