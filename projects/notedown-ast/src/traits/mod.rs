@@ -7,7 +7,7 @@ mod toc;
 pub use self::{
     context::ContextKind,
     into_node::IntoASTNode,
-    toc::{TableOfContent, TocNode},
+    toc::{TableOfContent, TocConfig, TocNode},
 };
 
 /// Slugify the element of notedown

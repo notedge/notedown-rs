@@ -17,7 +17,7 @@ pub mod value;
 
 pub use self::{
     command::Command,
-    errors::{NoteError, NoteErrorKind, Result},
+    errors::{DiagnosticLevel, NoteError, NoteErrorKind, Result},
     nodes::{ASTKind, ASTNode, ASTNodes},
     value::Value,
 };
@@ -27,7 +27,9 @@ pub mod utils {
     pub use itertools;
     pub use text_utils;
     #[cfg(feature = "lsp")]
-    pub use yggdrasil_shared::records::lsp_types;
+    mod lsp_wrap {
+        pub use yggdrasil_shared::records::{lsp_types, DashMap, DashSet, LSPPosition, LSPRange, Rope, TextIndex, Url};
+    }
     #[cfg(feature = "lsp")]
-    pub use yggdrasil_shared::records::{LSPPosition, LSPRange, TextIndex};
+    pub use lsp_wrap::*;
 }
