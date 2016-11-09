@@ -3,15 +3,19 @@ mod open_close;
 mod self_close;
 mod structural;
 
-use crate::completion::structural::complete_table;
+use crate::{completion::structural::complete_table, io::FILE_STORAGE};
 use command::build_command;
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, lazy::SyncLazy};
-use tower_lsp::lsp_types::{CompletionItem, CompletionItemKind::{self, *}, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind, WorkDoneProgressOptions, Position};
-use crate::io::FILE_STORAGE;
-
+use tower_lsp::lsp_types::{
+    CompletionItem,
+    CompletionItemKind::{self, *},
+    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
+    Position, WorkDoneProgressOptions,
+};
+use unicode_xid::UnicodeXID;
 
 pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
     let completion_trigger = vec!['.', '\\', '[', '<'];
@@ -22,12 +26,10 @@ pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
     }
 });
 
-pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
+pub async fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
     let text = FILE_STORAGE.get().read().await.read(&p.text_document_position.text_document.uri);
     match text {
-        Some(s) => {
-            completion_provider_dynamic(s, p.text_document_position.position)
-        },
+        Some(s) => completion_provider_dynamic(s, p.text_document_position.position),
         None => {
             let c = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
             completion_provider_static(c)
@@ -35,26 +37,12 @@ pub fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
     }
 }
 
-fn completion_provider_dynamic(text: String, position: Position) -> Option<CompletionResponse> {
-    let mut items = vec![];
-    match c {
-        Some('<') => items = complete_components(),
-        Some('\\') => {
-            items.extend(complete_commands());
-            items.extend(complete_table());
-        }
-        _ => return None,
-    };
-    Some(CompletionResponse::Array(items))
-}
-
-
 fn completion_provider_static(c: Option<char>) -> Option<CompletionResponse> {
     let mut items = vec![];
     match c {
-        Some('<') => items = complete_components(),
+        Some('<') => items = COMPLETE_COMPONENTS.to_owned(),
         Some('\\') => {
-            items.extend(complete_commands());
+            items.extend(COMPLETE_COMMANDS.to_owned());
             items.extend(complete_table());
         }
         _ => return None,
@@ -62,6 +50,30 @@ fn completion_provider_static(c: Option<char>) -> Option<CompletionResponse> {
     Some(CompletionResponse::Array(items))
 }
 
+fn completion_provider_dynamic(text: String, position: Position) -> Option<CompletionResponse> {
+    let word = get_completion_word(text, position);
+    completion_provider_static(word.chars().nth(0))
+}
+
+pub fn get_completion_word(text: String, tp: Position) -> String {
+    let line = tp.line as usize;
+    let num = tp.character as usize;
+    text.lines().nth(line).map(|e| get_word(e, num)).unwrap_or_default()
+}
+
+fn get_word(line: &str, index: usize) -> String {
+    // FIXME: panic when dis-sync!!!
+    let num = index.min(line.len());
+    let (f, e) = (&line[..num], &line[num..]);
+    let mut v = VecDeque::new();
+    for c in f.chars().rev() {
+        if c.is_xid_continue() || c == '\\' || c == '<' { v.push_front(c) } else { break }
+    }
+    for c in e.chars() {
+        if c.is_xid_continue() { v.push_back(c) } else { break }
+    }
+    return v.iter().collect();
+}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DocumentString {
@@ -109,16 +121,16 @@ fn load_md_doc(input: &str) -> Vec<DocumentString> {
     return Vec::from(out);
 }
 
-pub fn complete_commands() -> Vec<CompletionItem> {
+pub static COMPLETE_COMMANDS: SyncLazy<Vec<CompletionItem>> = SyncLazy::new(|| {
     let parsed = load_md_doc(include_str!("command.md"));
     parsed.iter().map(|doc| doc.command()).collect()
-}
+});
 
-pub fn complete_components() -> Vec<CompletionItem> {
+pub static COMPLETE_COMPONENTS: SyncLazy<Vec<CompletionItem>> = SyncLazy::new(|| {
     let open_close = load_md_doc(include_str!("open_close.md"));
     let self_close = load_md_doc(include_str!("self_close.md"));
     open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
-}
+});
 
 #[allow(dead_code)]
 fn list_completion_kinds() -> Vec<CompletionItem> {
