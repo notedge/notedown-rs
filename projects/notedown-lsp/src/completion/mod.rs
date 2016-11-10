@@ -38,16 +38,20 @@ pub async fn completion_provider(p: CompletionParams) -> Option<CompletionRespon
 }
 
 fn completion_provider_static(c: Option<char>) -> Option<CompletionResponse> {
-    let mut items = vec![];
     match c {
-        Some('<') => items = COMPLETE_COMPONENTS.to_owned(),
+        Some('<') => {
+            let items = COMPLETE_COMPONENTS.to_owned();
+            Some(CompletionResponse::Array(items))
+        }
         Some('\\') => {
+            let mut items = vec![];
             items.extend(COMPLETE_COMMANDS.to_owned());
             items.extend(complete_table());
+            Some(CompletionResponse::Array(items))
         }
-        _ => return None,
-    };
-    Some(CompletionResponse::Array(items))
+        Some('[') => None,
+        _ => None,
+    }
 }
 
 fn completion_provider_dynamic(text: String, position: Position) -> Option<CompletionResponse> {
@@ -55,7 +59,7 @@ fn completion_provider_dynamic(text: String, position: Position) -> Option<Compl
     completion_provider_static(word.chars().nth(0))
 }
 
-pub fn get_completion_word(text: String, tp: Position) -> String {
+fn get_completion_word(text: String, tp: Position) -> String {
     let line = tp.line as usize;
     let num = tp.character as usize;
     text.lines().nth(line).map(|e| get_word(e, num)).unwrap_or_default()
@@ -67,10 +71,20 @@ fn get_word(line: &str, index: usize) -> String {
     let (f, e) = (&line[..num], &line[num..]);
     let mut v = VecDeque::new();
     for c in f.chars().rev() {
-        if c.is_xid_continue() || c == '\\' || c == '<' { v.push_front(c) } else { break }
+        if c.is_xid_continue() || c == '\\' || c == '<' {
+            v.push_front(c)
+        }
+        else {
+            break;
+        }
     }
     for c in e.chars() {
-        if c.is_xid_continue() { v.push_back(c) } else { break }
+        if c.is_xid_continue() {
+            v.push_back(c)
+        }
+        else {
+            break;
+        }
     }
     return v.iter().collect();
 }
@@ -85,16 +99,6 @@ pub struct DocumentString {
 impl DocumentString {
     pub fn new(cmd: &str, short: &str, long: &str) -> DocumentString {
         Self { cmd: String::from(cmd.trim()), short: String::from(short.trim()), long: String::from(long.trim()) }
-    }
-
-    pub fn command(&self) -> CompletionItem {
-        build_command(&self.cmd, &self.short, &self.long)
-    }
-    pub fn open_close(&self) -> CompletionItem {
-        build_open_close(&self.cmd, &self.short, &self.long)
-    }
-    pub fn self_close(&self) -> CompletionItem {
-        build_self_close(&self.cmd, &self.short, &self.long)
     }
 }
 
@@ -123,13 +127,17 @@ fn load_md_doc(input: &str) -> Vec<DocumentString> {
 
 pub static COMPLETE_COMMANDS: SyncLazy<Vec<CompletionItem>> = SyncLazy::new(|| {
     let parsed = load_md_doc(include_str!("command.md"));
-    parsed.iter().map(|doc| doc.command()).collect()
+    parsed.iter().map(|doc| build_command(&doc.cmd, &doc.short, &doc.long)).collect()
 });
 
 pub static COMPLETE_COMPONENTS: SyncLazy<Vec<CompletionItem>> = SyncLazy::new(|| {
     let open_close = load_md_doc(include_str!("open_close.md"));
     let self_close = load_md_doc(include_str!("self_close.md"));
-    open_close.iter().map(|doc| doc.open_close()).chain(self_close.iter().map(|doc| doc.self_close())).collect()
+    open_close
+        .iter()
+        .map(|doc| build_open_close(&doc.cmd, &doc.short, &doc.long))
+        .chain(self_close.iter().map(|doc| build_self_close(&doc.cmd, &doc.short, &doc.long)))
+        .collect()
 });
 
 #[allow(dead_code)]

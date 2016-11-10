@@ -13,10 +13,10 @@ pub fn code_action_provider(p: CodeActionParams) -> Option<CodeActionResponse> {
 pub fn hover_provider(p: HoverParams) -> Option<Hover> {
     let _ = p;
     Some(Hover {
-        contents: HoverContents::Scalar(MarkedString::LanguageString(LanguageString {
-            language: "js".to_string(),
-            value: format!("{:#?}", p),
-        })),
+        contents: HoverContents::Markup(MarkupContent {
+            kind: MarkupKind::Markdown,
+            value: "![](https://projecteuler.net/images/icons/info.png)".to_string(),
+        }),
         range: None,
     })
 }

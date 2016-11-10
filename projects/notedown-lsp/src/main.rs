@@ -9,7 +9,11 @@ use crate::{
     io::{initialize_global_storages, FileStateUpdate, FILE_STORAGE},
 };
 use serde_json::Value;
-use tower_lsp::{jsonrpc::Result, lsp_types::*, Client, LanguageServer, LspService, Server};
+use tower_lsp::{
+    jsonrpc::Result,
+    lsp_types::{*},
+    Client, LanguageServer, LspService, Server,
+};
 
 mod commands;
 mod completion;
@@ -164,6 +168,12 @@ impl LanguageServer for Backend {
 
 impl Backend {
     pub async fn check_the_file(&self, url: &Url) {
+        let _ = url;
+        // self.execute_command(ExecuteCommandParams {
+        //     command: "notedown.inner.request-math-svg".to_string(),
+        //     arguments: vec![Value::String("x^2".to_string())],
+        //     work_done_progress_params: Default::default()
+        // }).await;
         self.client.publish_diagnostics(url.clone(), diagnostics_provider(&url), None).await
     }
 }
