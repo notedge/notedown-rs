@@ -3,13 +3,11 @@ mod open_close;
 mod self_close;
 mod structural;
 
-use crate::{completion::structural::complete_table, io::FILE_STORAGE};
+use crate::{completion::structural::complete_table, VM};
 use command::build_command;
 use lspower::lsp::{
-    CompletionItem,
-    CompletionItemKind::{self, *},
-    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind, Position,
-    WorkDoneProgressOptions,
+    CompletionItem, CompletionItemKind, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat,
+    MarkupContent, MarkupKind, Position, WorkDoneProgressOptions,
 };
 use open_close::build_open_close;
 use self_close::build_self_close;
@@ -22,7 +20,9 @@ pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
     CompletionOptions {
         resolve_provider: Some(false),
         trigger_characters: Some(completion_trigger.iter().map(ToString::to_string).collect()),
+        all_commit_characters: None,
         work_done_progress_options: WorkDoneProgressOptions { work_done_progress: Some(false) },
+        completion_item: None,
     }
 });
 
@@ -146,31 +146,31 @@ fn list_completion_kinds() -> Vec<CompletionItem> {
         CompletionItem { label: format!("{:?}", e), kind: Some(e), ..CompletionItem::default() }
     }
     vec![
-        item(Text),
-        item(Method),
-        item(Function),
-        item(Constructor),
-        item(Field),
-        item(Variable),
-        item(Class),
-        item(Interface),
-        item(Module),
-        item(Property),
-        item(Unit),
-        item(Value),
-        item(Enum),
-        item(Keyword),
-        item(Snippet),
-        item(Color),
-        item(File),
-        item(Reference),
-        item(Folder),
-        item(EnumMember),
-        item(Constant),
-        item(Struct),
-        item(Event),
-        item(Operator),
-        item(TypeParameter),
+        item(CompletionItemKind::TEXT),
+        item(CompletionItemKind::METHOD),
+        item(CompletionItemKind::FUNCTION),
+        item(CompletionItemKind::CONSTRUCTOR),
+        item(CompletionItemKind::FIELD),
+        item(CompletionItemKind::VARIABLE),
+        item(CompletionItemKind::CLASS),
+        item(CompletionItemKind::INTERFACE),
+        item(CompletionItemKind::MODULE),
+        item(CompletionItemKind::PROPERTY),
+        item(CompletionItemKind::UNIT),
+        item(CompletionItemKind::VALUE),
+        item(CompletionItemKind::ENUM),
+        item(CompletionItemKind::KEYWORD),
+        item(CompletionItemKind::SNIPPET),
+        item(CompletionItemKind::COLOR),
+        item(CompletionItemKind::FILE),
+        item(CompletionItemKind::REFERENCE),
+        item(CompletionItemKind::FOLDER),
+        item(CompletionItemKind::ENUM_MEMBER),
+        item(CompletionItemKind::CONSTANT),
+        item(CompletionItemKind::STRUCT),
+        item(CompletionItemKind::EVENT),
+        item(CompletionItemKind::OPERATOR),
+        item(CompletionItemKind::TYPE_PARAMETER),
     ]
 }
 

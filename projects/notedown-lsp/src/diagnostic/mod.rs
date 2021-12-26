@@ -1,4 +1,4 @@
-use crate::io::read_url;
+use crate::singleton::read_url;
 use lspower::lsp::*;
 
 pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
@@ -9,55 +9,67 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
             range: Range::new(Position::new(0, 0), Position::new(0, 100)),
             severity: Some(DiagnosticSeverity::Error),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: None,
+            data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(1, 0), Position::new(1, 100)),
             severity: Some(DiagnosticSeverity::Warning),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: None,
+            data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(2, 0), Position::new(2, 100)),
             severity: Some(DiagnosticSeverity::Information),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: None,
+            data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(3, 0), Position::new(3, 100)),
             severity: Some(DiagnosticSeverity::Hint),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: None,
+            data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(4, 0), Position::new(4, 100)),
             severity: Some(DiagnosticSeverity::Hint),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: Some(vec![DiagnosticTag::Unnecessary]),
+            data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(5, 0), Position::new(5, 100)),
             severity: Some(DiagnosticSeverity::Hint),
             code: None,
+            code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
             tags: Some(vec![DiagnosticTag::Deprecated]),
+            data: None,
         },
     ];
 }
@@ -76,10 +88,12 @@ pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
                                 range: Range::new(Position::new(line as u64, pos as u64), Position::new(line as u64, pos as u64 + 2)),
                                 severity: Some(DiagnosticSeverity::Error),
                                 code: None,
+                                code_description: None,
                                 source: Some("sourceeee ".to_string()),
                                 message: "messsssage ".to_string(),
                                 related_information: None,
                                 tags: None,
+                                data: None,
                             };
                             out.push(d)
                         }

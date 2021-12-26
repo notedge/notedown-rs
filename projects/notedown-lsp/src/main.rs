@@ -6,7 +6,6 @@ use crate::{
     completion::{completion_provider, COMPLETION_OPTIONS},
     diagnostic::diagnostics_provider,
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
-    io::{initialize_global_storages, FileStateUpdate, FILE_STORAGE},
 };
 use lspower::{jsonrpc::Result, lsp::*, Client, LanguageServer, LspService, Server};
 use serde_json::Value;
@@ -15,7 +14,9 @@ mod commands;
 mod completion;
 mod diagnostic;
 mod hint;
-mod io;
+mod singleton;
+
+pub use singleton::*;
 
 #[derive(Debug)]
 struct Backend {
@@ -63,101 +64,108 @@ impl LanguageServer for Backend {
         return Ok(init);
     }
     async fn initialized(&self, _: InitializedParams) {
-        self.client.log_message(MessageType::Info, "Notedown server initialized!").await;
+        self.client.log_message(MessageType::INFO, "Notedown server initialized!").await;
     }
 
     async fn shutdown(&self) -> Result<()> {
         Ok(())
     }
     async fn did_change_configuration(&self, params: DidChangeConfigurationParams) {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
     }
     async fn symbol(&self, params: WorkspaceSymbolParams) -> Result<Option<Vec<SymbolInformation>>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
     async fn execute_command(&self, params: ExecuteCommandParams) -> Result<Option<Value>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(command_provider(params, &self.client).await)
     }
     async fn did_open(&self, params: DidOpenTextDocumentParams) {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        self.check_the_file(&params.text_document.uri).await;
-        FILE_STORAGE.get().write().await.update(params);
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
+        let url = params.text_document.uri;
+        let diags = VM.update(&url).await;
+        self.client.publish_diagnostics(url, diags, None)
     }
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        FILE_STORAGE.get().write().await.update(params);
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
+        let url = params.text_document.uri;
+        let diags = VM.update_increment(&url, params.content_changes).await;
+        self.client.publish_diagnostics(url, diags, None);
     }
     async fn did_save(&self, params: DidSaveTextDocumentParams) {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        self.check_the_file(&params.text_document.uri).await;
-        FILE_STORAGE.get().write().await.update(params);
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
+        let url = params.text_document.uri;
+        let diags = VM.update(&url).await;
+        VM.gc_mark(&url);
+        self.client.publish_diagnostics(url, diags, None)
     }
     async fn did_close(&self, params: DidCloseTextDocumentParams) {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
-        self.check_the_file(&params.text_document.uri).await;
-        FILE_STORAGE.get().write().await.update(params);
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
+        let url = params.text_document.uri;
+        let diags = VM.update(&url).await;
+        VM.gc_mark(&url);
+        self.client.publish_diagnostics(url, diags, None)
     }
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(completion_provider(params).await)
     }
     async fn completion_resolve(&self, params: CompletionItem) -> Result<CompletionItem> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(params)
     }
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(hover_provider(params))
     }
     async fn signature_help(&self, params: SignatureHelpParams) -> Result<Option<SignatureHelp>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
     /// 当光标在位置 x 时, 哪些内容要被选中
     async fn document_highlight(&self, _: DocumentHighlightParams) -> Result<Option<Vec<DocumentHighlight>>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", hp)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", hp)).await;
         Ok(None)
     }
 
     async fn document_symbol(&self, params: DocumentSymbolParams) -> Result<Option<DocumentSymbolResponse>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", sp)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", sp)).await;
         Ok(document_symbol_provider(params))
     }
 
     /// Alt 键列出可执行的命令
     async fn code_action(&self, params: CodeActionParams) -> Result<Option<CodeActionResponse>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(code_action_provider(params))
     }
     /// 单独一行的特殊注释
     async fn code_lens(&self, params: CodeLensParams) -> Result<Option<Vec<CodeLens>>> {
-        // self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(code_lens_provider(params))
     }
     async fn document_link(&self, params: DocumentLinkParams) -> Result<Option<Vec<DocumentLink>>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
 
     async fn document_color(&self, params: DocumentColorParams) -> Result<Vec<ColorInformation>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(vec![])
     }
 
     async fn formatting(&self, params: DocumentFormattingParams) -> Result<Option<Vec<TextEdit>>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
 
     async fn rename(&self, params: RenameParams) -> Result<Option<WorkspaceEdit>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
 
     async fn selection_range(&self, params: SelectionRangeParams) -> Result<Option<Vec<SelectionRange>>> {
-        self.client.log_message(MessageType::Info, format!("{:#?}", params)).await;
+        self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         Ok(None)
     }
 }

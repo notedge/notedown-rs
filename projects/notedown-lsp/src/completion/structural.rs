@@ -17,7 +17,7 @@ fn build_table(a: usize, b: usize) -> CompletionItem {
     insert_text.extend_one(String::new());
     CompletionItem {
         label: format!("\u{200B}Table {} × {}", a, b),
-        kind: Some(CompletionItemKind::Keyword),
+        kind: Some(CompletionItemKind::KEYWORD),
         detail: Some(short),
         // documentation: Some(Documentation::MarkupContent(doc)),
         documentation: None,
@@ -26,7 +26,7 @@ fn build_table(a: usize, b: usize) -> CompletionItem {
         sort_text: Some(format!("9{}{}", a, b)),
         filter_text: Some(format!("\\table{}x{}", a, b)),
         insert_text: Some(insert_text.join("\n")),
-        insert_text_format: Some(InsertTextFormat::Snippet),
+        insert_text_format: Some(InsertTextFormat::SNIPPET),
         text_edit: None,
         additional_text_edits: None,
         command: None,

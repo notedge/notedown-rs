@@ -35,12 +35,14 @@ impl VMFileSystem {
 
 impl VMFileSystem {
     #[inline]
-    pub async fn update_text(&mut self, url: Url) -> Result<()> {
+    pub async fn update_text(&self, url: &Url) -> Result<()> {
         let _ = url.to_file_path()?;
+        // self.file_cache.insert();
+
         todo!()
     }
     #[inline]
-    pub async fn update_ast(&mut self, url: Url, parser: &Parser) -> Result<()> {
+    pub async fn update_ast(&mut self, url: &Url, parser: &Parser) -> Result<()> {
         match self.file_cache.get_mut(&url) {
             None => Err(NoteError::runtime_error("TODO")),
             Some(mut s) => s.value_mut().update_ast(parser).await,
