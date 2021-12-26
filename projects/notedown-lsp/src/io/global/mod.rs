@@ -1,10 +1,10 @@
+use lspower::lsp_types::{Url, *};
 use state::Storage;
 use std::{
     collections::HashMap,
     fmt::{self, Debug, Formatter},
 };
 use tokio::sync::RwLock;
-use tower_lsp::lsp_types::{Url, *};
 
 pub static FILE_STORAGE: Storage<RwLock<FileStateMap>> = Storage::new();
 

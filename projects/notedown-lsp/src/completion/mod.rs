@@ -5,16 +5,16 @@ mod structural;
 
 use crate::{completion::structural::complete_table, io::FILE_STORAGE};
 use command::build_command;
+use lspower::lsp::{
+    CompletionItem,
+    CompletionItemKind::{self, *},
+    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind, Position,
+    WorkDoneProgressOptions,
+};
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, lazy::SyncLazy};
-use tower_lsp::lsp_types::{
-    CompletionItem,
-    CompletionItemKind::{self, *},
-    CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat, MarkupContent, MarkupKind,
-    Position, WorkDoneProgressOptions,
-};
 use unicode_xid::UnicodeXID;
 
 pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {

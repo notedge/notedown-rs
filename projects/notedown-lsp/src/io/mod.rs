@@ -1,5 +1,5 @@
+use lspower::lsp_types::Url;
 use std::fs;
-use tower_lsp::lsp_types::Url;
 
 mod global;
 pub use global::{initialize_global_storages, FileStateUpdate, FILE_STORAGE};

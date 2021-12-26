@@ -4,26 +4,26 @@ publish = false
 version = "0.1.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown LSP Client"
-repository = "https://github.com/notedge/notedown-rs/tree/main/projects/notedown-lsp"
+repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-lsp"
 readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
 
 [dependencies]
-notedown_parser = "0.12.0"
 async-trait = "0.1.52"
 futures = { version = "0.3.19", features = ["compat"] }
 log = "0.4.14"
 serde = { version = "1.0.132", features = ["derive"] }
 serde_json = "1.0.73"
-tokio = { version = "1.15.0", features = ["rt-core", "io-std", "macros", "test-util"] }
-tokio-util = { version = "0.6.9", features = ["codec"] }
 # lsp-types = { version = "0.82", features = ["proposed"] }
-tower-lsp = "0.14.1"
-tower-service = "0.3.1"
-tower-test = "0.4.0"
+tokio = { version = "1.14.0", features = ["io-std", "rt-multi-thread", "macros", "test-util"] }
+lspower = "1.5.0"
 # clipboard = "0.5"
 cli-clipboard = "0.2.0"
 unicode-xid = "0.2.2"
 state = "0.5.2"
 itertools = "0.10.3"
+
+[dependencies.notedown-rt]
+version= "0.1.0"
+path = "../notedown-runtime"

@@ -8,12 +8,8 @@ use crate::{
     hint::{code_action_provider, code_lens_provider, document_symbol_provider, hover_provider},
     io::{initialize_global_storages, FileStateUpdate, FILE_STORAGE},
 };
+use lspower::{jsonrpc::Result, lsp::*, Client, LanguageServer, LspService, Server};
 use serde_json::Value;
-use tower_lsp::{
-    jsonrpc::Result,
-    lsp_types::{*},
-    Client, LanguageServer, LspService, Server,
-};
 
 mod commands;
 mod completion;
@@ -26,7 +22,7 @@ struct Backend {
     client: Client,
 }
 
-#[tower_lsp::async_trait]
+#[lspower::async_trait]
 impl LanguageServer for Backend {
     async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
         let server_info = ServerInfo {

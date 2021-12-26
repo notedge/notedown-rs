@@ -1,5 +1,5 @@
+use lspower::lsp::*;
 use serde_json::Value;
-use tower_lsp::lsp_types::*;
 
 mod document_symbol;
 pub use document_symbol::document_symbol_provider;

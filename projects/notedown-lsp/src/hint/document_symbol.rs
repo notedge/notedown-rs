@@ -1,6 +1,6 @@
 use crate::{diagnostic::ToToc, io::read_url};
+use lspower::lsp_types::{DocumentSymbolParams, DocumentSymbolResponse};
 use notedown_parser::ParserConfig;
-use tower_lsp::lsp_types::{DocumentSymbolParams, DocumentSymbolResponse};
 
 #[allow(deprecated)]
 pub fn document_symbol_provider(args: DocumentSymbolParams) -> Option<DocumentSymbolResponse> {

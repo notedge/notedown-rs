@@ -1,9 +1,5 @@
-mod toc;
-
-pub use toc::ToToc;
-
 use crate::io::read_url;
-use tower_lsp::lsp_types::*;
+use lspower::lsp::*;
 
 pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
     let _ = url;
@@ -77,10 +73,7 @@ pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
                     if let Some(c) = chars.next() {
                         if c.1 != ' ' {
                             let d = Diagnostic {
-                                range: Range::new(
-                                    Position::new(line as u64, pos as u64),
-                                    Position::new(line as u64, pos as u64 + 2),
-                                ),
+                                range: Range::new(Position::new(line as u64, pos as u64), Position::new(line as u64, pos as u64 + 2)),
                                 severity: Some(DiagnosticSeverity::Error),
                                 code: None,
                                 source: Some("sourceeee ".to_string()),
