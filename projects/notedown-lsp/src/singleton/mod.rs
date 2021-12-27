@@ -37,6 +37,7 @@ impl SingletonVM {
     pub fn gc_mark(&self, url: &Url) {
         todo!()
     }
+    
 }
 
 pub fn read_url(url: &Url) -> String {

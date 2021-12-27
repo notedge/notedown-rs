@@ -1,5 +1,11 @@
 use super::*;
-use notedown_ast::utils::{lsp_types::Url, Rope};
+use notedown_ast::{
+    traits::TocNode,
+    utils::{
+        lsp_types::{DocumentSymbolResponse, Url},
+        Rope, TextIndex,
+    },
+};
 
 pub struct FileState {
     /// used to check weather the file needs re-parse
@@ -12,6 +18,25 @@ pub struct FileState {
 impl PartialEq for FileState {
     fn eq(&self, other: &Self) -> bool {
         self.fingerprint.eq(&other.fingerprint)
+    }
+}
+
+impl FileState {
+    #[inline]
+    pub fn get_text(&self) -> String {
+        self.text.chars().collect()
+    }
+    #[inline]
+    pub fn get_text_index(&self) -> TextIndex {
+        TextIndex::new(self.get_text())
+    }
+    #[inline]
+    pub fn get_toc(&self) -> &TocNode {
+        &self.meta.toc
+    }
+    #[inline]
+    pub fn get_lsp_toc(&self) -> DocumentSymbolResponse {
+        self.meta.as_lsp_toc(&self.get_text_index())
     }
 }
 

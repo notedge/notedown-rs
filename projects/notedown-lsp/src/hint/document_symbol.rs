@@ -1,18 +1,15 @@
 use crate::singleton::read_url;
 use lspower::lsp::{DocumentSymbolParams, DocumentSymbolResponse};
-use notedown_rt::ParserConfig;
+use crate::VM;
 
 #[allow(deprecated)]
 pub fn document_symbol_provider(args: DocumentSymbolParams) -> Option<DocumentSymbolResponse> {
-    let cfg = ParserConfig::default();
-    let ast = match cfg.parse(&read_url(&args.text_document.uri)) {
-        Ok(o) => o,
-        Err(_) => return None,
-    };
+    match VM.get_lsp_toc(&args.text_document.uri) {
+        None => {}
+        Some(s) => {}
+    }
 
-    let nested = match ast.to_toc().children {
-        Some(v) => v,
-        None => vec![],
-    };
+    VM.get_lsp_toc(&args.text_document.uri).map(|f| f.as_document_symbol())
+
     Some(DocumentSymbolResponse::Nested(nested))
 }

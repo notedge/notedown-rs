@@ -8,8 +8,8 @@ use notedown_ast::{
 };
 
 pub struct FileMeta {
-    errors: Vec<NoteError>,
-    toc: TocNode,
+    pub errors: Vec<NoteError>,
+    pub toc: TocNode,
 }
 
 impl FileMeta {

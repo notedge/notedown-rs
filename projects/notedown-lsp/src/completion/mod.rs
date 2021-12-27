@@ -27,14 +27,23 @@ pub static COMPLETION_OPTIONS: SyncLazy<CompletionOptions> = SyncLazy::new(|| {
 });
 
 pub async fn completion_provider(p: CompletionParams) -> Option<CompletionResponse> {
-    let text = FILE_STORAGE.get().read().await.read(&p.text_document_position.text_document.uri);
-    match text {
-        Some(s) => completion_provider_dynamic(s, p.text_document_position.position),
-        None => {
-            let c = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
-            completion_provider_static(c)
-        }
+    let url = &p.text_document_position.text_document.uri;
+    let pos = &p.text_document_position.position;
+    match VM.get_completion_context(url, pos) {
+        ContextKind::None => {}
+        ContextKind::Text => {}
+        ContextKind::Function => {}
+        ContextKind::Math => {}
+        ContextKind::Code => {}
     }
+    todo!()
+    // match text {
+    //     Some(s) => completion_provider_dynamic(s, p.text_document_position.position),
+    //     None => {
+    //         let c = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());
+    //         completion_provider_static(c)
+    //     }
+    // }
 }
 
 fn completion_provider_static(c: Option<char>) -> Option<CompletionResponse> {

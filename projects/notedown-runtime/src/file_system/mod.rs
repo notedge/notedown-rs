@@ -6,7 +6,10 @@ pub use self::{meta::FileMeta, state::FileState};
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
 use notedown_ast::{
-    utils::{lsp_types::Url, DashMap},
+    utils::{
+        lsp_types::{DocumentSymbolResponse, Url},
+        DashMap,
+    },
     ASTNode, NoteError, Result,
 };
 use std::path::Path;
@@ -30,6 +33,15 @@ impl VMFileSystem {
     #[inline]
     pub fn clear_cache(&mut self) {
         self.file_cache.clear();
+    }
+}
+
+impl VMFileSystem {
+    pub fn get_lsp_toc(&self, url: &Url) -> Option<DocumentSymbolResponse> {
+        match self.file_cache.get(url) {
+            None => None,
+            Some(s) => Some(s.get_lsp_toc()),
+        }
     }
 }
 

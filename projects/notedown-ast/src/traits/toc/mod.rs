@@ -22,7 +22,7 @@ pub struct TocConfig {
 }
 
 /// Node of table of content
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TocNode {
     /// Depth of the node from root
     pub level: u8,
