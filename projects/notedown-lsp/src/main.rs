@@ -122,14 +122,14 @@ impl LanguageServer for Backend {
         let url = params.text_document.uri;
         let diags = VM.update(&url).await;
         VM.gc_mark(&url);
-        self.client.publish_diagnostics(url, diags, None)
+        self.client.publish_diagnostics(url, diags, None).await
     }
     async fn did_close(&self, params: DidCloseTextDocumentParams) {
         // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         let url = params.text_document.uri;
         let diags = VM.update(&url).await;
         VM.gc_mark(&url);
-        self.client.publish_diagnostics(url, diags, None)
+        self.client.publish_diagnostics(url, diags, None).await
     }
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;

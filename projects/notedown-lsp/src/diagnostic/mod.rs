@@ -85,7 +85,7 @@ pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
                     if let Some(c) = chars.next() {
                         if c.1 != ' ' {
                             let d = Diagnostic {
-                                range: Range::new(Position::new(line as u64, pos as u64), Position::new(line as u64, pos as u64 + 2)),
+                                range: Range::default(),
                                 severity: Some(DiagnosticSeverity::ERROR),
                                 code: None,
                                 code_description: None,

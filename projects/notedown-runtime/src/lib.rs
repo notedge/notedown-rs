@@ -4,5 +4,5 @@ mod vm;
 
 pub use self::{
     file_system::{FileMeta, FileState, VMFileSystem},
-    vm::NoteVM,
+    vm::{ContextKind, NoteVM},
 };

@@ -17,18 +17,24 @@ use std::path::Path;
 pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
 pub struct VMFileSystem {
-    workspace_root: Url,
+    workspace_root: Option<Url>,
     file_cache: DashMap<Url, FileState>,
+}
+
+impl Default for VMFileSystem {
+    fn default() -> Self {
+        Self { workspace_root: None, file_cache: Default::default() }
+    }
 }
 
 impl VMFileSystem {
     #[inline]
     pub fn new(url: Url) -> VMFileSystem {
-        Self { workspace_root: url, file_cache: Default::default() }
+        Self { workspace_root: Some(url), file_cache: Default::default() }
     }
     #[inline]
-    pub fn reset_workspace(&mut self, url: Url) {
-        self.workspace_root = url;
+    pub fn set_workspace(&mut self, url: Url) {
+        self.workspace_root = Some(url);
     }
     #[inline]
     pub fn clear_cache(&mut self) {
@@ -54,7 +60,7 @@ impl VMFileSystem {
         todo!()
     }
     #[inline]
-    pub async fn update_ast(&mut self, url: &Url, parser: &Parser) -> Result<()> {
+    pub async fn update_ast(&self, url: &Url, parser: &Parser) -> Result<()> {
         match self.file_cache.get_mut(&url) {
             None => Err(NoteError::runtime_error("TODO")),
             Some(mut s) => s.value_mut().update_ast(parser).await,

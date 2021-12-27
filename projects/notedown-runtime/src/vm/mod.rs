@@ -1,14 +1,19 @@
-use crate::VMFileSystem;
-use notedown_ast::{
-    traits::{ContextKind, TocNode},
-    utils::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent, Url},
-};
-use std::path::Path;
-
 mod diagnostic;
+
+pub use notedown_ast::traits::ContextKind;
+
+use crate::{file_system::Parser, VMFileSystem};
+use notedown_ast::utils::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent, Url};
+use std::path::Path;
 
 pub struct NoteVM {
     pub fs: VMFileSystem,
+}
+
+impl Default for NoteVM {
+    fn default() -> Self {
+        Self { fs: Default::default() }
+    }
 }
 
 impl NoteVM {
@@ -46,13 +51,12 @@ impl NoteVM {
     }
 
     #[inline]
-    async fn update_text(&mut self, url: &Url) {
-        let _ = url;
-        todo!()
+    async fn update_text(&self, url: &Url) {
+        self.fs.update_text(url).ok()
     }
-    async fn update_ast(&mut self, url: &Url) {
-        let _ = url;
-        todo!()
+    #[inline]
+    async fn update_ast(&self, url: &Url, parser: &Parser) {
+        self.fs.update_ast(url, parser).ok()
     }
 
     pub fn get_completion_context(&self, url: &Url, p: &Position) -> ContextKind {
@@ -61,7 +65,7 @@ impl NoteVM {
     }
 
     #[inline]
-    pub async fn update_increment(&mut self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) {
+    pub async fn update_increment(&mut self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) -> Vec<Diagnostic> {
         let _ = (url, edits);
         todo!()
     }

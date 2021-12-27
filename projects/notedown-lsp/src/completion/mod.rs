@@ -9,6 +9,7 @@ use lspower::lsp::{
     CompletionItem, CompletionItemKind, CompletionOptions, CompletionParams, CompletionResponse, Documentation, InsertTextFormat,
     MarkupContent, MarkupKind, Position, WorkDoneProgressOptions,
 };
+use notedown_rt::ContextKind;
 use open_close::build_open_close;
 use self_close::build_self_close;
 use serde::{Deserialize, Serialize};

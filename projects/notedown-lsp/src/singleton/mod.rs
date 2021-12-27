@@ -7,12 +7,14 @@ use std::{
     lazy::{SyncLazy, SyncOnceCell},
     ops::Deref,
 };
+use std::cell::RefCell;
+use tokio::sync::OnceCell;
 
 pub static VM: SyncLazy<SingletonVM> = SyncLazy::new(|| SingletonVM::default());
 
 #[derive(Default)]
 pub struct SingletonVM {
-    inner: SyncOnceCell<NoteVM>,
+    inner: RefCell<NoteVM>,
 }
 
 impl Deref for SingletonVM {
@@ -25,19 +27,24 @@ impl Deref for SingletonVM {
 
 impl SingletonVM {
     fn vm(&self) -> &mut NoteVM {
-        &mut self.inner.get_or_init(|| NoteVM::new())
+        match self.inner.get_mut() {
+            None => self.inner.set(),
+            Some(s) => return s,
+        }
+       self.inner.get_mut()
+
+        self.inner.get_or_init(|| NoteVM::default());
     }
 
     pub async fn update(&self, url: &Url) -> Vec<Diagnostic> {
         self.vm().update(url).await
     }
-    pub async fn update_increment(&self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) {
+    pub async fn update_increment(&self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) -> Vec<Diagnostic> {
         self.vm().update_increment(url, edits).await
     }
     pub fn gc_mark(&self, url: &Url) {
         todo!()
     }
-    
 }
 
 pub fn read_url(url: &Url) -> String {
