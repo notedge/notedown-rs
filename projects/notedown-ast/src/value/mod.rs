@@ -10,9 +10,6 @@ use num::{BigInt, BigUint};
 use rust_decimal::Decimal;
 use std::collections::{BTreeMap, BTreeSet};
 
-/// Ordered set of values
-pub type OrderedSet = IndexSet<Literal<Value>>;
-
 ///
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum Value {

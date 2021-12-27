@@ -19,6 +19,6 @@ pub struct NormalCommand {
     pub cmd: String,
     pub kind: NormalCommandKind,
     pub options: CommandOptions,
-    pub pattern: CommandPattern,
+    pub pattern: LiteralPattern,
     pub body: Literal<String>,
 }

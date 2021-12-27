@@ -13,14 +13,6 @@ impl Hash for Command {
     }
 }
 
-impl Hash for CommandPattern {
-    fn hash<H: Hasher>(&self, state: &mut H) {
-        for i in &self.pts {
-            i.value.hash(state)
-        }
-    }
-}
-
 impl Hash for CommandOptions {
     fn hash<H: Hasher>(&self, state: &mut H) {
         self.args.hash(state);

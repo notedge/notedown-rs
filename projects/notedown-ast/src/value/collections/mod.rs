@@ -1,9 +1,13 @@
+mod literal_pattern;
 mod ordered_map;
 mod sparse_array;
 
 pub use ordered_map::*;
 
 use super::*;
+
+/// Ordered set of values
+pub type OrderedSet = IndexSet<Literal<Value>>;
 
 /// Ordered map of key value pairs
 #[derive(Clone, Default, Debug, Eq, PartialEq)]
@@ -16,6 +20,12 @@ pub struct OrderedMap {
 pub struct LiteralPair {
     key: Literal<String>,
     value: Literal<Value>,
+}
+
+/// Literal Patterns for command
+#[derive(Clone, Default, Eq, PartialEq)]
+pub struct LiteralPattern {
+    inner: Vec<Literal<String>>,
 }
 
 /// Sparse representation of the array, the subscript can be any non-zero integer

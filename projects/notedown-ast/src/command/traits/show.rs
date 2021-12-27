@@ -12,12 +12,6 @@ impl Debug for Command {
     }
 }
 
-impl Debug for CommandPattern {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        f.debug_list().entries(self.pts.iter().cloned().map(|s| s.value)).finish()
-    }
-}
-
 impl Debug for NormalCommand {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         let w = &mut f.debug_struct("Command");
@@ -75,14 +69,7 @@ impl Display for Command {
     }
 }
 
-impl Display for CommandPattern {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        for i in &self.pts {
-            write!(f, "[{}]", i)?;
-        }
-        Ok(())
-    }
-}
+
 
 impl Display for CommandOptions {
     fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {

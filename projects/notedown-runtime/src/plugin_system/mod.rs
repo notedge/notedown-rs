@@ -1,12 +1,18 @@
+mod parser;
+
+pub use self::parser::PluginParser;
 use crate::FileMeta;
 use notedown_ast::{utils::DashMap, ASTNode, Result};
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Formatter},
+    hash::{Hash, Hasher},
 };
 
+/// A parser which can parse text into ast, and report errors at the same time
 pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
+/// Plugin system manager
 #[derive(Debug, Default)]
 pub struct PluginSystem {
     parsers: DashMap<String, PluginParser>,
@@ -32,32 +38,6 @@ impl PluginSystem {
         }
         return None;
     }
-}
-
-pub struct PluginParser {
-    pub name: String,
-    pub parser: Parser,
-    pub try_extension: BTreeSet<String>,
-}
-
-impl Debug for PluginParser {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let w = &mut f.debug_struct("Parser");
-        w.field("name", &self.name);
-        w.field("formats", &self.try_extension);
-        w.finish()
-    }
-}
-
-impl Default for PluginParser {
-    fn default() -> Self {
-        let mut set = BTreeSet::new();
-        set.insert("text".to_string());
-        Self { name: "text".to_string(), parser: text_view_parser, try_extension: set }
-    }
-}
-pub fn text_view_parser(_: &str, _: &mut FileMeta) -> Result<ASTNode> {
-    Ok(ASTNode::default())
 }
 
 pub struct ExtendedPackage {}

@@ -18,11 +18,7 @@ use std::ops::Range;
 pub struct CommandOptions {
     pub args: SparseArray,
     pub kvs: OrderedMap,
-}
-
-#[derive(Clone, Default, Eq, PartialEq)]
-pub struct CommandPattern {
-    pts: Vec<Literal<String>>,
+    pub pts: LiteralPattern,
 }
 
 #[derive(Clone, Eq, PartialEq)]
