@@ -95,7 +95,7 @@ impl NoteVM {
     }
 
     #[inline]
-    pub async fn update_increment(&mut self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) -> Vec<Diagnostic> {
+    pub async fn update_increment(&self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) -> Vec<Diagnostic> {
         let _ = (url, edits);
         todo!()
     }

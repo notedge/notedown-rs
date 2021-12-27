@@ -115,7 +115,7 @@ impl LanguageServer for Backend {
         // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         let url = params.text_document.uri;
         let diags = VM.update_increment(&url, params.content_changes).await;
-        self.client.publish_diagnostics(url, diags, None);
+        self.client.publish_diagnostics(url, diags, None).await
     }
     async fn did_save(&self, params: DidSaveTextDocumentParams) {
         // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;

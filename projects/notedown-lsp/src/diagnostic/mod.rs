@@ -72,35 +72,3 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
         },
     ];
 }
-
-#[allow(dead_code)]
-pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
-    let mut out = vec![];
-    for (_line, s) in read_url(&url).lines().enumerate() {
-        let mut chars = s.chars().enumerate();
-        while let Some((_pos, c)) = chars.next() {
-            match c {
-                ',' | '.' | ':' | '!' | '?' => {
-                    if let Some(c) = chars.next() {
-                        if c.1 != ' ' {
-                            let d = Diagnostic {
-                                range: Range::default(),
-                                severity: Some(DiagnosticSeverity::ERROR),
-                                code: None,
-                                code_description: None,
-                                source: Some("sourceeee ".to_string()),
-                                message: "messsssage ".to_string(),
-                                related_information: None,
-                                tags: None,
-                                data: None,
-                            };
-                            out.push(d)
-                        }
-                    }
-                }
-                _ => {}
-            }
-        }
-    }
-    return out;
-}

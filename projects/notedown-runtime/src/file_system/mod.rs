@@ -7,10 +7,7 @@ use crate::plugin_system::Parser;
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
 use notedown_ast::{
-    utils::{
-        lsp_types::{DocumentSymbolResponse, Url},
-        DashMap,
-    },
+    utils::{lsp_types::Url, DashMap},
     ASTNode, NoteError, Result,
 };
 use std::path::Path;

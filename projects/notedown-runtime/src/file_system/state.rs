@@ -7,7 +7,7 @@ use notedown_ast::{
         Rope, TextIndex,
     },
 };
-use std::{fs::read_to_string, path::PathBuf};
+use std::fs::read_to_string;
 
 pub struct FileState {
     /// used to check weather the file needs re-parse
