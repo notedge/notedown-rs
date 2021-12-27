@@ -1,4 +1,5 @@
 use super::*;
+use crate::plugin_system::Parser;
 use notedown_ast::{
     traits::TocNode,
     utils::{
@@ -6,7 +7,7 @@ use notedown_ast::{
         Rope, TextIndex,
     },
 };
-use crate::plugin_system::Parser;
+use std::{fs::read_to_string, path::PathBuf};
 
 pub struct FileState {
     /// used to check weather the file needs re-parse
@@ -27,6 +28,7 @@ impl FileState {
     pub fn get_text(&self) -> String {
         self.text.chars().collect()
     }
+
     #[inline]
     pub fn get_text_index(&self) -> TextIndex {
         TextIndex::new(self.get_text())
@@ -39,18 +41,17 @@ impl FileState {
     pub fn get_lsp_toc(&self) -> DocumentSymbolResponse {
         self.meta.as_lsp_toc(&self.get_text_index())
     }
+    #[inline]
+    pub fn can_gc(&self) -> bool {
+        false
+    }
 }
 
 impl FileState {
-    pub async fn load_file(&mut self, path: &Path) -> Result<()> {
-        let mut file = File::open(path).await?;
-        let mut contents = Vec::new();
-        file.read_to_end(&mut contents).await?;
-        unsafe { self.text = Rope::from_str(&String::from_utf8_unchecked(contents)) }
+    pub async fn load_local(&mut self, url: &Url) -> Result<()> {
+        let path = url.to_file_path()?;
+        self.text = Rope::from_str(&read_to_string(path)?);
         Ok(())
-    }
-    pub async fn load_local(&mut self, url: &Url) {
-        todo!("Local: {}", url)
     }
     pub async fn load_remote(&mut self, url: &Url) {
         todo!("Remote: {}", url)

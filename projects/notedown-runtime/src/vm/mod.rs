@@ -40,16 +40,30 @@ impl NoteVM {
 
 /// Properties that can be obtained immediately
 impl NoteVM {
+    /// Remove cache that no longer using
+    #[inline]
+    pub fn gc(&self) {
+        self.fs.cache.retain(|_, v| v.can_gc())
+    }
+    /// Mark some file is useless
+    #[inline]
+    pub fn gc_mark(&self, _: &Url) {
+        // TODO: mark
+    }
+
     #[inline]
     pub fn get_lsp_toc(&self, url: &Url) -> Option<DocumentSymbolResponse> {
-        self.fs.get_lsp_toc(url)
+        match self.fs.cache.get(url) {
+            None => None,
+            Some(s) => Some(s.get_lsp_toc()),
+        }
     }
 }
 
 /// Asynchronous operations that take amount of time
 impl NoteVM {
     #[inline]
-    pub async fn update(&mut self, url: &Url) -> Vec<Diagnostic> {
+    pub async fn update(&self, url: &Url) -> Vec<Diagnostic> {
         self.update_text(url).await;
         match self.ps.get_parser("note") {
             None => {}

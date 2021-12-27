@@ -38,4 +38,9 @@ impl FileMeta {
     pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbolResponse {
         DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
     }
+    
+    #[inline]
+    pub fn can_gc(&self) -> bool {
+        false
+    }
 }

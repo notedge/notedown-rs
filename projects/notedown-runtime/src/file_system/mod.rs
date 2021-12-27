@@ -3,6 +3,7 @@ mod state;
 
 pub use self::{meta::FileMeta, state::FileState};
 
+use crate::plugin_system::Parser;
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
 use notedown_ast::{
@@ -13,24 +14,22 @@ use notedown_ast::{
     ASTNode, NoteError, Result,
 };
 use std::path::Path;
-use crate::plugin_system::Parser;
-
 
 pub struct VMFileSystem {
-    workspace_root: Option<Url>,
-    file_cache: DashMap<Url, FileState>,
+    pub workspace_root: Option<Url>,
+    pub cache: DashMap<Url, FileState>,
 }
 
 impl Default for VMFileSystem {
     fn default() -> Self {
-        Self { workspace_root: None, file_cache: Default::default() }
+        Self { workspace_root: None, cache: Default::default() }
     }
 }
 
 impl VMFileSystem {
     #[inline]
     pub fn new(url: Url) -> VMFileSystem {
-        Self { workspace_root: Some(url), file_cache: Default::default() }
+        Self { workspace_root: Some(url), cache: Default::default() }
     }
     #[inline]
     pub fn set_workspace(&mut self, url: Url) {
@@ -38,18 +37,11 @@ impl VMFileSystem {
     }
     #[inline]
     pub fn clear_cache(&mut self) {
-        self.file_cache.clear();
+        self.cache.clear();
     }
 }
 
-impl VMFileSystem {
-    pub fn get_lsp_toc(&self, url: &Url) -> Option<DocumentSymbolResponse> {
-        match self.file_cache.get(url) {
-            None => None,
-            Some(s) => Some(s.get_lsp_toc()),
-        }
-    }
-}
+impl VMFileSystem {}
 
 impl VMFileSystem {
     #[inline]
@@ -61,7 +53,7 @@ impl VMFileSystem {
     }
     #[inline]
     pub async fn update_ast(&self, url: &Url, parser: &Parser) -> Result<()> {
-        match self.file_cache.get_mut(&url) {
+        match self.cache.get_mut(&url) {
             None => Err(NoteError::runtime_error("TODO")),
             Some(mut s) => s.value_mut().update_ast(parser).await,
         }
@@ -76,6 +68,7 @@ impl VMFileSystem {
         let _ = Url::from_file_path(path)?;
         todo!()
     }
+
     #[inline]
     /// add a file url to resolve
     pub async fn load_url(&mut self, url: &Url) -> Result<()> {

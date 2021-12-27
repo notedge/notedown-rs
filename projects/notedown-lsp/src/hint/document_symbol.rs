@@ -1,4 +1,4 @@
-use crate::{singleton::read_url, VM};
+use crate::VM;
 use lspower::lsp::{DocumentSymbolParams, DocumentSymbolResponse};
 
 #[inline]

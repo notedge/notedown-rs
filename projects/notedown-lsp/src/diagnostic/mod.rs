@@ -1,4 +1,3 @@
-use crate::singleton::read_url;
 use lspower::lsp::*;
 
 pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
@@ -77,9 +76,9 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
 #[allow(dead_code)]
 pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
     let mut out = vec![];
-    for (line, s) in read_url(&url).lines().enumerate() {
+    for (_line, s) in read_url(&url).lines().enumerate() {
         let mut chars = s.chars().enumerate();
-        while let Some((pos, c)) = chars.next() {
+        while let Some((_pos, c)) = chars.next() {
             match c {
                 ',' | '.' | ':' | '!' | '?' => {
                     if let Some(c) = chars.next() {
