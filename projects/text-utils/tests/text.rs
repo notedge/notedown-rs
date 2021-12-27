@@ -1,6 +1,4 @@
-use text_utils::{
-    dedent, dedent_less_than, indent, indent_with, unescape, unescape_dec_chars, unescape_hex_chars, unescape_unchecked,
-};
+use text_utils::{dedent, dedent_less_than, indent, indent_with, unescape, unescape_dec_chars, unescape_hex_chars, unescape_unchecked};
 
 #[test]
 fn test_dedent() {
@@ -46,7 +44,7 @@ fn test_indent_with() {
    3
     4
 ";
-    const OUTPUT: &str = "\n>  1\n>   2\n>    3\n>     4\n";
+    const OUTPUT: &str = ">\n>  1\n>   2\n>    3\n>     4\n";
     debug_assert_eq!(indent_with(INPUT, "> "), OUTPUT)
 }
 

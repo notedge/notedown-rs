@@ -1,4 +1,4 @@
-use crate::{nodes::*, ASTKind, ASTKind::ListView, ASTNode, Command, Value};
+use crate::{nodes::*, ASTKind, ASTNode, Command, Value};
 
 /// Convert element into [`ASTNode`]
 pub trait IntoASTNode {
@@ -20,71 +20,57 @@ impl IntoASTNode for ASTKind {
     }
 }
 
-macro_rules! into_node_level1 {
-    ($t:ty => (box, $name:ident)) => {
+macro_rules! into_node {
+    ($t:ty => (box, $variant:expr)) => {
     impl Into<ASTKind> for $t {
         #[inline]
-        fn into(self) -> ASTKind { ASTKind::$name(box self) }
+        fn into(self) -> ASTKind { $variant(box self).into() }
     }
     impl Into<ASTNode> for $t {
         #[inline]
-        fn into(self) -> ASTNode { ASTKind::$name(box self).into_node(None) }
+        fn into(self) -> ASTNode { $variant(box self).into_node(None) }
     }
     impl IntoASTNode for $t {
         #[inline]
         fn into_node(self, range: MaybeRanged) -> ASTNode {
-            ASTKind::$name(box self).into_node(range)
+            $variant(box self).into_node(range)
         }
     }
     };
-    ($t:ty => (ref, $name:ident)) => {
+    ($t:ty => (ref, $variant:expr)) => {
     impl Into<ASTKind> for $t {
         #[inline]
-        fn into(self) -> ASTKind { ASTKind::$name(self) }
+        fn into(self) -> ASTKind { $variant(self).into() }
     }
     impl Into<ASTNode> for $t {
         #[inline]
-        fn into(self) -> ASTNode { ASTKind::$name(self).into_node(None) }
+        fn into(self) -> ASTNode { $variant(self).into_node(None) }
     }
     impl IntoASTNode for $t {
         #[inline]
         fn into_node(self, range: MaybeRanged) -> ASTNode {
-            ASTKind::$name(self).into_node(range)
+            $variant(self).into_node(range)
         }
     }
     };
-    ($($t:ty => ($name:ident, $kind:ident)),+ $(,)?) => (
-        $(into_node_level1!($t=>($kind, $name));)+
+    ($($t:ty => ($name:expr, $kind:ident)),+ $(,)?) => (
+        $(into_node!($t=>($kind, $name));)+
     );
 }
 
-into_node_level1![
-    QuoteBlock => (QuoteNode,  box),
-    Header     => (Header,     box),
-    Delimiter  => (Delimiter,  box),
-    ListView   => (ListView,   ref),
-    TableView  => (TableView,  ref),
-    CodeNode   => (CodeNode,   box),
-    MathNode   => (MathNode,   box),
-    TextSpan   => (TextSpan,   box),
-    StyleNode  => (StyledSpan, box),
-    Command    => (Command,    box),
-    Value      => (Value,      box),
+into_node![
+    QuoteBlock    => (ASTKind::QuoteNode,     box),
+    Header        => (ASTKind::Header,        box),
+    Delimiter     => (ASTKind::Delimiter,     box),
+    ListView      => (ASTKind::ListView,      ref),
+    OrderedList   => (ListView::Ordered ,     box),
+    OrderlessList => (ListView::Orderless ,   box),
+    TableView     => (ASTKind::TableView,     ref),
+    SimpleTable  =>  (TableView::SimpleTable, box),
+    CodeNode      => (ASTKind::CodeNode,      box),
+    MathNode      => (ASTKind::MathNode,      box),
+    TextSpan      => (ASTKind::TextSpan,      box),
+    StyleNode     => (ASTKind::StyledSpan,    box),
+    Command       => (ASTKind::Command,       box),
+    Value         => (ASTKind::Value,         box),
 ];
-
-impl IntoASTNode for OrderedList {
-    fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ListView::Ordered(box self).into_node(range)
-    }
-}
-impl IntoASTNode for OrderlessList {
-    fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ListView::Orderless(box self).into_node(range)
-    }
-}
-
-impl IntoASTNode for SimpleTable {
-    fn into_node(self, range: MaybeRanged) -> ASTNode {
-        TableView::SimpleTable(box self).into_node(range)
-    }
-}
