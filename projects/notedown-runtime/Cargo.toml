@@ -1,6 +1,6 @@
 [package]
 name = "notedown-rt"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-runtime"
@@ -11,7 +11,7 @@ edition = "2021"
 
 
 [dependencies]
-notedown_ast = {version = "0.14", path = "../notedown-ast", features = ["globset", "lsp"]}
+notedown_ast = {version = "0.15", path = "../notedown-ast", features = ["globset", "lsp"]}
 globset = "0.4.8"
 async-std = "1.10.0"
 self_update= "0.28.0"

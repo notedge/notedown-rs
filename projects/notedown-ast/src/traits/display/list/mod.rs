@@ -16,22 +16,6 @@ impl Display for ListView {
     }
 }
 
-impl Debug for OrderedList {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let w = &mut f.debug_struct("List");
-        todo!();
-        w.finish()
-    }
-}
-
-impl Debug for OrderlessList {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        let w = &mut f.debug_struct("List");
-        todo!();
-        w.finish()
-    }
-}
-
 impl Display for DetailedList {
     fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()

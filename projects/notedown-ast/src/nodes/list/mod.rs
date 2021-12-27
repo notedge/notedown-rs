@@ -26,7 +26,8 @@ impl ListView {
     /// ```
     #[inline]
     pub fn ordered_list(children: Vec<ListItem>) -> Self {
-        Self { ignore_global_list_style: false, first_symbol: ListPrefixSymbol::Hyphen, children }
+        let list = OrderedList { first_order: 0, children };
+        Self::Ordered(box list)
     }
     /// ## Orderless List
     /// ```note
@@ -39,7 +40,8 @@ impl ListView {
     /// ```
     #[inline]
     pub fn orderless_list(children: Vec<ListItem>) -> Self {
-        Self { ignore_global_list_style: false, first_symbol: ListPrefixSymbol::Arabic, children }
+        let list = OrderlessList { children };
+        Self::Orderless(box list)
     }
 }
 

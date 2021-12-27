@@ -1,6 +1,7 @@
 use super::*;
 
-#[derive(Clone, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct OrderedList {
+    pub first_order: usize,
     pub children: Vec<ListItem>,
 }

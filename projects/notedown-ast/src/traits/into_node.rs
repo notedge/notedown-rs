@@ -37,8 +37,27 @@ macro_rules! into_node_boxed {
         }
     }
     };
+    ($t:ty |> $name:ident) => {
+    impl Into<ASTKind> for $t {
+        #[inline]
+        fn into(self) -> ASTKind { ASTKind::$name(self) }
+    }
+    impl Into<ASTNode> for $t {
+        #[inline]
+        fn into(self) -> ASTNode { ASTKind::$name(self).into_node(None) }
+    }
+    impl IntoASTNode for $t {
+        #[inline]
+        fn into_node(self, range: MaybeRanged) -> ASTNode {
+            ASTKind::$name(self).into_node(range)
+        }
+    }
+    };
     ($($t:ty => $name:ident),+ $(,)?) => (
         $(into_node_boxed!($t=>$name);)+
+    );
+    ($($t:ty |> $name:ident),+ $(,)?) => (
+        $(into_node_boxed!($t|>$name);)+
     );
 }
 
@@ -46,11 +65,15 @@ into_node_boxed![
     QuoteBlock => QuoteNode,
     Header     => Header,
     Delimiter  => Delimiter,
-    ListView   => ListView,
     CodeNode   => CodeNode ,
     MathNode   => MathNode,
     TextSpan   => TextSpan,
     StyleNode  => StyledSpan,
     Command    => Command,
     Value      => Value,
+];
+
+into_node_boxed![
+    ListView   |> ListView,
+    TableView  |> TableView,
 ];

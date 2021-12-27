@@ -1,7 +1,6 @@
 use crate::nodes::*;
-use std::fmt::Debug;
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Eq, PartialEq, Hash)]
 pub enum TableView {
     SimpleTable(Box<SimpleTable>),
 }
@@ -9,8 +8,8 @@ pub enum TableView {
 ///
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub struct SimpleTable {
-    head: Vec<ASTNode>,
-    align: Vec<u8>,
-    terms: Vec<Vec<ASTNode>>,
-    column: usize,
+    pub head: Vec<ASTNode>,
+    pub align: Vec<u8>,
+    pub terms: Vec<Vec<ASTNode>>,
+    pub column: usize,
 }
