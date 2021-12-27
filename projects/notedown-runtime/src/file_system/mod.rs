@@ -13,8 +13,8 @@ use notedown_ast::{
     ASTNode, NoteError, Result,
 };
 use std::path::Path;
+use crate::plugin_system::Parser;
 
-pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
 pub struct VMFileSystem {
     workspace_root: Option<Url>,

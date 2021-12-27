@@ -6,6 +6,7 @@ use notedown_ast::{
         Rope, TextIndex,
     },
 };
+use crate::plugin_system::Parser;
 
 pub struct FileState {
     /// used to check weather the file needs re-parse

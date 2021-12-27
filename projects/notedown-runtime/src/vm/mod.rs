@@ -2,23 +2,27 @@ mod diagnostic;
 
 pub use notedown_ast::traits::ContextKind;
 
-use crate::{file_system::Parser, VMFileSystem};
+use crate::{
+    plugin_system::{Parser, PluginSystem},
+    VMFileSystem,
+};
 use notedown_ast::utils::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent, Url};
 use std::path::Path;
 
 pub struct NoteVM {
-    pub fs: VMFileSystem,
+    fs: VMFileSystem,
+    ps: PluginSystem,
 }
 
 impl Default for NoteVM {
     fn default() -> Self {
-        Self { fs: Default::default() }
+        Self { fs: Default::default(), ps: Default::default() }
     }
 }
 
 impl NoteVM {
     pub fn new(root: Url) -> NoteVM {
-        Self { fs: VMFileSystem::new(root) }
+        Self { fs: VMFileSystem::new(root), ps: Default::default() }
     }
 
     pub fn run() {}
@@ -44,19 +48,29 @@ impl NoteVM {
 
 /// Asynchronous operations that take amount of time
 impl NoteVM {
-    pub async fn update(&mut self, url: &Url) -> Vec<Diagnostic> {
+    #[inline]
+    pub async fn update(&mut self, url: &Url, parser: &Parser) -> Vec<Diagnostic> {
+        // TODO: check extension
+        self.ps
+
         self.update_text(url).await;
-        self.update_ast(url).await;
+        self.update_ast(url, parser).await;
         todo!()
     }
 
     #[inline]
-    async fn update_text(&self, url: &Url) {
-        self.fs.update_text(url).ok()
+    async fn update_text(&self, url: &Url) -> bool {
+        match self.fs.update_text(url).await {
+            Ok(_) => true,
+            Err(_) => false,
+        }
     }
     #[inline]
-    async fn update_ast(&self, url: &Url, parser: &Parser) {
-        self.fs.update_ast(url, parser).ok()
+    async fn update_ast(&self, url: &Url, parser: &Parser) -> bool {
+        match self.fs.update_ast(url, parser).await {
+            Ok(_) => true,
+            Err(_) => false,
+        }
     }
 
     pub fn get_completion_context(&self, url: &Url, p: &Position) -> ContextKind {
