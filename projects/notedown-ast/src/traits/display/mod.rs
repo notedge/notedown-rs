@@ -1,6 +1,7 @@
 mod link;
 mod list;
 mod quote;
+mod table;
 mod value;
 
 use crate::{nodes::*, value::*};

@@ -2,15 +2,16 @@ use super::*;
 
 mod detailed;
 mod item;
+mod ordered;
+mod orderless;
 mod prefix;
 
-pub use self::{detailed::DetailedList, item::ListItem, prefix::ListPrefixSymbol};
+pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol};
 
 #[derive(Clone, Eq, PartialEq, Hash)]
-pub struct ListView {
-    pub ignore_global_list_style: bool,
-    pub first_symbol: ListPrefixSymbol,
-    pub children: Vec<ListItem>,
+pub enum ListView {
+    Ordered(Box<OrderedList>),
+    Orderless(Box<OrderlessList>),
 }
 
 impl ListView {

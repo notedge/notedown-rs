@@ -9,10 +9,10 @@ mod table;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
-    list::{DetailedList, ListItem, ListPrefixSymbol, ListView},
+    list::{DetailedList, ListItem, ListPrefixSymbol, ListView, OrderedList, OrderlessList},
     literal::Literal,
     quote::QuoteBlock,
-    table::TableView,
+    table::{SimpleTable, TableView},
 };
 pub use crate::traits::Slugify;
 use crate::{traits::IntoASTNode, Command, Value};
@@ -50,9 +50,9 @@ pub enum ASTKind {
     /// - block only
     Header(Box<Header>),
     /// - block only
-    TableView(Box<TableView>),
+    TableView(TableView),
     /// - block only
-    ListView(Box<ListView>),
+    ListView(ListView),
     /// - block only
     QuoteNode(Box<QuoteBlock>),
     /// - block + inline
