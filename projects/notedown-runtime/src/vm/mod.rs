@@ -49,12 +49,14 @@ impl NoteVM {
 /// Asynchronous operations that take amount of time
 impl NoteVM {
     #[inline]
-    pub async fn update(&mut self, url: &Url, parser: &Parser) -> Vec<Diagnostic> {
-        // TODO: check extension
-        self.ps
-
+    pub async fn update(&mut self, url: &Url) -> Vec<Diagnostic> {
         self.update_text(url).await;
-        self.update_ast(url, parser).await;
+        match self.ps.get_parser("note") {
+            None => {}
+            Some(parser) => {
+                self.update_ast(url, &parser).await;
+            }
+        }
         todo!()
     }
 
