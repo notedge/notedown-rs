@@ -27,7 +27,7 @@ pub async fn command_provider(p: ExecuteCommandParams, c: &Client) -> Option<Val
         "notedown.inner.request-math-svg" => request_math_svg(c).await,
         _ => {
             let err = format!("Unknown command: {}", p.command);
-            c.show_message(MessageType::Error, err).await;
+            c.show_message(MessageType::ERROR, err).await;
             return None;
         }
     }
@@ -45,7 +45,7 @@ async fn read_clipboard(c: &Client) -> Option<Value> {
     let mut ctx: ClipboardContext = match ClipboardProvider::new() {
         Ok(o) => o,
         Err(e) => {
-            c.show_message(MessageType::Error, e).await;
+            c.show_message(MessageType::ERROR, e).await;
             return None;
         }
     };
@@ -53,7 +53,7 @@ async fn read_clipboard(c: &Client) -> Option<Value> {
     let s = match ctx.get_contents() {
         Ok(o) => o,
         Err(e) => {
-            c.show_message(MessageType::Error, e).await;
+            c.show_message(MessageType::ERROR, e).await;
             return None;
         }
     };

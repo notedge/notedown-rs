@@ -52,5 +52,7 @@ fn action() -> CodeAction {
         edit: None,
         command: None,
         is_preferred: Some(true),
+        disabled: None,
+        data: None,
     }
 }

@@ -31,16 +31,24 @@ impl LanguageServer for Backend {
             // should read from cargo.toml
             version: Some(format!("V{}", env!("CARGO_PKG_VERSION"))),
         };
-        let ws = WorkspaceCapability {
-            workspace_folders: Some(WorkspaceFolderCapability {
+        let ws = WorkspaceServerCapabilities {
+            workspace_folders: Some(WorkspaceFoldersServerCapabilities {
                 supported: Some(true),
-                change_notifications: Some(WorkspaceFolderCapabilityChangeNotifications::Bool(true)),
+                change_notifications: Some(OneOf::Left(true)),
+            }),
+            file_operations: Some(WorkspaceFileOperationsServerCapabilities {
+                did_create: None,
+                will_create: None,
+                did_rename: None,
+                will_rename: None,
+                did_delete: None,
+                will_delete: None,
             }),
         };
         let init = InitializeResult {
             server_info: Some(server_info),
             capabilities: ServerCapabilities {
-                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::Full)),
+                text_document_sync: Some(TextDocumentSyncCapability::Kind(TextDocumentSyncKind::INCREMENTAL)),
                 hover_provider: Some(HoverProviderCapability::Simple(true)),
                 completion_provider: Some(COMPLETION_OPTIONS.to_owned()),
                 signature_help_provider: Some(SignatureHelpOptions {
@@ -48,18 +56,34 @@ impl LanguageServer for Backend {
                     retrigger_characters: None,
                     work_done_progress_options: Default::default(),
                 }),
+                definition_provider: None,
+                type_definition_provider: None,
+                implementation_provider: None,
                 selection_range_provider: Some(SelectionRangeProviderCapability::Simple(true)),
                 code_action_provider: Some(CodeActionProviderCapability::Simple(true)),
                 code_lens_provider: Some(CodeLensOptions { resolve_provider: None }),
-                document_highlight_provider: Some(false),
+                document_highlight_provider: Some(OneOf::Left(true)),
                 // semantic_highlighting: None,
-                document_symbol_provider: Some(true),
-                document_formatting_provider: Some(true),
-                workspace_symbol_provider: Some(true),
+                document_symbol_provider: Some(OneOf::Left(true)),
+                document_formatting_provider: Some(OneOf::Left(true)),
+                document_range_formatting_provider: None,
+                document_on_type_formatting_provider: None,
+                rename_provider: None,
+                document_link_provider: None,
+                color_provider: None,
+                folding_range_provider: None,
+                workspace_symbol_provider: Some(OneOf::Left(true)),
                 execute_command_provider: Some(server_commands()),
                 workspace: Some(ws),
-                ..ServerCapabilities::default()
+                call_hierarchy_provider: None,
+                semantic_tokens_provider: None,
+                moniker_provider: None,
+                linked_editing_range_provider: None,
+                references_provider: None,
+                declaration_provider: None,
+                experimental: None,
             },
+            offset_encoding: Some("utf-8".to_string()),
         };
         return Ok(init);
     }
@@ -85,7 +109,7 @@ impl LanguageServer for Backend {
         // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
         let url = params.text_document.uri;
         let diags = VM.update(&url).await;
-        self.client.publish_diagnostics(url, diags, None)
+        self.client.publish_diagnostics(url, diags, None).await
     }
     async fn did_change(&self, params: DidChangeTextDocumentParams) {
         // self.client.log_message(MessageType::INFO, format!("{:#?}", params)).await;
@@ -186,7 +210,6 @@ impl Backend {
 async fn main() {
     let std_in = tokio::io::stdin();
     let stdout = tokio::io::stdout();
-    initialize_global_storages();
     let (service, messages) = LspService::new(|client| Backend { client });
     Server::new(std_in, stdout).interleave(messages).serve(service).await;
 }

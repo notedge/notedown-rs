@@ -29,10 +29,10 @@ impl SingletonVM {
     }
 
     pub async fn update(&self, url: &Url) -> Vec<Diagnostic> {
-        self.vm().update(url)
+        self.vm().update(url).await
     }
-    pub async fn update_increment(&self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) -> Vec<Diagnostic> {
-        self.vm().update_increment(url, edits)
+    pub async fn update_increment(&self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) {
+        self.vm().update_increment(url, edits).await
     }
     pub fn gc_mark(&self, url: &Url) {
         todo!()

@@ -7,7 +7,7 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
     return vec![
         Diagnostic {
             range: Range::new(Position::new(0, 0), Position::new(0, 100)),
-            severity: Some(DiagnosticSeverity::Error),
+            severity: Some(DiagnosticSeverity::ERROR),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
@@ -18,7 +18,7 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
         },
         Diagnostic {
             range: Range::new(Position::new(1, 0), Position::new(1, 100)),
-            severity: Some(DiagnosticSeverity::Warning),
+            severity: Some(DiagnosticSeverity::WARNING),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
@@ -29,7 +29,7 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
         },
         Diagnostic {
             range: Range::new(Position::new(2, 0), Position::new(2, 100)),
-            severity: Some(DiagnosticSeverity::Information),
+            severity: Some(DiagnosticSeverity::INFORMATION),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
@@ -40,7 +40,7 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
         },
         Diagnostic {
             range: Range::new(Position::new(3, 0), Position::new(3, 100)),
-            severity: Some(DiagnosticSeverity::Hint),
+            severity: Some(DiagnosticSeverity::HINT),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
@@ -51,24 +51,24 @@ pub fn diagnostics_provider(url: &Url) -> Vec<Diagnostic> {
         },
         Diagnostic {
             range: Range::new(Position::new(4, 0), Position::new(4, 100)),
-            severity: Some(DiagnosticSeverity::Hint),
+            severity: Some(DiagnosticSeverity::HINT),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
-            tags: Some(vec![DiagnosticTag::Unnecessary]),
+            tags: Some(vec![DiagnosticTag::UNNECESSARY]),
             data: None,
         },
         Diagnostic {
             range: Range::new(Position::new(5, 0), Position::new(5, 100)),
-            severity: Some(DiagnosticSeverity::Hint),
+            severity: Some(DiagnosticSeverity::HINT),
             code: None,
             code_description: None,
             source: Some("sourceeee ".to_string()),
             message: "messsssage ".to_string(),
             related_information: None,
-            tags: Some(vec![DiagnosticTag::Deprecated]),
+            tags: Some(vec![DiagnosticTag::DEPRECATED]),
             data: None,
         },
     ];
@@ -86,7 +86,7 @@ pub fn comma_problems(url: &Url) -> Vec<Diagnostic> {
                         if c.1 != ' ' {
                             let d = Diagnostic {
                                 range: Range::new(Position::new(line as u64, pos as u64), Position::new(line as u64, pos as u64 + 2)),
-                                severity: Some(DiagnosticSeverity::Error),
+                                severity: Some(DiagnosticSeverity::ERROR),
                                 code: None,
                                 code_description: None,
                                 source: Some("sourceeee ".to_string()),

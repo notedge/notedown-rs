@@ -32,11 +32,12 @@ impl NoteVM {
         self.update_ast(url).await;
         todo!()
     }
-
+    #[inline]
     pub async fn update_text(&mut self, url: &Url) {
         // self.fs.update_text();
         todo!()
     }
+    #[inline]
     pub async fn update_increment(&mut self, url: &Url, edits: Vec<TextDocumentContentChangeEvent>) {
         // self.fs.update_text();
         todo!()
