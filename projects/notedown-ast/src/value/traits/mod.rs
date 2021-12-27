@@ -13,8 +13,9 @@ impl Hash for Value {
             Self::Decimal(v) => v.hash(state),
             Self::String(v) => v.hash(state),
             Self::Set(v) => {
-                v.len().hash(state);
-                for e in v {
+                let iter = v.iter();
+                iter.len().hash(state);
+                for e in iter {
                     e.hash(state);
                 }
             }

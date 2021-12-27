@@ -42,7 +42,7 @@ impl Value {
     fn check_set_type(&self, input: &OrderedSet) -> ValueType {
         let mut count = BTreeSet::new();
         for v in input {
-            count.insert(v.value.get_type());
+            count.insert(v.get_type());
         }
         ValueType::Set(count)
     }

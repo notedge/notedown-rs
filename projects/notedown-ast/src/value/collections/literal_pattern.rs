@@ -49,6 +49,7 @@ impl LiteralPattern {
     }
 }
 
+/// Wrapper type of [`LiteralPattern::iter`]
 pub struct LiteralPatternIter<'i> {
     inner: Iter<'i, Literal<String>>,
 }

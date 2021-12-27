@@ -1,13 +1,20 @@
 mod literal_pattern;
 mod ordered_map;
+mod ordered_set;
 mod sparse_array;
 
+pub use literal_pattern::*;
 pub use ordered_map::*;
+pub use ordered_set::*;
+pub use sparse_array::*;
 
 use super::*;
 
 /// Ordered set of values
-pub type OrderedSet = IndexSet<Literal<Value>>;
+#[derive(Clone, Default, Debug, Eq, PartialEq)]
+pub struct OrderedSet {
+    inner: IndexSet<Literal<Value>>,
+}
 
 /// Ordered map of key value pairs
 #[derive(Clone, Default, Debug, Eq, PartialEq)]

@@ -33,7 +33,7 @@ impl SparseArray {
 }
 
 impl SparseArray {
-    /// TODO: doc
+    /// Appends an element to the back of a collection.
     #[inline]
     #[allow(mutable_borrow_reservation_conflict)]
     pub fn push(&mut self, value: Literal<Value>) {
@@ -43,7 +43,7 @@ impl SparseArray {
             Some(s) => self.inner.insert(s + 1u8, value),
         };
     }
-    /// TODO: doc
+    /// Inserts an element at position index within the vector, shifting all elements after it to the right.
     #[inline]
     pub fn insert(&mut self, index: BigUint, value: Literal<Value>) -> Option<Literal<Value>> {
         self.inner.insert(index, value)
