@@ -17,7 +17,6 @@ pub mod value;
 
 pub use self::{
     command::Command,
-    errors::{DiagnosticLevel, NoteError, NoteErrorKind, Result},
     nodes::{ASTKind, ASTNode, ASTNodes},
     value::Value,
 };

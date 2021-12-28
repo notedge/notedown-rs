@@ -15,8 +15,13 @@ notedown-pest = {version = "1.0", path = "../notedown-pest"}
 url = "2.2.2"
 
 [dependencies.notedown_ast]
-version = "0.15"
+version = "0.16"
 path = "../notedown-ast"
-features = ["pest"]
+features = []
+
+[dependencies.notedown-rt]
+version = "0.3"
+path = "../notedown-runtime"
+features = []
 
 [dev-dependencies]
