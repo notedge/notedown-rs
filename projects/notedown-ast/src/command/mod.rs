@@ -17,16 +17,17 @@ use crate::{
 use std::ops::Range;
 
 /// Aka. Macro.
-/// It can be understood as a mark that attempts to expand in a given context until the position cannot be expanded
+/// It can be understood as a mark that attempts to expand in a given context
+/// until the position cannot be expanded
 #[derive(Clone, Eq, PartialEq)]
 pub enum Command {
-    /// ```md
-    /// \cmd: args
-    /// ```
+    /// Command in normal form
     Normal(NormalCommand),
-    /// C
+    /// Command in escape form
     Escaped(EscapedCommand),
+    /// Command in XML form
     XML(XMLCommand),
+    /// Command in external form
     External(ExternalCommand),
 }
 
@@ -45,10 +46,12 @@ pub struct CommandArguments {
 }
 
 impl Command {
+    /// Check if the command is some given name
     #[inline]
     pub fn is(&self, rhs: impl AsRef<str>) -> bool {
         self.command().eq(rhs.as_ref())
     }
+    /// Get the name of this command
     #[inline]
     pub fn command(&self) -> &str {
         match self {
@@ -57,9 +60,5 @@ impl Command {
             Self::XML(v) => v.cmd.as_str(),
             Self::External(v) => v.cmd.as_str(),
         }
-    }
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::Command(box self), range }
     }
 }

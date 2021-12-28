@@ -11,7 +11,7 @@ pub struct HyperLink {
     /// [path-of-link]
     /// ```
     pub src: String,
-    /// ## Real Link
+    /// ## Description
     /// A normal link without any description
     /// ```note
     /// [alt-text: link]
@@ -34,21 +34,19 @@ pub enum HyperLinkTarget {
 }
 
 impl HyperLink {
+    /// Set description text for the link
     #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        SmartLink::Normal(box self).into_node(range)
-    }
-    #[inline]
-    pub fn set_text(&mut self, msg: impl Into<String>) {
+    pub fn set_text(&mut self, msg: impl Into<String>) -> &mut Self {
         self.text = Some(msg.into());
+        self
     }
-
+    /// Parse arguments from arguments
     pub fn parse_options(mut self) -> Self {
-        let options = match &mut self.options {
+        let args = match &mut self.options {
             None => return self,
             Some(s) => s,
         };
-        options.optional.get_string("text").map(|f| self.set_text(f));
+        args.optional.get_string("text").map(|f| self.set_text(f));
         return self;
     }
 }

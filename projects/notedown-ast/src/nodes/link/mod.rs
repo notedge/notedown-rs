@@ -20,6 +20,7 @@ use num::{Signed, Zero};
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum SmartLink {
+    /// 
     /// - `[<RD>]`: Resource Descriptor
     ///
     /// ```note
@@ -64,30 +65,28 @@ pub enum SmartLink {
     TwoWay(Box<TwoWayLink>),
 }
 
-impl SmartLink {
-    #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: ASTKind::LinkNode(self), range }
-    }
-}
-
 impl ASTKind {
+    /// Constructor for [`ImageLink`]
     #[inline]
     pub fn image_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
         ImageLink { source: src.into(), ..Default::default() }.into_node(range)
     }
+    /// Constructor for [`ImageLink`]
     #[inline]
     pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, range: MaybeRanged) -> ASTNode {
         ImageLink { source: src.into(), description: Some(alt.into()), ..Default::default() }.into_node(range)
     }
+    /// Constructor for [`HyperLink`]
     #[inline]
     pub fn hyper_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
         HyperLink { src: src.into(), is_bare: false, ..Default::default() }.into_node(range)
     }
+    /// Constructor for [`HyperLink`]
     #[inline]
     pub fn hyper_link_text(src: impl Into<String>, text: impl Into<String>, range: MaybeRanged) -> ASTNode {
         HyperLink { src: src.into(), is_bare: false, text: Some(text.into()), ..Default::default() }.into_node(range)
     }
+    /// Constructor for [`HyperLink`]
     #[inline]
     pub fn bare_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
         HyperLink { src: src.into(), is_bare: true, ..Default::default() }.into_node(range)

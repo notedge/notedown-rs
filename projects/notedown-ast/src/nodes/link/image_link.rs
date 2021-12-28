@@ -34,10 +34,6 @@ pub struct ImageLink {
 
 impl ImageLink {
     #[inline]
-    pub fn into_node(self, range: MaybeRanged) -> ASTNode {
-        SmartLink::Image(box self).into_node(range)
-    }
-    #[inline]
     pub fn set_src(&mut self, msg: impl Into<String>) {
         self.source = msg.into();
     }
