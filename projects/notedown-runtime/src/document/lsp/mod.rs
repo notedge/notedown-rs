@@ -1,4 +1,8 @@
 use super::*;
+use yggdrasil_shared::records::{
+    lsp_types::{DocumentSymbol, SymbolKind},
+    LSPRange,
+};
 
 impl TocNode {
     #[inline]

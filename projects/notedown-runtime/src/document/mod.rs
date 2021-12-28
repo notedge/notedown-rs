@@ -1,8 +1,12 @@
 #[cfg(feature = "lsp")]
 mod lsp;
 mod meta;
+mod toc;
 
-pub use self::meta::DocumentMeta;
+pub use self::{
+    meta::DocumentMeta,
+    toc::{TableOfContent, TocConfig, TocNode},
+};
 use chrono::NaiveDateTime;
 use notedown_ast::{
     traits::{TableOfContent, TocConfig, TocNode},

@@ -3,12 +3,10 @@ mod context;
 mod display;
 mod into_node;
 mod slugify;
-mod toc;
 
 pub use self::{
     context::ContextKind,
     into_node::IntoASTNode,
-    toc::{TableOfContent, TocConfig, TocNode},
 };
 
 /// Slugify the element of notedown
