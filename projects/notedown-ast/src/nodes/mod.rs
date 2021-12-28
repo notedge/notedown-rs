@@ -16,14 +16,15 @@ pub use self::{
     table::*,
 };
 pub use crate::traits::Slugify;
-use crate::{traits::IntoASTNode, Command, Value};
+use crate::{command::CommandArguments, traits::IntoASTNode, Command, Value};
+use notedown_error::{MaybeRanged, NoteError, Result};
+use num::{Signed, Zero};
 use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
-    ops::Range,
+    ops::RangeInclusive,
 };
-/// Maybe have ast position
-pub type MaybeRanged = Option<Range<usize>>;
+
 /// Represents an AST object with position
 pub type ASTNode = Literal<ASTKind>;
 /// Represents a list of AST objects with position

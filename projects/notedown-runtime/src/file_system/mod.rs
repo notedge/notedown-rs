@@ -6,11 +6,10 @@ pub use self::{meta::FileMeta, state::FileState};
 use crate::plugin_system::Parser;
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
-use notedown_ast::{
-    utils::{lsp_types::Url, DashMap},
-    ASTNode, NoteError, Result,
-};
+use notedown_ast::ASTNode;
+use notedown_error::{NoteError, Result};
 use std::path::Path;
+use yggdrasil_shared::records::{DashMap, Url};
 
 pub struct VMFileSystem {
     pub workspace_root: Option<Url>,

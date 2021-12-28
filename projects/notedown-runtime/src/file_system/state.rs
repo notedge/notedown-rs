@@ -1,13 +1,9 @@
 use super::*;
 use crate::plugin_system::Parser;
-use notedown_ast::{
-    traits::TocNode,
-    utils::{
-        lsp_types::{DocumentSymbolResponse, Url},
-        Rope, TextIndex,
-    },
-};
+use notedown_ast::traits::TocNode;
+use notedown_error::Result;
 use std::fs::read_to_string;
+use yggdrasil_shared::records::{lsp_types::DocumentSymbolResponse, Rope, TextIndex, Url};
 
 pub struct FileState {
     /// used to check weather the file needs re-parse

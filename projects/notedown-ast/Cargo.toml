@@ -25,12 +25,7 @@ path = "../text-utils"
 [dependencies.notedown-error]
 version = "1.0"
 path = "../notedown-error"
-
-#[dependencies.notedown-rt]
-#version = "0.3"
-#path = "../notedown-runtime"
-#default-features = false
-#features = []
+features = ["rust_decimal", "num"]
 
 [dev-dependencies]
 

@@ -1,4 +1,5 @@
 use crate::{nodes::*, ASTKind, ASTNode, Command, Value};
+use notedown_error::MaybeRanged;
 
 /// Convert element into [`ASTNode`]
 pub trait IntoASTNode {

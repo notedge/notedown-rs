@@ -1,10 +1,9 @@
 use super::*;
-use notedown_ast::{
-    traits::{TableOfContent, TocConfig, TocNode},
-    utils::{
-        lsp_types::{Diagnostic, DocumentSymbolResponse},
-        TextIndex,
-    },
+use notedown_ast::traits::{TableOfContent, TocConfig, TocNode};
+use notedown_error::NoteError;
+use yggdrasil_shared::records::{
+    lsp_types::{Diagnostic, DocumentSymbolResponse},
+    TextIndex,
 };
 
 pub struct FileMeta {
@@ -38,7 +37,7 @@ impl FileMeta {
     pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbolResponse {
         DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
     }
-    
+
     #[inline]
     pub fn can_gc(&self) -> bool {
         false

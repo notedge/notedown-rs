@@ -6,8 +6,11 @@ use crate::{
     plugin_system::{Parser, PluginSystem},
     VMFileSystem,
 };
-use notedown_ast::utils::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent, Url};
 use std::path::Path;
+use yggdrasil_shared::records::{
+    lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent},
+    Url,
+};
 
 pub struct NoteVM {
     fs: VMFileSystem,

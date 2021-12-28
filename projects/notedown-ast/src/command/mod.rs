@@ -5,14 +5,15 @@ mod normal;
 mod options;
 mod traits;
 mod xml;
-
 pub use self::xml::{XMLCommand, XMLCommandMarks};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-    nodes::{Literal, MaybeRanged},
+    nodes::Literal,
+    traits::IntoASTNode,
     value::*,
     ASTKind, ASTNode,
 };
+use notedown_error::MaybeRanged;
 use std::ops::Range;
 
 /// Aka. Macro.

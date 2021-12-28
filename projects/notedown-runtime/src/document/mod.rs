@@ -1,5 +1,6 @@
 use chrono::{DateTime, NaiveDateTime};
 use notedown_ast::{value::OrderedMap, ASTNode};
+use notedown_error::Result;
 
 pub struct NoteDocument {
     context: ASTNode,
@@ -23,8 +24,9 @@ impl NoteDocument {
     pub fn set_date_unix(&mut self, date: i32) {
         self.meta.date = Some(date);
     }
-    pub fn set_date_string(&mut self, date: i32) -> Result<()> {
-        NaiveDateTime::parse_from_str(s);
+    pub fn set_date_fmt(&mut self, date: &str, fmt: &str) -> Result<()> {
+        let date = NaiveDateTime::parse_from_str(date, fmt)?;
         self.meta.date = Some(date);
+        Ok(())
     }
 }

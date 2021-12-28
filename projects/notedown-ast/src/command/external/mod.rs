@@ -1,5 +1,4 @@
 use super::*;
-use crate::traits::IntoASTNode;
 
 /// Serialized external data
 #[derive(Clone, Eq, PartialEq)]

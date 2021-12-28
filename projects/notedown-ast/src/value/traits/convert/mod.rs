@@ -1,5 +1,5 @@
 use crate::Value;
-use notedown_error::{NoteError, Result};
+use notedown_error::NoteError;
 use std::convert::TryFrom;
 
 macro_rules! from_value {
