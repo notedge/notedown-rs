@@ -1,18 +1,14 @@
 mod parser;
 
-pub use self::parser::PluginParser;
-use crate::FileMeta;
+pub use self::parser::{Parser, PluginParser};
 use notedown_ast::ASTNode;
-use notedown_error::Result;
+use notedown_error::{NoteError, Result};
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Formatter},
     hash::{Hash, Hasher},
 };
 use yggdrasil_shared::records::DashMap;
-
-/// A parser which can parse text into ast, and report errors at the same time
-pub type Parser = fn(&str, &mut FileMeta) -> Result<ASTNode>;
 
 /// Plugin system manager
 #[derive(Debug, Default)]

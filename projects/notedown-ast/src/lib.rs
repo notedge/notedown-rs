@@ -9,8 +9,6 @@
 #![doc = include_str!("../Readme.md")]
 pub mod command;
 
-#[cfg(feature = "lsp")]
-mod language_server;
 pub mod nodes;
 pub mod traits;
 pub mod value;

@@ -1,20 +1,25 @@
+#[cfg(feature = "lsp")]
+mod lsp;
+mod meta;
+
+pub use self::meta::DocumentMeta;
 use chrono::NaiveDateTime;
 use notedown_ast::{
+    traits::{TableOfContent, TocConfig, TocNode},
     value::{LiteralPair, OrderedMap},
     ASTNode, Value,
 };
-use notedown_error::Result;
+use notedown_error::{NoteError, Result};
+use yggdrasil_shared::records::{
+    lsp_types::{Diagnostic, DocumentSymbolResponse},
+    TextIndex,
+};
 
 pub struct NoteDocument {
     context: ASTNode,
     meta: DocumentMeta,
     variable: OrderedMap,
-}
-
-pub struct DocumentMeta {
-    title: Option<String>,
-    author: Vec<String>,
-    date: Option<NaiveDateTime>,
+    errors: Vec<NoteError>,
 }
 
 impl NoteDocument {

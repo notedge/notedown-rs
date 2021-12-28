@@ -1,5 +1,5 @@
 use super::*;
-use crate::plugin_system::Parser;
+use crate::{document::NoteDocument, plugin_system::Parser};
 use notedown_ast::traits::TocNode;
 use notedown_error::Result;
 use std::fs::read_to_string;
@@ -9,8 +9,7 @@ pub struct FileState {
     /// used to check weather the file needs re-parse
     fingerprint: u128,
     text: Rope,
-    ast: ASTNode,
-    meta: FileMeta,
+    parsed: NoteDocument,
 }
 
 impl PartialEq for FileState {
@@ -31,7 +30,7 @@ impl FileState {
     }
     #[inline]
     pub fn get_toc(&self) -> &TocNode {
-        &self.meta.toc
+        &self.parsed.get_toc()
     }
     #[inline]
     pub fn get_lsp_toc(&self) -> DocumentSymbolResponse {
@@ -55,7 +54,8 @@ impl FileState {
     #[inline]
     pub async fn update_ast(&mut self, parse: &Parser) -> Result<()> {
         let text: String = self.text.chars().collect();
-        self.meta.clear();
-        parse(&text, &mut self.meta).map(|new| self.ast = new)
+        let mut errors = vec![];
+        let parsed = parse(&text, &mut errors)?;
+        todo!()
     }
 }

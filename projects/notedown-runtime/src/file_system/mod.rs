@@ -1,13 +1,11 @@
 mod get_env;
-mod meta;
 mod state;
 
-pub use self::{meta::FileMeta, state::FileState};
+pub use self::state::FileState;
 
 use crate::plugin_system::Parser;
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
-use notedown_ast::ASTNode;
 use notedown_error::{NoteError, Result};
 use std::path::Path;
 use yggdrasil_shared::records::{DashMap, Url};
