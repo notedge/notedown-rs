@@ -26,7 +26,7 @@ impl FileMeta {
     }
     #[inline]
     pub fn as_lsp_diagnostics(&self, index: &TextIndex) -> Vec<Diagnostic> {
-        self.errors.iter().map(|f| f.build_diagnostic(index)).collect()
+        self.errors.iter().map(|f| f.as_lsp_diagnostic(index)).collect()
     }
     #[inline]
     pub fn set_lsp_toc(&mut self, node: &ASTNode) {
@@ -34,8 +34,9 @@ impl FileMeta {
         self.toc = node.toc_configurable(&cfg);
     }
     #[inline]
-    pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbolResponse {
-        DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
+    pub fn as_lsp_toc(&self, _: &TextIndex) -> DocumentSymbolResponse {
+        todo!()
+        // DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
     }
 
     #[inline]

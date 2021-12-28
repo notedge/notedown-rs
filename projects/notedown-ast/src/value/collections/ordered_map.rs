@@ -15,7 +15,7 @@ impl OrderedMap {
     /// Get value from Ordered Map
     #[inline]
     pub fn get_string(&self, key: &str) -> Option<String> {
-        self.get(key).and_then(|f| String::try_from(f.to_owned()).ok())
+        self.get(key).and_then(|f| String::try_from(f).ok())
     }
 }
 
@@ -23,7 +23,7 @@ impl OrderedMap {
     /// Extract value from Ordered Map
     #[inline]
     pub fn extract(&mut self, key: &str) -> Option<Value> {
-        self.inner.remove(key).map(|f| f.value.value.to_owned())
+        self.inner.remove(key).map(|f| f.value.value)
     }
     /// Extract value from Ordered Map
     #[inline]
@@ -42,6 +42,18 @@ impl OrderedMap {
     #[inline]
     pub fn is_empty(&self) -> bool {
         self.inner.is_empty()
+    }
+
+    /// Insert a ranged key-value pair in the map.
+    #[inline]
+    pub fn insert_raw(&mut self, pair: LiteralPair) -> Option<LiteralPair> {
+        self.inner.insert(pair.key.value.to_owned(), pair)
+    }
+    /// Insert a key-value pair in the map.
+    #[inline]
+    pub fn insert(&mut self, key: String, value: Value) -> Option<Value> {
+        let pair = LiteralPair { key: Literal { value: key, range: None }, value: Literal { value, range: None } };
+        self.inner.insert(pair.key.value.to_owned(), pair).map(|pair| pair.value.value)
     }
 }
 
