@@ -1,12 +1,17 @@
+
+```note
 [^def]: xxxx
     xxxx
+```
 
-
+```note
 [>]:
 xxxxxxxxxxxxxx
     xxxxxxxxxxxxxx
     xxxxxxxxxxxxxx
     xxxxxxxxxxxxxx
+```
+
 
 Footnotes
 

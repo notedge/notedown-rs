@@ -54,7 +54,7 @@ impl Display for MathNode {
 }
 
 impl MathKind {
-    /// TODO: doc
+    /// Surround start
     pub fn surround_begin(&self) -> &'static str {
         match self {
             Self::Inline => "$",
@@ -63,7 +63,7 @@ impl MathKind {
             Self::BlockDisplay => "\n\n$$",
         }
     }
-    /// TODO: doc
+    /// Surround end
     pub fn surround_end(&self) -> &'static str {
         match self {
             Self::Inline => "$",
@@ -75,7 +75,7 @@ impl MathKind {
 }
 
 impl MathNode {
-    /// TODO: doc
+    /// surrounded
     pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
         f.write_str(self.kind.surround_begin())?;
         f.write_str(&self.raw)?;
@@ -94,7 +94,7 @@ impl MathNode {
 }
 
 impl MathBackend {
-    ///
+    /// Parse math backend form string
     pub fn new(s: &str) -> Option<Self> {
         match s.to_ascii_lowercase().as_str() {
             "tex" | "latex" => Some(Self::LaTeX),

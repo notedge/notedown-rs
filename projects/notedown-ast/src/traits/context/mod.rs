@@ -3,17 +3,18 @@ use crate::{
     traits::ContextAware,
     ASTNodes,
 };
-
+///
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContextKind {
+    ///
     None,
-
+    ///
     Text,
-
+    ///
     Function,
-
+    ///
     Math,
-
+    ///
     Code,
 }
 

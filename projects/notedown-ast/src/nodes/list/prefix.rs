@@ -1,7 +1,9 @@
 use super::*;
 
+/// Prefix marks of the list
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum ListPrefixSymbol {
+pub enum ListPrefixMark {
+    /// Something wrong
     Unknown,
     /// ```note
     /// -
@@ -33,7 +35,9 @@ pub enum ListPrefixSymbol {
     /// 4.6.
     /// ```
     ArabicNest {
+        /// Prefix number list
         prefix_number: Vec<usize>,
+        /// Last part of prefix number
         number: usize,
     },
     /// ```note
@@ -43,13 +47,14 @@ pub enum ListPrefixSymbol {
     RomanNumerals,
 }
 
-impl Default for ListPrefixSymbol {
+impl Default for ListPrefixMark {
     fn default() -> Self {
         Self::Hyphen
     }
 }
 
-impl ListPrefixSymbol {
+impl ListPrefixMark {
+    /// Parse [`ListPrefixMark`] mark from string
     pub fn parse(input: &str) -> Self {
         match input {
             s if s.starts_with(">") => Self::Quote,
@@ -58,13 +63,20 @@ impl ListPrefixSymbol {
     }
 }
 
-impl ListPrefixSymbol {
+impl ListPrefixMark {
+    /// Check if this marks quote
     #[inline]
     pub fn is_quote(&self) -> bool {
         matches!(self, Self::Quote)
     }
+    /// Check if this marks ordered list
     #[inline]
     pub fn is_ordered(&self) -> bool {
         matches!(self, Self::Arabic | Self::ArabicNest { .. })
+    }
+    /// Check if this marks orderless list
+    #[inline]
+    pub fn is_orderless(&self) -> bool {
+        matches!(self, Self::Hyphen)
     }
 }

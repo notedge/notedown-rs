@@ -4,7 +4,7 @@ mod ordered;
 mod orderless;
 mod prefix;
 
-pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixSymbol};
+pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixMark};
 
 use super::*;
 use crate::{NoteError, Result};
@@ -38,7 +38,7 @@ impl ListView {
     }
     /// Returns the first prefix of this list
     #[inline]
-    pub fn first_prefix(&self) -> Result<&ListPrefixSymbol> {
+    pub fn first_prefix(&self) -> Result<&ListPrefixMark> {
         match self.children().first() {
             None => Err(NoteError::runtime_error("Not a valid list")),
             Some(s) => Ok(&s.prefix.value),

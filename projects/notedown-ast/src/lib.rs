@@ -1,8 +1,11 @@
-#![allow(clippy::needless_return)]
+// features
 #![feature(box_syntax)]
 #![feature(map_first_last)]
 #![feature(arbitrary_enum_discriminant)]
+// lints
 #![deny(missing_docs)]
+#![allow(clippy::needless_return)]
+// documentation
 #![doc = include_str!("../Readme.md")]
 pub mod command;
 mod errors;

@@ -25,6 +25,6 @@ pub struct DetailedList {
 impl DetailedList {
     /// open?
     pub fn is_open(&self) -> bool {
-        matches!(self.summary.prefix.value, ListPrefixSymbol::SummaryOpen)
+        matches!(self.summary.prefix.value, ListPrefixMark::SummaryOpen)
     }
 }

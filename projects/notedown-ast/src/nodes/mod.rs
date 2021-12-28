@@ -10,7 +10,7 @@ mod table;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
-    list::{DetailedList, ListItem, ListPrefixSymbol, ListView, OrderedList, OrderlessList},
+    list::{DetailedList, ListItem, ListPrefixMark, ListView, OrderedList, OrderlessList},
     literal::Literal,
     quote::QuoteBlock,
     table::{SimpleTable, TableView},
@@ -94,14 +94,17 @@ impl Default for ASTKind {
 }
 
 impl ASTKind {
+    /// Constructor of [`ASTKind::Statements`]
     #[inline]
     pub fn statements(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Statements(children), range }
     }
+    /// Constructor of [`ASTKind::Paragraph`]
     #[inline]
     pub fn paragraph(children: ASTNodes, range: MaybeRanged) -> ASTNode {
         ASTNode { value: Self::Paragraph(children), range }
     }
+    /// Constructor of [`Delimiter::HorizontalRule`]
     #[inline]
     pub fn hr(range: MaybeRanged) -> ASTNode {
         Delimiter::HorizontalRule.into_node(range)

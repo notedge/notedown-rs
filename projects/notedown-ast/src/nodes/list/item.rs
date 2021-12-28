@@ -1,9 +1,11 @@
 use super::*;
 
-///
+/// A list item contains the prefix and rest text nodes
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct ListItem {
-    pub prefix: Literal<ListPrefixSymbol>,
+    /// Prefix of the list item
+    pub prefix: Literal<ListPrefixMark>,
+    /// Rest parts the list item
     pub rest: ASTNodes,
 }
 
