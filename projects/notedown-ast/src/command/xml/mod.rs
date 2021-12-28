@@ -15,9 +15,9 @@ pub enum XMLCommandMarks {
     /// `<cmd arg=1/>`
     /// ```
     SelfClose {
-        // <cmd
+        /// <cmd
         start: usize,
-        // </cmd>
+        /// </cmd>
         end: usize,
     },
 }

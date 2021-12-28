@@ -1,3 +1,5 @@
+//! Value and value types of notedown
+
 mod collections;
 mod methods;
 mod traits;

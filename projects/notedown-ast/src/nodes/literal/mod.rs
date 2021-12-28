@@ -6,7 +6,7 @@ use std::{cmp::Ordering, ops::Deref};
 pub struct Literal<T> {
     /// The actual value
     pub value: T,
-    // The Start offset and end offset
+    /// The Start offset and end offset
     pub range: MaybeRanged,
 }
 

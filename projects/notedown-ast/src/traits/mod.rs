@@ -1,3 +1,5 @@
+//! Traits for notedown
+
 mod context;
 mod display;
 mod into_node;

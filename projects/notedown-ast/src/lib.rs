@@ -2,17 +2,16 @@
 #![feature(box_syntax)]
 #![feature(map_first_last)]
 #![feature(arbitrary_enum_discriminant)]
+#![deny(missing_docs)]
+
+//! # Notedown AST
 
 pub mod command;
 mod errors;
 #[cfg(feature = "lsp")]
 mod language_server;
 pub mod nodes;
-#[deny(missing_docs)]
-/// Traits for notedown
 pub mod traits;
-#[deny(missing_docs)]
-/// Value and value types of notedown
 pub mod value;
 
 pub use self::{
@@ -23,6 +22,7 @@ pub use self::{
 };
 
 pub mod utils {
+    //! Auxiliary tools and related libraries
     pub use indexmap;
     pub use itertools;
     pub use text_utils;

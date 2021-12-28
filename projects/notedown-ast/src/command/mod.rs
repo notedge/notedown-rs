@@ -1,3 +1,5 @@
+//! Commands
+
 mod escaped;
 mod external;
 mod normal;

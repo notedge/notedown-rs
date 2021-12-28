@@ -1,10 +1,10 @@
 [package]
 name = "notedown-rt"
-version = "0.1.2"
+version = "0.2.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-runtime"
-documentation = "https://docs.rs/notedown-rt/latest/notedown_rt/"
+documentation = "https://docs.rs/notedown-rt"
 readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"

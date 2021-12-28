@@ -24,9 +24,9 @@ impl ListView {
     }
     #[inline]
     pub fn children_mut(&mut self) -> &mut Vec<ListItem> {
-        &mut match self {
-            Self::Ordered(v) => v.children,
-            Self::Orderless(v) => v.children,
+        match self {
+            Self::Ordered(v) => &mut v.children,
+            Self::Orderless(v) => &mut v.children,
         }
     }
     #[inline]
@@ -54,15 +54,7 @@ impl ListView {
         let list = OrderedList { first_order: 0, children };
         Self::Ordered(box list)
     }
-    /// ## Orderless List
-    /// ```note
-    /// - part1
-    /// - part2
-    ///   part2
-    /// - part3
-    ///
-    /// - part4
-    /// ```
+
     #[inline]
     pub fn orderless_list(children: Vec<ListItem>) -> Self {
         let list = OrderlessList { children };

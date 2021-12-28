@@ -1,3 +1,4 @@
+/// TagReference
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct TagReference {
     /// ## Tag Block
