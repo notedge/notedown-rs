@@ -13,10 +13,10 @@ impl Hash for Command {
     }
 }
 
-impl Hash for CommandOptions {
+impl Hash for CommandArguments {
     fn hash<H: Hasher>(&self, state: &mut H) {
-        self.args.hash(state);
-        for i in &self.kvs {
+        self.positional.hash(state);
+        for i in &self.optional {
             i.hash(state)
         }
     }

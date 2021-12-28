@@ -11,7 +11,7 @@ pub struct EscapedCommand {
     pub level: u8,
     pub start: usize,
     pub end: usize,
-    pub options: CommandOptions,
+    pub options: CommandArguments,
     pub pattern: LiteralPattern,
     pub body: Literal<String>,
 }

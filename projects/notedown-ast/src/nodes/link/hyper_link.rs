@@ -22,7 +22,7 @@ pub struct HyperLink {
     ///
     pub target: Option<HyperLinkTarget>,
     ///
-    pub options: Option<CommandOptions>,
+    pub options: Option<CommandArguments>,
 }
 
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
@@ -48,7 +48,7 @@ impl HyperLink {
             None => return self,
             Some(s) => s,
         };
-        options.kvs.get_string("text").map(|f| self.set_text(f));
+        options.optional.get_string("text").map(|f| self.set_text(f));
         return self;
     }
 }

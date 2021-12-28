@@ -29,7 +29,7 @@ pub struct ImageLink {
     pub layout: Option<ImageLayout>,
     /// force to use layout ignore global setting
     pub size: Option<(usize, usize)>,
-    pub options: Option<CommandOptions>,
+    pub options: Option<CommandArguments>,
 }
 
 impl ImageLink {
@@ -58,27 +58,27 @@ impl ImageLink {
         self.layout = Some(layout);
     }
 
-    pub fn set_options(&mut self, options: CommandOptions) -> Vec<NoteError> {
+    pub fn set_options(&mut self, options: CommandArguments) -> Vec<NoteError> {
         let mut options = options;
         let mut errors = vec![];
 
-        options.kvs.extract_string("src").map(|f| self.set_src(f));
-        options.kvs.extract_string("source").map(|f| self.set_src(f));
+        options.optional.extract_string("src").map(|f| self.set_src(f));
+        options.optional.extract_string("source").map(|f| self.set_src(f));
 
         self.parse_layout(&mut options, &mut errors);
 
-        options.kvs.extract_string("alt").map(|f| self.set_alt(f));
-        options.kvs.extract_string("caption").map(|f| self.set_alt(f));
-        options.kvs.extract_string("description").map(|f| self.set_alt(f));
+        options.optional.extract_string("alt").map(|f| self.set_alt(f));
+        options.optional.extract_string("caption").map(|f| self.set_alt(f));
+        options.optional.extract_string("description").map(|f| self.set_alt(f));
 
-        options.kvs.extract_bool("force_caption").map(|f| self.force_caption = Some(f));
+        options.optional.extract_bool("force_caption").map(|f| self.force_caption = Some(f));
 
         self.options = Some(options);
         return errors;
     }
 
-    fn parse_layout(&mut self, options: &mut CommandOptions, errors: &mut Vec<NoteError>) {
-        let value = match options.kvs.extract("layout") {
+    fn parse_layout(&mut self, options: &mut CommandArguments, errors: &mut Vec<NoteError>) {
+        let value = match options.optional.extract("layout") {
             None => return,
             Some(s) => s,
         };

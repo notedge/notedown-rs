@@ -2,22 +2,26 @@ use super::*;
 use num::One;
 
 impl SparseArray {
-    /// TODO: doc
+    /// Returns a reference to the value corresponding to the key.
+    /// The key may be any borrowed form of the map's key type, but the ordering
+    /// on the borrowed form must match the ordering on the key type.
     #[inline]
     pub fn get(&self, index: &BigUint) -> Option<Value> {
         self.inner.get(index).map(|f| f.value.to_owned())
     }
-    /// TODO: doc
+    /// Returns a [`bool`] value corresponding to the key.
+    /// Return [`None`] if the key is not [`bool`] or missing.
     #[inline]
     pub fn get_bool(&self, index: &BigUint) -> Option<bool> {
         self.get(index).and_then(|f| bool::try_from(f.to_owned()).ok())
     }
-    /// TODO: doc
+    /// Returns a [`String`] value corresponding to the key.
+    /// Return [`None`] if the key is not [`String`] or missing.
     #[inline]
     pub fn get_string(&self, index: &BigUint) -> Option<String> {
         self.get(index).and_then(|f| String::try_from(f.to_owned()).ok())
     }
-    /// TODO: doc
+    /// Get last key value of the array.
     #[inline]
     pub fn last_key_value(&self) -> Option<(&BigUint, &Value)> {
         self.inner.last_key_value().map(|(k, v)| (k, &v.value))
@@ -25,7 +29,6 @@ impl SparseArray {
 }
 
 impl SparseArray {
-    /// TODO: doc
     #[inline]
     pub fn extract(&mut self, index: &BigUint) -> Option<Value> {
         self.inner.remove(index).map(|f| f.value)
@@ -43,7 +46,8 @@ impl SparseArray {
             Some(s) => self.inner.insert(s + 1u8, value),
         };
     }
-    /// Inserts an element at position index within the vector, shifting all elements after it to the right.
+    /// Inserts an element at position index within the vector, shifting all
+    /// elements after it to the right.
     #[inline]
     pub fn insert(&mut self, index: BigUint, value: Literal<Value>) -> Option<Literal<Value>> {
         self.inner.insert(index, value)

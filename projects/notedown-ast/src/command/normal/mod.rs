@@ -18,7 +18,7 @@ pub enum NormalCommandKind {
 pub struct NormalCommand {
     pub cmd: String,
     pub kind: NormalCommandKind,
-    pub options: CommandOptions,
+    pub options: CommandArguments,
     pub pattern: LiteralPattern,
     pub body: Literal<String>,
 }

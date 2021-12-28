@@ -16,22 +16,32 @@ use crate::{
 };
 use std::ops::Range;
 
-#[derive(Clone, Debug, Default, Eq, PartialEq)]
-pub struct CommandOptions {
-    pub args: SparseArray,
-    pub kvs: OrderedMap,
-    pub pts: LiteralPattern,
-}
-
+/// Aka. Macro.
+/// It can be understood as a mark that attempts to expand in a given context until the position cannot be expanded
 #[derive(Clone, Eq, PartialEq)]
 pub enum Command {
     /// ```md
     /// \cmd: args
     /// ```
     Normal(NormalCommand),
+    /// C
     Escaped(EscapedCommand),
     XML(XMLCommand),
     External(ExternalCommand),
+}
+
+/// Available arguments for the command
+/// - positional: `\cmd(a, b, c)`
+/// - optional: `\cmd(a = 1, b = 2)`
+/// - pattern: `\cmd[a][b]`
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub struct CommandArguments {
+    /// Arguments which depends on position
+    pub positional: SparseArray,
+    /// Arguments forms of key-value pairs
+    pub optional: OrderedMap,
+    /// Arguments short string pattern
+    pub pattern: LiteralPattern,
 }
 
 impl Command {

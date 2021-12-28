@@ -41,8 +41,9 @@ impl Debug for XMLCommand {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &self.kind.to_string());
-        if !self.pattern.is_empty() {
-            w.field("pattern", &self.pattern);
+        let pattern = &self.options.pattern;
+        if !pattern.is_empty() {
+            w.field("pattern", &pattern);
         }
         w.finish()
     }
@@ -69,7 +70,7 @@ impl Display for Command {
     }
 }
 
-impl Display for CommandOptions {
+impl Display for CommandArguments {
     fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()
     }

@@ -14,7 +14,7 @@ pub use self::{
     two_way::TwoWayLink,
 };
 use super::*;
-use crate::{command::CommandOptions, NoteError, Value};
+use crate::{command::CommandArguments, NoteError, Value};
 use num::{Signed, Zero};
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
