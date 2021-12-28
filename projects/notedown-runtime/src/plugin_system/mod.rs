@@ -1,11 +1,10 @@
 mod parser;
-
 pub use self::parser::{Parser, PluginParser};
 use notedown_ast::ASTNode;
 use notedown_error::{NoteError, Result};
 use std::{
     collections::BTreeSet,
-    fmt::{Debug, Formatter},
+    fmt::{Debug, Display, Formatter},
     hash::{Hash, Hasher},
 };
 use yggdrasil_shared::records::DashMap;

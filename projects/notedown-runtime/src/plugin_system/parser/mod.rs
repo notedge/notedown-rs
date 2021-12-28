@@ -1,6 +1,4 @@
 use super::*;
-use crate::NoteDocument;
-use std::fmt::Display;
 
 /// A parser which can parse text into ast, and report errors at the same time
 pub type Parser = fn(&str, &mut Vec<NoteError>) -> Result<ASTNode>;
@@ -34,7 +32,7 @@ impl Default for PluginParser {
     }
 }
 
-pub fn text_view_parser(_: &str, _: &mut NoteDocument) -> Result<()> {
+pub fn text_view_parser(_: &str, _: &mut Vec<NoteError>) -> Result<ASTNode> {
     Ok(ASTNode::default())
 }
 

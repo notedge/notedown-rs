@@ -1,4 +1,5 @@
 use super::*;
+use notedown_ast::{traits::Slugify, ASTKind, ASTNode};
 
 impl TocNode {
     fn last_at_level(&mut self, depth: u8) -> &mut TocNode {
@@ -23,8 +24,7 @@ impl TableOfContent for ASTNode {
                             continue;
                         }
                         let parent = root.last_at_level(level - 1);
-                        let new =
-                            TocNode { level, detail: header.slugify(), range: self.range.to_owned().unwrap_or_default(), children: vec![] };
+                        let new = TocNode { level, detail: header.slugify(), range: self.range.to_owned().unwrap_or_default(), children: vec![] };
                         parent.children.push(new);
                     }
                     ASTKind::Command(cmd) => {

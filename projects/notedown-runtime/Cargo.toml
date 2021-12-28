@@ -12,12 +12,13 @@ edition = "2021"
 
 [dependencies]
 notedown_ast = { version = "0.16", path = "../notedown-ast" }
-yggdrasil-shared = { version = "0.1.7", optional = true }
 async-std = "1.10.0"
 self_update = "0.28.0"
 chrono = "0.4.19"
-rsass = { version = "0.23.0", optional = true }
 globset = "0.4.8"
+rsass = { version = "0.23.0", optional = true }
+yggdrasil-shared = { version = "0.1.7", optional = true }
+
 
 [dependencies.notedown-error]
 version = "1.0"

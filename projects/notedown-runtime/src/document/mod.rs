@@ -9,7 +9,6 @@ pub use self::{
 };
 use chrono::NaiveDateTime;
 use notedown_ast::{
-    traits::{TableOfContent, TocConfig, TocNode},
     value::{LiteralPair, OrderedMap},
     ASTNode, Value,
 };
@@ -69,5 +68,28 @@ impl NoteDocument {
     #[inline]
     pub fn set_value(&mut self, name: String, value: Value) -> Option<Value> {
         self.variable.insert(name, value)
+    }
+
+    #[inline]
+    pub fn get_ast(&self) -> &ASTNode {
+        &self.context
+    }
+    #[inline]
+    pub fn get_toc(&self) -> &TocNode {
+        &self.meta.toc
+    }
+
+    #[inline]
+    pub fn extend_error_one(&mut self, e: NoteError) {
+        self.errors.push(e)
+    }
+    #[inline]
+    pub fn extend_error_iter(&mut self, e: impl Iterator<Item = NoteError>) {
+        self.errors.extend(e.into_iter())
+    }
+
+    #[inline]
+    pub fn can_gc(&self) -> bool {
+        false
     }
 }

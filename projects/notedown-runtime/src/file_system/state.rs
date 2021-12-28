@@ -1,15 +1,18 @@
-use super::*;
-use crate::{document::NoteDocument, plugin_system::Parser};
-use notedown_ast::traits::TocNode;
+use crate::{
+    document::{NoteDocument, TocNode},
+    plugin_system::Parser,
+};
 use notedown_error::Result;
 use std::fs::read_to_string;
-use yggdrasil_shared::records::{lsp_types::DocumentSymbolResponse, Rope, TextIndex, Url};
+#[cfg(feature = "lsp")]
+use yggdrasil_shared::records::lsp_types::DocumentSymbol;
+use yggdrasil_shared::records::{Rope, TextIndex, Url};
 
 pub struct FileState {
     /// used to check weather the file needs re-parse
     fingerprint: u128,
     text: Rope,
-    parsed: NoteDocument,
+    document: NoteDocument,
 }
 
 impl PartialEq for FileState {
@@ -30,11 +33,12 @@ impl FileState {
     }
     #[inline]
     pub fn get_toc(&self) -> &TocNode {
-        &self.parsed.get_toc()
+        &self.document.get_toc()
     }
+    #[cfg(feature = "lsp")]
     #[inline]
-    pub fn get_lsp_toc(&self) -> DocumentSymbolResponse {
-        self.meta.as_lsp_toc(&self.get_text_index())
+    pub fn get_lsp_toc(&self) -> DocumentSymbol {
+        self.document.as_lsp_toc(&self.get_text_index())
     }
     #[inline]
     pub fn can_gc(&self) -> bool {
@@ -52,7 +56,7 @@ impl FileState {
         todo!("Remote: {}", url)
     }
     #[inline]
-    pub async fn update_ast(&mut self, parse: &Parser) -> Result<()> {
+    pub async fn update_document(&mut self, parse: &Parser) -> Result<()> {
         let text: String = self.text.chars().collect();
         let mut errors = vec![];
         let parsed = parse(&text, &mut errors)?;

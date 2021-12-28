@@ -15,8 +15,11 @@ pub use self::{
     quote::QuoteBlock,
     table::*,
 };
-pub use crate::traits::Slugify;
-use crate::{command::CommandArguments, traits::IntoASTNode, Command, Value};
+use crate::{
+    command::CommandArguments,
+    traits::{IntoASTNode, Slugify},
+    Command, Value,
+};
 use notedown_error::{MaybeRanged, NoteError, Result};
 use num::{Signed, Zero};
 use std::{

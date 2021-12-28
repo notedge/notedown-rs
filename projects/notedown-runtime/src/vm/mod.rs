@@ -56,10 +56,11 @@ impl NoteVM {
 
     #[inline]
     pub fn get_lsp_toc(&self, url: &Url) -> Option<DocumentSymbolResponse> {
-        match self.fs.cache.get(url) {
-            None => None,
-            Some(s) => Some(s.get_lsp_toc()),
-        }
+        let toc = match self.fs.cache.get(url) {
+            None => return None,
+            Some(s) => s.get_lsp_toc(),
+        };
+        Some(DocumentSymbolResponse::Nested(vec![toc]))
     }
 }
 

@@ -50,7 +50,7 @@ impl VMFileSystem {
     pub async fn update_ast(&self, url: &Url, parser: &Parser) -> Result<()> {
         match self.cache.get_mut(&url) {
             None => Err(NoteError::runtime_error("TODO")),
-            Some(mut s) => s.value_mut().update_ast(parser).await,
+            Some(mut s) => s.value_mut().update_document(parser).await,
         }
     }
 
