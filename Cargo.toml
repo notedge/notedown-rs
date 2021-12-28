@@ -1,16 +1,15 @@
 [workspace]
 members = ["projects/*"]
 default-members = [
+    "projects/notedown-error",
     "projects/notedown-ast",
-#    "projects/notedown-pest",
-#    "projects/notedown-parser",
-#    "projects/notedown-parser2",
     "projects/notedown-runtime",
     "projects/notedown-lsp",
     "projects/text-utils",
 ]
 exclude = [
-
+    "projects/notedown-parser",
+    "projects/notedown-parser2",
 ]
 
 [profile.release]

@@ -7,7 +7,6 @@ mod prefix;
 pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixMark};
 
 use super::*;
-use crate::{NoteError, Result};
 
 /// List like nodes
 /// Basically can be classified as ordered and orderless
