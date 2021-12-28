@@ -1,4 +1,4 @@
-//! nodes
+//! All valid notedown ast nodes
 
 mod as_element;
 mod elements;
@@ -38,37 +38,52 @@ pub type ASTNodes = Vec<Literal<ASTKind>>;
 /// - Node: Code, Math, Link, Command
 ///
 /// ### Notice
-/// If a constructor returns individual elements, then interface accept what is needed (`T`).
+/// If a constructor returns individual elements, then interface accept what is
+/// needed (`T`).
 ///
-/// If a constructor returns [`ASTNode`], then the interface implements polymorphic input (`impl Into<T>`).
+/// If a constructor returns [`ASTNode`], then the interface implements
+/// polymorphic input (`impl Into<T>`).
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ASTKind {
     /// Top Scope
     Statements(ASTNodes),
+    /// 
     /// - block only
     Paragraph(ASTNodes),
+    /// 
     /// - block only
     Delimiter(Box<Delimiter>),
+    /// 
     /// - block only
     Header(Box<Header>),
+    /// 
     /// - block only
     TableView(TableView),
+    /// 
     /// - block only
     ListView(ListView),
+    /// 
     /// - block only
     QuoteNode(Box<QuoteBlock>),
+    /// 
     /// - block + inline
     CodeNode(Box<CodeNode>),
+    /// 
     /// - block + inline
     MathNode(Box<MathNode>),
+    /// 
     /// - block + inline
     LinkNode(SmartLink),
+    /// 
     /// - inline only
     TextSpan(Box<TextSpan>),
+    /// 
     /// - inline only
     StyledSpan(Box<StyleNode>),
+    /// 
     /// - context sensitive
     Command(Box<Command>),
+    /// 
     /// - never bared
     Value(Box<Value>),
 }

@@ -80,9 +80,7 @@ impl Debug for HyperLink {
         if let Some(s) = &self.download {
             w.field("download", &s);
         }
-        if let Some(s) = &self.target {
-            w.field("target", &s);
-        }
+        w.field("target", &self.target);
         w.finish()
     }
 }
@@ -97,8 +95,8 @@ impl Display for HyperLink {
     //         (None, None) => write!(f, "{}", from_to),
     //         (Some(bind), None) => write!(f, "{}[:{}]", from_to, bind),
     //         (None, Some(alt)) => write!(f, "{}[{}]", from_to, alt),
-    //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", from_to, bind, alt),
-    //     }
+    //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", from_to, bind,
+    // alt),     }
     // }
     // SmartLink::PathWithText { text: img, path: to, alt, bind } => {
     //     let img_to = match to {

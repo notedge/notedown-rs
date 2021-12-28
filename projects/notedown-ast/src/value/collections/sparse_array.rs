@@ -29,6 +29,8 @@ impl SparseArray {
 }
 
 impl SparseArray {
+    /// Removes a key from the map, returning the value at the key if the key
+    /// was previously in the map.
     #[inline]
     pub fn extract(&mut self, index: &BigUint) -> Option<Value> {
         self.inner.remove(index).map(|f| f.value)

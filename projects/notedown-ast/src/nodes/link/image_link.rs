@@ -1,9 +1,13 @@
 use super::*;
 
+/// Image position relevant to the document
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum ImageLayout {
+    /// Image left alignment
     Left,
+    /// Image center alignment
     Center,
+    /// Image right alignment
     Right,
 }
 
@@ -29,47 +33,54 @@ pub struct ImageLink {
     pub layout: Option<ImageLayout>,
     /// force to use layout ignore global setting
     pub size: Option<(usize, usize)>,
+    /// Additional options for the image
     pub options: Option<CommandArguments>,
 }
 
 impl ImageLink {
+    /// Set the source of the image
     #[inline]
     pub fn set_src(&mut self, msg: impl Into<String>) {
         self.source = msg.into();
     }
+    /// Set the description of the image
     #[inline]
     pub fn set_alt(&mut self, msg: impl Into<String>) {
         self.description = Some(msg.into());
     }
+    /// Set the link of the image
     #[inline]
     pub fn set_link(&mut self, msg: impl Into<String>) {
         self.link = Some(msg.into());
     }
+    /// Set the width and height of the image
     #[inline]
     pub fn set_size(&mut self, width: usize, height: usize) {
         self.size = Some((width, height));
     }
+    /// Set the layout of the image
     #[inline]
     pub fn set_layout(&mut self, layout: ImageLayout) {
         self.layout = Some(layout);
     }
-
-    pub fn set_options(&mut self, options: CommandArguments) -> Vec<NoteError> {
-        let mut options = options;
+    /// Parse attributes from options
+    pub fn parse_options(&mut self, options: CommandArguments) -> Vec<NoteError> {
+        let mut args = options;
         let mut errors = vec![];
 
-        options.optional.extract_string("src").map(|f| self.set_src(f));
-        options.optional.extract_string("source").map(|f| self.set_src(f));
+        args.optional.extract_string("src").map(|f| self.set_src(f));
+        args.optional.extract_string("source").map(|f| self.set_src(f));
 
-        self.parse_layout(&mut options, &mut errors);
+        self.parse_layout(&mut args, &mut errors);
 
-        options.optional.extract_string("alt").map(|f| self.set_alt(f));
-        options.optional.extract_string("caption").map(|f| self.set_alt(f));
-        options.optional.extract_string("description").map(|f| self.set_alt(f));
+        args.optional.extract_string("alt").map(|f| self.set_alt(f));
+        args.optional.extract_string("caption").map(|f| self.set_alt(f));
+        args.optional.extract_string("description").map(|f| self.set_alt(f));
 
-        options.optional.extract_bool("force_caption").map(|f| self.force_caption = Some(f));
-
-        self.options = Some(options);
+        args.optional.extract_bool("force_caption").map(|f| self.force_caption = Some(f));
+        if !args.is_empty() {
+            self.options = Some(args);
+        }
         return errors;
     }
 

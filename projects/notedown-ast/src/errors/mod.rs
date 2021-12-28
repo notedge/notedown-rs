@@ -89,6 +89,13 @@ impl NoteError {
     pub fn unreachable() -> Self {
         Self { kind: Box::new(NoteErrorKind::Unreachable), level: DiagnosticLevel::None, file: None, range: None }
     }
+
+    /// Constructor of [`NoteErrorKind::UndefinedVariable`]
+    #[inline]
+    pub fn undefined_variable(name: impl Into<String>) -> NoteError {
+        let kind = NoteErrorKind::UndefinedVariable { name: name.into() };
+        Self { kind: Box::new(kind), level: DiagnosticLevel::None, file: None, range: None }
+    }
 }
 
 impl NoteError {
@@ -108,6 +115,7 @@ impl NoteError {
 
 macro_rules! error_msg {
     ($name:ident => $t:ident) => {
+        /// Constructor of [`NoteErrorKind::$t`]
         pub fn $name(msg: impl Into<String>) -> NoteError {
             let kind = NoteErrorKind::$t(msg.into());
             Self { kind: Box::new(kind), level: DiagnosticLevel::None, file: None, range: None }
@@ -123,13 +131,6 @@ error_msg![
     type_mismatch => TypeMismatch,
     runtime_error => RuntimeError,
 ];
-
-impl NoteError {
-    pub fn undefined_variable(name: impl Into<String>) -> NoteError {
-        let kind = NoteErrorKind::UndefinedVariable { name: name.into() };
-        Self { kind: Box::new(kind), level: DiagnosticLevel::None, file: None, range: None }
-    }
-}
 
 impl Error for NoteError {}
 

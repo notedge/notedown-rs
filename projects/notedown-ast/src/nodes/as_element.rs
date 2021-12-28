@@ -2,6 +2,7 @@ use super::*;
 
 macro_rules! ast_view {
     ($f:ident => ($t1:ident,$t2:ident, ref)) => {
+    /// Returns a copy of the elements, return [`Option::None`] if not match this kind.
     pub fn $f(&self) -> Option<$t1> {
         match self {
             ASTKind::$t2(v) => Some(v.to_owned()),
@@ -10,6 +11,7 @@ macro_rules! ast_view {
     }
     };
     ($f:ident => ($t1:ident,$t2:ident, box)) => {
+    /// Returns a copy of the elements, return [`Option::None`] if not match this kind.
     pub fn $f(&self) -> Option<$t1> {
         match self {
             ASTKind::$t2(v) => Some(v.as_ref().to_owned()),

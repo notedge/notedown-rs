@@ -1,5 +1,6 @@
 use super::*;
 
+/// # HyperLink
 #[derive(Clone, Default, Eq, PartialEq, Hash)]
 pub struct HyperLink {
     /// ## Bare Link
@@ -17,20 +18,35 @@ pub struct HyperLink {
     /// [alt-text: link]
     /// ```
     pub text: Option<String>,
-    ///
+    /// Click this link to begin downloading
     pub download: Option<String>,
-    ///
-    pub target: Option<HyperLinkTarget>,
-    ///
+    /// Click this link to jumping to target
+    pub target: HyperLinkTarget,
+    /// Additional information for the link
     pub options: Option<CommandArguments>,
 }
 
+/// HyperLink target type
+/// [HTML/Element/a#attr-target](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attr-target)
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]
 pub enum HyperLinkTarget {
-    Blank,
-    Parent,
+    /// the current browsing context
     This,
+    /// usually a new tab, but users can configure browsers to open a new window
+    /// instead.
+    Blank,
+    /// the parent browsing context of the current one. If no parent, behaves as
+    /// _self.
+    Parent,
+    /// the topmost browsing context (the "highest" context that’s an ancestor
+    /// of the current one). If no ancestors, behaves as _self.
     Top,
+}
+
+impl Default for HyperLinkTarget {
+    fn default() -> Self {
+        Self::This
+    }
 }
 
 impl HyperLink {
