@@ -1,3 +1,5 @@
+#![forbid(missing_docs)]
+
 mod error_3rd;
 mod error_std;
 

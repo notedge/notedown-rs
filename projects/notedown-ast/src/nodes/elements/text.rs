@@ -1,5 +1,5 @@
 use super::*;
-use crate::{NoteError, Result};
+use notedown_error::{NoteError, Result};
 
 ///
 #[repr(u8)]
