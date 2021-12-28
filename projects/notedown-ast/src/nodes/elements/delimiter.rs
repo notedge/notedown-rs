@@ -1,11 +1,11 @@
 use super::*;
 
-/// TODO: doc
+/// Delimiter of two block
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub enum Delimiter {
-    /// TODO: doc
+    /// Aka. `<hr>`
     HorizontalRule,
-    /// TODO: doc
+    /// Raw HTML block that can be insert directly
     HTMLRawBlock(String),
 }
 

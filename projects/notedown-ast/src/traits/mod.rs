@@ -1,5 +1,4 @@
-//! Traits for notedown
-
+#![doc = include_str!("readme.md")]
 mod context;
 mod display;
 mod into_node;

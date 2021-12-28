@@ -1,5 +1,4 @@
-//! All valid notedown ast nodes
-
+#![doc = include_str!("readme.md")]
 mod as_element;
 mod elements;
 mod link;

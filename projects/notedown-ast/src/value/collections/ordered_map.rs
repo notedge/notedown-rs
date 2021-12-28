@@ -38,6 +38,15 @@ impl OrderedMap {
 }
 
 impl OrderedMap {
+    /// Returns true if the array contains no elements
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+}
+
+/// Iterator related methods
+impl OrderedMap {
     /// Return an iterator over the key-value pairs of the map in their order
     #[inline]
     pub fn iter(&self) -> OrderedMapIter {

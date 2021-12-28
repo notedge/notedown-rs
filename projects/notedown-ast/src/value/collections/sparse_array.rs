@@ -38,7 +38,13 @@ impl SparseArray {
 }
 
 impl SparseArray {
-    /// Appends an element to the back of a collection.
+    /// Returns true if the array contains no elements
+    #[inline]
+    pub fn is_empty(&self) -> bool {
+        self.inner.is_empty()
+    }
+
+    /// Appends an element to the back of a collection
     #[inline]
     #[allow(mutable_borrow_reservation_conflict)]
     pub fn push(&mut self, value: Literal<Value>) {
@@ -49,7 +55,7 @@ impl SparseArray {
         };
     }
     /// Inserts an element at position index within the vector, shifting all
-    /// elements after it to the right.
+    /// elements after it to the right
     #[inline]
     pub fn insert(&mut self, index: BigUint, value: Literal<Value>) -> Option<Literal<Value>> {
         self.inner.insert(index, value)

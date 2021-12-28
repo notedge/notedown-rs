@@ -3,9 +3,7 @@
 #![feature(map_first_last)]
 #![feature(arbitrary_enum_discriminant)]
 #![deny(missing_docs)]
-
-//! # Notedown AST
-
+#![doc = include_str!("../Readme.md")]
 pub mod command;
 mod errors;
 #[cfg(feature = "lsp")]

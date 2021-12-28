@@ -16,11 +16,14 @@ use super::*;
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct DetailedList {
+    ///
     pub summary: ListItem,
+    ///
     pub body: Vec<ListItem>,
 }
 
 impl DetailedList {
+    /// open?
     pub fn is_open(&self) -> bool {
         matches!(self.summary.prefix.value, ListPrefixSymbol::SummaryOpen)
     }

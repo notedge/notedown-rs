@@ -1,5 +1,4 @@
-//! Value and value types of notedown
-
+#![doc = include_str!("readme.md")]
 mod collections;
 mod methods;
 mod traits;

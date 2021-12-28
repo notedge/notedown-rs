@@ -74,31 +74,31 @@ impl Display for CodeNode {
 }
 
 impl CodeNode {
-    /// TODO: doc
+    /// Set file name of the code segment
     #[inline]
     pub fn set_file_name(mut self, name: String) -> Self {
         self.show_file_name = Some(name);
         return self;
     }
-    /// TODO: doc
+    /// Clear highlight info   
     #[inline]
     pub fn clear_highlight_line(mut self) -> Self {
         self.highlight_lines.clear();
         return self;
     }
-    /// TODO: doc
+    /// Set highlight info   
     #[inline]
     pub fn set_highlight_line(mut self, lines: Vec<RangeInclusive<usize>>) -> Self {
         self.highlight_lines = lines;
         return self;
     }
-    /// TODO: doc
+    /// Add highlight line
     #[inline]
     pub fn add_highlight_line(mut self, line: usize) -> Self {
         self.highlight_lines.push(RangeInclusive::new(line, line));
         return self;
     }
-    /// TODO: doc
+    /// Add highlight line ranged
     #[inline]
     pub fn add_highlight_range(mut self, lines: RangeInclusive<usize>) -> Self {
         self.highlight_lines.push(lines);

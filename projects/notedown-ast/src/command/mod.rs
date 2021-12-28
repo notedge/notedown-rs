@@ -1,5 +1,4 @@
-//! Commands
-
+#![doc = include_str!("readme.md")]
 mod escaped;
 mod external;
 mod normal;
@@ -64,6 +63,7 @@ impl Command {
 }
 
 impl CommandArguments {
+    /// Returns true if theres no arguments given
     pub fn is_empty(&self) -> bool {
         self.positional.is_empty() && self.optional.is_empty() && self.pattern.is_empty()
     }

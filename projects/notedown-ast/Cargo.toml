@@ -1,6 +1,6 @@
 [package]
 name = "notedown_ast"
-version = "0.15.3"
+version = "0.15.4"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Abstract Syntax Tree"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-ast"

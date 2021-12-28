@@ -4,18 +4,16 @@ use crate::{
     ASTNodes,
 };
 
-/// todo
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum ContextKind {
-    /// todo
     None,
-    /// todo
+
     Text,
-    /// todo
+
     Function,
-    /// todo
+
     Math,
-    /// todo
+
     Code,
 }
 
