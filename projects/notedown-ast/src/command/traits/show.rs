@@ -69,8 +69,6 @@ impl Display for Command {
     }
 }
 
-
-
 impl Display for CommandOptions {
     fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
         todo!()
@@ -114,7 +112,7 @@ impl Display for XMLCommand {
     }
 }
 
-impl Display for XMLCommandKind {
+impl Display for XMLCommandMarks {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
             Self::OpenClose { .. } => f.write_str("OpenClose"),

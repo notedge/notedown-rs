@@ -5,7 +5,7 @@ mod options;
 mod traits;
 mod xml;
 
-pub use self::xml::{XMLCommand, XMLCommandKind};
+pub use self::xml::{XMLCommand, XMLCommandMarks};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
     nodes::{Literal, MaybeRanged},

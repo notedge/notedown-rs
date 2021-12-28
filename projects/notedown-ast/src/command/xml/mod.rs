@@ -2,13 +2,13 @@ use super::*;
 use crate::ASTNodes;
 
 #[derive(Clone, Eq, PartialEq)]
-pub enum XMLCommandKind {
+pub enum XMLCommandMarks {
     OpenClose {
-        /// `|``<cmd`
+        /// `|` `<cmd`
         start: usize,
-        /// `|``>`
+        /// `|` `>`
         middle: usize,
-        /// `|``</cmd>`
+        /// `|` `</cmd>`
         end: usize,
     },
     /// ```md
@@ -29,13 +29,13 @@ pub enum XMLCommandKind {
 pub struct XMLCommand {
     /// `cmd`
     pub cmd: String,
-    pub kind: XMLCommandKind,
+    pub kind: XMLCommandMarks,
     pub pattern: LiteralPattern,
     pub options: CommandOptions,
     pub body: ASTNodes,
 }
 
-impl XMLCommandKind {
+impl XMLCommandMarks {
     pub fn start_range(&self, name: &str) -> Range<usize> {
         match self {
             | Self::OpenClose { start, middle: _, end: _ } // \n
@@ -56,12 +56,12 @@ impl XMLCommandKind {
 
 impl XMLCommand {
     pub fn open_close(body: ASTNodes, literal: LiteralPattern, options: CommandOptions) -> Self {
-        let kind = XMLCommandKind::OpenClose { start: 0, middle: 0, end: 0 };
+        let kind = XMLCommandMarks::OpenClose { start: 0, middle: 0, end: 0 };
         Self { cmd: "".to_string(), kind, pattern: literal, options, body }
     }
 
     pub fn self_close(literal: LiteralPattern, options: CommandOptions) -> Self {
-        let kind = XMLCommandKind::SelfClose { start: 0, end: 0 };
+        let kind = XMLCommandMarks::SelfClose { start: 0, end: 0 };
         Self { cmd: "".to_string(), kind, pattern: literal, options, body: vec![] }
     }
 }

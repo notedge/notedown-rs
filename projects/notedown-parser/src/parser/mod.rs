@@ -174,7 +174,7 @@ impl NotedownParser {
                 _ => debug_cases!(pair),
             };
         }
-        ASTKind::command_line(cmd, rest, r)
+        ASTKind::command_external(cmd, rest, r)
     }
     pub fn parse_paragraph(&self, pairs: Pair<Rule>) -> ASTNode {
         let r = self.get_position(pairs.as_span());

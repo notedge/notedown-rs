@@ -15,6 +15,31 @@ pub enum ListView {
 }
 
 impl ListView {
+    #[inline]
+    pub fn children(&self) -> &Vec<ListItem> {
+        match self {
+            Self::Ordered(v) => &v.children,
+            Self::Orderless(v) => &v.children,
+        }
+    }
+    #[inline]
+    pub fn children_mut(&mut self) -> &mut Vec<ListItem> {
+        &mut match self {
+            Self::Ordered(v) => v.children,
+            Self::Orderless(v) => v.children,
+        }
+    }
+    #[inline]
+    pub fn first_prefix(&self) -> Option<&ListPrefixSymbol> {
+        self.children().first().map(|f| &f.prefix.value)
+    }
+    #[inline]
+    pub fn is_ordered(&self) -> bool {
+        matches!(self, Self::Ordered(_))
+    }
+}
+
+impl ListView {
     /// ## Ordered List
     /// ```note
     /// 1. part1
