@@ -10,10 +10,10 @@ mod table;
 pub use self::{
     elements::*,
     link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
-    list::{DetailedList, ListItem, ListPrefixMark, ListView, OrderedList, OrderlessList},
+    list::*,
     literal::Literal,
     quote::QuoteBlock,
-    table::{SimpleTable, TableView},
+    table::*,
 };
 pub use crate::traits::Slugify;
 use crate::{traits::IntoASTNode, Command, Value};

@@ -15,7 +15,7 @@ notedown_ast = {version = "0.15", path = "../notedown-ast", features = ["globset
 globset = "0.4.8"
 async-std = "1.10.0"
 self_update= "0.28.0"
-
+chrono = "*"
 
 [dev-dependencies]
 

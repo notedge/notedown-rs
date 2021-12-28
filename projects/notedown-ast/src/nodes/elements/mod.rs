@@ -11,7 +11,7 @@ pub use self::{
     code_block::CodeNode,
     delimiter::Delimiter,
     header::Header,
-    math::{MathKind, MathNode},
+    math::{MathBackend, MathKind, MathNode},
     styled::{StyleKind, StyleNode},
     text::TextSpan,
 };
