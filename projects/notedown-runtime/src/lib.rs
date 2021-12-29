@@ -1,3 +1,4 @@
+mod builtin;
 pub mod document;
 mod file_system;
 mod plugin;
