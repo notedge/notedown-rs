@@ -2,9 +2,28 @@ use super::*;
 
 pub struct DocumentMeta {
     pub title: Option<String>,
-    pub author: Vec<String>,
-    pub date: Option<NaiveDateTime>,
+    pub author: Vec<DocumentAuthor>,
+    pub date: Option<DocumentDate>,
     pub toc: TocNode,
+}
+
+pub struct DocumentAuthor {
+    name: String,
+    email: Option<String>,
+}
+
+pub enum DocumentDate {
+    /// `\date: runtime-today`
+    RuntimeToday,
+    /// `\date: file-changed`
+    FileChanged,
+    /// `\date: file-created`
+    FileCreated,
+    /// `\date: git-changed`
+    GitChanged,
+    /// `\date: git-created`
+    GitCreated,
+    DateTime(NaiveDateTime),
 }
 
 impl DocumentMeta {
