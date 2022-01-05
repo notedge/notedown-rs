@@ -40,6 +40,7 @@ impl NoteDocument {
     }
 }
 
+#[derive(Debug)]
 pub struct DocumentAuthorIter<'a> {
     inner: Values<'a, String, DocumentAuthor>,
 }

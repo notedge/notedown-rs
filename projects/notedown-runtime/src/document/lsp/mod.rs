@@ -29,7 +29,8 @@ impl NoteDocument {
 
 impl DocumentMeta {
     #[inline]
-    pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbolResponse {
+    pub fn as_lsp_toc(&self) -> DocumentSymbolResponse {
+        let text = &self.get_text_index();
         DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
     }
 }

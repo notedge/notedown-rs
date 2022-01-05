@@ -1,12 +1,11 @@
-use super::*;
-
 /// https://ctan.org/topic/class
+#[derive(Debug)]
 pub enum DocumentClass {
     Article(DocumentClassArticle),
 }
-
+#[derive(Debug)]
 pub struct DocumentClassArticle {
-    font_size: usize,
+    pub font_size: usize,
 }
 
 impl DocumentClass {
@@ -14,5 +13,7 @@ impl DocumentClass {
 }
 
 impl DocumentClassArticle {
+    pub fn parse_short(&mut self) {}
+
     pub fn parse(&mut self) {}
 }

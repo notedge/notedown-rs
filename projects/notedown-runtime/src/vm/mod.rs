@@ -11,6 +11,7 @@ use crate::{
 use std::path::Path;
 use yggdrasil_shared::records::Url;
 
+#[derive(Debug)]
 pub struct NoteVM {
     fs: VMFileSystem,
     ps: PluginSystem,

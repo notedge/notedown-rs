@@ -1,21 +1,26 @@
 use super::*;
 
 impl VMFileSystem {
-    pub fn find_git_root(base: &Path) -> Option<PathBuf> {
+    #[cfg(feature = "native")]
+    pub fn find_git_root(base: &Path) -> Result<PathBuf> {
         let mut path: PathBuf = base.into();
         let git_root = Path::new(".git");
         loop {
             path.push(git_root);
 
             if path.is_file() {
-                break Some(path);
+                break Ok(path);
             }
 
             if !(path.pop() && path.pop()) {
                 // remove file && remove parent
-                break None;
+                break Err(NoteError::runtime_error("git root not found"));
             }
         }
     }
-    pub fn find_git_repo(base: &Path) {}
+    #[cfg(feature = "native")]
+    pub fn find_git_repo(base: &Path) -> Result<Repository> {
+        let root = Self::find_git_root(base)?;
+        Ok(Repository::open(root)?)
+    }
 }

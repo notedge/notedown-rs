@@ -1,5 +1,7 @@
 #[cfg(feature = "docx-rs")]
 mod for_docx;
+#[cfg(feature = "git2")]
+mod for_git2;
 #[cfg(feature = "globset")]
 mod for_globset;
 #[cfg(feature = "html_parser")]

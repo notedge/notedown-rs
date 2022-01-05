@@ -1,11 +1,8 @@
 pub(crate) mod get_env;
 pub(crate) mod get_git;
-pub(crate) mod state;
 
-pub use self::state::FileState;
-use crate::plugin_system::Parser;
-use async_std::{fs::File, io::ReadExt};
-use globset::{Glob, GlobSet, GlobSetBuilder};
+use crate::{plugin_system::Parser, NoteDocument};
+
 use notedown_error::{NoteError, Result};
 use std::{
     env::VarError,
@@ -13,10 +10,25 @@ use std::{
 };
 use yggdrasil_shared::records::{DashMap, Url};
 
-#[derive(Debug, Clone)]
+#[cfg(feature = "native")]
+pub(crate) mod native_wrap {
+    pub use async_std::{fs::File, io::ReadExt};
+    pub use notedown_error::{
+        git2::Repository,
+        globset::{Glob, GlobSet, GlobSetBuilder},
+    };
+}
+#[cfg(feature = "wasm")]
+pub(crate) mod wasm_wrap {}
+#[cfg(feature = "native")]
+use native_wrap::*;
+#[cfg(feature = "wasm")]
+use wasm_wrap::*;
+
+#[derive(Debug)]
 pub struct VMFileSystem {
     pub workspace_root: Option<Url>,
-    pub cache: DashMap<Url, FileState>,
+    pub cache: DashMap<Url, NoteDocument>,
 }
 
 impl Default for VMFileSystem {
@@ -47,7 +59,6 @@ impl VMFileSystem {
     pub async fn update_text(&self, url: &Url) -> Result<()> {
         let _ = url.to_file_path()?;
         // self.file_cache.insert();
-
         todo!()
     }
     #[inline]
@@ -57,7 +68,19 @@ impl VMFileSystem {
             Some(mut s) => s.value_mut().update_document(parser).await,
         }
     }
+}
 
+#[cfg(feature = "native")]
+impl VMFileSystem {
+    #[inline]
+    /// add a file url to resolve
+    pub async fn load_local_url(&mut self, url: &Url) -> Result<()> {
+        let mut file = File::open(url.to_file_path()?).await?;
+        let mut contents = Vec::new();
+        file.read_to_end(&mut contents).await?;
+
+        todo!()
+    }
     /// add a local file path to resolve
     #[inline]
     pub async fn load_path(&mut self, path: &Path) -> Result<()> {
@@ -69,15 +92,6 @@ impl VMFileSystem {
     }
 
     #[inline]
-    /// add a file url to resolve
-    pub async fn load_url(&mut self, url: &Url) -> Result<()> {
-        let mut file = File::open(url.to_file_path()?).await?;
-        let mut contents = Vec::new();
-        file.read_to_end(&mut contents).await?;
-
-        todo!()
-    }
-    #[inline]
     pub async fn load_pattern_text(&mut self, patterns: &str) -> Result<()> {
         let mut builder = GlobSetBuilder::new();
         for row in patterns.lines() {
@@ -85,6 +99,7 @@ impl VMFileSystem {
         }
         Ok(self.load_pattern(&builder.build()?).await)
     }
+
     #[inline]
     pub async fn load_pattern(&mut self, patterns: &GlobSet) {
         let _ = patterns;

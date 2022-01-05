@@ -11,7 +11,7 @@ mod plugin_system;
 mod vm;
 
 pub use self::{
-    file_system::{FileState, VMFileSystem},
+    file_system::VMFileSystem,
     vm::{ContextKind, NoteVM},
 };
 

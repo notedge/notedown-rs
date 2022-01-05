@@ -1,6 +1,6 @@
 [package]
 name = "notedown-rt"
-version = "0.3.1"
+version = "0.3.2"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-runtime"
@@ -12,29 +12,34 @@ edition = "2021"
 
 [dependencies]
 notedown_ast = { version = "0.16", path = "../notedown-ast" }
-async-std = "1.10.0"
 self_update = "0.28.0"
 chrono = {version = "0.4.19", features = ["serde"]}
-globset = "0.4.8"
 rsass = { version = "0.23.0", optional = true }
 yggdrasil-shared = { version = "0.1.7", default-features = false }
-
+async-std = { version = "1.10.0", optional = true }
+# Native only
 
 [dependencies.notedown-error]
-version = "1.0"
+version = "1.1"
 path = "../notedown-error"
-features = ["globset", "chrono"]
+features = ["chrono"]
 
 [dev-dependencies]
 
 [features]
-default = ["native"]
+default = ["wasm"]
 lsp = [
+    "native",
     "yggdrasil-shared/lsp",
     "notedown-error/yggdrasil-shared",
     "notedown-error/lsp-types"
 ]
 
-native = []
+native = [
+    "async-std",
+    "notedown-error/git2",
+    "notedown-error/globset",
+    "notedown-error/chrono"
+]
 # wasm support
 wasm = []
