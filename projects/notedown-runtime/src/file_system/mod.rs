@@ -57,9 +57,12 @@ impl VMFileSystem {}
 impl VMFileSystem {
     #[inline]
     pub async fn update_text(&self, url: &Url) -> Result<()> {
-        let _ = url.to_file_path()?;
-        // self.file_cache.insert();
-        todo!()
+        match self.cache.get_mut(url) {
+            None => {
+                todo!()
+            }
+            Some(mut s) => s.value_mut().update_text().await,
+        }
     }
     #[inline]
     pub async fn update_ast(&self, url: &Url, parser: &Parser) -> Result<()> {

@@ -16,14 +16,17 @@ use notedown_ast::{
     ASTNode, Value,
 };
 use notedown_error::{NoteError, Result};
-use std::{collections::BTreeMap, fs::read_to_string};
+use std::collections::BTreeMap;
 use yggdrasil_shared::records::{Rope, TextIndex, Url};
 
 #[cfg(feature = "native")]
 pub(crate) mod native_wrap {
     pub use crate::VMFileSystem;
     pub use chrono::{DateTime, TimeZone};
-    pub use std::time::{SystemTime, UNIX_EPOCH};
+    pub use std::{
+        fs::read_to_string,
+        time::{SystemTime, UNIX_EPOCH},
+    };
 }
 #[cfg(feature = "wasm")]
 pub(crate) mod wasm_wrap {}
@@ -34,6 +37,7 @@ use wasm_wrap::*;
 
 #[derive(Debug)]
 pub struct NoteDocument {
+    url: Url,
     /// used to check weather the file needs re-parse
     fingerprint: u128,
     text: Rope,
@@ -45,7 +49,6 @@ pub struct NoteDocument {
 
 #[derive(Debug, Clone)]
 pub struct DocumentMeta {
-    path: Option<Url>,
     title: DocumentTitle,
     authors: BTreeMap<String, DocumentAuthor>,
     date: DocumentTime,
@@ -97,13 +100,10 @@ impl NoteDocument {
 }
 
 impl NoteDocument {
-    pub async fn load_local(&mut self, url: &Url) -> Result<()> {
-        let path = url.to_file_path()?;
-        self.text = Rope::from_str(&read_to_string(path)?);
+    #[inline]
+    pub async fn update_text(&mut self) -> Result<()> {
+        self.text = Rope::from_str(&Self::load_url(&self.url).await?);
         Ok(())
-    }
-    pub async fn load_remote(&mut self, url: &Url) {
-        todo!("Remote: {}", url)
     }
     #[inline]
     pub async fn update_document(&mut self, parse: &Parser) -> Result<()> {
@@ -111,5 +111,36 @@ impl NoteDocument {
         let mut errors = vec![];
         let parsed = parse(&text, &mut errors)?;
         todo!()
+    }
+}
+
+impl NoteDocument {
+    pub async fn load_url(url: &Url) -> Result<String> {
+        #[cfg(feature = "native")]
+        match url.scheme() == "file" {
+            true => Self::load_local_url(url).await,
+            false => Self::load_remote_url_native(url).await,
+        };
+        #[cfg(feature = "wasm")]
+        match url.scheme() == "file" {
+            true => Err(NoteError::runtime_error("Can not load local file from wasm")),
+            false => Self::load_remote_url_wasm(url).await,
+        }
+    }
+    #[cfg(feature = "native")]
+    #[inline(always)]
+    async fn load_local_url(url: &Url) -> Result<String> {
+        let path = url.to_file_path()?;
+        Ok(read_to_string(path)?)
+    }
+    #[cfg(feature = "native")]
+    #[inline(always)]
+    async fn load_remote_url_native(url: &Url) -> Result<String> {
+        todo!("Remote: {}", url)
+    }
+    #[cfg(feature = "wasm")]
+    #[inline(always)]
+    async fn load_remote_url_wasm(url: &Url) -> Result<String> {
+        todo!("Remote: {}", url)
     }
 }

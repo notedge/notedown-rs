@@ -65,7 +65,7 @@ impl NoteVM {
         }
     }
     #[inline]
-    async fn update_ast(&self, url: &Url, parser: &Parser) -> bool {
+    async fn update_document(&self, url: &Url, parser: &Parser) -> bool {
         match self.fs.update_ast(url, parser).await {
             Ok(_) => true,
             Err(_) => false,

@@ -21,7 +21,7 @@ impl NoteVM {
         match self.ps.get_parser("note") {
             None => {}
             Some(parser) => {
-                self.update_ast(url, &parser).await;
+                self.update_document(url, &parser).await;
             }
         }
         todo!()
