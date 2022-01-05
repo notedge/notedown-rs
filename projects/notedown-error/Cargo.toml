@@ -1,6 +1,6 @@
 [package]
 name = "notedown-error"
-version = "1.1.2"
+version = "1.1.4"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Error Handlers"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-ast"

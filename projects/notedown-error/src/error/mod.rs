@@ -4,7 +4,6 @@ use std::{
     error::Error,
     fmt::{self, Debug, Display, Formatter},
     ops::Range,
-    path::Path,
 };
 use url::Url;
 
@@ -66,13 +65,6 @@ pub enum DiagnosticLevel {
 }
 
 impl NoteError {
-    /// Set a new local path for the error
-    #[inline]
-    pub fn set_path(&mut self, path: impl AsRef<Path>) {
-        if let Ok(s) = Url::from_file_path(path) {
-            self.file = Some(s)
-        }
-    }
     /// Set a new url for the error
     #[inline]
     pub fn set_url(&mut self, url: Url) {
