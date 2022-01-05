@@ -1,15 +1,16 @@
+mod author;
+mod datetime;
+
 use super::*;
+use std::collections::BTreeMap;
+
+pub use self::author::{DocumentAuthor, DocumentAuthorIter};
 
 pub struct DocumentMeta {
     pub title: Option<String>,
-    pub author: Vec<DocumentAuthor>,
+    authors: BTreeMap<String, DocumentAuthor>,
     pub date: Option<DocumentDate>,
     pub toc: TocNode,
-}
-
-pub struct DocumentAuthor {
-    name: String,
-    email: Option<String>,
 }
 
 pub enum DocumentDate {

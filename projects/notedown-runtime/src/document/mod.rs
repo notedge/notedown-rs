@@ -48,19 +48,7 @@ impl NoteDocument {
     pub fn set_title(&mut self, title: String) {
         self.meta.title = Some(title)
     }
-
-    #[inline]
-    pub fn get_author(&self) -> &Vec<String> {
-        &self.meta.author
-    }
-    #[inline]
-    pub fn set_author(&mut self, authors: Vec<String>) {
-        self.meta.author = authors
-    }
-    #[inline]
-    pub fn add_author(&mut self, author: String) {
-        self.meta.author.push(author)
-    }
+    
     #[inline]
     pub fn set_value_raw(&mut self, pair: LiteralPair) -> Option<LiteralPair> {
         self.variable.insert_raw(pair)

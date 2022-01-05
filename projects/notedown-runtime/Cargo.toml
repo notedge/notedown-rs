@@ -1,6 +1,6 @@
 [package]
 name = "notedown-rt"
-version = "0.3.0"
+version = "0.3.1"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-runtime"
