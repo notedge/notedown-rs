@@ -1,18 +1,18 @@
 #![doc = include_str!("readme.md")]
-mod as_element;
-mod elements;
-mod link;
-mod list;
-mod literal;
-mod quote;
-mod table;
+pub(crate) mod as_element;
+pub(crate) mod elements;
+pub(crate) mod link;
+pub(crate) mod list;
+pub(crate) mod literal;
+pub(crate) mod quote;
+pub(crate) mod table;
 
 pub use self::{
-    elements::*,
-    link::{EmailLink, HyperLink, HyperLinkTarget, ImageLayout, ImageLink, ResourceDescriptor, SmartLink, TagReference, TwoWayLink},
+    elements::{code_block::*, delimiter::*, header::*, math::*, styled::*, text::*},
+    link::*,
     list::*,
-    literal::Literal,
-    quote::QuoteBlock,
+    literal::*,
+    quote::*,
     table::*,
 };
 use crate::{

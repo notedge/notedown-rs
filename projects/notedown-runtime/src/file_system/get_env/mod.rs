@@ -1,9 +1,4 @@
-use crate::VMFileSystem;
-use notedown_error::{NoteError, Result};
-use std::{
-    env::VarError,
-    path::{Path, PathBuf},
-};
+use super::*;
 
 impl VMFileSystem {
     pub const NOTEDOWN_ROOT: &'static str = "NOTEDOWN_ROOT";

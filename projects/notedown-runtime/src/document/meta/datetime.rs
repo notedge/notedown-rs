@@ -1,5 +1,8 @@
 use super::*;
+use crate::VMFileSystem;
+use std::path::PathBuf;
 
+#[derive(Debug, Clone)]
 pub enum DocumentTime {
     /// `\date: runtime-today`
     RuntimeToday,
@@ -37,7 +40,7 @@ impl DocumentTime {
         Self::DateTime(Utc::now().naive_utc())
     }
     #[inline]
-    pub fn instantiate(&self) -> Option<NaiveDateTime> {
+    pub fn instantiate(&self, file: &Url) -> Option<NaiveDateTime> {
         match self {
             Self::RuntimeToday => None,
             Self::FileChanged => {
@@ -46,25 +49,29 @@ impl DocumentTime {
             Self::FileCreated => {
                 todo!()
             }
-            Self::GitChanged => {
-                todo!()
-            }
-            Self::GitCreated => {
-                todo!()
-            }
+            Self::GitChanged => Self::instantiate_git_time(false, file),
+            Self::GitCreated => Self::instantiate_git_time(true, file),
             Self::DateTime(t) => Some(t.to_owned()),
         }
+    }
+    fn instantiate_git_time(created: bool, file: &Url) -> Option<NaiveDateTime> {
+        let path = file.to_file_path().ok()?;
+        let git_root = VMFileSystem::find_git_root(&path)?;
+
+        let _ = created;
+
+        todo!()
     }
 }
 
 /// Methods about [`DocumentDate`]
 impl NoteDocument {
     #[inline]
-    pub fn get_date(&self) -> &Option<DocumentTime> {
+    pub fn get_date(&self) -> &DocumentTime {
         &self.meta.date
     }
     #[inline]
     pub fn set_date(&mut self, date: DocumentTime) {
-        self.meta.date = Some(date);
+        self.meta.date = date;
     }
 }

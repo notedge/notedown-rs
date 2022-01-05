@@ -1,5 +1,9 @@
-pub struct Today {}
+use super::*;
 
-trait NoteCommand {
-    fn apply();
+pub struct Date {}
+
+impl NoteCommand for Date {
+    fn apply() {
+        todo!()
+    }
 }

@@ -1,6 +1,7 @@
 use super::*;
 use std::collections::btree_map::Values;
 
+#[derive(Debug, Clone)]
 pub struct DocumentAuthor {
     pub name: String,
     pub email: Option<String>,

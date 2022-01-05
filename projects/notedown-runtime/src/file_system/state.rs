@@ -8,6 +8,7 @@ use std::fs::read_to_string;
 use yggdrasil_shared::records::lsp_types::DocumentSymbol;
 use yggdrasil_shared::records::{Rope, TextIndex, Url};
 
+#[derive(Debug, Clone)]
 pub struct FileState {
     /// used to check weather the file needs re-parse
     fingerprint: u128,

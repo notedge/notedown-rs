@@ -36,5 +36,5 @@ impl PluginSystem {
         return None;
     }
 }
-
+#[derive(Debug, Clone)]
 pub struct ExtendedPackage {}

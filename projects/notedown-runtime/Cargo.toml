@@ -14,10 +14,10 @@ edition = "2021"
 notedown_ast = { version = "0.16", path = "../notedown-ast" }
 async-std = "1.10.0"
 self_update = "0.28.0"
-chrono = "0.4.19"
+chrono = {version = "0.4.19", features = ["serde"]}
 globset = "0.4.8"
 rsass = { version = "0.23.0", optional = true }
-yggdrasil-shared = { version = "0.1.7", optional = true }
+yggdrasil-shared = { version = "0.1.7", default-features = false }
 
 
 [dependencies.notedown-error]
@@ -28,10 +28,13 @@ features = ["globset", "chrono"]
 [dev-dependencies]
 
 [features]
-default = ["lsp"]
+default = ["native"]
 lsp = [
-    "yggdrasil-shared",
     "yggdrasil-shared/lsp",
     "notedown-error/yggdrasil-shared",
     "notedown-error/lsp-types"
 ]
+
+native = []
+# wasm support
+wasm = []

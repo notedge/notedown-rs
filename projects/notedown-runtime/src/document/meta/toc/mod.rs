@@ -1,3 +1,4 @@
+use crate::NoteDocument;
 use std::ops::Range;
 
 mod visit_ast;
@@ -15,6 +16,7 @@ pub trait TableOfContent {
 }
 
 /// Config of table of content
+#[derive(Debug, Clone)]
 pub struct TocConfig {
     /// Calculate the level from the root, 0 means infinite, and root it self is the first level
     pub max_depth: u8,
@@ -42,5 +44,12 @@ impl Default for TocConfig {
 impl Default for TocNode {
     fn default() -> Self {
         Self { level: 0, detail: String::from("ROOT"), range: Default::default(), children: vec![] }
+    }
+}
+
+impl NoteDocument {
+    #[inline]
+    pub fn get_toc(&self) -> &TocNode {
+        &self.meta.toc
     }
 }

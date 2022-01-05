@@ -1,2 +1,6 @@
 mod datetime;
-mod documentclass;
+mod document_class;
+
+pub trait NoteCommand {
+    fn apply();
+}

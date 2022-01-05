@@ -1,9 +1,8 @@
 use super::*;
 use yggdrasil_shared::records::{
-    lsp_types::{DocumentSymbol, SymbolKind},
+    lsp_types::{Diagnostic, DocumentSymbol, DocumentSymbolResponse, SymbolKind},
     LSPRange,
 };
-
 impl TocNode {
     #[inline]
     pub fn get_lsp_range(&self, text: &TextIndex) -> LSPRange {
@@ -25,5 +24,12 @@ impl NoteDocument {
     #[inline]
     pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbol {
         self.meta.toc.as_document_symbol(text)
+    }
+}
+
+impl DocumentMeta {
+    #[inline]
+    pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbolResponse {
+        DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
     }
 }

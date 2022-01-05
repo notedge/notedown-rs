@@ -1,15 +1,19 @@
-mod get_env;
-mod state;
+pub(crate) mod get_env;
+pub(crate) mod get_git;
+pub(crate) mod state;
 
 pub use self::state::FileState;
-
 use crate::plugin_system::Parser;
 use async_std::{fs::File, io::ReadExt};
 use globset::{Glob, GlobSet, GlobSetBuilder};
 use notedown_error::{NoteError, Result};
-use std::path::Path;
+use std::{
+    env::VarError,
+    path::{Path, PathBuf},
+};
 use yggdrasil_shared::records::{DashMap, Url};
 
+#[derive(Debug, Clone)]
 pub struct VMFileSystem {
     pub workspace_root: Option<Url>,
     pub cache: DashMap<Url, FileState>,
