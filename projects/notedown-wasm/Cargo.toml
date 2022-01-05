@@ -17,6 +17,9 @@ path = "../notedown-runtime"
 default-features = false
 features = ["wasm"]
 
+[dev-dependencies]
+wasm-bindgen-test = "0.3.28"
+
 [[test]]
 name = "wasm"
 path = "tests/main.rs"
