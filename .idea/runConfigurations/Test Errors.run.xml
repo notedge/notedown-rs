@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Test Errors" type="CargoCommandRunConfiguration" factoryName="Cargo Command" singleton="false">
-    <option name="command" value="test --package notedown-error --test main ready -- --exact" />
-    <option name="workingDirectory" value="file://$PROJECT_DIR$" />
+    <option name="command" value="test" />
+    <option name="workingDirectory" value="file://$PROJECT_DIR$/projects/notedown-error" />
     <option name="channel" value="DEFAULT" />
     <option name="requiredFeatures" value="true" />
     <option name="allFeatures" value="true" />
