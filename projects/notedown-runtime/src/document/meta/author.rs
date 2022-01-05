@@ -15,7 +15,7 @@ impl DocumentAuthor {
     }
 }
 
-/// Setter and getter for authors
+/// Methods about [`DocumentAuthor`]
 impl NoteDocument {
     #[inline]
     pub fn authors(&self) -> DocumentAuthorIter {
