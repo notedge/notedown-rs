@@ -6,6 +6,7 @@ use std::{
     ops::Range,
 };
 use url::Url;
+use yggdrasil_shared::DiagnosticLevel;
 
 /// All result about notedown
 pub type Result<T> = std::result::Result<T, NoteError>;
@@ -45,23 +46,8 @@ pub enum NoteErrorKind {
     },
     /// A forbidden cst_node encountered
     Unreachable,
-    /* #[error(transparent)]
-     * UnknownError(#[from] anyhow::Error), */
-}
-
-/// DiagnosticLevel
-#[derive(Debug, Copy, Clone)]
-pub enum DiagnosticLevel {
-    /// No special diagnostic
-    None = 0,
-    /// Error Message, red
-    Error = 1,
-    /// Warning Message, yellow
-    Warning = 2,
-    /// Notice Message, magenta
-    Information = 3,
-    /// Hint Message, dots
-    Hint = 4,
+    // #[error(transparent)]
+    // UnknownError(#[from] anyhow::Error),
 }
 
 impl NoteError {
@@ -69,6 +55,13 @@ impl NoteError {
     #[inline]
     pub fn set_url(&mut self, url: Url) {
         self.file = Some(url);
+    }
+    /// Set a local path for the error
+    #[inline]
+    #[cfg(any(unix, windows, target_os = "redox"))]
+    pub fn set_path(&mut self, url: &std::path::Path) -> Result<()> {
+        self.file = Some(Url::from_file_path(url)?);
+        Ok(())
     }
     /// Set a new range for the error
     #[inline]

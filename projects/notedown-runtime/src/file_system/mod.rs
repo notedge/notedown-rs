@@ -3,12 +3,13 @@ pub(crate) mod get_git;
 
 use crate::{plugin_system::Parser, NoteDocument};
 
+use dashmap::DashMap;
 use notedown_error::{NoteError, Result};
 use std::{
     env::VarError,
     path::{Path, PathBuf},
 };
-use yggdrasil_shared::records::{DashMap, Url};
+use yggdrasil_shared::Url;
 
 #[cfg(feature = "native")]
 pub(crate) mod native_wrap {

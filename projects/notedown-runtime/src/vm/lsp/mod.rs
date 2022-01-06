@@ -1,6 +1,6 @@
 use super::*;
 
-use yggdrasil_shared::records::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent};
+use yggdrasil_shared::lsp_types::{Diagnostic, DocumentSymbolResponse, Position, TextDocumentContentChangeEvent};
 
 impl NoteVM {
     #[inline]

@@ -5,7 +5,9 @@
 mod error;
 mod error_3rd;
 
-pub use error::{DiagnosticLevel, MaybeRanged, NoteError, NoteErrorKind, Result};
+pub use self::error::{MaybeRanged, NoteError, NoteErrorKind, Result};
+pub use url::Url;
+pub use yggdrasil_shared::DiagnosticLevel;
 
 #[cfg(feature = "git2")]
 pub extern crate git2;

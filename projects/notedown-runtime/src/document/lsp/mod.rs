@@ -1,12 +1,13 @@
 use super::*;
-use yggdrasil_shared::records::{
+use yggdrasil_shared::{
     lsp_types::{Diagnostic, DocumentSymbol, DocumentSymbolResponse, SymbolKind},
-    LSPRange,
+    LspRange, LspTextAdaptor,
 };
+
 impl TocNode {
     #[inline]
-    pub fn get_lsp_range(&self, text: &TextIndex) -> LSPRange {
-        text.get_lsp_range(self.range.start, self.range.end)
+    pub fn get_lsp_range(&self, text: &TextIndex) -> LspRange {
+        text.offset_range_to_lsp_range(&self.range).unwrap_or_default()
     }
     /// Get table of content from element in lsp form
     #[inline]
@@ -22,15 +23,7 @@ impl NoteDocument {
         self.errors.iter().map(|f| f.as_lsp_diagnostic(index)).collect()
     }
     #[inline]
-    pub fn as_lsp_toc(&self, text: &TextIndex) -> DocumentSymbol {
-        self.meta.toc.as_document_symbol(text)
-    }
-}
-
-impl DocumentMeta {
-    #[inline]
-    pub fn as_lsp_toc(&self) -> DocumentSymbolResponse {
-        let text = &self.get_text_index();
-        DocumentSymbolResponse::Nested(vec![self.toc.as_document_symbol(text)])
+    pub fn get_lsp_toc(&self) -> DocumentSymbol {
+        self.meta.toc.as_document_symbol(&self.text)
     }
 }

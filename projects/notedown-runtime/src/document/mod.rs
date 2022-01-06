@@ -17,7 +17,7 @@ use notedown_ast::{
 };
 use notedown_error::{NoteError, Result};
 use std::collections::BTreeMap;
-use yggdrasil_shared::records::{Rope, TextIndex, Url};
+use yggdrasil_shared::{TextAdaptor, TextIndex, Url};
 
 #[cfg(feature = "native")]
 pub(crate) mod native_wrap {
@@ -40,7 +40,7 @@ pub struct NoteDocument {
     url: Url,
     /// used to check weather the file needs re-parse
     fingerprint: u128,
-    text: Rope,
+    text: TextIndex,
     ast: ASTNode,
     variable: OrderedMap,
     errors: Vec<NoteError>,
@@ -72,12 +72,12 @@ impl NoteDocument {
     }
     #[inline]
     pub fn get_text(&self) -> String {
-        self.text.chars().collect()
+        self.text.text()
     }
 
     #[inline]
-    pub fn get_text_index(&self) -> TextIndex {
-        TextIndex::new(self.get_text())
+    pub fn get_text_index(&self) -> &TextIndex {
+        &self.text
     }
 
     #[inline]
@@ -102,14 +102,14 @@ impl NoteDocument {
 impl NoteDocument {
     #[inline]
     pub async fn update_text(&mut self) -> Result<()> {
-        self.text = Rope::from_str(&Self::load_url(&self.url).await?);
+        let full = &Self::load_url(&self.url).await?;
+        self.text.apply_change_full(full);
         Ok(())
     }
     #[inline]
     pub async fn update_document(&mut self, parse: &Parser) -> Result<()> {
-        let text: String = self.text.chars().collect();
         let mut errors = vec![];
-        let parsed = parse(&text, &mut errors)?;
+        let parsed = parse(&self.text.text(), &mut errors)?;
         todo!()
     }
 }
@@ -120,7 +120,7 @@ impl NoteDocument {
         match url.scheme() == "file" {
             true => Self::load_local_url(url).await,
             false => Self::load_remote_url_native(url).await,
-        };
+        }
         #[cfg(feature = "wasm")]
         match url.scheme() == "file" {
             true => Err(NoteError::runtime_error("Can not load local file from wasm")),

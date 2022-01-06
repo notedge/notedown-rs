@@ -1,32 +1,12 @@
-use crate::{error::DiagnosticLevel, NoteError};
-#[cfg(feature = "yggdrasil-shared")]
-use lsp_types::{Diagnostic, Range};
-use lsp_types::{DiagnosticSeverity, DiagnosticTag};
-#[cfg(feature = "yggdrasil-shared")]
-use yggdrasil_shared::records::TextIndex;
-
-impl DiagnosticLevel {
-    /// Convert to lsp [`DiagnosticSeverity`]
-    pub fn into_severity(self) -> Option<DiagnosticSeverity> {
-        match self {
-            Self::None => None,
-            Self::Error => Some(DiagnosticSeverity::ERROR),
-            Self::Warning => Some(DiagnosticSeverity::WARNING),
-            Self::Information => Some(DiagnosticSeverity::INFORMATION),
-            Self::Hint => Some(DiagnosticSeverity::HINT),
-        }
-    }
-}
+use crate::NoteError;
+use lsp_types::{Diagnostic, DiagnosticTag, Range};
+use yggdrasil_shared::{LspTextAdaptor, TextIndex};
 
 impl NoteError {
     /// Get the range as [`Range`]
-    #[cfg(feature = "yggdrasil-shared")]
     #[inline]
-    pub fn get_lsp_range(&self, text: &TextIndex) -> Range {
-        match &self.range {
-            None => Default::default(),
-            Some(r) => text.get_lsp_range(r.start, r.end),
-        }
+    pub fn get_lsp_range(&self, text: &TextIndex) -> Option<Range> {
+        self.range.as_ref().and_then(|r| text.offset_range_to_lsp_range(&r))
     }
     /// Get the tags as [`DiagnosticTag`]
     #[inline]
@@ -41,11 +21,10 @@ impl NoteError {
         return Some(tags);
     }
     /// Convert error to lsp [`Diagnostic`]
-    #[cfg(feature = "yggdrasil-shared")]
     #[inline]
     pub fn as_lsp_diagnostic(&self, text: &TextIndex) -> Diagnostic {
         Diagnostic {
-            range: self.get_lsp_range(text),
+            range: self.get_lsp_range(text).unwrap_or_default(),
             severity: self.level.into_severity(),
             code: None,
             code_description: None,

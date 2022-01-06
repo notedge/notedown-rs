@@ -9,7 +9,7 @@ use crate::{
     VMFileSystem,
 };
 use std::path::Path;
-use yggdrasil_shared::records::Url;
+use yggdrasil_shared::Url;
 
 #[derive(Debug)]
 pub struct NoteVM {

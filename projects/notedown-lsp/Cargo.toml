@@ -27,3 +27,4 @@ itertools = "0.10.3"
 [dependencies.notedown-rt]
 version = "0.3"
 path = "../notedown-runtime"
+features = ["lsp"]
