@@ -46,7 +46,6 @@ impl SparseArray {
 
     /// Appends an element to the back of a collection
     #[inline]
-    #[allow(mutable_borrow_reservation_conflict)]
     pub fn push(&mut self, value: Literal<Value>) {
         let last = self.inner.last_key_value().map(|f| f.0);
         match last {
