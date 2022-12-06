@@ -6,12 +6,12 @@ pub trait Index<I> {
 }
 
 impl Index<BigInt> for Value {
-    type Output = Result<Self>;
+    type Output = QResult<Self>;
 
     fn get_index(&self, index: &BigInt) -> Self::Output {
         match self {
             Self::Null | Self::Boolean(_) | Self::Integer(_) | Self::Decimal(_) => {
-                Err(QError::type_mismatch(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
+                Err(QError::runtime_error(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
             }
             Self::String(s) => {
                 let i = if index.is_negative() {
@@ -89,7 +89,7 @@ impl Index<BigInt> for Value {
 }
 
 impl Index<String> for Value {
-    type Output = Result<Self>;
+    type Output = QResult<Self>;
 
     fn get_index(&self, index: &String) -> Self::Output {
         match self {
@@ -100,7 +100,7 @@ impl Index<String> for Value {
                     None => Err(QError::runtime_error(format!("Index `{}` of `Object` not found.", index))),
                 }
             }
-            _ => Err(QError::type_mismatch(format!("Can not take `String` index of type `{}`", self.get_type_name()))),
+            _ => Err(QError::runtime_error(format!("Can not take `String` index of type `{}`", self.get_type_name()))),
         }
     }
 }

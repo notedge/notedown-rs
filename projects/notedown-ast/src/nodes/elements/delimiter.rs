@@ -9,6 +9,13 @@ pub enum Delimiter {
     HTMLRawBlock(String),
 }
 
+impl IntoNotedown for Delimiter {
+    #[inline]
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        NotedownKind::Delimiter(Box::new(self)).into_node(span, file)
+    }
+}
+
 impl NotedownKind {
     /// Insert raw html text
     pub fn raw_html_inline(msg: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {

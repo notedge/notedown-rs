@@ -48,9 +48,20 @@ impl ListView {
     }
 }
 
+impl IntoNotedown for ListView {
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        NotedownKind::ListView(self).into_node(span, file)
+    }
+}
 
 impl NotedownKind {
-    pub fn as_listview(&self) -> Option<&ListView> {
+    pub fn get_listview(&self) -> Option<&ListView> {
+        match self {
+            Self::ListView(v) => Some(v),
+            _ => None,
+        }
+    }
+    pub fn mut_listview(&mut self) -> Option<&mut ListView> {
         match self {
             Self::ListView(v) => Some(v),
             _ => None,

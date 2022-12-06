@@ -1,7 +1,7 @@
 use super::*;
 
 impl Display for ValueType {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             ValueType::Null => f.write_str("Null"),
             ValueType::Boolean => f.write_str("Boolean"),

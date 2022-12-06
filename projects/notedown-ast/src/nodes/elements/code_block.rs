@@ -62,7 +62,7 @@ impl Default for CodeNode {
 }
 
 impl Display for CodeNode {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         if self.inline {
             write!(f, "{mark}{lang}\n{body}\n{mark}", mark = "`", lang = "", body = self.code)
         }
@@ -119,6 +119,13 @@ impl CodeNode {
     #[inline]
     pub fn code_block(lang: String, code: String) -> Self {
         Self { language: lang, inline: false, highlight: true, code, ..Default::default() }
+    }
+}
+
+impl IntoNotedown for CodeNode {
+    #[inline]
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        NotedownKind::CodeNode(Box::new(self)).into_node(span, file)
     }
 }
 

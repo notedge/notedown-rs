@@ -32,8 +32,14 @@ impl NotedownKind {
     pub fn ordered_list(children: Vec<ListItem>, span: &Span, file: &FileID) -> NotedownNode {
         ListView::ordered_list(children).into_node(span, file)
     }
-    pub fn as_ordered_list(&self) -> Option<&OrderedList> {
-        match self.as_listview()? {
+    pub fn get_ordered_list(&self) -> Option<&OrderedList> {
+        match self.get_listview()? {
+            ListView::Ordered(o) => Some(o),
+            _ => None,
+        }
+    }
+    pub fn mut_ordered_list(&mut self) -> Option<&mut OrderedList> {
+        match self.mut_listview()? {
             ListView::Ordered(o) => Some(o),
             _ => None,
         }

@@ -1,6 +1,9 @@
 use diagnostic_quick::{FileID, Span};
 
-use crate::{nodes::*, Command, NotedownKind, NotedownNode, Value};
+use crate::{
+    nodes::{EmailLink, ImageLink, SmartLink},
+    NotedownKind, NotedownNode,
+};
 
 /// Convert element into [`NotedownNode`]
 pub trait IntoNotedown {
@@ -20,4 +23,38 @@ impl IntoNotedown for NotedownKind {
     fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
         NotedownNode { value: self, range: span.clone(), file: file.clone() }
     }
+}
+
+impl IntoNotedown for SmartLink {
+    #[inline]
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        NotedownKind::LinkNode(self).into_node(span, file)
+    }
+}
+
+impl IntoNotedown for ImageLink {
+    #[inline]
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        SmartLink::Image(Box::new(self)).into_node(span, file)
+    }
+}
+
+impl IntoNotedown for EmailLink {
+    #[inline]
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        SmartLink::Image(Box::new(self)).into_node(span, file)
+    }
+}
+
+macro_rules! impl_into_notedown {
+    ($($t:ty),*) => {
+        $(
+            impl IntoNotedown for $t {
+                #[inline]
+                fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+                    NotedownKind::from(self).into_node(span, file)
+                }
+            }
+        )*
+    };
 }

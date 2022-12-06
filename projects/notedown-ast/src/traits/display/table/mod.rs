@@ -1,7 +1,7 @@
 use super::*;
 
 impl Debug for TableView {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::SimpleTable(v) => Debug::fmt(v, f),
         }
@@ -9,7 +9,7 @@ impl Debug for TableView {
 }
 
 impl Display for TableView {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::SimpleTable(v) => Display::fmt(v, f),
         }
@@ -17,7 +17,7 @@ impl Display for TableView {
 }
 
 impl Debug for SimpleTable {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("Table");
         w.field("column", &self.column);
         w.finish()

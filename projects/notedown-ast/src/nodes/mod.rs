@@ -83,7 +83,7 @@ pub enum NotedownKind {
     /// - inline only
     StyledSpan(Box<StyleNode>),
     /// - context sensitive
-    Command(Box<Command>),
+    Command(Command),
     /// - never bared
     Value(Box<Value>),
 }
@@ -98,12 +98,12 @@ impl NotedownKind {
     /// Constructor of [`NotedownKind::Statements`]
     #[inline]
     pub fn statements(children: NotedownNodes, span: &Span, file: &FileID) -> NotedownNode {
-        NotedownNode { value: Self::Statements(children), range }
+        Self::Statements(children).into_node(span, file)
     }
     /// Constructor of [`NotedownKind::Paragraph`]
     #[inline]
     pub fn paragraph(children: NotedownNodes, span: &Span, file: &FileID) -> NotedownNode {
-        NotedownNode { value: Self::Paragraph(children), range }
+        Self::Paragraph(children).into_node(span, file)
     }
     /// Constructor of [`Delimiter::HorizontalRule`]
     #[inline]

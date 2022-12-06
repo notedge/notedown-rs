@@ -23,7 +23,7 @@ impl TextError {
 impl Error for TextError {}
 
 impl Display for TextError {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         match self {
             TextError::UnescapeError { offset, chars: message } => {
                 write!(f, "UnescapeError: Fail to unescape `{}` at position {}", message, offset)

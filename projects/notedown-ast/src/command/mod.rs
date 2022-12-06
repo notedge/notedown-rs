@@ -12,6 +12,7 @@ use crate::{
     value::*,
     NotedownKind, NotedownNode,
 };
+use diagnostic_quick::{FileID, Span};
 use std::ops::Range;
 
 /// Aka. Macro.
@@ -20,13 +21,13 @@ use std::ops::Range;
 #[derive(Clone, Eq, PartialEq)]
 pub enum Command {
     /// Command in normal form
-    Normal(NormalCommand),
+    Normal(Box<NormalCommand>),
     /// Command in escape form
-    Escaped(EscapedCommand),
+    Escaped(Box<EscapedCommand>),
     /// Command in XML form
-    XML(XMLCommand),
+    XML(Box<XMLCommand>),
     /// Command in external form
-    External(ExternalCommand),
+    External(Box<ExternalCommand>),
 }
 
 /// Available arguments for the command
@@ -41,6 +42,12 @@ pub struct CommandArguments {
     pub optional: OrderedMap,
     /// Arguments short string pattern
     pub pattern: LiteralPattern,
+}
+
+impl IntoNotedown for Command {
+    fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
+        NotedownKind::Command(self).into_node(span, file)
+    }
 }
 
 impl Command {

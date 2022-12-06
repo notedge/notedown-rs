@@ -3,12 +3,12 @@ use num::FromPrimitive;
 use rust_decimal::Decimal;
 
 impl Add for Value {
-    type Output = Result<Self>;
+    type Output = QResult<Self>;
 
     /// a + b
     fn add(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `+` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(QError::type_mismatch(msg));
+        let type_mismatch = Err(QError::runtime_error(msg));
 
         let out = match (self, other) {
             (Self::String(lhs), Self::String(rhs)) => Self::String(lhs + &rhs),
@@ -27,12 +27,12 @@ impl Add for Value {
 }
 
 impl Shr for Value {
-    type Output = Result<Self>;
+    type Output = QResult<Self>;
 
     /// a ++ b
     fn shr(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `++` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(QError::type_mismatch(msg));
+        let type_mismatch = Err(QError::runtime_error(msg));
         let out = match (self, other) {
             (Self::String(lhs), rhs) => Self::string_join(lhs, rhs)?,
             _ => return type_mismatch,
@@ -43,9 +43,9 @@ impl Shr for Value {
 
 impl Value {
     /// join a value to the string
-    pub fn string_join(lhs: String, other: Value) -> Result<Self> {
+    pub fn string_join(lhs: String, other: Value) -> QResult<Self> {
         let msg = format!("Can not apply `++` on lhs: `String`, rhs: {}", other.get_type_name());
-        let type_mismatch = Err(QError::type_mismatch(msg));
+        let type_mismatch = Err(QError::runtime_error(msg));
         let out = match other {
             Value::Null => lhs,
             Value::Boolean(v) => {
@@ -75,11 +75,11 @@ impl Value {
 }
 
 impl Sub for Value {
-    type Output = Result<Self>;
+    type Output = QResult<Self>;
     /// a- b
     fn sub(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `-` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(QError::type_mismatch(msg));
+        let type_mismatch = Err(QError::runtime_error(msg));
 
         let out = match (self, other) {
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs - rhs),

@@ -17,7 +17,7 @@ pub enum Value {
 }
 
 impl Debug for Value {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         match self {
             Value::None => write!(f, "none"),
             Value::String(s) => write!(f, "{:?}", s),
@@ -32,7 +32,7 @@ impl Debug for Value {
 }
 
 impl Display for Value {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         match self {
             Value::None => write!(f, ""),
             _ => write!(f, "{:?}", self),

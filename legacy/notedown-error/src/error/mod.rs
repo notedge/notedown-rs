@@ -119,7 +119,7 @@ error_msg![
 impl Error for NoteError {}
 
 impl Display for NoteError {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let path = match &self.file {
             Some(s) => s.path(),
             None => "<Anonymous>",
@@ -133,7 +133,7 @@ impl Display for NoteError {
 }
 
 impl Display for NoteErrorKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::IOError(e) => {
                 write!(f, "{}", e)

@@ -2,7 +2,7 @@ use super::*;
 use crate::command::normal::NormalCommandKind;
 
 impl Debug for Command {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Normal(v) => Debug::fmt(v, f),
             Self::Escaped(v) => Debug::fmt(v, f),
@@ -13,7 +13,7 @@ impl Debug for Command {
 }
 
 impl Debug for NormalCommand {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &self.kind.to_string());
         w.field("name", &self.cmd);
@@ -25,7 +25,7 @@ impl Debug for NormalCommand {
 }
 
 impl Debug for EscapedCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &"Escaped");
         w.field("name", &self.cmd);
@@ -38,7 +38,7 @@ impl Debug for EscapedCommand {
 }
 
 impl Debug for XMLCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &self.kind.to_string());
         let pattern = &self.options.pattern;
@@ -50,7 +50,7 @@ impl Debug for XMLCommand {
 }
 
 impl Debug for ExternalCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("Command");
         w.field("kind", &"External");
         w.field("name", &self.cmd);
@@ -60,7 +60,7 @@ impl Debug for ExternalCommand {
 }
 
 impl Display for Command {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Normal(v) => Display::fmt(v, f),
             Self::Escaped(v) => Display::fmt(v, f),
@@ -71,13 +71,13 @@ impl Display for Command {
 }
 
 impl Display for CommandArguments {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for NormalCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self.kind {
             NormalCommandKind::OneLine => {
                 write!(f, "\\{}", self.cmd)?;
@@ -93,7 +93,7 @@ impl Display for NormalCommand {
 }
 
 impl Display for NormalCommandKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::OneLine => f.write_str("OneLine"),
             Self::MultiLine => f.write_str("MultiLine"),
@@ -102,19 +102,19 @@ impl Display for NormalCommandKind {
 }
 
 impl Display for EscapedCommand {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for XMLCommand {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for XMLCommandMarks {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::OpenClose { .. } => f.write_str("OpenClose"),
             Self::SelfClose { .. } => f.write_str("SelfClose"),
@@ -123,7 +123,7 @@ impl Display for XMLCommandMarks {
 }
 
 impl Display for ExternalCommand {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "\\external[{}][{}bytes]", self.cmd, self.data.len())
     }
 }

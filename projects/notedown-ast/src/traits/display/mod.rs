@@ -6,16 +6,10 @@ mod value;
 
 use crate::{nodes::*, value::*};
 use itertools::Itertools;
-use std::fmt::{self, Debug, Display, Formatter, Write};
-
-impl<T: Display> Display for Literal<T> {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        Display::fmt(&self.value, f)
-    }
-}
+use std::fmt::{Debug, Display, Formatter, Write};
 
 impl Display for NotedownKind {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         match &self {
             NotedownKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
@@ -39,7 +33,7 @@ impl Display for NotedownKind {
 }
 
 impl Display for Delimiter {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::HorizontalRule => f.write_str("---"),
             Self::HTMLRawBlock(s) => f.write_str(s),
@@ -48,7 +42,7 @@ impl Display for Delimiter {
 }
 
 impl Debug for TextSpan {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Normal(s) => Debug::fmt(s, f),
             Self::Raw(s) => Debug::fmt(s, f),
@@ -70,7 +64,7 @@ impl Debug for TextSpan {
 }
 
 impl Display for TextSpan {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Normal(_) => {
                 unimplemented!()
@@ -96,7 +90,7 @@ impl Display for TextSpan {
 }
 
 impl Display for StyleNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.kind.surround_in())?;
         for child in &self.children {
             write!(f, "{}", child.value)?;
@@ -107,7 +101,7 @@ impl Display for StyleNode {
 }
 
 impl Display for Value {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Null => f.write_str("null"),
             Self::Boolean(v) => f.write_str(&v.to_string()),

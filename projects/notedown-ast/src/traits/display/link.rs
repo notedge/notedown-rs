@@ -2,7 +2,7 @@ use super::*;
 use crate::nodes::{EmailLink, HyperLink, ImageLink, ResourceDescriptor, TagReference, TwoWayLink};
 
 impl Debug for SmartLink {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::ExternalResource(v) => Debug::fmt(v, f),
             Self::Reference(v) => Debug::fmt(v, f),
@@ -15,7 +15,7 @@ impl Debug for SmartLink {
 }
 
 impl Display for SmartLink {
-    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter) -> std::fmt::Result {
         match self {
             Self::Reference(v) => Display::fmt(v, f),
             Self::Image(v) => Display::fmt(v, f),
@@ -28,31 +28,31 @@ impl Display for SmartLink {
 }
 
 impl Display for ResourceDescriptor {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for EmailLink {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for TagReference {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for ImageLink {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Debug for ImageLink {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("ImageLink");
         w.field("src", &self.source);
         if let Some(s) = &self.description {
@@ -70,7 +70,7 @@ impl Debug for ImageLink {
 }
 
 impl Debug for HyperLink {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         let w = &mut f.debug_struct("HyperLink");
         w.field("src", &self.src);
         w.field("is_bare", &self.is_bare);
@@ -110,13 +110,13 @@ impl Display for HyperLink {
     //         (Some(bind), Some(alt)) => write!(f, "{}[{}:{}]", img_to, bind, alt),
     //     }
     // }
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }
 
 impl Display for TwoWayLink {
-    fn fmt(&self, _: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, _: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()
     }
 }

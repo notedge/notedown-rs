@@ -48,7 +48,7 @@ impl Default for MathNode {
 }
 
 impl Display for MathNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         self.surround(f)
     }
 }
@@ -76,7 +76,7 @@ impl MathKind {
 
 impl MathNode {
     /// surrounded
-    pub fn surround(&self, f: &mut Formatter<'_>) -> fmt::Result {
+    pub fn surround(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_str(self.kind.surround_begin())?;
         f.write_str(&self.raw)?;
         f.write_str(self.kind.surround_end())?;

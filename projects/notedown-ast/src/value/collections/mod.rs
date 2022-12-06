@@ -1,7 +1,4 @@
-mod literal_pattern;
-mod ordered_map;
-mod ordered_set;
-mod sparse_array;
+use diagnostic_quick::error_3rd::NodeLocation;
 
 pub use literal_pattern::*;
 pub use ordered_map::*;
@@ -10,10 +7,15 @@ pub use sparse_array::*;
 
 use super::*;
 
+mod literal_pattern;
+mod ordered_map;
+mod ordered_set;
+mod sparse_array;
+
 /// Ordered set of values
 #[derive(Clone, Default, Debug, Eq, PartialEq)]
 pub struct OrderedSet {
-    inner: IndexSet<Literal<Value>>,
+    inner: IndexSet<NodeLocation<Value>>,
 }
 
 /// Ordered map of key value pairs
@@ -25,20 +27,20 @@ pub struct OrderedMap {
 /// Ordered map of key value pairs
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LiteralPair {
-    key: Literal<String>,
-    value: Literal<Value>,
+    key: NodeLocation<String>,
+    value: NodeLocation<Value>,
 }
 
 /// Literal Patterns for command
 #[derive(Clone, Default, Eq, PartialEq)]
 pub struct LiteralPattern {
-    inner: Vec<Literal<String>>,
+    inner: Vec<NodeLocation<String>>,
 }
 
-/// Sparse representation of the array, the subscript can be any non-zero integer
-/// 1-index
+/// Sparse representation of the array, the subscript can be any non-zero
+/// integer 1-index
 #[derive(Clone, Default, Debug, Eq, PartialEq, Hash)]
 pub struct SparseArray {
     default: Value,
-    inner: BTreeMap<BigUint, Literal<Value>>,
+    inner: BTreeMap<BigUint, NodeLocation<Value>>,
 }

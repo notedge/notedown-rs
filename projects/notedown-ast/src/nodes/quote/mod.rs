@@ -37,12 +37,12 @@ impl QuoteBlock {
 impl NotedownKind {
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote(body: NotedownNodes, r: MaybeRanged) -> NotedownNode {
-        QuoteBlock::quote(body).into_node(r)
+    pub fn quote(body: NotedownNodes, span: &Span, file: &FileID) -> NotedownNode {
+        QuoteBlock::quote(body).into_node(span, file)
     }
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote_style(body: NotedownNodes, style: impl Into<String>, r: MaybeRanged) -> NotedownNode {
-        QuoteBlock::quote_styled(body, style.into()).into_node(r)
+    pub fn quote_styled(body: NotedownNodes, style: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        QuoteBlock::quote_styled(body, style.into()).into_node(span, file)
     }
 }
