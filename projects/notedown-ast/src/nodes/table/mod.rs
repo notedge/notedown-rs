@@ -7,6 +7,7 @@ pub enum TableView {
     SimpleTable(Box<SimpleTable>),
 }
 
+
 ///
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub struct SimpleTable {
