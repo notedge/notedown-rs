@@ -22,9 +22,8 @@ indexmap = "1.7.0"
 version = "0.4"
 path = "../text-utils"
 
-[dependencies.notedown-error]
-version = "1.1.10"
-path = "../notedown-error"
+[dependencies.diagnostic-quick]
+version = "0.2.6"
 features = ["rust_decimal", "num"]
 
 [dev-dependencies]

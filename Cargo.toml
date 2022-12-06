@@ -1,14 +1,11 @@
 [workspace]
 members = ["projects/*"]
 default-members = [
-    "projects/notedown-error",
     "projects/notedown-ast",
     "projects/notedown-runtime",
-    "legacy/notedown-lsp",
     "projects/text-utils",
 ]
 exclude = [
-    "legacy/notedown-parser",
     "projects/notedown-parser",
 ]
 
