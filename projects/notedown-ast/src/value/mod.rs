@@ -5,7 +5,6 @@ mod traits;
 mod typing;
 
 pub use self::{collections::*, typing::ValueType};
-use crate::nodes::Literal;
 use indexmap::{IndexMap, IndexSet};
 use num::{BigInt, BigUint};
 use rust_decimal::Decimal;

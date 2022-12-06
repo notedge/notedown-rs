@@ -1,4 +1,5 @@
 use super::*;
+use diagnostic_quick::error_3rd::NodeLocation;
 
 /// ````md
 /// ```cmd(arg=1)
@@ -13,5 +14,5 @@ pub struct EscapedCommand {
     pub end: usize,
     pub options: CommandArguments,
     pub pattern: LiteralPattern,
-    pub body: Literal<String>,
+    pub body: NodeLocation<String>,
 }

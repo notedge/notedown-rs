@@ -1,19 +1,11 @@
-mod hyper_link;
-mod image_link;
-mod other;
-mod rd;
-mod reference;
-mod two_way;
-
-pub use self::{
-    hyper_link::{HyperLink, HyperLinkTarget},
-    image_link::{ImageLayout, ImageLink},
-    other::EmailLink,
-    rd::ResourceDescriptor,
-    reference::TagReference,
-    two_way::TwoWayLink,
-};
 use super::*;
+
+pub mod hyper_link;
+pub mod image_link;
+pub mod other;
+pub mod rd;
+pub mod reference;
+pub mod two_way;
 
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Eq, PartialEq, Hash)]
@@ -65,27 +57,27 @@ pub enum SmartLink {
 impl NotedownKind {
     /// Constructor for [`ImageLink`]
     #[inline]
-    pub fn image_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        ImageLink { source: src.into(), ..Default::default() }.into_node(range)
+    pub fn image_link(src: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        ImageLink { source: src.into(), ..Default::default() }.into_node(span, file)
     }
     /// Constructor for [`ImageLink`]
     #[inline]
-    pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        ImageLink { source: src.into(), description: Some(alt.into()), ..Default::default() }.into_node(range)
+    pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        ImageLink { source: src.into(), description: Some(alt.into()), ..Default::default() }.into_node(span, file)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn hyper_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        HyperLink { src: src.into(), is_bare: false, ..Default::default() }.into_node(range)
+    pub fn hyper_link(src: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        HyperLink { src: src.into(), is_bare: false, ..Default::default() }.into_node(span, file)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn hyper_link_text(src: impl Into<String>, text: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        HyperLink { src: src.into(), is_bare: false, text: Some(text.into()), ..Default::default() }.into_node(range)
+    pub fn hyper_link_text(src: impl Into<String>, text: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        HyperLink { src: src.into(), is_bare: false, text: Some(text.into()), ..Default::default() }.into_node(span, file)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn bare_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        HyperLink { src: src.into(), is_bare: true, ..Default::default() }.into_node(range)
+    pub fn bare_link(src: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        HyperLink { src: src.into(), is_bare: true, ..Default::default() }.into_node(span, file)
     }
 }

@@ -11,11 +11,11 @@ pub enum Delimiter {
 
 impl NotedownKind {
     /// Insert raw html text
-    pub fn raw_html_inline(msg: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        Delimiter::HTMLRawBlock(msg.into()).into_node(range)
+    pub fn raw_html_inline(msg: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        Delimiter::HTMLRawBlock(msg.into()).into_node(span, file)
     }
     /// Inset raw html block
-    pub fn raw_html_block(msg: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        TextSpan::HTMLRawInline(msg.into()).into_node(range)
+    pub fn raw_html_block(msg: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        TextSpan::HTMLRawInline(msg.into()).into_node(span, file)
     }
 }

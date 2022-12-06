@@ -1,4 +1,5 @@
 use super::*;
+use diagnostic_quick::{FileID, Span};
 
 /// Serialized external data
 #[derive(Clone, Eq, PartialEq)]
@@ -28,7 +29,13 @@ impl Command {
 impl NotedownKind {
     /// Constructor of [`ExternalCommand`]
     #[inline]
-    pub fn command_external<S: Into<String>>(cmd: S, data: Vec<u8>, r: MaybeRanged) -> NotedownNode {
-        Command::external(cmd.into(), data).into_node(r)
+    pub fn command_external<S: Into<String>>(cmd: S, data: Vec<u8>, span: &Span, &file: FileID) -> NotedownNode {
+        Command::external(cmd.into(), data).into_node(span, file)
+    }
+    pub fn as_command_external(&self) -> Option<&ExternalCommand> {
+        match self {
+            Self::Command(Command::External(v)) => Some(v),
+            _ => None,
+        }
     }
 }

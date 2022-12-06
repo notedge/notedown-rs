@@ -8,7 +8,6 @@ mod xml;
 pub use self::xml::{XMLCommand, XMLCommandMarks};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-    nodes::Literal,
     traits::IntoNotedown,
     value::*,
     NotedownKind, NotedownNode,

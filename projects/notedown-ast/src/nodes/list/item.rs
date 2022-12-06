@@ -4,7 +4,7 @@ use super::*;
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct ListItem {
     /// Prefix of the list item
-    pub prefix: Literal<ListPrefixMark>,
+    pub prefix: NodeLocation<ListPrefixMark>,
     /// Rest parts the list item
     pub rest: NotedownNodes,
 }

@@ -1,32 +1,42 @@
 #![doc = include_str!("readme.md")]
-pub(crate) mod as_element;
-pub(crate) mod elements;
-pub(crate) mod link;
-pub(crate) mod list;
-pub(crate) mod literal;
-pub(crate) mod quote;
-pub(crate) mod table;
 
-pub use self::{
-    elements::{code_block::*, delimiter::*, header::*, math::*, styled::*, text::*},
-    link::*,
-    list::*,
-    literal::*,
-    quote::*,
-    table::*,
-};
-use crate::{
-    command::CommandArguments,
-    traits::{IntoNotedown, Slugify},
-    Command, Value,
-};
-use diagnostic_quick::error_3rd::NodeLocation;
-use num::{Signed, Zero};
 use std::{
     fmt::{self, Debug, Display, Formatter},
     hash::{Hash, Hasher},
     ops::RangeInclusive,
 };
+
+use diagnostic_quick::{error_3rd::NodeLocation, FileID, QError, QResult, Span};
+use num::{Signed, Zero};
+use serde::{Deserialize, Serialize};
+
+use crate::{
+    command::CommandArguments,
+    traits::{IntoNotedown, Slugify},
+    Command, Value,
+};
+
+pub use self::{
+    elements::{code_block::*, delimiter::*, header::*, math::*, styled::*, text::*},
+    link::{
+        hyper_link::{HyperLink, HyperLinkTarget},
+        image_link::{ImageLayout, ImageLink},
+        other::EmailLink,
+        rd::ResourceDescriptor,
+        reference::TagReference,
+        two_way::TwoWayLink,
+        SmartLink,
+    },
+    list::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixMark, ListView},
+    quote::QuoteBlock,
+    table::{SimpleTable, TableView},
+};
+
+pub(crate) mod elements;
+pub(crate) mod link;
+pub(crate) mod list;
+pub(crate) mod quote;
+pub(crate) mod table;
 
 /// Represents an AST object with position
 pub type NotedownNode = NodeLocation<NotedownKind>;
@@ -87,17 +97,17 @@ impl Default for NotedownKind {
 impl NotedownKind {
     /// Constructor of [`NotedownKind::Statements`]
     #[inline]
-    pub fn statements(children: NotedownNodes, range: MaybeRanged) -> NotedownNode {
+    pub fn statements(children: NotedownNodes, span: &Span, file: &FileID) -> NotedownNode {
         NotedownNode { value: Self::Statements(children), range }
     }
     /// Constructor of [`NotedownKind::Paragraph`]
     #[inline]
-    pub fn paragraph(children: NotedownNodes, range: MaybeRanged) -> NotedownNode {
+    pub fn paragraph(children: NotedownNodes, span: &Span, file: &FileID) -> NotedownNode {
         NotedownNode { value: Self::Paragraph(children), range }
     }
     /// Constructor of [`Delimiter::HorizontalRule`]
     #[inline]
-    pub fn hr(range: MaybeRanged) -> NotedownNode {
-        Delimiter::HorizontalRule.into_node(range)
+    pub fn hr(span: &Span, file: &FileID) -> NotedownNode {
+        Delimiter::HorizontalRule.into_node(span, file)
     }
 }

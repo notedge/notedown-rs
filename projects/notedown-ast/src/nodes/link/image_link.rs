@@ -1,4 +1,5 @@
 use super::*;
+use diagnostic_quick::QError;
 
 /// Image position relevant to the document
 #[derive(Copy, Clone, Debug, Eq, PartialEq, Hash)]

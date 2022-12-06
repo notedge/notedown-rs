@@ -1,4 +1,5 @@
 use super::*;
+use diagnostic_quick::error_3rd::NodeLocation;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum NormalCommandKind {
@@ -20,5 +21,5 @@ pub struct NormalCommand {
     pub kind: NormalCommandKind,
     pub options: CommandArguments,
     pub pattern: LiteralPattern,
-    pub body: Literal<String>,
+    pub body: NodeLocation<String>,
 }

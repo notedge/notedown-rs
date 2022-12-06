@@ -1,5 +1,4 @@
 use super::*;
-use crate::traits::IntoNotedown;
 
 /// ## Quote List
 /// ```note

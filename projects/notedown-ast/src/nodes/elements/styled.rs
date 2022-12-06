@@ -108,39 +108,3 @@ impl StyleNode {
         Self { kind: StyleKind::from(style), children }
     }
 }
-
-macro_rules! styled_node {
-    (@StyleNode => $name:tt => $t:tt) => {
-        /// Constructor of [`StyleNode`]
-        #[inline]
-        pub fn $name(children: ASTNodes) -> Self {
-            Self { kind: StyleKind::$t, children }
-        }
-    };
-    (@ASTKind => $name:tt => $t:tt) => {
-        /// Constructor of [`StyleNode`]
-        #[inline]
-        pub fn $name(children: ASTNodes, range: MaybeRanged) -> ASTNode {
-            StyleNode::$name(children).into_node(range)
-        }
-    };
-    ($($name:tt => $t:tt),+ $(,)?) => (
-        impl StyleNode { $(styled_node!(@StyleNode => $name=>$t);)+ }
-        impl ASTKind {$(styled_node!(@ASTKind => $name=>$t);)+ }
-    );
-}
-
-styled_node![
-    bold        => Strong,
-    strong      => Strong,
-    italic      => Emphasis,
-    emphasis    => Emphasis,
-    italic_bold => ItalicBold,
-    marking     => Marking,
-    underline   => Underline,
-    undercover  => Undercover,
-    delete      => Delete,
-    insert      => Insert,
-    subscript   => Subscript,
-    superscript => Superscript,
-];

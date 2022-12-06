@@ -16,3 +16,26 @@ pub struct OrderedList {
     /// Children nodes of the list
     pub children: Vec<ListItem>,
 }
+
+impl ListView {
+    /// Constructor of [`OrderedList`]
+    #[inline]
+    pub fn ordered_list(children: Vec<ListItem>) -> Self {
+        let list = OrderedList { first_order: 0, children };
+        Self::Ordered(Box::new(list))
+    }
+}
+
+impl NotedownKind {
+    /// Constructor of [`OrderedList`]
+    #[inline]
+    pub fn ordered_list(children: Vec<ListItem>, span: &Span, file: &FileID) -> NotedownNode {
+        ListView::ordered_list(children).into_node(span, file)
+    }
+    pub fn as_ordered_list(&self) -> Option<&OrderedList> {
+        match self.as_listview()? {
+            ListView::Ordered(o) => Some(o),
+            _ => None,
+        }
+    }
+}

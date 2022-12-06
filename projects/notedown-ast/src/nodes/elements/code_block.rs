@@ -125,12 +125,12 @@ impl CodeNode {
 impl NotedownKind {
     /// Constructor of [`CodeNode`]
     #[inline]
-    pub fn code_inline(code: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        CodeNode::code_inline(code.into()).into_node(range)
+    pub fn code_inline(code: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        CodeNode::code_inline(code.into()).into_node(span, file)
     }
     /// Constructor of [`CodeNode`]
     #[inline]
-    pub fn code_block(code: impl Into<String>, language: impl Into<String>, range: MaybeRanged) -> NotedownNode {
-        CodeNode::code_block(language.into(), code.into()).into_node(range)
+    pub fn code_block(code: impl Into<String>, language: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
+        CodeNode::code_block(language.into(), code.into()).into_node(span, file)
     }
 }

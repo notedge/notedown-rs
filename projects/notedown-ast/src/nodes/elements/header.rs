@@ -66,7 +66,7 @@ impl Header {
 impl NotedownKind {
     /// Construct a header node
     #[inline]
-    pub fn header(children: NotedownNodes, level: u8, range: MaybeRanged) -> NotedownNode {
-        Header::new(children, level).into_node(range)
+    pub fn header(children: NotedownNodes, level: u8, span: &Span, file: &FileID) -> NotedownNode {
+        Header::new(children, level).into_node(span, file)
     }
 }

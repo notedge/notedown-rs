@@ -1,12 +1,10 @@
-mod detailed;
-mod item;
-mod ordered;
-mod orderless;
-mod prefix;
-
-pub use self::{detailed::DetailedList, item::ListItem, ordered::OrderedList, orderless::OrderlessList, prefix::ListPrefixMark};
-
 use super::*;
+
+pub mod detailed;
+pub mod item;
+pub mod ordered;
+pub mod orderless;
+pub mod prefix;
 
 /// List like nodes
 /// Basically can be classified as ordered and orderless
@@ -37,7 +35,7 @@ impl ListView {
     }
     /// Returns the first prefix of this list
     #[inline]
-    pub fn first_prefix(&self) -> Result<&ListPrefixMark> {
+    pub fn first_prefix(&self) -> QResult<&ListPrefixMark> {
         match self.children().first() {
             None => Err(QError::runtime_error("Not a valid list")),
             Some(s) => Ok(&s.prefix.value),
@@ -50,30 +48,12 @@ impl ListView {
     }
 }
 
-impl ListView {
-    /// Constructor of [`OrderedList`]
-    #[inline]
-    pub fn ordered_list(children: Vec<ListItem>) -> Self {
-        let list = OrderedList { first_order: 0, children };
-        Self::Ordered(box list)
-    }
-    /// Constructor of [`OrderlessList`]
-    #[inline]
-    pub fn orderless_list(children: Vec<ListItem>) -> Self {
-        let list = OrderlessList { children };
-        Self::Orderless(box list)
-    }
-}
 
 impl NotedownKind {
-    /// Constructor of [`OrderedList`]
-    #[inline]
-    pub fn ordered_list(children: Vec<ListItem>, r: MaybeRanged) -> NotedownNode {
-        ListView::ordered_list(children).into_node(r)
-    }
-    /// Constructor of [`OrderlessList`]
-    #[inline]
-    pub fn orderless_list(children: Vec<ListItem>, r: MaybeRanged) -> NotedownNode {
-        ListView::orderless_list(children).into_node(r)
+    pub fn as_listview(&self) -> Option<&ListView> {
+        match self {
+            Self::ListView(v) => Some(v),
+            _ => None,
+        }
     }
 }
