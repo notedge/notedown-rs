@@ -5,6 +5,7 @@ mod normal;
 mod options;
 mod traits;
 mod xml;
+
 pub use self::xml::{XMLCommand, XMLCommandMarks};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
@@ -12,8 +13,12 @@ use crate::{
     value::*,
     NotedownKind, NotedownNode,
 };
-use diagnostic_quick::{FileID, Span};
-use std::ops::Range;
+use diagnostic_quick::{error_3rd::NodeLocation, FileID, Span};
+use std::{
+    collections::BTreeMap,
+    fmt::{Display, Formatter},
+    ops::Range,
+};
 
 /// Aka. Macro.
 /// It can be understood as a mark that attempts to expand in a given context
@@ -39,7 +44,7 @@ pub struct CommandArguments {
     /// Arguments which depends on position
     pub positional: SparseArray,
     /// Arguments forms of key-value pairs
-    pub optional: OrderedMap,
+    pub optional: BTreeMap<NodeLocation<String>, NodeLocation<NotedownNode>>,
     /// Arguments short string pattern
     pub pattern: LiteralPattern,
 }
@@ -47,6 +52,17 @@ pub struct CommandArguments {
 impl IntoNotedown for Command {
     fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
         NotedownKind::Command(self).into_node(span, file)
+    }
+}
+
+impl Display for Command {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::Normal(v) => Display::fmt(v, f),
+            Self::Escaped(v) => Display::fmt(v, f),
+            Self::XML(v) => Display::fmt(v, f),
+            Self::External(v) => Display::fmt(v, f),
+        }
     }
 }
 

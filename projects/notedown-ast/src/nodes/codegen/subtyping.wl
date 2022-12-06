@@ -33,6 +33,18 @@ subtyping = <|
         "box"-> False,
         "constructor"-> "list_view"
     |>,
+    "OrderedList"-> <|
+        "parent"-> "ListView",
+        "variant"-> "Ordered",
+        "box"-> True,
+        "constructor"-> "list_ordered"
+    |>,
+    "OrderlessList"-> <|
+        "parent"-> "ListView",
+        "variant"-> "Orderless",
+        "box"-> True,
+        "constructor"-> "list_orderless"
+    |>,
 	(* table *)
     "TableView"-> <|
         "parent"-> "NotedownKind",

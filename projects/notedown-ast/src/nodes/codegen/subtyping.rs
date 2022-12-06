@@ -69,7 +69,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`EmailLink`]
     #[inline]
     pub fn email_link(value: EmailLink, span: &Span, file: &FileID) -> NotedownNode {
@@ -89,7 +88,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`HyperLink`]
     #[inline]
     pub fn hyper_link(value: HyperLink, span: &Span, file: &FileID) -> NotedownNode {
@@ -109,7 +107,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`ImageLink`]
     #[inline]
     pub fn image_link(value: ImageLink, span: &Span, file: &FileID) -> NotedownNode {
@@ -129,7 +126,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`ListView`]
     #[inline]
     pub fn list_view(value: ListView, span: &Span, file: &FileID) -> NotedownNode {
@@ -149,7 +145,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`TableView`]
     #[inline]
     pub fn table_view(value: TableView, span: &Span, file: &FileID) -> NotedownNode {
@@ -169,7 +164,6 @@ impl NotedownKind {
             _ => None,
         }
     }
-
     /// Constructor of [`SimpleTable`]
     #[inline]
     pub fn table_simple(value: SimpleTable, span: &Span, file: &FileID) -> NotedownNode {

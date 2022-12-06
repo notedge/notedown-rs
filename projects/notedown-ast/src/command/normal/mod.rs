@@ -1,12 +1,6 @@
 use super::*;
 use diagnostic_quick::error_3rd::NodeLocation;
 
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum NormalCommandKind {
-    OneLine,
-    MultiLine,
-}
-
 /// ```md
 /// \cmd[][](): args
 /// ```
@@ -17,9 +11,36 @@ pub enum NormalCommandKind {
 /// ```
 #[derive(Clone, Eq, PartialEq)]
 pub struct NormalCommand {
+    /// The name of the command
+    ///
+    /// ## Example
+    ///
+    /// ```note
+    /// \cmd
+    /// ```
     pub cmd: String,
-    pub kind: NormalCommandKind,
+    /// The standard argument of the command
+    ///
+    /// ## Example
+    ///
+    /// ```note
+    /// \cmd(arguments, options)
+    /// ```
     pub options: CommandArguments,
-    pub pattern: LiteralPattern,
+    /// The pattern argument of the command
+    ///
+    /// ## Example
+    ///
+    /// ```note
+    /// \cmd[p1][p2]
+    /// ```
+    pub pattern: Vec<NodeLocation<String>>,
+    /// The body argument of the command
+    ///
+    /// ## Example
+    ///
+    /// ```note
+    /// \cmd: body
+    /// ```
     pub body: NodeLocation<String>,
 }

@@ -1,12 +1,11 @@
 #![doc = include_str!("readme.md")]
-mod collections;
+mod dict;
 mod methods;
 mod traits;
 mod typing;
 
-pub use self::{collections::*, typing::ValueType};
-use indexmap::{IndexMap, IndexSet};
-use num::{BigInt, BigUint};
+pub use self::typing::ValueType;
+use num::BigInt;
 use rust_decimal::Decimal;
 use std::collections::{BTreeMap, BTreeSet};
 

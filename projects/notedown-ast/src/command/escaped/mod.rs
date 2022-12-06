@@ -13,6 +13,6 @@ pub struct EscapedCommand {
     pub start: usize,
     pub end: usize,
     pub options: CommandArguments,
-    pub pattern: LiteralPattern,
+    pub pattern: Vec<NodeLocation<String>>,
     pub body: NodeLocation<String>,
 }
