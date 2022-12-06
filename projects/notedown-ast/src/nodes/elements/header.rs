@@ -1,18 +1,27 @@
 use crate::nodes::*;
 
+/// The Header node
+///
+/// ## Example
+///
 /// ```note
+/// 
+/// # level1
+///
+/// ### level3
+///
 /// \args(id = "custom-id")
-/// # head1
+/// ###### level6
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 pub struct Header {
-    ///
+    /// The level of the header
     pub level: u8,
-    ///
+    /// Should hide the header in title of content
     pub hide_in_toc: bool,
-    ///
+    /// Force to set the header-id as string
     pub id: Option<String>,
-    ///
+    /// The content after `#` mark
     pub children: Vec<NotedownNode>,
 }
 

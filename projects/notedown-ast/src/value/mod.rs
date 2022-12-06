@@ -1,17 +1,28 @@
 #![doc = include_str!("readme.md")]
-mod dict;
+
+use std::{
+    collections::{BTreeMap, BTreeSet},
+    fmt::{Debug, Formatter},
+};
+
+use diagnostic_quick::error_3rd::NodeLocation;
+use indexmap::IndexMap;
+use num::BigInt;
+use rust_decimal::Decimal;
+
+use crate::{value::list::List, Dict};
+
+pub use self::typing::NotedownType;
+
+pub mod dict;
+pub mod list;
 mod methods;
 mod traits;
 mod typing;
 
-pub use self::typing::ValueType;
-use num::BigInt;
-use rust_decimal::Decimal;
-use std::collections::{BTreeMap, BTreeSet};
-
 ///
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum Value {
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+pub enum NotedownValue {
     /// It doesn't look like anything to me
     Null,
     /// `true` or `false`
@@ -22,21 +33,19 @@ pub enum Value {
     Decimal(Decimal),
     /// A UTF-8–encoded string
     String(String),
-    /// Ordered set of values
-    Set(OrderedSet),
     /// Array of values
-    Array(Box<SparseArray>),
+    Array(List<NotedownValue>),
     /// Ordered map of key value pairs
-    Object(Box<OrderedMap>),
+    Object(Dict<NotedownValue>),
 }
 
-impl Default for Value {
+impl Default for NotedownValue {
     fn default() -> Self {
         Self::Null
     }
 }
 
-impl Value {
+impl NotedownValue {
     /// convert a integer to value
     pub fn integer(value: impl Into<BigInt>) -> Self {
         Self::Integer(value.into())

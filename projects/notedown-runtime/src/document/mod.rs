@@ -13,7 +13,7 @@ use crate::plugin_system::Parser;
 use chrono::{NaiveDateTime, Utc};
 use notedown_ast::{
     value::{LiteralPair, OrderedMap},
-    NotedownNode, Value,
+    NotedownNode, NotedownValue,
 };
 use notedown_error::{QError, Result};
 use std::collections::BTreeMap;
@@ -67,7 +67,7 @@ impl NoteDocument {
         self.variable.insert_raw(pair)
     }
     #[inline]
-    pub fn set_value(&mut self, name: String, value: Value) -> Option<Value> {
+    pub fn set_value(&mut self, name: String, value: NotedownValue) -> Option<NotedownValue> {
         self.variable.insert(name, value)
     }
     #[inline]

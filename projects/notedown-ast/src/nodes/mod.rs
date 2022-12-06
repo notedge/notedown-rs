@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 use crate::{
     command::CommandArguments,
     traits::{IntoNotedown, Slugify},
-    Command, Value,
+    Command, NotedownValue,
 };
 
 pub use self::{
@@ -86,12 +86,12 @@ pub enum NotedownKind {
     /// - context sensitive
     Command(Command),
     /// - never bared
-    Value(Box<Value>),
+    Value(Box<NotedownValue>),
 }
 
 impl Default for NotedownKind {
     fn default() -> Self {
-        Self::Value(Box::new(Value::Null))
+        Self::Value(Box::new(NotedownValue::Null))
     }
 }
 

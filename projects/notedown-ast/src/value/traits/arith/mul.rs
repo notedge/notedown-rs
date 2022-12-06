@@ -2,7 +2,7 @@ use super::*;
 use num::FromPrimitive;
 use rust_decimal::Decimal;
 
-impl Mul for Value {
+impl Mul for NotedownValue {
     type Output = QResult<Self>;
     // a * b
     fn mul(self, other: Self) -> Self::Output {
@@ -23,7 +23,7 @@ impl Mul for Value {
     }
 }
 
-impl Div for Value {
+impl Div for NotedownValue {
     type Output = QResult<Self>;
 
     fn div(self, other: Self) -> Self::Output {

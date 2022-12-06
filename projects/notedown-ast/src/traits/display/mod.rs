@@ -100,7 +100,7 @@ impl Display for StyleNode {
     }
 }
 
-impl Display for Value {
+impl Display for NotedownValue {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Null => f.write_str("null"),

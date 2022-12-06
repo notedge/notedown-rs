@@ -30,7 +30,7 @@ pub enum StyleKind {
     Superscript = 42,
 }
 ///
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct StyleNode {
     ///
     pub kind: StyleKind,

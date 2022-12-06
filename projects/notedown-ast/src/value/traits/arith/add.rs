@@ -2,7 +2,7 @@ use super::*;
 use num::FromPrimitive;
 use rust_decimal::Decimal;
 
-impl Add for Value {
+impl Add for NotedownValue {
     type Output = QResult<Self>;
 
     /// a + b
@@ -26,7 +26,7 @@ impl Add for Value {
     }
 }
 
-impl Shr for Value {
+impl Shr for NotedownValue {
     type Output = QResult<Self>;
 
     /// a ++ b
@@ -41,40 +41,40 @@ impl Shr for Value {
     }
 }
 
-impl Value {
+impl NotedownValue {
     /// join a value to the string
-    pub fn string_join(lhs: String, other: Value) -> QResult<Self> {
+    pub fn string_join(lhs: String, other: NotedownValue) -> QResult<Self> {
         let msg = format!("Can not apply `++` on lhs: `String`, rhs: {}", other.get_type_name());
         let type_mismatch = Err(QError::runtime_error(msg));
         let out = match other {
-            Value::Null => lhs,
-            Value::Boolean(v) => {
+            NotedownValue::Null => lhs,
+            NotedownValue::Boolean(v) => {
                 format!("{}{}", lhs, v)
             }
-            Value::Integer(v) => {
+            NotedownValue::Integer(v) => {
                 format!("{}{}", lhs, v)
             }
-            Value::Decimal(v) => {
+            NotedownValue::Decimal(v) => {
                 format!("{}{}", lhs, v)
             }
-            Value::String(v) => {
+            NotedownValue::String(v) => {
                 format!("{}{}", lhs, v)
             }
-            Value::Set(_) => {
+            NotedownValue::Set(_) => {
                 return type_mismatch;
             }
-            Value::Array(_) => {
+            NotedownValue::Array(_) => {
                 return type_mismatch;
             }
-            Value::Object(_) => {
+            NotedownValue::Object(_) => {
                 return type_mismatch;
             }
         };
-        Ok(Value::String(out))
+        Ok(NotedownValue::String(out))
     }
 }
 
-impl Sub for Value {
+impl Sub for NotedownValue {
     type Output = QResult<Self>;
     /// a- b
     fn sub(self, other: Self) -> Self::Output {

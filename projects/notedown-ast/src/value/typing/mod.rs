@@ -1,8 +1,8 @@
 use super::*;
 
-/// Type of [`Value`]
+/// Type of [`NotedownValue`]
 #[derive(Clone, Debug, Ord, PartialOrd, Eq, PartialEq)]
-pub enum ValueType {
+pub enum NotedownType {
     /// It doesn't look like anything to me
     Null,
     /// `true` or `false`
@@ -14,23 +14,22 @@ pub enum ValueType {
     /// A UTF-8–encoded string
     String,
     /// Ordered set of values
-    Set(BTreeSet<ValueType>),
+    Set(BTreeSet<NotedownType>),
     /// Array of values
-    List(BTreeSet<ValueType>),
+    List(BTreeSet<NotedownType>),
     /// Ordered map of key value pairs
-    Object(BTreeMap<String, ValueType>),
+    Object(BTreeMap<String, NotedownType>),
 }
 
-impl Value {
+impl NotedownValue {
     /// get type of the value
-    pub fn get_type(&self) -> ValueType {
+    pub fn get_type(&self) -> NotedownType {
         match self {
-            Self::Null => ValueType::Null,
-            Self::Boolean(_) => ValueType::Boolean,
-            Self::Integer(_) => ValueType::Integer,
-            Self::Decimal(_) => ValueType::Decimal,
-            Self::String(_) => ValueType::String,
-            Self::Set(v) => self.check_set_type(v),
+            Self::Null => NotedownType::Null,
+            Self::Boolean(_) => NotedownType::Boolean,
+            Self::Integer(_) => NotedownType::Integer,
+            Self::Decimal(_) => NotedownType::Decimal,
+            Self::String(_) => NotedownType::String,
             Self::Array(v) => self.check_list_type(v),
             Self::Object(v) => self.check_dict_type(v),
         }
@@ -39,26 +38,26 @@ impl Value {
     pub fn get_type_name(&self) -> String {
         self.get_type().to_string()
     }
-    fn check_set_type(&self, input: &OrderedSet) -> ValueType {
+    fn check_set_type(&self, input: &Vec<NotedownValue>) -> NotedownType {
         let mut count = BTreeSet::new();
         for v in input {
             count.insert(v.get_type());
         }
-        ValueType::Set(count)
+        NotedownType::Set(count)
     }
-    fn check_list_type(&self, input: &SparseArray) -> ValueType {
+    fn check_list_type(&self, input: &List<NotedownValue>) -> NotedownType {
         let mut count = BTreeSet::new();
-        for v in input.iter() {
+        for v in input {
             count.insert(v.get_type());
         }
-        ValueType::List(count)
+        NotedownType::List(count)
     }
-    fn check_dict_type(&self, input: &OrderedMap) -> ValueType {
+    fn check_dict_type(&self, input: &Dict<NotedownValue>) -> NotedownType {
         // let input: BTreeMap<String, Literal<Value>>;
         let mut count = BTreeMap::new();
         for (k, v) in input {
-            count.insert(k.to_owned(), v.get_type());
+            count.insert(k.value.to_owned(), v.value.get_type());
         }
-        ValueType::Object(count)
+        NotedownType::Object(count)
     }
 }

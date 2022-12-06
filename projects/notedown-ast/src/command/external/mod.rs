@@ -17,25 +17,3 @@ impl ExternalCommand {
         Self { cmd, data }
     }
 }
-
-impl Command {
-    /// Constructor of [`ExternalCommand`]
-    #[inline]
-    pub fn external(cmd: String, data: Vec<u8>) -> Self {
-        Self::External(ExternalCommand::new(cmd, data))
-    }
-}
-
-impl NotedownKind {
-    /// Constructor of [`ExternalCommand`]
-    #[inline]
-    pub fn command_external<S: Into<String>>(cmd: S, data: Vec<u8>, span: &Span, &file: FileID) -> NotedownNode {
-        Command::external(cmd.into(), data).into_node(span, file)
-    }
-    pub fn as_command_external(&self) -> Option<&ExternalCommand> {
-        match self {
-            Self::Command(Command::External(v)) => Some(v),
-            _ => None,
-        }
-    }
-}

@@ -91,12 +91,12 @@ impl ImageLink {
             Some(s) => s,
         };
         match value {
-            Value::Integer(i) if i.is_negative() => self.layout = Some(ImageLayout::Left),
-            Value::Integer(i) if i.is_zero() => self.layout = Some(ImageLayout::Center),
-            Value::Integer(i) if i.is_zero() => self.layout = Some(ImageLayout::Right),
-            Value::String(s) if s.to_ascii_lowercase().eq("left") => self.layout = Some(ImageLayout::Left),
-            Value::String(s) if s.to_ascii_lowercase().eq("center") => self.layout = Some(ImageLayout::Center),
-            Value::String(s) if s.to_ascii_lowercase().eq("right") => self.layout = Some(ImageLayout::Right),
+            NotedownValue::Integer(i) if i.is_negative() => self.layout = Some(ImageLayout::Left),
+            NotedownValue::Integer(i) if i.is_zero() => self.layout = Some(ImageLayout::Center),
+            NotedownValue::Integer(i) if i.is_zero() => self.layout = Some(ImageLayout::Right),
+            NotedownValue::String(s) if s.to_ascii_lowercase().eq("left") => self.layout = Some(ImageLayout::Left),
+            NotedownValue::String(s) if s.to_ascii_lowercase().eq("center") => self.layout = Some(ImageLayout::Center),
+            NotedownValue::String(s) if s.to_ascii_lowercase().eq("right") => self.layout = Some(ImageLayout::Right),
             _ => errors.push(QError::runtime_error(format!("Unknown layout option {}", value))),
         }
     }

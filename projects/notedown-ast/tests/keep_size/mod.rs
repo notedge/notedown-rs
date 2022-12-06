@@ -1,6 +1,7 @@
 use notedown_ast::{
     nodes::{ListView, MathNode, SmartLink, TableView, TextSpan},
-    NotedownKind, NotedownNode, Value,
+    value::NotedownType,
+    NotedownKind, NotedownNode, NotedownValue,
 };
 use std::mem::size_of;
 
@@ -16,8 +17,10 @@ macro_rules! show_size {
 #[test]
 fn keep_size() {
     show_size!();
-    show_size!(ASTNode);
+    show_size!(NotedownNode);
     show_size!(NotedownKind);
+    show_size!(NotedownValue);
+    show_size!(NotedownType);
 
     show_size!(ListView);
     show_size!(TableView);
@@ -27,5 +30,5 @@ fn keep_size() {
 
     assert_eq!(size_of::<NotedownNode>(), 56);
     assert_eq!(size_of::<NotedownKind>(), 32);
-    assert_eq!(size_of::<Value>(), 80);
+    assert_eq!(size_of::<NotedownValue>(), 80);
 }

@@ -12,7 +12,7 @@ pub mod value;
 pub use self::{
     command::Command,
     nodes::{NotedownKind, NotedownNode, NotedownNodes},
-    value::Value,
+    value::{NotedownValue, dict::Dict},
 };
 
 pub mod utils {

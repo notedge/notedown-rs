@@ -5,7 +5,7 @@ pub trait Index<I> {
     fn get_index(&self, index: &I) -> Self::Output;
 }
 
-impl Index<BigInt> for Value {
+impl Index<BigInt> for NotedownValue {
     type Output = QResult<Self>;
 
     fn get_index(&self, index: &BigInt) -> Self::Output {
@@ -29,7 +29,7 @@ impl Index<BigInt> for Value {
                 };
 
                 match i.and_then(|e| s.chars().nth(e)) {
-                    Some(s) => Ok(Value::string(s)),
+                    Some(s) => Ok(NotedownValue::string(s)),
                     None => Err(QError::runtime_error(format!("Index `{}` of `String` out of range.", index))),
                 }
             }
@@ -88,7 +88,7 @@ impl Index<BigInt> for Value {
     }
 }
 
-impl Index<String> for Value {
+impl Index<String> for NotedownValue {
     type Output = QResult<Self>;
 
     fn get_index(&self, index: &String) -> Self::Output {

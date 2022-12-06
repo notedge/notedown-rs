@@ -11,12 +11,12 @@ use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
     traits::IntoNotedown,
     value::*,
-    NotedownKind, NotedownNode,
+    Dict, NotedownKind, NotedownNode,
 };
 use diagnostic_quick::{error_3rd::NodeLocation, FileID, Span};
 use std::{
     collections::BTreeMap,
-    fmt::{Display, Formatter},
+    fmt::{Debug, Display, Formatter},
     ops::Range,
 };
 
@@ -38,15 +38,12 @@ pub enum Command {
 /// Available arguments for the command
 /// - positional: `\cmd(a, b, c)`
 /// - optional: `\cmd(a = 1, b = 2)`
-/// - pattern: `\cmd[a][b]`
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 pub struct CommandArguments {
     /// Arguments which depends on position
-    pub positional: SparseArray,
+    pub positional: Vec<NodeLocation<NotedownValue>>,
     /// Arguments forms of key-value pairs
-    pub optional: BTreeMap<NodeLocation<String>, NodeLocation<NotedownNode>>,
-    /// Arguments short string pattern
-    pub pattern: LiteralPattern,
+    pub optional: Dict<NotedownValue>,
 }
 
 impl IntoNotedown for Command {
@@ -55,13 +52,13 @@ impl IntoNotedown for Command {
     }
 }
 
-impl Display for Command {
+impl Debug for Command {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Normal(v) => Display::fmt(v, f),
-            Self::Escaped(v) => Display::fmt(v, f),
-            Self::XML(v) => Display::fmt(v, f),
-            Self::External(v) => Display::fmt(v, f),
+            Self::Normal(v) => Debug::fmt(v, f),
+            Self::Escaped(v) => Debug::fmt(v, f),
+            Self::XML(v) => Debug::fmt(v, f),
+            Self::External(v) => Debug::fmt(v, f),
         }
     }
 }
