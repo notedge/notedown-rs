@@ -4,12 +4,12 @@ default-members = [
     "projects/notedown-error",
     "projects/notedown-ast",
     "projects/notedown-runtime",
-    "projects/notedown-lsp",
+    "legacy/notedown-lsp",
     "projects/text-utils",
 ]
 exclude = [
+    "legacy/notedown-parser",
     "projects/notedown-parser",
-    "projects/notedown-parser2",
 ]
 
 [profile.release]
