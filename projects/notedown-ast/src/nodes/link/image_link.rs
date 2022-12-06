@@ -64,7 +64,7 @@ impl ImageLink {
         self.layout = Some(layout);
     }
     /// Parse attributes from options
-    pub fn parse_options(&mut self, options: CommandArguments) -> Vec<NoteError> {
+    pub fn parse_options(&mut self, options: CommandArguments) -> Vec<QError> {
         let mut args = options;
         let mut errors = vec![];
 
@@ -84,7 +84,7 @@ impl ImageLink {
         return errors;
     }
 
-    fn parse_layout(&mut self, options: &mut CommandArguments, errors: &mut Vec<NoteError>) {
+    fn parse_layout(&mut self, options: &mut CommandArguments, errors: &mut Vec<QError>) {
         let value = match options.optional.extract("layout") {
             None => return,
             Some(s) => s,
@@ -96,7 +96,7 @@ impl ImageLink {
             Value::String(s) if s.to_ascii_lowercase().eq("left") => self.layout = Some(ImageLayout::Left),
             Value::String(s) if s.to_ascii_lowercase().eq("center") => self.layout = Some(ImageLayout::Center),
             Value::String(s) if s.to_ascii_lowercase().eq("right") => self.layout = Some(ImageLayout::Right),
-            _ => errors.push(NoteError::runtime_error(format!("Unknown layout option {}", value))),
+            _ => errors.push(QError::runtime_error(format!("Unknown layout option {}", value))),
         }
     }
 }

@@ -11,11 +11,11 @@ pub enum TableView {
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub struct SimpleTable {
     ///
-    pub head: Vec<ASTNode>,
+    pub head: Vec<NotedownNode>,
     ///
     pub align: Vec<u8>,
     ///
-    pub terms: Vec<Vec<ASTNode>>,
+    pub terms: Vec<Vec<NotedownNode>>,
     ///
     pub column: usize,
 }

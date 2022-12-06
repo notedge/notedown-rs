@@ -35,7 +35,7 @@ pub struct StyleNode {
     ///
     pub kind: StyleKind,
     ///
-    pub children: ASTNodes,
+    pub children: NotedownNodes,
 }
 
 impl From<&str> for StyleKind {
@@ -104,7 +104,7 @@ impl StyleKind {
 impl StyleNode {
     /// Constructor of [`StyleNode`]
     #[inline]
-    pub fn new(children: ASTNodes, style: &str) -> Self {
+    pub fn new(children: NotedownNodes, style: &str) -> Self {
         Self { kind: StyleKind::from(style), children }
     }
 }

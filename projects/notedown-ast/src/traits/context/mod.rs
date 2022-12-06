@@ -1,7 +1,7 @@
 use crate::{
-    nodes::{ASTKind, ASTNode},
+    nodes::{NotedownKind, NotedownNode},
     traits::ContextAware,
-    ASTNodes,
+    NotedownNodes,
 };
 ///
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -18,7 +18,7 @@ pub enum ContextKind {
     Code,
 }
 
-impl ContextAware for ASTNodes {
+impl ContextAware for NotedownNodes {
     fn context_aware(&self, offset: u32) -> ContextKind {
         for item in self {
             let e = item.value.context_aware(offset);
@@ -30,13 +30,13 @@ impl ContextAware for ASTNodes {
     }
 }
 
-impl ContextAware for ASTNode {
+impl ContextAware for NotedownNode {
     fn context_aware(&self, offset: u32) -> ContextKind {
         self.value.context_aware(offset)
     }
 }
 
-impl ContextAware for ASTKind {
+impl ContextAware for NotedownKind {
     fn context_aware(&self, offset: u32) -> ContextKind {
         match self {
             Self::Statements(children) => children.context_aware(offset),

@@ -13,7 +13,7 @@ pub struct Header {
     ///
     pub id: Option<String>,
     ///
-    pub children: Vec<ASTNode>,
+    pub children: Vec<NotedownNode>,
 }
 
 impl Default for Header {
@@ -36,7 +36,7 @@ impl Display for Header {
 impl Header {
     /// Basic constructor
     #[inline]
-    pub fn new(children: ASTNodes, level: u8) -> Self {
+    pub fn new(children: NotedownNodes, level: u8) -> Self {
         let mut new = Self::default();
         let id = children.slugify();
         new.children = children;
@@ -63,10 +63,10 @@ impl Header {
     }
 }
 
-impl ASTKind {
+impl NotedownKind {
     /// Construct a header node
     #[inline]
-    pub fn header(children: ASTNodes, level: u8, range: MaybeRanged) -> ASTNode {
+    pub fn header(children: NotedownNodes, level: u8, range: MaybeRanged) -> NotedownNode {
         Header::new(children, level).into_node(range)
     }
 }

@@ -11,7 +11,7 @@ impl Index<BigInt> for Value {
     fn get_index(&self, index: &BigInt) -> Self::Output {
         match self {
             Self::Null | Self::Boolean(_) | Self::Integer(_) | Self::Decimal(_) => {
-                Err(NoteError::type_mismatch(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
+                Err(QError::type_mismatch(format!("Can not take `Integer` index of type `{}`", self.get_type_name())))
             }
             Self::String(s) => {
                 let i = if index.is_negative() {
@@ -30,7 +30,7 @@ impl Index<BigInt> for Value {
 
                 match i.and_then(|e| s.chars().nth(e)) {
                     Some(s) => Ok(Value::string(s)),
-                    None => Err(NoteError::runtime_error(format!("Index `{}` of `String` out of range.", index))),
+                    None => Err(QError::runtime_error(format!("Index `{}` of `String` out of range.", index))),
                 }
             }
             Self::Set(v) => {
@@ -43,7 +43,7 @@ impl Index<BigInt> for Value {
                 };
                 match out {
                     Some(s) => Ok(s.to_owned()),
-                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Set` out of range.", index))),
+                    None => Err(QError::runtime_error(format!("Index `{}` of `Set` out of range.", index))),
                 }
             }
             Self::Array(v) => {
@@ -68,7 +68,7 @@ impl Index<BigInt> for Value {
                 };
                 match out {
                     Some(s) => Ok(s.to_owned()),
-                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Array` out of range.", index))),
+                    None => Err(QError::runtime_error(format!("Index `{}` of `Array` out of range.", index))),
                 }
             }
             Self::Object(v) => {
@@ -81,7 +81,7 @@ impl Index<BigInt> for Value {
                 };
                 match out {
                     Some(s) => Ok(s.to_owned()),
-                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` out of range.", index))),
+                    None => Err(QError::runtime_error(format!("Index `{}` of `Object` out of range.", index))),
                 }
             }
         }
@@ -97,10 +97,10 @@ impl Index<String> for Value {
                 // let v : BTreeMap<String, Literal<Value>>;
                 match v.get(index) {
                     Some(s) => Ok(s.to_owned()),
-                    None => Err(NoteError::runtime_error(format!("Index `{}` of `Object` not found.", index))),
+                    None => Err(QError::runtime_error(format!("Index `{}` of `Object` not found.", index))),
                 }
             }
-            _ => Err(NoteError::type_mismatch(format!("Can not take `String` index of type `{}`", self.get_type_name()))),
+            _ => Err(QError::type_mismatch(format!("Can not take `String` index of type `{}`", self.get_type_name()))),
         }
     }
 }

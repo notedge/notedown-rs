@@ -17,10 +17,10 @@ pub use self::{
 };
 use crate::{
     command::CommandArguments,
-    traits::{IntoASTNode, Slugify},
+    traits::{IntoNotedown, Slugify},
     Command, Value,
 };
-use notedown_error::{MaybeRanged, NoteError, Result};
+use diagnostic_quick::error_3rd::NodeLocation;
 use num::{Signed, Zero};
 use std::{
     fmt::{self, Debug, Display, Formatter},
@@ -29,9 +29,9 @@ use std::{
 };
 
 /// Represents an AST object with position
-pub type ASTNode = Literal<ASTKind>;
+pub type NotedownNode = NodeLocation<NotedownKind>;
 /// Represents a list of AST objects with position
-pub type ASTNodes = Vec<Literal<ASTKind>>;
+pub type NotedownNodes = Vec<NotedownNode>;
 
 /// ## ASTKing
 /// Typed info of the Node
@@ -44,73 +44,60 @@ pub type ASTNodes = Vec<Literal<ASTKind>>;
 /// If a constructor returns individual elements, then interface accept what is
 /// needed (`T`).
 ///
-/// If a constructor returns [`ASTNode`], then the interface implements
+/// If a constructor returns [`NotedownNode`], then the interface implements
 /// polymorphic input (`impl Into<T>`).
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
-pub enum ASTKind {
+pub enum NotedownKind {
     /// Top Scope
-    Statements(ASTNodes),
-    /// 
+    Statements(NotedownNodes),
     /// - block only
-    Paragraph(ASTNodes),
-    /// 
+    Paragraph(NotedownNodes),
     /// - block only
     Delimiter(Box<Delimiter>),
-    /// 
     /// - block only
     Header(Box<Header>),
-    /// 
     /// - block only
     TableView(TableView),
-    /// 
     /// - block only
     ListView(ListView),
-    /// 
     /// - block only
     QuoteNode(Box<QuoteBlock>),
-    /// 
     /// - block + inline
     CodeNode(Box<CodeNode>),
-    /// 
     /// - block + inline
     MathNode(Box<MathNode>),
-    /// 
     /// - block + inline
     LinkNode(SmartLink),
-    /// 
     /// - inline only
     TextSpan(Box<TextSpan>),
-    /// 
     /// - inline only
     StyledSpan(Box<StyleNode>),
-    /// 
     /// - context sensitive
     Command(Box<Command>),
-    /// 
     /// - never bared
     Value(Box<Value>),
 }
 
-impl Default for ASTKind {
+impl Default for NotedownKind {
     fn default() -> Self {
         Self::Value(Box::new(Value::Null))
     }
 }
 
-impl ASTKind {
-    /// Constructor of [`ASTKind::Statements`]
+impl NotedownKind {
+    /// Constructor of [`NotedownKind::Statements`]
     #[inline]
-    pub fn statements(children: ASTNodes, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: Self::Statements(children), range }
+    pub fn statements(children: NotedownNodes, range: MaybeRanged) -> NotedownNode {
+        NotedownNode { value: Self::Statements(children), range }
     }
-    /// Constructor of [`ASTKind::Paragraph`]
+    /// Constructor of [`NotedownKind::Paragraph`]
     #[inline]
-    pub fn paragraph(children: ASTNodes, range: MaybeRanged) -> ASTNode {
-        ASTNode { value: Self::Paragraph(children), range }
+    pub fn paragraph(children: NotedownNodes, range: MaybeRanged) -> NotedownNode {
+        NotedownNode { value: Self::Paragraph(children), range }
     }
     /// Constructor of [`Delimiter::HorizontalRule`]
     #[inline]
-    pub fn hr(range: MaybeRanged) -> ASTNode {
+    pub fn hr(range: MaybeRanged) -> NotedownNode {
         Delimiter::HorizontalRule.into_node(range)
     }
 }

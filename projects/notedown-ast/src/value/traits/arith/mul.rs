@@ -7,7 +7,7 @@ impl Mul for Value {
     // a * b
     fn mul(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `*` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
         let out = match (self, other) {
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs * rhs),
             (Self::Integer(lhs), Self::Decimal(rhs)) | (Self::Decimal(rhs), Self::Integer(lhs)) => {
@@ -28,7 +28,7 @@ impl Div for Value {
 
     fn div(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `/` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
         let out = match (self, other) {
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs / rhs),
             (Self::Integer(lhs), Self::Decimal(rhs)) | (Self::Decimal(rhs), Self::Integer(lhs)) => {

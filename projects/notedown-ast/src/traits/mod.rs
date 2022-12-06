@@ -4,10 +4,7 @@ mod display;
 mod into_node;
 mod slugify;
 
-pub use self::{
-    context::ContextKind,
-    into_node::IntoASTNode,
-};
+pub use self::{context::ContextKind, into_node::IntoNotedown};
 
 /// Slugify the element of notedown
 pub trait Slugify {

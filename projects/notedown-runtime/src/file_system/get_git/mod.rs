@@ -14,7 +14,7 @@ impl VMFileSystem {
 
             if !(path.pop() && path.pop()) {
                 // remove file && remove parent
-                break Err(NoteError::runtime_error("git root not found"));
+                break Err(QError::runtime_error("git root not found"));
             }
         }
     }

@@ -9,11 +9,10 @@ pub use self::xml::{XMLCommand, XMLCommandMarks};
 use crate::{
     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
     nodes::Literal,
-    traits::IntoASTNode,
+    traits::IntoNotedown,
     value::*,
-    ASTKind, ASTNode,
+    NotedownKind, NotedownNode,
 };
-use notedown_error::MaybeRanged;
 use std::ops::Range;
 
 /// Aka. Macro.

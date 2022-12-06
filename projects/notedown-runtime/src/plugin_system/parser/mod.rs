@@ -1,7 +1,7 @@
 use super::*;
 
 /// A parser which can parse text into ast, and report errors at the same time
-pub type Parser = fn(&str, &mut Vec<NoteError>) -> Result<ASTNode>;
+pub type Parser = fn(&str, &mut Vec<QError>) -> Result<NotedownNode>;
 
 pub struct PluginParser {
     pub name: String,
@@ -32,8 +32,8 @@ impl Default for PluginParser {
     }
 }
 
-pub fn text_view_parser(_: &str, _: &mut Vec<NoteError>) -> Result<ASTNode> {
-    Ok(ASTNode::default())
+pub fn text_view_parser(_: &str, _: &mut Vec<QError>) -> Result<NotedownNode> {
+    Ok(NotedownNode::default())
 }
 
 impl Hash for PluginParser {

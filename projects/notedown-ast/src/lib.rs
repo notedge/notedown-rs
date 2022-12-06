@@ -1,7 +1,3 @@
-// features
-#![feature(box_syntax)]
-#![feature(map_first_last)]
-#![feature(arbitrary_enum_discriminant)]
 // lints
 #![deny(missing_docs)]
 #![allow(clippy::needless_return)]
@@ -15,7 +11,7 @@ pub mod value;
 
 pub use self::{
     command::Command,
-    nodes::{ASTKind, ASTNode, ASTNodes},
+    nodes::{NotedownKind, NotedownNode, NotedownNodes},
     value::Value,
 };
 

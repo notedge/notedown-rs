@@ -1,5 +1,5 @@
 use super::*;
-use crate::traits::IntoASTNode;
+use crate::traits::IntoNotedown;
 
 /// ## Quote List
 /// ```note
@@ -15,9 +15,9 @@ pub struct QuoteBlock {
     /// Quote style name
     pub style: Option<String>,
     /// Head part
-    pub head: ASTNodes,
+    pub head: NotedownNodes,
     /// Body part
-    pub body: ASTNodes,
+    pub body: NotedownNodes,
     /// Last quote
     pub quote: Option<String>,
 }
@@ -25,25 +25,25 @@ pub struct QuoteBlock {
 impl QuoteBlock {
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote(body: ASTNodes) -> Self {
+    pub fn quote(body: NotedownNodes) -> Self {
         Self { style: None, head: vec![], body, quote: None }
     }
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote_styled(body: ASTNodes, style: String) -> Self {
+    pub fn quote_styled(body: NotedownNodes, style: String) -> Self {
         Self { style: Some(style), head: vec![], body, quote: None }
     }
 }
 
-impl ASTKind {
+impl NotedownKind {
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote(body: ASTNodes, r: MaybeRanged) -> ASTNode {
+    pub fn quote(body: NotedownNodes, r: MaybeRanged) -> NotedownNode {
         QuoteBlock::quote(body).into_node(r)
     }
     /// Constructor of [`QuoteBlock`]
     #[inline]
-    pub fn quote_style(body: ASTNodes, style: impl Into<String>, r: MaybeRanged) -> ASTNode {
+    pub fn quote_style(body: NotedownNodes, style: impl Into<String>, r: MaybeRanged) -> NotedownNode {
         QuoteBlock::quote_styled(body, style.into()).into_node(r)
     }
 }

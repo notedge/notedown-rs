@@ -6,11 +6,11 @@ pub struct ListItem {
     /// Prefix of the list item
     pub prefix: Literal<ListPrefixMark>,
     /// Rest parts the list item
-    pub rest: ASTNodes,
+    pub rest: NotedownNodes,
 }
 
-impl From<ASTNodes> for ListItem {
-    fn from(node: ASTNodes) -> Self {
+impl From<NotedownNodes> for ListItem {
+    fn from(node: NotedownNodes) -> Self {
         Self { prefix: Default::default(), rest: node }
     }
 }

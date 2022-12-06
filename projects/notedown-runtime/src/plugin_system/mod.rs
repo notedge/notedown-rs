@@ -1,8 +1,8 @@
 mod parser;
 pub use self::parser::{Parser, PluginParser};
 use dashmap::DashMap;
-use notedown_ast::ASTNode;
-use notedown_error::{NoteError, Result};
+use notedown_ast::NotedownNode;
+use notedown_error::{QError, Result};
 use std::{
     collections::BTreeSet,
     fmt::{Debug, Display, Formatter},

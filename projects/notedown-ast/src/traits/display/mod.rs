@@ -14,26 +14,26 @@ impl<T: Display> Display for Literal<T> {
     }
 }
 
-impl Display for ASTKind {
+impl Display for NotedownKind {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match &self {
-            ASTKind::Statements(children) => {
+            NotedownKind::Statements(children) => {
                 let s: Vec<_> = children.iter().map(|e| format!("{}", e)).collect();
                 write!(f, "{}", s.join("\n\n"))
             }
-            ASTKind::Header { .. } => unimplemented!(),
-            ASTKind::Paragraph { .. } => unimplemented!(),
-            ASTKind::Delimiter(inner) => Display::fmt(inner, f),
-            ASTKind::TableView(inner) => Display::fmt(inner, f),
-            ASTKind::ListView(inner) => Display::fmt(inner, f),
-            ASTKind::TextSpan(inner) => Display::fmt(inner, f),
-            ASTKind::StyledSpan(inner) => Display::fmt(inner, f),
-            ASTKind::MathNode(inner) => Display::fmt(inner, f),
-            ASTKind::CodeNode(inner) => Display::fmt(inner, f),
-            ASTKind::LinkNode(inner) => Display::fmt(inner, f),
-            ASTKind::QuoteNode(inner) => Display::fmt(inner, f),
-            ASTKind::Command(inner) => Display::fmt(inner, f),
-            ASTKind::Value(inner) => Display::fmt(inner, f),
+            NotedownKind::Header { .. } => unimplemented!(),
+            NotedownKind::Paragraph { .. } => unimplemented!(),
+            NotedownKind::Delimiter(inner) => Display::fmt(inner, f),
+            NotedownKind::TableView(inner) => Display::fmt(inner, f),
+            NotedownKind::ListView(inner) => Display::fmt(inner, f),
+            NotedownKind::TextSpan(inner) => Display::fmt(inner, f),
+            NotedownKind::StyledSpan(inner) => Display::fmt(inner, f),
+            NotedownKind::MathNode(inner) => Display::fmt(inner, f),
+            NotedownKind::CodeNode(inner) => Display::fmt(inner, f),
+            NotedownKind::LinkNode(inner) => Display::fmt(inner, f),
+            NotedownKind::QuoteNode(inner) => Display::fmt(inner, f),
+            NotedownKind::Command(inner) => Display::fmt(inner, f),
+            NotedownKind::Value(inner) => Display::fmt(inner, f),
         }
     }
 }

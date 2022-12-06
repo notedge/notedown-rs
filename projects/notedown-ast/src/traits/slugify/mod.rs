@@ -1,10 +1,10 @@
 use crate::{
-    nodes::{ASTKind, ASTNode, ASTNodes, Header},
+    nodes::{Header, NotedownKind, NotedownNode, NotedownNodes},
     traits::Slugify,
 };
 pub use text_utils::slugify;
 
-impl Slugify for ASTNodes {
+impl Slugify for NotedownNodes {
     fn slugify(&self) -> String {
         let mut out = String::new();
         for span in self {
@@ -17,13 +17,13 @@ impl Slugify for ASTNodes {
     }
 }
 
-impl Slugify for ASTNode {
+impl Slugify for NotedownNode {
     fn slugify(&self) -> String {
         self.value.slugify()
     }
 }
 
-impl Slugify for ASTKind {
+impl Slugify for NotedownKind {
     fn slugify(&self) -> String {
         match self {
             _ => format!("Slugify: {:#?}", self),

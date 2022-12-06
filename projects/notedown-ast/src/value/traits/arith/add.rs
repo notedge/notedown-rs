@@ -8,7 +8,7 @@ impl Add for Value {
     /// a + b
     fn add(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `+` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
 
         let out = match (self, other) {
             (Self::String(lhs), Self::String(rhs)) => Self::String(lhs + &rhs),
@@ -32,7 +32,7 @@ impl Shr for Value {
     /// a ++ b
     fn shr(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `++` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
         let out = match (self, other) {
             (Self::String(lhs), rhs) => Self::string_join(lhs, rhs)?,
             _ => return type_mismatch,
@@ -45,7 +45,7 @@ impl Value {
     /// join a value to the string
     pub fn string_join(lhs: String, other: Value) -> Result<Self> {
         let msg = format!("Can not apply `++` on lhs: `String`, rhs: {}", other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
         let out = match other {
             Value::Null => lhs,
             Value::Boolean(v) => {
@@ -79,7 +79,7 @@ impl Sub for Value {
     /// a- b
     fn sub(self, other: Self) -> Self::Output {
         let msg = format!("Can not apply `-` on lhs: {}, rhs: {}", self.get_type_name(), other.get_type_name());
-        let type_mismatch = Err(NoteError::type_mismatch(msg));
+        let type_mismatch = Err(QError::type_mismatch(msg));
 
         let out = match (self, other) {
             (Self::Integer(lhs), Self::Integer(rhs)) => Self::Integer(lhs - rhs),

@@ -1,5 +1,5 @@
 use super::*;
-use notedown_ast::{traits::Slugify, ASTKind, ASTNode};
+use notedown_ast::{traits::Slugify, NotedownKind, NotedownNode};
 
 impl TocNode {
     fn last_at_level(&mut self, depth: u8) -> &mut TocNode {
@@ -7,14 +7,14 @@ impl TocNode {
     }
 }
 
-impl TableOfContent for ASTNode {
+impl TableOfContent for NotedownNode {
     fn toc_configurable(&self, config: &TocConfig) -> TocNode {
         let mut root = TocNode::default();
         let mut toc_ignore = false;
-        if let ASTKind::Statements(terms) = &self.value {
+        if let NotedownKind::Statements(terms) = &self.value {
             for term in terms {
                 match &term.value {
-                    ASTKind::Header(header) => {
+                    NotedownKind::Header(header) => {
                         let level = header.level;
                         if toc_ignore {
                             toc_ignore = false;
@@ -27,7 +27,7 @@ impl TableOfContent for ASTNode {
                         let new = TocNode { level, detail: header.slugify(), range: self.range.to_owned().unwrap_or_default(), children: vec![] };
                         parent.children.push(new);
                     }
-                    ASTKind::Command(cmd) => {
+                    NotedownKind::Command(cmd) => {
                         if cmd.is("toc_ignore") {
                             toc_ignore = true
                         }

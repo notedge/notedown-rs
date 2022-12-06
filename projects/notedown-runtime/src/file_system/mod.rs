@@ -4,7 +4,7 @@ pub(crate) mod get_git;
 use crate::{plugin_system::Parser, NoteDocument};
 
 use dashmap::DashMap;
-use notedown_error::{NoteError, Result};
+use notedown_error::{QError, Result};
 use std::{
     env::VarError,
     path::{Path, PathBuf},
@@ -68,7 +68,7 @@ impl VMFileSystem {
     #[inline]
     pub async fn update_ast(&self, url: &Url, parser: &Parser) -> Result<()> {
         match self.cache.get_mut(&url) {
-            None => Err(NoteError::runtime_error("TODO")),
+            None => Err(QError::runtime_error("TODO")),
             Some(mut s) => s.value_mut().update_document(parser).await,
         }
     }

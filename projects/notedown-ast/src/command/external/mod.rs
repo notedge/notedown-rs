@@ -25,10 +25,10 @@ impl Command {
     }
 }
 
-impl ASTKind {
+impl NotedownKind {
     /// Constructor of [`ExternalCommand`]
     #[inline]
-    pub fn command_external<S: Into<String>>(cmd: S, data: Vec<u8>, r: MaybeRanged) -> ASTNode {
+    pub fn command_external<S: Into<String>>(cmd: S, data: Vec<u8>, r: MaybeRanged) -> NotedownNode {
         Command::external(cmd.into(), data).into_node(r)
     }
 }

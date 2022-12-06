@@ -18,7 +18,6 @@ use super::*;
 /// 智能链接是指类似 `[ ]` 以及 `[[ ]]` 的结构
 #[derive(Clone, Eq, PartialEq, Hash)]
 pub enum SmartLink {
-    /// 
     /// - `[<RD>]`: Resource Descriptor
     ///
     /// ```note
@@ -63,30 +62,30 @@ pub enum SmartLink {
     TwoWay(Box<TwoWayLink>),
 }
 
-impl ASTKind {
+impl NotedownKind {
     /// Constructor for [`ImageLink`]
     #[inline]
-    pub fn image_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
+    pub fn image_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
         ImageLink { source: src.into(), ..Default::default() }.into_node(range)
     }
     /// Constructor for [`ImageLink`]
     #[inline]
-    pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, range: MaybeRanged) -> ASTNode {
+    pub fn image_link_alt(src: impl Into<String>, alt: impl Into<String>, range: MaybeRanged) -> NotedownNode {
         ImageLink { source: src.into(), description: Some(alt.into()), ..Default::default() }.into_node(range)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn hyper_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
+    pub fn hyper_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
         HyperLink { src: src.into(), is_bare: false, ..Default::default() }.into_node(range)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn hyper_link_text(src: impl Into<String>, text: impl Into<String>, range: MaybeRanged) -> ASTNode {
+    pub fn hyper_link_text(src: impl Into<String>, text: impl Into<String>, range: MaybeRanged) -> NotedownNode {
         HyperLink { src: src.into(), is_bare: false, text: Some(text.into()), ..Default::default() }.into_node(range)
     }
     /// Constructor for [`HyperLink`]
     #[inline]
-    pub fn bare_link(src: impl Into<String>, range: MaybeRanged) -> ASTNode {
+    pub fn bare_link(src: impl Into<String>, range: MaybeRanged) -> NotedownNode {
         HyperLink { src: src.into(), is_bare: true, ..Default::default() }.into_node(range)
     }
 }

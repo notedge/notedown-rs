@@ -1,5 +1,5 @@
 use super::*;
-use crate::ASTNodes;
+use crate::NotedownNodes;
 
 /// Marks position of [`XMLCommand`]
 #[derive(Clone, Eq, PartialEq)]
@@ -41,7 +41,7 @@ pub struct XMLCommand {
     /// Command options
     pub options: CommandArguments,
     /// Command body
-    pub body: ASTNodes,
+    pub body: NotedownNodes,
 }
 
 impl XMLCommandMarks {
@@ -67,7 +67,7 @@ impl XMLCommandMarks {
 
 impl XMLCommand {
     /// Constructor of [`XMLCommand`]
-    pub fn open_close(cmd: String, body: ASTNodes, options: CommandArguments) -> Self {
+    pub fn open_close(cmd: String, body: NotedownNodes, options: CommandArguments) -> Self {
         let kind = XMLCommandMarks::OpenClose { start: 0, middle: 0, end: 0 };
         Self { cmd, kind, options, body }
     }

@@ -13,9 +13,9 @@ use crate::plugin_system::Parser;
 use chrono::{NaiveDateTime, Utc};
 use notedown_ast::{
     value::{LiteralPair, OrderedMap},
-    ASTNode, Value,
+    NotedownNode, Value,
 };
-use notedown_error::{NoteError, Result};
+use notedown_error::{QError, Result};
 use std::collections::BTreeMap;
 use yggdrasil_shared::{TextAdaptor, TextIndex, Url};
 
@@ -41,9 +41,9 @@ pub struct NoteDocument {
     /// used to check weather the file needs re-parse
     fingerprint: u128,
     text: TextIndex,
-    ast: ASTNode,
+    ast: NotedownNode,
     variable: OrderedMap,
-    errors: Vec<NoteError>,
+    errors: Vec<QError>,
     meta: DocumentMeta,
 }
 
@@ -81,16 +81,16 @@ impl NoteDocument {
     }
 
     #[inline]
-    pub fn get_ast(&self) -> &ASTNode {
+    pub fn get_ast(&self) -> &NotedownNode {
         &self.ast
     }
 
     #[inline]
-    pub fn extend_error_one(&mut self, e: NoteError) {
+    pub fn extend_error_one(&mut self, e: QError) {
         self.errors.push(e)
     }
     #[inline]
-    pub fn extend_error_iter(&mut self, e: impl Iterator<Item = NoteError>) {
+    pub fn extend_error_iter(&mut self, e: impl Iterator<Item = QError>) {
         self.errors.extend(e.into_iter())
     }
     #[inline]
@@ -123,7 +123,7 @@ impl NoteDocument {
         }
         #[cfg(feature = "wasm")]
         match url.scheme() == "file" {
-            true => Err(NoteError::runtime_error("Can not load local file from wasm")),
+            true => Err(QError::runtime_error("Can not load local file from wasm")),
             false => Self::load_remote_url_wasm(url).await,
         }
     }

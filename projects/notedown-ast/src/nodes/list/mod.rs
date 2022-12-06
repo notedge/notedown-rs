@@ -39,7 +39,7 @@ impl ListView {
     #[inline]
     pub fn first_prefix(&self) -> Result<&ListPrefixMark> {
         match self.children().first() {
-            None => Err(NoteError::runtime_error("Not a valid list")),
+            None => Err(QError::runtime_error("Not a valid list")),
             Some(s) => Ok(&s.prefix.value),
         }
     }
@@ -65,15 +65,15 @@ impl ListView {
     }
 }
 
-impl ASTKind {
+impl NotedownKind {
     /// Constructor of [`OrderedList`]
     #[inline]
-    pub fn ordered_list(children: Vec<ListItem>, r: MaybeRanged) -> ASTNode {
+    pub fn ordered_list(children: Vec<ListItem>, r: MaybeRanged) -> NotedownNode {
         ListView::ordered_list(children).into_node(r)
     }
     /// Constructor of [`OrderlessList`]
     #[inline]
-    pub fn orderless_list(children: Vec<ListItem>, r: MaybeRanged) -> ASTNode {
+    pub fn orderless_list(children: Vec<ListItem>, r: MaybeRanged) -> NotedownNode {
         ListView::orderless_list(children).into_node(r)
     }
 }
