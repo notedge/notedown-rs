@@ -1,7 +1,6 @@
 mod show;
 use super::*;
 use std::{
-    fmt,
     fmt::{Debug, Display, Formatter},
     hash::{Hash, Hasher},
 };

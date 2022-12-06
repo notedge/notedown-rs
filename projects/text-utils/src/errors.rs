@@ -1,6 +1,6 @@
 use std::{
     error::Error,
-    fmt::{self, Debug, Display, Formatter},
+    fmt::{Debug, Display, Formatter},
 };
 
 /// Result of text progress

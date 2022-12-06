@@ -52,7 +52,7 @@ impl Default for HyperLinkTarget {
 impl HyperLink {
     /// Set description text for the link
     #[inline]
-    pub fn set_text(&mut self, msg: impl Into<String>) -> &mut Self {
+    pub fn with_text(mut self, msg: impl Into<String>) -> Self {
         self.text = Some(msg.into());
         self
     }
@@ -62,7 +62,7 @@ impl HyperLink {
             None => return self,
             Some(s) => s,
         };
-        args.optional.get_string("text").map(|f| self.set_text(f));
+        args.optional.get_string("text").map(|f| self.with_text(f));
         return self;
     }
 }

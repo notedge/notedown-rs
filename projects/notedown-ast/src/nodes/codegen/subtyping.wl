@@ -1,19 +1,52 @@
 (* ::Package:: *)
 
 subtyping = <|
-        "TableView"-> <|
-            "parent"-> "NotedownKind",
-            "variant"-> "TableView",
-            "box"-> False,
-            "constructor"-> "table_view"
-        |>,
-        "SimpleTable"-> <|
-            "parent"-> "TableView",
-            "variant"-> "SimpleTable",
-            "box"-> True,
-            "constructor"-> "table_simple"
-        |>
-    |>;
+	(* link *)
+    "SmartLink"-> <|
+        "parent"-> "NotedownKind",
+        "variant"-> "LinkNode",
+        "box"-> False,
+        "constructor"-> "smart_link"
+    |>,
+    "EmailLink"-> <|
+        "parent"-> "SmartLink",
+        "variant"-> "EMail",
+        "box"-> True,
+        "constructor"-> "email_link"
+    |>,
+    "HyperLink"-> <|
+        "parent"-> "SmartLink",
+        "variant"-> "Normal",
+        "box"-> True,
+        "constructor"-> "hyper_link"
+    |>,
+    "ImageLink"-> <|
+        "parent"-> "SmartLink",
+        "variant"-> "Image",
+        "box"-> True,
+        "constructor"-> "image_link"
+    |>,
+	(* list *)
+    "ListView"-> <|
+        "parent"-> "NotedownKind",
+        "variant"-> "ListView",
+        "box"-> False,
+        "constructor"-> "list_view"
+    |>,
+	(* table *)
+    "TableView"-> <|
+        "parent"-> "NotedownKind",
+        "variant"-> "TableView",
+        "box"-> False,
+        "constructor"-> "table_view"
+    |>,
+    "SimpleTable"-> <|
+        "parent"-> "TableView",
+        "variant"-> "SimpleTable",
+        "box"-> True,
+        "constructor"-> "table_simple"
+    |>
+|>;
 
 
 
@@ -26,13 +59,14 @@ impl IntoNotedown for `type` {
     fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {
         `parent`::`variant`(`box`).into_node(span, file)
     }
-}
-", <|
+}",
+<|
 "parent" -> v["parent"],
 "variant" -> v["variant"],
 "type"->k,
 "box" -> box
-|>]
+|>
+]
 ]
 
 constructorNotedown[k_String, v_Association]:=Block[
@@ -41,8 +75,7 @@ box = If[TrueQ[v["box"]], "Box::new(value)", "value"];
 parent = v["parent"];
 selfGet = If[parent=="NotedownKind","self", "self.get_"<>subtyping[parent]["constructor"]<>"()?"];
 selfMut = If[parent=="NotedownKind","self", "self.mut_"<>subtyping[parent]["constructor"]<>"()?"];
-TemplateApply["
-    /// Constructor of [`type_ref`]
+TemplateApply["    /// Constructor of [`type_ref`]
     #[inline]
     pub fn `constructor`(value: `type`, span: &Span, file: &FileID) -> NotedownNode {
         `parent`::`variant`(`box`).into_node(span, file)
@@ -60,8 +93,8 @@ TemplateApply["
             `parent`::`variant`(v) => Some(v),
             _ => None,
         }
-    }
-", <|
+    }",
+    <|
 "parent" -> v["parent"],
 "variant" -> v["variant"],
 "type"->k,
@@ -70,7 +103,8 @@ TemplateApply["
 "box" -> box,
 "self_get"-> selfGet,
 "self_mut"-> selfMut
-|>]
+|>
+]
 ]
 
 

@@ -1,7 +1,7 @@
 #![doc = include_str!("readme.md")]
 
 use std::{
-    fmt::{self, Debug, Display, Formatter},
+    fmt::{Debug, Display, Formatter},
     hash::{Hash, Hasher},
     ops::RangeInclusive,
 };
