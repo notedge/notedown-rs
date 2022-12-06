@@ -32,6 +32,7 @@ pub use self::{
     table::{SimpleTable, TableView},
 };
 
+mod codegen;
 pub(crate) mod elements;
 pub(crate) mod link;
 pub(crate) mod list;

@@ -1,0 +1,9 @@
+[
+    {
+        "TableView": {
+            "parent": "NotedownKind",
+            "box": true,
+            "constructor": "table_view"
+        }
+    }
+]
