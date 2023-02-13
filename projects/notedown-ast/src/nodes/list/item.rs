@@ -1,10 +1,10 @@
 use super::*;
 
 /// A list item contains the prefix and rest text nodes
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ListItem {
     /// Prefix of the list item
-    pub prefix: NodeLocation<ListPrefixMark>,
+    pub prefix: ListPrefixMark,
     /// Rest parts the list item
     pub rest: NotedownNodes,
 }

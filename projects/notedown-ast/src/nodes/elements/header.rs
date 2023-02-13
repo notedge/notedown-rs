@@ -13,7 +13,7 @@ use crate::nodes::*;
 /// \args(id = "custom-id")
 /// ###### level6
 /// ```
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct Header {
     /// The level of the header
     pub level: u8,

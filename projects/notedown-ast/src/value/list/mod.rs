@@ -1,6 +1,7 @@
 use super::*;
+mod iter;
 
-#[derive(Default)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct List<T> {
     inner: Box<Vec<NodeLocation<T>>>,
 }

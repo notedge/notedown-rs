@@ -9,7 +9,7 @@ use super::*;
 ///
 /// - part4
 /// ```
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OrderlessList {
     /// list items
     pub children: Vec<ListItem>,

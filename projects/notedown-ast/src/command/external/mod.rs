@@ -2,7 +2,7 @@ use super::*;
 use diagnostic_quick::{FileID, Span};
 
 /// Serialized external data
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct ExternalCommand {
     /// Name of the command
     pub cmd: String,

@@ -9,7 +9,7 @@ use super::*;
 ///
 /// 4. part4
 /// ```
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OrderedList {
     /// First element number of the list
     pub first_order: usize,

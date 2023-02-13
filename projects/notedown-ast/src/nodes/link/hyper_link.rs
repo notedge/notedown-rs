@@ -1,7 +1,7 @@
 use super::*;
 
 /// # HyperLink
-#[derive(Clone, Default, Eq, PartialEq, Hash)]
+#[derive(Clone, Default, Eq, PartialEq)]
 pub struct HyperLink {
     /// ## Bare Link
     /// A link without the `[ ]`
@@ -62,7 +62,7 @@ impl HyperLink {
             None => return self,
             Some(s) => s,
         };
-        args.optional.get_string("text").map(|f| self.with_text(f));
+        args.optional.get_value("text").map(|f| self.with_text(f));
         return self;
     }
 }

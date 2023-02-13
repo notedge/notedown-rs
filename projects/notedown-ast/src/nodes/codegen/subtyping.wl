@@ -45,6 +45,13 @@ subtyping = <|
         "box"-> True,
         "constructor"-> "list_orderless"
     |>,
+    (* quote *)
+    "QuoteBlock"-> <|
+        "parent"-> "TableView",
+        "variant"-> "QuoteNode",
+        "box"-> True,
+        "constructor"-> "quote_block"
+    |>
 	(* table *)
     "TableView"-> <|
         "parent"-> "NotedownKind",

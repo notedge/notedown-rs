@@ -57,7 +57,7 @@ pub type NotedownNodes = Vec<NotedownNode>;
 ///
 /// If a constructor returns [`NotedownNode`], then the interface implements
 /// polymorphic input (`impl Into<T>`).
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum NotedownKind {
     /// Top Scope
     Statements(NotedownNodes),

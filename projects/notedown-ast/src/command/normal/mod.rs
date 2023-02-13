@@ -9,7 +9,7 @@ use diagnostic_quick::error_3rd::NodeLocation;
 ///     arg = 1
 /// )
 /// ```
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct NormalCommand {
     /// The name of the command
     ///

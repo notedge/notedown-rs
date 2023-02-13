@@ -6,7 +6,7 @@ use diagnostic_quick::error_3rd::NodeLocation;
 /// body text
 /// ```
 /// ````
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct EscapedCommand {
     pub cmd: String,
     pub level: u8,

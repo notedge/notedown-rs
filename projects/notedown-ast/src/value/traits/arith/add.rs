@@ -60,9 +60,6 @@ impl NotedownValue {
             NotedownValue::String(v) => {
                 format!("{}{}", lhs, v)
             }
-            NotedownValue::Set(_) => {
-                return type_mismatch;
-            }
             NotedownValue::Array(_) => {
                 return type_mismatch;
             }

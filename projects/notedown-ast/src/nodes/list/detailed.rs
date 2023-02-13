@@ -14,7 +14,7 @@ use super::*;
 /// Well, you asked for it!
 /// </details>
 /// ```
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct DetailedList {
     ///
     pub summary: ListItem,

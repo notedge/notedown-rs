@@ -2,7 +2,7 @@ use super::*;
 use crate::NotedownNodes;
 
 /// Marks position of [`XMLCommand`]
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum XMLCommandMarks {
     /// This is a open-close xml
     OpenClose {
@@ -32,7 +32,7 @@ pub enum XMLCommandMarks {
 /// ```md
 /// <cmd[][] arg=1/>
 /// ```
-#[derive(Clone, Eq, PartialEq)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub struct XMLCommand {
     /// Command name
     pub cmd: String,
