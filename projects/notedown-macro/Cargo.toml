@@ -16,7 +16,7 @@ proc-macro = true
 path = "src/lib.rs"
 
 [dependencies]
-proc-macro2 = "1.0.47"
+proc-macro2 = "1.0.53"
 
 
 [dev-dependencies]

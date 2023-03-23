@@ -16,9 +16,9 @@ exclude = ["/tests/*"]
 
 
 [dependencies]
-textwrap = "0.14.2"
-percent-encoding = "2.1.0"
+textwrap = "0.16.0"
+percent-encoding = "2.2.0"
 slugify = "0.1.0"
-emojic = "0.4.0"
+emojic = "0.4.1"
 css-color-parser = "0.1.2"
-html-escape = "0.2.9"
+html-escape = "0.2.13"

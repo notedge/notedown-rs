@@ -1,41 +1,25 @@
 [package]
 name = "notedown-rt"
-version = "0.3.2"
+version = "0.1.0"
 authors = ["Aster <192607617@qq.com>"]
 description = "Notedown Text parser"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-runtime"
-documentation = "https://docs.rs/notedown-rt"
+documentation = "https://github.com/notedge/notedown-rs"
 readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
 
 
 [dependencies]
-notedown_ast = { version = "0.16", path = "../notedown-ast" }
-# self_update = "0.28.0"
-chrono = { version = "0.4.19", features = ["serde"] }
-rsass = { version = "0.23.0", optional = true }
-yggdrasil-shared = { version = "0.2.1", default-features = false }
-async-std = { version = "1.10.0", optional = true }
-# Native only
-notedown-error = { version = "1.1.10", features = ["chrono"] }
-dashmap = "5.0.0"
+notedown_ast = {version = "0.14", path = "../notedown-ast", features = ["globset", "lsp"]}
+globset = "0.4.10"
+async-std = "1.12.0"
+
+[dependencies.self_update]
+version = "0.36.0"
+
 
 [dev-dependencies]
 
 [features]
-default = ["native"]
-lsp = [
-    "native",
-    "yggdrasil-shared/lsp-types",
-    "notedown-error/lsp-types"
-]
-
-native = [
-    "async-std",
-    "notedown-error/git2",
-    "notedown-error/globset",
-    "notedown-error/chrono"
-]
-# wasm support
-wasm = []
+default = []
