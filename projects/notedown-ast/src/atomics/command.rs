@@ -20,7 +20,8 @@ pub struct CommandNode {
 /// ```
 #[derive(Debug)]
 pub struct CommandArguments {
-    prefill: WhitespaceNode,
+    prefill: Option<WhitespaceNode>,
+    span: Range<u32>,
 }
 
 /// CommandNode
@@ -46,5 +47,11 @@ impl Display for CommandNode {
 impl CommandNode {
     pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
         Self { name: body.to_string(), span }
+    }
+}
+
+impl CommandArguments {
+    pub fn with_prefill(self, space: Option<WhitespaceNode>) -> Self {
+        Self { prefill: space, ..self }
     }
 }

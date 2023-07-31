@@ -6,13 +6,16 @@
 
 mod atomics;
 
-pub use crate::atomics::{
-    command::{CommandArguments, CommandBody, CommandNode},
-    identifier::IdentifierNode,
-    whitespace::{NewlineNode, WhitespaceNode},
+pub use crate::{
+    atomics::{
+        command::{CommandArguments, CommandBody, CommandNode},
+        identifier::IdentifierNode,
+        whitespace::{NewlineNode, WhitespaceNode},
+    },
+    traits::NotedownNode,
 };
 // pub mod nodes;
-// pub mod traits;
+pub mod traits;
 // pub mod value;
 
 // pub use self::{

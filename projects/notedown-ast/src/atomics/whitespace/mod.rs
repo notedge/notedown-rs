@@ -1,34 +1,35 @@
 pub use super::*;
-use std::fmt::{Formatter, Write};
+mod display;
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub enum IgnoreNode {
+    WS(WhitespaceNode),
+    NL(NewlineNode),
+}
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct WhitespaceNode {
     width: usize,
-    start: u32,
+    span: Range<u32>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct NewlineNode {
     count: usize,
-    start: u32,
+    span: Range<u32>,
 }
 
-impl Display for WhitespaceNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for _ in 0..self.width {
-            f.write_char(' ')?
-        }
-        Ok(())
+impl WhitespaceNode {
+    pub fn new(width: usize, span: Range<u32>) -> Self {
+        Self { width, span }
     }
 }
 
-impl Display for NewlineNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for _ in 0..self.count {
-            f.write_char('\n')?
-        }
-        Ok(())
+impl NewlineNode {
+    pub fn new(lines: usize, span: Range<u32>) -> Self {
+        Self { count: lines, span }
     }
 }

@@ -1,17 +1,14 @@
 pub mod command;
 pub mod identifier;
+pub mod number;
 pub mod whitespace;
 
-use std::{fmt::Display, ops::Range};
+use crate::NotedownNode;
+use std::{
+    fmt::{Display, Formatter, Write},
+    ops::Range,
+};
 
-// #![doc = include_str!("readme.md")]
-// mod escaped;
-// mod external;
-// mod normal;
-// mod options;
-// mod traits;
-// mod xml;
-//
 // pub use self::xml::{XMLCommand, XMLCommandMarks};
 // use crate::{
 //     atomics::{escaped::EscapedCommand, external::ExternalCommand,
@@ -41,11 +38,6 @@ use std::{fmt::Display, ops::Range};
 //     External(Box<ExternalCommand>),
 // }
 //
-
-pub struct NumberNode {
-    number: String,
-    span: Range<u32>,
-}
 
 // /// Available arguments for the atomics
 // /// - positional: `\cmd(a, b, c)`
