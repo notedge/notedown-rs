@@ -8,13 +8,6 @@ pub trait IntoNotedown {
     fn into_node(self, span: &Span, file: &FileID) -> NotedownNode;
 }
 
-impl Into<NotedownNode> for NotedownKind {
-    #[inline]
-    fn into(self) -> NotedownNode {
-        self.into_node(&Span::default(), &FileID::default())
-    }
-}
-
 impl IntoNotedown for NotedownKind {
     #[inline]
     fn into_node(self, span: &Span, file: &FileID) -> NotedownNode {

@@ -1,13 +1,32 @@
+use std::fmt::{Debug, Formatter};
 use std::ops::Range;
 use pex::{ParseResult, ParseState};
 use crate::helpers::ignore;
 
+pub struct ValkyrieError {
+    kind: Box<ValkyrieErrorKind>,
+}
 
-pub struct ValkyrieError {}
+#[derive(Debug)]
+pub enum ValkyrieErrorKind {
+    Custom {
+        message: String,
+    }
+}
+
+impl Debug for ValkyrieError {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(&self.kind, f)
+    }
+}
 
 impl ValkyrieError {
-    pub fn custom<T>(msg: T) -> Self {
-        unimplemented!()
+    pub fn custom<T: ToString>(message: T) -> Self {
+        Self {
+            kind: Box::new(ValkyrieErrorKind::Custom {
+                message: message.to_string(),
+            }),
+        }
     }
 }
 

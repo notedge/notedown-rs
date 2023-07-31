@@ -1,6 +1,7 @@
 use std::ops::Range;
 use std::sync::LazyLock;
-use pex::{ParseResult, ParseState, Regex};
+use pex::{BracketPattern, ParseResult, ParseState, Regex};
+use crate::helpers::{get_span, ignore};
 use crate::traits::ThisParser;
 
 
@@ -9,22 +10,51 @@ pub struct NotedownKind {}
 pub struct NotedownNode {
     pub kind: NotedownKind,
     pub span: Range<u32>,
-    pub rest: Vec<NotedownIgnore>,
     pub children: Vec<NotedownNode>,
 }
 
-pub struct WhitespaceNode {
+pub struct WhitespaceNode {}
 
+pub struct NewlineNode {}
+
+
+pub struct NumberNode {
+    number: String,
+    span: Range<u32>,
 }
 
-pub struct NewlineNode {
-
-}
-
+#[derive(Debug)]
 pub struct IdentifierNode {
     name: String,
     span: Range<u32>,
-    rest: Vec<NotedownIgnore>,
+}
+
+///CommandNode
+///
+/// ```note
+/// \cmd () { }
+/// ```
+#[derive(Debug)]
+pub struct CommandNode {
+    name: String,
+    span: Range<u32>,
+}
+///CommandNode
+///
+/// ```note
+/// ()
+/// ```
+#[derive(Debug)]
+pub struct CommandArguments {}
+
+///CommandNode
+///
+/// ```note
+/// { }
+/// ```
+#[derive(Debug)]
+pub struct CommandBody {
+
 }
 
 impl IdentifierNode {
@@ -32,7 +62,15 @@ impl IdentifierNode {
         Self {
             name: body.to_string(),
             span,
-            rest: vec![],
+        }
+    }
+}
+
+impl CommandNode {
+    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
+        Self {
+            name: body.to_string(),
+            span,
         }
     }
 }
@@ -59,6 +97,25 @@ impl ThisParser for IdentifierNode {
     }
 }
 
+impl ThisParser for CommandNode {
+    fn parse(input: ParseState) -> ParseResult<Self> {
+        let (state, _) = input.match_char('\\')?;
+        let (state, id) = state.match_fn(IdentifierNode::parse)?;
+        state.finish(CommandNode::new(id.name, get_span(input, state)))
+    }
+}
+
+impl ThisParser for CommandArguments {
+    fn parse(input: ParseState) -> ParseResult<Self> {
+        let pat = BracketPattern::new("(", ")");
+        pat.consume(input.skip(ignore), ignore, GenericArgumentTerm::parse)
+    }
+}
+
+
+
+#[test]
 fn test() {
-    IdentifierNode::
+    let id = CommandNode::parse_text("\\abc");
+    println!("{:#?}", id);
 }
