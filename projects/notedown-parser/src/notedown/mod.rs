@@ -1,28 +1,17 @@
-use nom::IResult;
+trait Parser {}
 
-pub mod parser;
 
-pub type MarkdownText = Vec<MarkdownInline>;
 
-#[derive(Clone, Debug, PartialEq)]
-pub enum Markdown {
-    Heading(usize, MarkdownText),
-    OrderedList(Vec<MarkdownText>),
-    UnorderedList(Vec<MarkdownText>),
-    Line(MarkdownText),
-    Codeblock(String),
+/// `=[id] title`
+pub struct Header {
+
 }
 
-#[derive(Clone, Debug, PartialEq)]
-pub enum MarkdownInline {
-    Link(String, String),
-    Image(String, String),
-    InlineCode(String),
-    Bold(String),
-    Italic(String),
-    Plaintext(String),
+
+pub struct Word {
+
 }
 
-// pub fn markdown(md: &str) -> IResult<&str, Vec<Markdown>> {
-//     parser::parse_markdown(md)
-// }
+impl Parser for Word {
+
+}

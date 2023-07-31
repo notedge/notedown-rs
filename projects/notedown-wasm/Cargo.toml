@@ -11,11 +11,11 @@ readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
 
-[dependencies.notedown-rt]
-version = "0"
-path = "../notedown-runtime"
-default-features = false
-features = ["wasm"]
+#[dependencies.notedown-rt]
+#version = "0"
+#path = "../notedown-runtime"
+#default-features = false
+#features = ["wasm"]
 
 [dev-dependencies]
 wasm-bindgen-test = "0.3.34"
