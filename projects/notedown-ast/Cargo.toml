@@ -30,5 +30,5 @@ path = "../text-utils"
 
 [features]
 default = []
-lsp = ["yggdrasil-shared", "yggdrasil-shared/lsp"]
+#lsp = ["yggdrasil-shared", "yggdrasil-shared/lsp"]
 

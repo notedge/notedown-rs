@@ -1,6 +1,7 @@
 use std::sync::LazyLock;
 use pex::{ParseResult, ParseState};
 use pex::ParseResult::{Pending, Stop};
+use pex::Regex;
 
 pub static IGNORE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(

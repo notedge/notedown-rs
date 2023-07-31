@@ -11,7 +11,7 @@ edition = "2021"
 
 
 [dependencies]
-notedown_ast = {version = "0.14", path = "../notedown-ast", features = ["globset", "lsp"]}
+#notedown_ast = {version = "0.14", path = "../notedown-ast", features = ["globset", "lsp"]}
 globset = "0.4.10"
 async-std = "1.12.0"
 
