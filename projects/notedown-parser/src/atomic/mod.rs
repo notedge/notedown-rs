@@ -1,9 +1,10 @@
-use std::ops::Range;
-use std::sync::LazyLock;
+use crate::{
+    helpers::{get_span, ignore},
+    traits::ThisParser,
+};
+use notedown_ast::{CommandArguments, CommandNode, IdentifierNode};
 use pex::{BracketPattern, ParseResult, ParseState, Regex};
-use crate::helpers::{get_span, ignore};
-use crate::traits::ThisParser;
-
+use std::{ops::Range, sync::LazyLock};
 
 pub struct NotedownKind {}
 
@@ -13,69 +14,6 @@ pub struct NotedownNode {
     pub children: Vec<NotedownNode>,
 }
 
-pub struct WhitespaceNode {}
-
-pub struct NewlineNode {}
-
-
-pub struct NumberNode {
-    number: String,
-    span: Range<u32>,
-}
-
-#[derive(Debug)]
-pub struct IdentifierNode {
-    name: String,
-    span: Range<u32>,
-}
-
-///CommandNode
-///
-/// ```note
-/// \cmd () { }
-/// ```
-#[derive(Debug)]
-pub struct CommandNode {
-    name: String,
-    span: Range<u32>,
-}
-///CommandNode
-///
-/// ```note
-/// ()
-/// ```
-#[derive(Debug)]
-pub struct CommandArguments {}
-
-///CommandNode
-///
-/// ```note
-/// { }
-/// ```
-#[derive(Debug)]
-pub struct CommandBody {
-
-}
-
-impl IdentifierNode {
-    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
-        Self {
-            name: body.to_string(),
-            span,
-        }
-    }
-}
-
-impl CommandNode {
-    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
-        Self {
-            name: body.to_string(),
-            span,
-        }
-    }
-}
-
-
 pub static IDENTIFIER: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(?x)(
@@ -84,7 +22,7 @@ pub static IDENTIFIER: LazyLock<Regex> = LazyLock::new(|| {
     | `(?P<escaped>(?:\\.|[^`])*)`
 )",
     )
-        .unwrap()
+    .unwrap()
 });
 
 impl ThisParser for IdentifierNode {
@@ -92,7 +30,7 @@ impl ThisParser for IdentifierNode {
         let (state, m) = input.match_regex(&IDENTIFIER, "IDENTIFIER")?;
         let start = input.start_offset as u32;
         let end = (input.start_offset + m.range().end) as u32;
-        let id = IdentifierNode::new(m.as_str(), start..end);
+        let id = IdentifierNode::new(m.as_str());
         state.finish(id)
     }
 }
@@ -105,17 +43,16 @@ impl ThisParser for CommandNode {
     }
 }
 
-impl ThisParser for CommandArguments {
-    fn parse(input: ParseState) -> ParseResult<Self> {
-        let pat = BracketPattern::new("(", ")");
-        pat.consume(input.skip(ignore), ignore, GenericArgumentTerm::parse)
-    }
-}
-
-
+// impl ThisParser for CommandArguments {
+//     fn parse(input: ParseState) -> ParseResult<Self> {
+//         let pat = BracketPattern::new("(", ")");
+//         pat.consume(input.skip(ignore), ignore, GenericArgumentTerm::parse)
+//     }
+// }
 
 #[test]
 fn test() {
-    let id = CommandNode::parse_text("\\abc");
+    let id = CommandNode::parse_text("\\abc ").unwrap();
+    println!("{}", id);
     println!("{:#?}", id);
 }

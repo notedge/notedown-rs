@@ -198,7 +198,7 @@ impl Backend {
     pub async fn check_the_file(&self, url: &Url) {
         let _ = url;
         // self.execute_command(ExecuteCommandParams {
-        //     command: "notedown.inner.request-math-svg".to_string(),
+        //     atomics: "notedown.inner.request-math-svg".to_string(),
         //     arguments: vec![Value::String("x^2".to_string())],
         //     work_done_progress_params: Default::default()
         // }).await;

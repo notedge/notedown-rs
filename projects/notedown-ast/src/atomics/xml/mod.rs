@@ -23,7 +23,7 @@ pub enum XMLCommandMarks {
 }
 
 /// ## XMLCommand
-/// a command on XML Syntax
+/// a atomics on XML Syntax
 /// ### OpenClose
 /// ```md
 /// <cmd[][] arg=1>body text</cmd>
@@ -79,7 +79,7 @@ impl XMLCommand {
 }
 
 impl XMLCommand {
-    /// Edit event of command name
+    /// Edit event of atomics name
     pub fn modify_name(&mut self, new: String) -> (Range<usize>, Range<usize>) {
         let out = (self.kind.start_range(&self.cmd), self.kind.end_range(&self.cmd));
         self.cmd = new;

@@ -7,7 +7,7 @@ repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedo
 documentation = "https://docs.rs/notedown_ast"
 categories = ["text-processing", "template-engine"]
 keywords = ["text", "utils"]
-readme = "../../readme.md"
+readme = "Readme.md"
 license = "MPL-2.0"
 edition = "2021"
 

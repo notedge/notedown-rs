@@ -11,7 +11,7 @@ use diagnostic_quick::error_3rd::NodeLocation;
 /// ```
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub struct NormalCommand {
-    /// The name of the command
+    /// The name of the atomics
     ///
     /// ## Example
     ///
@@ -19,7 +19,7 @@ pub struct NormalCommand {
     /// \cmd
     /// ```
     pub cmd: String,
-    /// The standard argument of the command
+    /// The standard argument of the atomics
     ///
     /// ## Example
     ///
@@ -27,7 +27,7 @@ pub struct NormalCommand {
     /// \cmd(arguments, options)
     /// ```
     pub options: CommandArguments,
-    /// The pattern argument of the command
+    /// The pattern argument of the atomics
     ///
     /// ## Example
     ///
@@ -35,7 +35,7 @@ pub struct NormalCommand {
     /// \cmd[p1][p2]
     /// ```
     pub pattern: Vec<NodeLocation<String>>,
-    /// The body argument of the command
+    /// The body argument of the atomics
     ///
     /// ## Example
     ///

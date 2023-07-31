@@ -14,7 +14,7 @@ pex = { version = "0.2.3", features = ["regex"] }
 
 
 [dependencies.notedown_ast]
-version = "0.14"
+version = "0.14.*"
 path = "../notedown-ast"
 features = []
 

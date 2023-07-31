@@ -3,14 +3,20 @@
 #![allow(clippy::needless_return)]
 // documentation
 #![doc = include_str!("../Readme.md")]
-pub mod command;
 
+mod atomics;
+
+pub use crate::atomics::{
+    command::{CommandArguments, CommandBody, CommandNode},
+    identifier::IdentifierNode,
+    whitespace::{NewlineNode, WhitespaceNode},
+};
 // pub mod nodes;
 // pub mod traits;
 // pub mod value;
 
 // pub use self::{
-//     command::Command,
+//     atomics::Command,
 //     nodes::{NotedownKind, NotedownNode, NotedownNodes},
 //     value::{NotedownValue, dict::Dict},
 // };
@@ -22,8 +28,8 @@ pub mod command;
 //     pub use text_utils;
 //     #[cfg(feature = "lsp")]
 //     mod lsp_wrap {
-//         pub use yggdrasil_shared::records::{lsp_types, DashMap, DashSet, LSPPosition, LSPRange, Rope, TextIndex, Url};
-//     }
+//         pub use yggdrasil_shared::records::{lsp_types, DashMap, DashSet,
+// LSPPosition, LSPRange, Rope, TextIndex, Url};     }
 //     #[cfg(feature = "lsp")]
 //     pub use lsp_wrap::*;
 // }

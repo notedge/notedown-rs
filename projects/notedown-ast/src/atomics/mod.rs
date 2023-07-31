@@ -1,3 +1,9 @@
+pub mod command;
+pub mod identifier;
+pub mod whitespace;
+
+use std::{fmt::Display, ops::Range};
+
 // #![doc = include_str!("readme.md")]
 // mod escaped;
 // mod external;
@@ -8,8 +14,8 @@
 //
 // pub use self::xml::{XMLCommand, XMLCommandMarks};
 // use crate::{
-//     command::{escaped::EscapedCommand, external::ExternalCommand, normal::NormalCommand},
-//     traits::IntoNotedown,
+//     atomics::{escaped::EscapedCommand, external::ExternalCommand,
+// normal::NormalCommand},     traits::IntoNotedown,
 //     value::*,
 //     Dict, NotedownKind, NotedownNode,
 // };
@@ -35,7 +41,13 @@
 //     External(Box<ExternalCommand>),
 // }
 //
-// /// Available arguments for the command
+
+pub struct NumberNode {
+    number: String,
+    span: Range<u32>,
+}
+
+// /// Available arguments for the atomics
 // /// - positional: `\cmd(a, b, c)`
 // /// - optional: `\cmd(a = 1, b = 2)`
 // #[derive(Clone, Debug, Default, Eq, PartialEq)]
@@ -64,14 +76,14 @@
 // }
 //
 // impl Command {
-//     /// Check if the command is some given name
+//     /// Check if the atomics is some given name
 //     #[inline]
 //     pub fn is(&self, rhs: impl AsRef<str>) -> bool {
-//         self.command().eq(rhs.as_ref())
+//         self.atomics().eq(rhs.as_ref())
 //     }
-//     /// Get the name of this command
+//     /// Get the name of this atomics
 //     #[inline]
-//     pub fn command(&self) -> &str {
+//     pub fn atomics(&self) -> &str {
 //         match self {
 //             Self::Normal(v) => v.cmd.as_str(),
 //             Self::Escaped(v) => v.cmd.as_str(),

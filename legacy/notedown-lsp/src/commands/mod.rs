@@ -19,14 +19,14 @@ static SERVER_COMMANDS: SyncLazy<HashSet<&'static str>> = SyncLazy::new(|| {
 });
 
 pub async fn command_provider(p: ExecuteCommandParams, c: &Client) -> Option<Value> {
-    // c.show_message(MessageType::Log, format!("{:#?}", p.command)).await;
+    // c.show_message(MessageType::Log, format!("{:#?}", p.atomics)).await;
     // c.show_message(MessageType::Log, format!("{:#?}", p.arguments)).await;
     match p.command.as_ref() {
         "notedown.inner.read-clipboard" => read_clipboard(c).await,
         "notedown.inner.get-web-view" => get_web_view().await,
         "notedown.inner.request-math-svg" => request_math_svg(c).await,
         _ => {
-            let err = format!("Unknown command: {}", p.command);
+            let err = format!("Unknown atomics: {}", p.command);
             c.show_message(MessageType::ERROR, err).await;
             return None;
         }
