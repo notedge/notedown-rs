@@ -10,7 +10,7 @@ edition = "2021"
 publish = false
 
 [dependencies]
-pex = { version = "0.2.3", features = ["regex"] }
+pex = { version = "0.2.4", features = ["regex"] }
 
 
 [dependencies.notedown_ast]

@@ -1,7 +1,9 @@
-use std::fmt::{Debug, Formatter};
-use std::ops::Range;
-use pex::{ParseResult, ParseState};
 use crate::helpers::ignore;
+use pex::{ParseResult, ParseState};
+use std::{
+    fmt::{Debug, Formatter},
+    ops::Range,
+};
 
 pub struct ValkyrieError {
     kind: Box<ValkyrieErrorKind>,
@@ -9,9 +11,7 @@ pub struct ValkyrieError {
 
 #[derive(Debug)]
 pub enum ValkyrieErrorKind {
-    Custom {
-        message: String,
-    }
+    Custom { message: String },
 }
 
 impl Debug for ValkyrieError {
@@ -22,23 +22,19 @@ impl Debug for ValkyrieError {
 
 impl ValkyrieError {
     pub fn custom<T: ToString>(message: T) -> Self {
-        Self {
-            kind: Box::new(ValkyrieErrorKind::Custom {
-                message: message.to_string(),
-            }),
-        }
+        Self { kind: Box::new(ValkyrieErrorKind::Custom { message: message.to_string() }) }
     }
 }
 
 pub(crate) trait ThisParser
-    where
-        Self: Sized,
+where
+    Self: Sized,
 {
     fn parse(input: ParseState) -> ParseResult<Self>;
     fn parse_text(input: &str) -> Result<Self, ValkyrieError> {
         let input = ParseState::new(input);
-        let (state, repl) = match Self::parse(input.skip(ignore)) {
-            ParseResult::Pending(s, v) => (s.skip(ignore), v),
+        let (state, repl) = match Self::parse(input) {
+            ParseResult::Pending(s, v) => (s, v),
             ParseResult::Stop(e) => Err(ValkyrieError::custom(format!("Failed to parse text: {:?}", e)))?,
         };
         if !state.residual.is_empty() {

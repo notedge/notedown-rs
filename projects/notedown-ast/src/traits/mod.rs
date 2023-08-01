@@ -1,6 +1,8 @@
 use std::{fmt::Display, ops::Range};
 
+/// Marker trait for notedown node
 pub trait NotedownNode: Display {
+    /// Get the span of the node
     fn get_span(&self) -> Range<u32>;
 }
 

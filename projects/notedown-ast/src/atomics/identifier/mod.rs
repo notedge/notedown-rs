@@ -8,6 +8,7 @@ pub struct IdentifierNode {
 }
 
 impl IdentifierNode {
+    /// Create a new identifier node with the given name.
     pub fn new<S: ToString>(body: S) -> Self {
         Self { name: body.to_string() }
     }

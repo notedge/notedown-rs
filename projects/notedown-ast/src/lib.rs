@@ -10,12 +10,12 @@ pub use crate::{
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
         identifier::IdentifierNode,
-        whitespace::{NewlineNode, WhitespaceNode},
+        whitespace::{IgnoreNode, NewlineNode, WhitespaceNode},
     },
     traits::NotedownNode,
 };
 // pub mod nodes;
-pub mod traits;
+mod traits;
 // pub mod value;
 
 // pub use self::{
