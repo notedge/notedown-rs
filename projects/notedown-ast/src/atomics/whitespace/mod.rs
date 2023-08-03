@@ -19,6 +19,20 @@ pub struct WhitespaceNode {
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct HSpaceNode {
+    pub width: usize,
+    pub span: Range<u32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct VSpaceNode {
+    pub width: usize,
+    pub span: Range<u32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct NewlineNode {
     pub count: usize,
     pub span: Range<u32>,
@@ -31,7 +45,7 @@ pub struct AlignNode {
 }
 
 impl WhitespaceNode {
-    /// Create a new punctuation node with the given width and span.
+    /// Create a new whitespace node with the given width and span.
     pub fn new(width: usize, span: Range<u32>) -> Self {
         Self { width, span }
     }

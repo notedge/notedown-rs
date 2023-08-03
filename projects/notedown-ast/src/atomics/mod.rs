@@ -1,7 +1,7 @@
 pub mod command;
 pub mod identifier;
 pub mod number;
-pub mod punctuation;
+pub mod whitespace;
 
 use crate::NotedownNode;
 use std::{

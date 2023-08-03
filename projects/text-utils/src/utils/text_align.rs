@@ -1,4 +1,4 @@
-/// Removes common leading punctuation from each line.
+/// Removes common leading whitespace from each line.
 pub fn dedent(text: impl AsRef<str>) -> String {
     textwrap::dedent(text.as_ref())
 }
@@ -13,7 +13,7 @@ pub fn indent_with(text: impl AsRef<str>, prefix: &str) -> String {
     textwrap::indent(text.as_ref(), prefix)
 }
 
-/// Removes at most n leading punctuation from each line
+/// Removes at most n leading whitespace from each line
 pub fn dedent_less_than(text: impl AsRef<str>, max: usize) -> String {
     // https://stackoverflow.com/questions/60337455/how-to-trim-space-less-than-n-times
     text.as_ref()
@@ -21,7 +21,7 @@ pub fn dedent_less_than(text: impl AsRef<str>, max: usize) -> String {
         .map(|line| {
             let mut max = max;
             line.chars()
-                // Skip while `c` is a punctuation and at most `max` spaces
+                // Skip while `c` is a whitespace and at most `max` spaces
                 .skip_while(|c| {
                     if max == 0 {
                         false

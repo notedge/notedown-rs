@@ -8,7 +8,7 @@ use std::{ops::Range, sync::LazyLock};
 pub static IGNORE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(?x)(
-    # punctuation
+    # whitespace
       \s
     # comments
     | \# [^\r\n]*
@@ -17,7 +17,7 @@ pub static IGNORE: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
-/// Ignores punctuation and comments.
+/// Ignores whitespace and comments.
 #[inline]
 pub fn ignore<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {
     match input.match_regex(&IGNORE, "IGNORE") {

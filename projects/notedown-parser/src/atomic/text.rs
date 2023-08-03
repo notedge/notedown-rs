@@ -1,6 +1,6 @@
 use super::*;
 
-// no punctuation
+// no whitespace
 // no newline
 // no math $
 // no comma , dot

@@ -10,7 +10,7 @@ pub use crate::{
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
         identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode, TextNode},
-        punctuation::{IgnoreNode, NewlineNode, WhitespaceNode},
+        whitespace::{IgnoreNode, NewlineNode, WhitespaceNode},
     },
     traits::NotedownNode,
 };
