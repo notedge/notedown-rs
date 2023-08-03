@@ -1,28 +1,16 @@
 pub mod command;
 pub mod identifier;
 pub mod number;
+pub mod punctuation;
 pub mod whitespace;
 
-use crate::NotedownNode;
+use crate::{CommaNode, NewlineNode, NotedownNode, PeriodNode, TextLiteralNode, WhitespaceNode};
+use deriver::From;
 use std::{
-    fmt::{Display, Formatter, Write},
+    fmt::{Debug, Display, Formatter, Write},
     ops::Range,
 };
 
-// pub use self::xml::{XMLCommand, XMLCommandMarks};
-// use crate::{
-//     atomics::{escaped::EscapedCommand, external::ExternalCommand,
-// normal::NormalCommand},     traits::IntoNotedown,
-//     value::*,
-//     Dict, NotedownKind, NotedownNode,
-// };
-// use diagnostic_quick::{error_3rd::NodeLocation, FileID, Span};
-// use std::{
-//     collections::BTreeMap,
-//     fmt::{Debug, Display, Formatter},
-//     ops::Range,
-// };
-//
 // /// Aka. Macro.
 // /// It can be understood as a mark that attempts to expand in a given context
 // /// until the position cannot be expanded

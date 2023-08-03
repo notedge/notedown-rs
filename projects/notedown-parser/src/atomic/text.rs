@@ -9,10 +9,10 @@ pub static TEXT: LazyLock<Regex> = LazyLock::new(|| {Regex::new(r#"^(?x)(
     [^,.$\s\\\[]+
 )"#).unwrap()});
 
-impl NoteParser for TextNode {
+impl NoteParser for TextLiteralNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, m) = input.match_regex(&TEXT, "IDENTIFIER")?;
-        let number = TextNode::new(m.as_str(), get_span(input, state));
+        let number = TextLiteralNode::new(m.as_str(), get_span(input, state));
         state.finish(number)
     }
 }

@@ -5,7 +5,8 @@ mod text;
 
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, TextNode, WhitespaceNode,
+    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, TextLiteralNode, TextModeNode,
+    TextModeTerm, WhitespaceNode,
 };
 use pex::{ParseResult, ParseState, Regex};
 use std::sync::LazyLock;
@@ -24,17 +25,3 @@ impl NoteParser for CommandNode {
 //         pat.consume(input.skip(ignore), ignore, GenericArgumentTerm::parse)
 //     }
 // }
-
-#[test]
-fn test() {
-    let id = IgnoreNode::parse(ParseState::new("\n\r\n "));
-    // println!("{}", id);
-    println!("{:#?}", id);
-}
-
-#[test]
-fn test2() {
-    let id = TextNode::parse(ParseState::new("a_b, good"));
-    // println!("{}", id);
-    println!("{:#?}", id);
-}

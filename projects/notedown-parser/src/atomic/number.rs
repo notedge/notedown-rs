@@ -25,7 +25,7 @@ pub static VALUE: LazyLock<Regex> = LazyLock::new(|| {Regex::new(r"^(?x)(
 
 impl NoteParser for NumberValueNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, m) = input.match_regex(&LITERAL, "IDENTIFIER")?;
+        let (state, m) = input.match_regex(&VALUE, "IDENTIFIER")?;
         let (state, unit) = state.match_optional(IdentifierNode::parse)?;
         let number = NumberValueNode { value: m.as_str().to_string(), unit, span: get_span(input, state) };
         state.finish(number)

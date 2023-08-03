@@ -31,7 +31,7 @@ pub static LIGATURE: LazyLock<Regex> = LazyLock::new(|| {Regex::new(r"^(?x)(
 
 impl NoteParser for LigatureNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, m) = input.match_regex(&IDENTIFIER, "LIGATURE")?;
+        let (state, m) = input.match_regex(&LIGATURE, "LIGATURE")?;
         let id = LigatureNode::new(m.as_str(), get_span(input, state));
         state.finish(id)
     }

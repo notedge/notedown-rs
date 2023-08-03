@@ -10,6 +10,13 @@ pub enum IgnoreNode {
     NL(NewlineNode),
 }
 
+/// A period of whitespace longer than two newlines, terminated by a newline
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct ParagraphSpaceNode {
+    pub span: Range<u32>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct WhitespaceNode {
@@ -17,17 +24,17 @@ pub struct WhitespaceNode {
     pub span: Range<u32>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct HSpaceNode {
-    pub width: usize,
+    pub width: f32,
     pub span: Range<u32>,
 }
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[derive(Clone, Debug)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct VSpaceNode {
-    pub width: usize,
+    pub height: f32,
     pub span: Range<u32>,
 }
 
