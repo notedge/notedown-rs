@@ -26,7 +26,7 @@ impl ValkyrieError {
     }
 }
 
-pub(crate) trait ThisParser
+pub trait NoteParser
 where
     Self: Sized,
 {

@@ -1,5 +1,5 @@
 use super::*;
-use crate::atomics::whitespace::WhitespaceNode;
+use crate::atomics::punctuation::WhitespaceNode;
 use std::fmt::{Debug, Formatter};
 
 /// CommandNode

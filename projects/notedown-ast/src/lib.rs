@@ -9,8 +9,8 @@ mod atomics;
 pub use crate::{
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
-        identifier::IdentifierNode,
-        whitespace::{IgnoreNode, NewlineNode, WhitespaceNode},
+        identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode, TextNode},
+        punctuation::{IgnoreNode, NewlineNode, WhitespaceNode},
     },
     traits::NotedownNode,
 };

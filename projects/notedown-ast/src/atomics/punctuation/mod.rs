@@ -13,19 +13,25 @@ pub enum IgnoreNode {
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct WhitespaceNode {
-    width: usize,
-    span: Range<u32>,
+    pub width: usize,
+    pub span: Range<u32>,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct NewlineNode {
-    count: usize,
-    span: Range<u32>,
+    pub count: usize,
+    pub span: Range<u32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct AlignNode {
+    pub span: Range<u32>,
 }
 
 impl WhitespaceNode {
-    /// Create a new whitespace node with the given width and span.
+    /// Create a new punctuation node with the given width and span.
     pub fn new(width: usize, span: Range<u32>) -> Self {
         Self { width, span }
     }

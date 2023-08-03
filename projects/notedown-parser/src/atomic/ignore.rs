@@ -1,13 +1,13 @@
 use super::*;
 use pex::StopBecause;
 
-impl ThisParser for IgnoreNode {
+impl NoteParser for IgnoreNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         input.begin_choice().choose_from(WhitespaceNode::parse).choose_from(NewlineNode::parse).end_choice()
     }
 }
 
-impl ThisParser for WhitespaceNode {
+impl NoteParser for WhitespaceNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let mut offset = 0;
         let mut width = 0;
@@ -28,7 +28,7 @@ impl ThisParser for WhitespaceNode {
     }
 }
 
-impl ThisParser for NewlineNode {
+impl NoteParser for NewlineNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let mut offset = 0;
         let mut lines = 0;

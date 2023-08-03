@@ -1,22 +1,23 @@
-use std::ops::Range;
-use std::sync::LazyLock;
-use pex::{ParseResult, ParseState};
-use pex::ParseResult::{Pending, Stop};
-use pex::Regex;
+use pex::{
+    ParseResult,
+    ParseResult::{Pending, Stop},
+    ParseState, Regex,
+};
+use std::{ops::Range, sync::LazyLock};
 
 pub static IGNORE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
         r"^(?x)(
-    # whitespace
+    # punctuation
       \s
     # comments
     | \# [^\r\n]*
 )*",
     )
-        .unwrap()
+    .unwrap()
 });
 
-/// Ignores whitespace and comments.
+/// Ignores punctuation and comments.
 #[inline]
 pub fn ignore<'i>(input: ParseState<'i>) -> ParseResult<&'i str> {
     match input.match_regex(&IGNORE, "IGNORE") {
