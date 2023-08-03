@@ -4,7 +4,7 @@ use super::*;
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct HeadingNode {
     pub level: usize,
-    pub text: TextModeNode,
+    pub text: ParagraphNode,
     pub span: Range<u32>,
 }
 

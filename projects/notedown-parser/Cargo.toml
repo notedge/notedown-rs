@@ -7,15 +7,17 @@ repository = "https://github.com/notedge/notedown-rs"
 readme = "../../readme.md"
 license = "MPL-2.0"
 edition = "2021"
-publish = false
 
 [dependencies]
-pex = { version = "0.2.4", features = ["regex"] }
-
 
 [dependencies.notedown_ast]
 version = "0.14.*"
 path = "../notedown-ast"
 features = []
+
+[dependencies.pex]
+version = "0.2.4"
+features = ["regex"]
+path = 'C:\Users\Dell\CLionProjects\pex\projects\pex-core'
 
 [dev-dependencies]

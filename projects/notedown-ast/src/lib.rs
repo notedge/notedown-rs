@@ -11,10 +11,10 @@ mod traits;
 pub use crate::{
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
-        identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode, TextLiteralNode},
+        identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode},
         punctuation::{CommaNode, PeriodNode},
-        whitespace::{HSpaceNode, IgnoreNode, NewlineNode, VSpaceNode, WhitespaceNode},
+        whitespace::{HSpaceNode, IgnoreNode, NewlineNode, ParagraphSpaceNode, VSpaceNode, WhitespaceNode},
     },
-    text::{TextModeNode, TextModeTerm},
+    text::{ParagraphNode, ParagraphTerm, TextLiteralNode},
     traits::NotedownNode,
 };

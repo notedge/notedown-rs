@@ -5,8 +5,8 @@ mod text;
 
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, TextLiteralNode, TextModeNode,
-    TextModeTerm, WhitespaceNode,
+    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, ParagraphNode, ParagraphTerm,
+    TextLiteralNode, WhitespaceNode,
 };
 use pex::{ParseResult, ParseState, Regex};
 use std::sync::LazyLock;

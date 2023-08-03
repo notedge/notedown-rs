@@ -1,4 +1,7 @@
-use notedown_ast::{text::title::HeadingNode, IgnoreNode, TextModeNode};
+use notedown_ast::{
+    text::{title::HeadingNode, TextModeNode, TextModeTerm},
+    IgnoreNode, ParagraphNode,
+};
 use notedown_parser::NoteParser;
 use pex::ParseState;
 
@@ -12,14 +15,14 @@ fn test() {
 #[test]
 fn test2() {
     let test = ParseState::new(include_str!("test.note"));
-    let id = TextModeNode::parse(test);
+    let id = TextModeTerm::parse(test);
     // println!("{}", id);
     println!("{:#?}", id);
 }
 
 #[test]
 fn test_title() {
-    let id = HeadingNode::parse(ParseState::new("== title\n\na"));
+    let id = HeadingNode::parse(ParseState::new("== title"));
     // println!("{}", id);
     println!("{:#?}", id);
 }
