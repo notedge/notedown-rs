@@ -1,13 +1,13 @@
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    text::{title::HeadingNode, TextModeNode, TextModeTerm},
+    text::{title::HeadingNode, NotedownAST, NotedownTerm},
     CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextEscapeNode, TextLiteralNode, WhitespaceNode,
 };
 use pex::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
-impl NoteParser for TextModeNode {
+impl NoteParser for NotedownAST {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, terms) = input.match_repeats(TextModeTerm::parse)?;
+        let (state, terms) = input.match_repeats(NotedownTerm::parse)?;
         state.finish(Self { terms, span: get_span(input, state) })
     }
 }
@@ -20,7 +20,7 @@ impl NoteParser for TextEscapeNode {
     }
 }
 
-impl NoteParser for TextModeTerm {
+impl NoteParser for NotedownTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
         input
             .begin_choice()

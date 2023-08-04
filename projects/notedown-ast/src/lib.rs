@@ -6,6 +6,7 @@
 
 mod atomics;
 pub mod hir;
+mod link;
 pub mod text;
 mod traits;
 
@@ -19,7 +20,7 @@ pub use crate::{
     text::{
         paragraph::{ParagraphNode, ParagraphTerm},
         style::{FontBoldItalicNode, FontBoldNode, FontDeleteNode, FontItalicNode, FontUnderlineNode},
-        TextEscapeNode, TextLiteralNode,
+        NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralNode,
     },
     traits::NotedownNode,
 };

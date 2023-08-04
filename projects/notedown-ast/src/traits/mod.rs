@@ -1,26 +1,10 @@
-use std::{fmt::Display, ops::Range};
+use crate::NotedownAST;
 
-/// Marker trait for notedown node
-pub trait NotedownNode: Display {
-    /// Get the span of the node
-    fn get_span(&self) -> Range<u32>;
+pub trait NoteOptimizer {
+    fn optimize(&mut self, info: &NotedownAST) -> Result<NotedownAST>;
 }
 
-// #![doc = include_str!("readme.md")]
-// mod context;
-// mod display;
-// mod into_node;
-// mod slugify;
-//
-// pub use self::{context::ContextKind, into_node::IntoNotedown};
-//
-// /// Slugify the element of notedown
-// pub trait Slugify {
-//     /// Slugify the element of notedown
-//     fn slugify(&self) -> String;
-// }
-// /// Aware the context in which the cursor is located
-// pub trait ContextAware {
-//     /// Aware the context in which the cursor is located
-//     fn context_aware(&self, offset: u32) -> ContextKind;
-// }
+pub trait NoteGenerator {
+    type Output;
+    fn generate(&mut self, info: &NotedownAST) -> Result<Self::Output>;
+}

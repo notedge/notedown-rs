@@ -11,6 +11,14 @@ impl Debug for IgnoreNode {
 }
 
 impl NotedownNode for WhitespaceNode {
+    fn write_html(&self, f: &mut impl Write) -> std::fmt::Result {
+        f.write_str("&nbsp")
+    }
+
+    fn write_tex(&self, f: &mut impl Write) -> std::fmt::Result {
+        f.write_char(' ')
+    }
+
     fn get_span(&self) -> Range<u32> {
         self.span.clone()
     }
@@ -36,6 +44,7 @@ impl Debug for NewlineNode {
         write!(f, "NewlineNode({:?})", self.span)
     }
 }
+
 impl Debug for AlignNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_tuple("AlignNode").field(&self.span).finish()
