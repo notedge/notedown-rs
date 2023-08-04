@@ -3,7 +3,7 @@ pub mod paragraph;
 pub mod style;
 pub mod title;
 
-use crate::{text::title::HeadingNode, CommaNode, NewlineNode, NotedownNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
+use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
 use deriver::From;
 use std::{
     fmt::{Debug, Display, Formatter, Write},
@@ -22,7 +22,7 @@ pub struct TextLiteralNode {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct NotedownAST {
     pub terms: Vec<NotedownTerm>,
-    pub span: Range<u32>,
+    pub path: Option<Url>,
 }
 
 #[derive(Clone, Eq, PartialEq, Hash, From)]

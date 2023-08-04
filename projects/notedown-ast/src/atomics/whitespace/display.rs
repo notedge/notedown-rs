@@ -10,20 +10,6 @@ impl Debug for IgnoreNode {
     }
 }
 
-impl NotedownNode for WhitespaceNode {
-    fn write_html(&self, f: &mut impl Write) -> std::fmt::Result {
-        f.write_str("&nbsp")
-    }
-
-    fn write_tex(&self, f: &mut impl Write) -> std::fmt::Result {
-        f.write_char(' ')
-    }
-
-    fn get_span(&self) -> Range<u32> {
-        self.span.clone()
-    }
-}
-
 impl From<WhitespaceNode> for IgnoreNode {
     fn from(value: WhitespaceNode) -> Self {
         Self::WS(value)

@@ -1,4 +1,5 @@
 mod errors;
-pub mod store;
+pub mod third_party;
+// pub mod store;
 
-pub use errors::{NotedownImageError, Result};
+pub use errors::{NoteError, NoteErrorKind, Validation};

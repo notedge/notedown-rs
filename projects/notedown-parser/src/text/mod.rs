@@ -5,21 +5,6 @@ use notedown_ast::{
 };
 use pex::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
-impl NoteParser for NotedownAST {
-    fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, terms) = input.match_repeats(NotedownTerm::parse)?;
-        state.finish(Self { terms, span: get_span(input, state) })
-    }
-}
-
-impl NoteParser for TextEscapeNode {
-    fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, _) = input.match_char('\\')?;
-        let (state, any) = state.match_char_any()?;
-        state.finish(Self { escape: any, span: get_span(input, state) })
-    }
-}
-
 impl NoteParser for NotedownTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
         input
@@ -28,6 +13,14 @@ impl NoteParser for NotedownTerm {
             .choose_from(HeadingNode::parse)
             .choose_from(ParagraphNode::parse)
             .end_choice()
+    }
+}
+
+impl NoteParser for TextEscapeNode {
+    fn parse(input: ParseState) -> ParseResult<Self> {
+        let (state, _) = input.match_char('\\')?;
+        let (state, any) = state.match_char_any()?;
+        state.finish(Self { escape: any, span: get_span(input, state) })
     }
 }
 

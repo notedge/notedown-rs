@@ -1,28 +1,34 @@
-use image::ImageError;
-use std::io::Error;
+mod display;
+use std::{
+    error::Error,
+    fmt::{Debug, Display, Formatter},
+};
 
-pub type Result<T> = std::result::Result<T, NotedownImageError>;
+pub type Validation<T> = validatus::Validation<T, NoteError>;
 
-pub enum NotedownImageError {
-    IOError(std::io::Error),
-    ImageError(ImageError),
-    UnknownError,
+pub struct NoteError {
+    kind: Box<NoteErrorKind>,
 }
 
-impl From<std::io::Error> for NotedownImageError {
-    fn from(e: Error) -> Self {
-        Self::IOError(e)
+pub enum NoteErrorKind {
+    IOError { message: String, source: std::io::Error },
+    Unknown { message: String },
+}
+
+impl From<std::io::Error> for NoteError {
+    fn from(e: std::io::Error) -> Self {
+        Self { kind: Box::new(NoteErrorKind::IOError { message: "".to_string(), source: e }) }
     }
 }
 
-impl From<ImageError> for NotedownImageError {
-    fn from(e: ImageError) -> Self {
-        Self::ImageError(e)
+impl From<std::fmt::Error> for NoteError {
+    fn from(value: std::fmt::Error) -> Self {
+        todo!()
     }
 }
 
-impl From<()> for NotedownImageError {
+impl From<()> for NoteErrorKind {
     fn from(_: ()) -> Self {
-        Self::UnknownError
+        Self::Unknown { message: "".to_string() }
     }
 }

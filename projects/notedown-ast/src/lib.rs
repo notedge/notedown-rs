@@ -22,5 +22,5 @@ pub use crate::{
         style::{FontBoldItalicNode, FontBoldNode, FontDeleteNode, FontItalicNode, FontUnderlineNode},
         NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralNode,
     },
-    traits::NotedownNode,
+    traits::{NoteGenerator, NoteOptimizer},
 };
