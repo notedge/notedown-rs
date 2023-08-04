@@ -14,15 +14,20 @@ impl Display for NoteError {
 
 impl Error for NoteError {}
 
-impl Debug for NoteErrorKind {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        todo!()
-    }
-}
-
 impl Display for NoteErrorKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        match self {
+            NoteErrorKind::IOError { message, source } => {
+                write!(f, "IOError: {} ({})", message, source)
+            }
+            NoteErrorKind::Syntax { message, range, file } => {
+                write!(f, "SyntaxError: {} (range: {:?}, file: {:?})", message, range, file)
+            }
+            NoteErrorKind::Custom { message } => f.write_str(message),
+            NoteErrorKind::Unknown { message } => {
+                write!(f, "UnknownError: {}", message)
+            }
+        }
     }
 }
 

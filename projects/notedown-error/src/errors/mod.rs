@@ -2,18 +2,35 @@ mod display;
 use std::{
     error::Error,
     fmt::{Debug, Display, Formatter},
+    ops::Range,
 };
+#[cfg(feature = "url")]
+use url::Url;
 
 pub type Validation<T> = validatus::Validation<T, NoteError>;
 
 pub struct NoteError {
-    kind: Box<NoteErrorKind>,
+    pub(crate) kind: Box<NoteErrorKind>,
 }
 
+#[derive(Debug)]
 pub enum NoteErrorKind {
-    IOError { message: String, source: std::io::Error },
-    Custom { message: String },
-    Unknown { message: String },
+    IOError {
+        message: String,
+        source: std::io::Error,
+    },
+    Syntax {
+        message: String,
+        range: Range<usize>,
+        #[cfg(feature = "url")]
+        file: Option<Url>,
+    },
+    Custom {
+        message: String,
+    },
+    Unknown {
+        message: String,
+    },
 }
 
 impl From<std::io::Error> for NoteError {
@@ -37,5 +54,13 @@ impl From<()> for NoteError {
 impl NoteError {
     pub fn custom<T: ToString>(message: T) -> Self {
         Self { kind: Box::new(NoteErrorKind::Custom { message: message.to_string() }) }
+    }
+    pub fn with_url(&mut self, url: Url) {
+        match self.kind.as_mut() {
+            NoteErrorKind::Syntax { file, .. } => {
+                *file = Some(url);
+            }
+            _ => {}
+        }
     }
 }

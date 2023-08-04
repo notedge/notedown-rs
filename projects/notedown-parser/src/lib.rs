@@ -2,7 +2,6 @@
 
 mod atomic;
 mod helpers;
-pub mod notedown;
 mod text;
 mod traits;
 
