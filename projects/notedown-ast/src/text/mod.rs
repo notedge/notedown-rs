@@ -1,3 +1,4 @@
+pub mod paragraph;
 pub mod title;
 
 use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
@@ -38,33 +39,12 @@ impl Debug for TextModeTerm {
     }
 }
 
+/// `\.`
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct ParagraphNode {
-    pub terms: Vec<ParagraphTerm>,
+pub struct TextEscapeNode {
+    pub escape: char,
     pub span: Range<u32>,
-}
-
-#[derive(Clone, Eq, PartialEq, Hash, From)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub enum ParagraphTerm {
-    Text(Box<TextLiteralNode>),
-    WhiteSpace(Box<WhitespaceNode>),
-    NewLine(Box<NewlineNode>),
-    Comma(Box<CommaNode>),
-    Period(Box<PeriodNode>),
-}
-
-impl Debug for ParagraphTerm {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            ParagraphTerm::Text(v) => Debug::fmt(v, f),
-            ParagraphTerm::WhiteSpace(v) => Debug::fmt(v, f),
-            ParagraphTerm::NewLine(v) => Debug::fmt(v, f),
-            ParagraphTerm::Comma(v) => Debug::fmt(v, f),
-            ParagraphTerm::Period(v) => Debug::fmt(v, f),
-        }
-    }
 }
 
 impl TextLiteralNode {

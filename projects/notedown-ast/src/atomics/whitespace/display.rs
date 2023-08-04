@@ -31,12 +31,20 @@ impl Display for WhitespaceNode {
     }
 }
 
+impl Debug for NewlineNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "NewlineNode({:?})", self.span)
+    }
+}
+impl Debug for AlignNode {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        f.debug_tuple("AlignNode").field(&self.span).finish()
+    }
+}
+
 impl Display for NewlineNode {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        for _ in 0..self.count {
-            f.write_char('\n')?
-        }
-        Ok(())
+        f.write_char('\n')
     }
 }
 

@@ -15,6 +15,9 @@ pub use crate::{
         punctuation::{CommaNode, PeriodNode},
         whitespace::{HSpaceNode, IgnoreNode, NewlineNode, ParagraphSpaceNode, VSpaceNode, WhitespaceNode},
     },
-    text::{ParagraphNode, ParagraphTerm, TextLiteralNode},
+    text::{
+        paragraph::{ParagraphNode, ParagraphTerm},
+        TextEscapeNode, TextLiteralNode,
+    },
     traits::NotedownNode,
 };

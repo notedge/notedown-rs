@@ -30,28 +30,12 @@ impl NoteParser for WhitespaceNode {
 
 impl NoteParser for NewlineNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let mut offset = 0;
-        let mut lines = 0;
-        let mut chars = input.residual.chars();
-        while let Some(c) = chars.next() {
-            match c {
-                '\n' => lines += 1,
-                '\r' => {
-                    match chars.next() {
-                        Some('\n') => lines += 1,
-                        Some('\r') => lines += 2,
-                        _ => break,
-                    }
-                    offset += 1;
-                }
-                _ => break,
-            }
-            offset += 1;
-        }
-        if offset == 0 {
-            return StopBecause::missing_character('\n', input.start_offset)?;
-        }
-        let state = input.advance(offset);
-        state.finish(NewlineNode::new(lines, get_span(input, state)))
+        let (state, _) = input
+            .begin_choice()
+            .choose(|c| c.match_str("\r\n")) // CRLF
+            .choose(|c| c.match_str("\n")) // LF
+            .choose(|c| c.match_str("\r")) // CR
+            .end_choice()?;
+        state.finish(NewlineNode { span: get_span(input, state) })
     }
 }

@@ -1,7 +1,7 @@
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
     text::{title::HeadingNode, TextModeNode, TextModeTerm},
-    CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextLiteralNode, WhitespaceNode,
+    CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextEscapeNode, TextLiteralNode, WhitespaceNode,
 };
 use pex::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
@@ -12,13 +12,21 @@ impl NoteParser for TextModeNode {
     }
 }
 
+impl NoteParser for TextEscapeNode {
+    fn parse(input: ParseState) -> ParseResult<Self> {
+        let (state, _) = input.match_char('\\')?;
+        let (state, any) = state.match_char_any()?;
+        state.finish(Self { escape: any, span: get_span(input, state) })
+    }
+}
+
 impl NoteParser for TextModeTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
         input
             .begin_choice()
             .choose_from(ParagraphSpaceNode::parse)
-            .choose_from(ParagraphNode::parse)
             .choose_from(HeadingNode::parse)
+            .choose_from(ParagraphNode::parse)
             .end_choice()
     }
 }
@@ -26,13 +34,16 @@ impl NoteParser for TextModeTerm {
 impl NoteParser for ParagraphNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, terms) = input.match_repeats(ParagraphTerm::parse)?;
+        if terms.is_empty() {
+            StopBecause::missing_string("TEXT_MODE_TERM", input.start_offset)?
+        }
         state.finish(Self { terms, span: get_span(input, state) })
     }
 }
 
 impl NoteParser for ParagraphSpaceNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, input) = paragraph_break(input)?;
+        let (state, _) = paragraph_break(input)?;
         state.finish(Self { span: get_span(state, state) })
     }
 }
