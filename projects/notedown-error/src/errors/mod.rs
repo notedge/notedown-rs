@@ -12,6 +12,7 @@ pub struct NoteError {
 
 pub enum NoteErrorKind {
     IOError { message: String, source: std::io::Error },
+    Custom { message: String },
     Unknown { message: String },
 }
 
@@ -27,8 +28,14 @@ impl From<std::fmt::Error> for NoteError {
     }
 }
 
-impl From<()> for NoteErrorKind {
+impl From<()> for NoteError {
     fn from(_: ()) -> Self {
-        Self::Unknown { message: "".to_string() }
+        todo!()
+    }
+}
+
+impl NoteError {
+    pub fn custom<T: ToString>(message: T) -> Self {
+        Self { kind: Box::new(NoteErrorKind::Custom { message: message.to_string() }) }
     }
 }

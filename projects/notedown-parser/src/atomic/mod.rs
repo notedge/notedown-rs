@@ -8,7 +8,7 @@ use notedown_ast::{
     CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, ParagraphNode, ParagraphTerm,
     TextLiteralNode, WhitespaceNode,
 };
-use pex::{ParseResult, ParseState, Regex};
+use notedown_error::{ParseResult, ParseState, Regex, StopBecause};
 use std::sync::LazyLock;
 
 impl NoteParser for CommandNode {

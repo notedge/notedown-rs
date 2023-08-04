@@ -3,7 +3,7 @@ use notedown_ast::{
     text::{title::HeadingNode, NotedownAST, NotedownTerm},
     CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextEscapeNode, TextLiteralNode, WhitespaceNode,
 };
-use pex::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
+use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
 impl NoteParser for NotedownTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {

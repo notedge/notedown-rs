@@ -1,5 +1,4 @@
 use super::*;
-use pex::StopBecause;
 
 impl NoteParser for IgnoreNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
@@ -22,7 +21,6 @@ impl NoteParser for WhitespaceNode {
         if offset == 0 {
             return StopBecause::missing_character(' ', input.start_offset)?;
         }
-
         let state = input.advance(offset);
         state.finish(WhitespaceNode::new(width, get_span(input, state)))
     }

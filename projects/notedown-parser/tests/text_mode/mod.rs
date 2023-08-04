@@ -2,8 +2,9 @@ use notedown_ast::{
     text::{title::HeadingNode, NotedownAST, NotedownTerm},
     IgnoreNode, ParagraphNode,
 };
-use notedown_parser::NoteParser;
-use pex::{ParseState, StopBecause};
+use notedown_error::{NoteError, ParseState, StopBecause};
+use notedown_parser::{parse_file, NoteParser};
+use std::path::Path;
 
 #[test]
 fn test() {
@@ -20,9 +21,9 @@ fn test_title() {
 }
 
 #[test]
-fn test2() -> Result<(), StopBecause> {
-    let input = ParseState::new(include_str!("test.note"));
-    let out = NotedownAST::parse(input);
+fn test2() -> Result<(), NoteError> {
+    let here = Path::new(env!("CARGO_MANIFEST_DIR"));
+    let out = parse_file(here.join("tests/text_mode/test.note"))?;
     println!("{:#?}", out);
     Ok(())
 }

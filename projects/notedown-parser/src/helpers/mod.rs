@@ -1,4 +1,4 @@
-use pex::{
+use notedown_error::{
     ParseResult,
     ParseResult::{Pending, Stop},
     ParseState, Regex,

@@ -5,6 +5,7 @@ pub mod title;
 
 use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
 use deriver::From;
+use notedown_error::Url;
 use std::{
     fmt::{Debug, Display, Formatter, Write},
     ops::Range,
