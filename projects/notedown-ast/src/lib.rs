@@ -5,6 +5,7 @@
 #![doc = include_str!("../Readme.md")]
 
 mod atomics;
+pub mod hir;
 pub mod text;
 mod traits;
 
@@ -17,6 +18,7 @@ pub use crate::{
     },
     text::{
         paragraph::{ParagraphNode, ParagraphTerm},
+        style::{FontBoldItalicNode, FontBoldNode, FontDeleteNode, FontItalicNode, FontUnderlineNode},
         TextEscapeNode, TextLiteralNode,
     },
     traits::NotedownNode,

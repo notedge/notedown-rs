@@ -1,7 +1,9 @@
+mod display;
 pub mod paragraph;
+pub mod style;
 pub mod title;
 
-use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
+use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
 use deriver::From;
 use std::{
     fmt::{Debug, Formatter},
@@ -27,16 +29,6 @@ pub enum TextModeTerm {
     Heading(Box<HeadingNode>),
     Paragraph(Box<ParagraphNode>),
     SpaceBreak(Box<ParagraphSpaceNode>),
-}
-
-impl Debug for TextModeTerm {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        match self {
-            TextModeTerm::Heading(v) => Debug::fmt(v, f),
-            TextModeTerm::Paragraph(v) => Debug::fmt(v, f),
-            TextModeTerm::SpaceBreak(v) => Debug::fmt(v, f),
-        }
-    }
 }
 
 /// `\.`
