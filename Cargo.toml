@@ -3,11 +3,11 @@ resolver = "2"
 members = ["projects/*"]
 default-members = [
     "projects/notedown-ast",
-    "projects/notedown-runtime",
+    "projects/notedown-parser",
     "projects/text-utils",
 ]
 exclude = [
-    "projects/notedown-parser",
+
 ]
 
 [profile.release]

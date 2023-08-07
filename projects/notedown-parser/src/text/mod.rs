@@ -1,8 +1,8 @@
+mod style;
+
 use crate::{helpers::get_span, traits::NoteParser};
-use notedown_ast::{
-    text::{title::HeadingNode, NotedownAST, NotedownTerm},
-    CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextEscapeNode, TextLiteralNode, WhitespaceNode,
-};
+use notedown_ast::{ast::{title::HeadingSpan, NotedownAST, NotedownTerm}, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, ParagraphTerm, PeriodNode, TextEscapeNode, TextLiteralNode, WhitespaceNode, FontBoldItalicNode, FontItalicNode, FontBoldNode};
+use notedown_ast::ast::title::HeadingLevel;
 use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
 impl NoteParser for NotedownTerm {
@@ -10,7 +10,7 @@ impl NoteParser for NotedownTerm {
         input
             .begin_choice()
             .choose_from(ParagraphSpaceNode::parse)
-            .choose_from(HeadingNode::parse)
+            .choose_from(HeadingSpan::parse)
             .choose_from(ParagraphNode::parse)
             .end_choice()
     }
@@ -46,6 +46,9 @@ impl NoteParser for ParagraphTerm {
         let (state, _) = input.match_negative(ParagraphSpaceNode::parse, "PARAGRAPH_BREAK")?;
         state
             .begin_choice()
+            .choose_from(FontBoldItalicNode::parse)
+            .choose_from(FontBoldNode::parse)
+            .choose_from(FontItalicNode::parse)
             .choose_from(TextLiteralNode::parse)
             .choose_from(CommaNode::parse)
             .choose_from(PeriodNode::parse)
@@ -69,11 +72,11 @@ impl NoteParser for PeriodNode {
     }
 }
 
-impl NoteParser for HeadingNode {
+impl NoteParser for HeadingSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, mark) = input.match_str_if(|c| c == '=', "TITLE_MARK")?;
         let (state, _) = WhitespaceNode::parse(state)?;
         let (state, text) = ParagraphNode::parse(state)?;
-        state.finish(Self { level: mark.len(), text, span: get_span(input, state) })
+        state.finish(Self { level: HeadingLevel::from(mark.len()), text, span: get_span(input, state) })
     }
 }

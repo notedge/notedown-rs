@@ -5,7 +5,7 @@ use super::*;
 /// ## Code Inline
 /// Code block in the body
 /// ````note
-/// text `code` text
+/// ast `code` ast
 /// ````
 /// ## Code Block
 /// Independent code block
@@ -49,7 +49,7 @@ pub struct CodeNode {
 impl Default for CodeNode {
     fn default() -> Self {
         Self {
-            language: String::from("text"),
+            language: String::from("ast"),
             code: String::new(),
             inline: false,
             highlight: false,
@@ -111,7 +111,7 @@ impl CodeNode {
     /// ```
     #[inline]
     pub fn code_inline(code: String) -> Self {
-        Self { language: String::from("text"), inline: true, highlight: false, code, ..Default::default() }
+        Self { language: String::from("ast"), inline: true, highlight: false, code, ..Default::default() }
     }
     /// ```notedown
     /// `s`

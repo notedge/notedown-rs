@@ -17,7 +17,7 @@ impl IntoNotedown for Delimiter {
 }
 
 impl NotedownKind {
-    /// Insert raw html text
+    /// Insert raw html ast
     pub fn raw_html_inline(msg: impl Into<String>, span: &Span, file: &FileID) -> NotedownNode {
         Delimiter::HTMLRawBlock(msg.into()).into_node(span, file)
     }

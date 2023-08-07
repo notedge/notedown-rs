@@ -6,7 +6,7 @@ use super::*;
 // no comma , dot
 #[rustfmt::skip]
 pub static TEXT: LazyLock<Regex> = LazyLock::new(|| {Regex::new(r#"^(?x)(
-    [^,.$\s\\\[]+
+    [^,.*_$\s\\\[]+
 )"#).unwrap()});
 
 impl NoteParser for TextLiteralNode {

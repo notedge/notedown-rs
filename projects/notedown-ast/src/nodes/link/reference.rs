@@ -3,22 +3,22 @@
 pub struct TagReference {
     /// ## Tag Block
     /// ```note
-    /// [^tag]: text text text
+    /// [^tag]: ast ast ast
     /// [^tag]:
-    ///     text text text
-    ///     text text text
+    ///     ast ast ast
+    ///     ast ast ast
     /// ```
     pub inline: bool,
     /// ## Tag Reference
     /// Quote a number, note that the name is irrelevant, and a number will always be generated in sequence at the end
     /// ```note
-    /// text [^tag] text text text
+    /// ast [^tag] ast ast ast
     /// ```
     pub tag: String,
     /// ## Tag Inline
     /// Quote a number while defining
     /// ```note
-    /// text [^tag][text text text] text
+    /// ast [^tag][ast ast ast] ast
     /// ```
     pub text: Vec<String>,
 }

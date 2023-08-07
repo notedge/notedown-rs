@@ -7,7 +7,7 @@
 mod atomics;
 pub mod hir;
 mod link;
-pub mod text;
+pub mod ast;
 mod traits;
 
 pub use crate::{
@@ -17,7 +17,7 @@ pub use crate::{
         punctuation::{CommaNode, PeriodNode},
         whitespace::{HSpaceNode, IgnoreNode, NewlineNode, ParagraphSpaceNode, VSpaceNode, WhitespaceNode},
     },
-    text::{
+    ast::{
         paragraph::{ParagraphNode, ParagraphTerm},
         style::{FontBoldItalicNode, FontBoldNode, FontDeleteNode, FontItalicNode, FontUnderlineNode},
         NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralNode,

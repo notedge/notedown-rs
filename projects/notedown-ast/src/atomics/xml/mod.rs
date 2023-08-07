@@ -26,7 +26,7 @@ pub enum XMLCommandMarks {
 /// a atomics on XML Syntax
 /// ### OpenClose
 /// ```md
-/// <cmd[][] arg=1>body text</cmd>
+/// <cmd[][] arg=1>body ast</cmd>
 /// ```
 /// ### SelfClose
 /// ```md

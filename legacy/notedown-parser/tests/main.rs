@@ -5,7 +5,7 @@ use notedown_parser::NotedownParser;
 mod normal;
 mod simple;
 mod style;
-// mod text;
+// mod ast;
 
 #[test]
 fn ready() {

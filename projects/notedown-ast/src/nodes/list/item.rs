@@ -1,6 +1,6 @@
 use super::*;
 
-/// A list item contains the prefix and rest text nodes
+/// A list item contains the prefix and rest ast nodes
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ListItem {
     /// Prefix of the list item

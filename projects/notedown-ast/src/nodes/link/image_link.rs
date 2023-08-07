@@ -14,7 +14,7 @@ pub enum ImageLayout {
 
 /// ```note
 /// [!! storage]
-/// [./path/path.png : alt text ]
+/// [./path/path.png : alt ast ]
 /// [!description][source][link](options)
 /// ```
 #[derive(Clone, Default, Eq, PartialEq, Hash)]

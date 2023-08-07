@@ -1,5 +1,5 @@
 use notedown_ast::{
-    text::{title::HeadingNode, NotedownAST, NotedownTerm},
+    ast::{title::HeadingSpan, NotedownAST, NotedownTerm},
     IgnoreNode, ParagraphNode,
 };
 use notedown_error::{NoteError, ParseState, StopBecause};
@@ -15,7 +15,7 @@ fn test() {
 
 #[test]
 fn test_title() {
-    let id = HeadingNode::parse(ParseState::new("== title"));
+    let id = HeadingSpan::parse(ParseState::new("== title"));
     // println!("{}", id);
     println!("{:#?}", id);
 }

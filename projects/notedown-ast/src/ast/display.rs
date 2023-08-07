@@ -16,6 +16,7 @@ impl Display for NotedownAST {
     }
 }
 
+
 impl Display for NotedownTerm {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         todo!()

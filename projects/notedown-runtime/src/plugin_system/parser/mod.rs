@@ -1,6 +1,6 @@
 use super::*;
 
-/// A parser which can parse text into ast, and report errors at the same time
+/// A parser which can parse ast into ast, and report errors at the same time
 pub type Parser = fn(&str, &mut Vec<QError>) -> Result<NotedownNode>;
 
 pub struct PluginParser {
@@ -27,8 +27,8 @@ impl Display for PluginParser {
 impl Default for PluginParser {
     fn default() -> Self {
         let mut set = BTreeSet::new();
-        set.insert("text".to_string());
-        Self { name: "text".to_string(), parser: text_view_parser, try_extension: set }
+        set.insert("ast".to_string());
+        Self { name: "ast".to_string(), parser: text_view_parser, try_extension: set }
     }
 }
 

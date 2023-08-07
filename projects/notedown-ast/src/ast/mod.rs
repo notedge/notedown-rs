@@ -3,7 +3,7 @@ pub mod paragraph;
 pub mod style;
 pub mod title;
 
-use crate::{text::title::HeadingNode, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
+use crate::{ast::title::HeadingSpan, CommaNode, NewlineNode, ParagraphNode, ParagraphSpaceNode, PeriodNode, WhitespaceNode};
 use deriver::From;
 use notedown_error::Url;
 use std::{
@@ -29,7 +29,7 @@ pub struct NotedownAST {
 #[derive(Clone, Eq, PartialEq, Hash, From)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum NotedownTerm {
-    Heading(Box<HeadingNode>),
+    Heading(Box<HeadingSpan>),
     Paragraph(Box<ParagraphNode>),
     SpaceBreak(Box<ParagraphSpaceNode>),
 }

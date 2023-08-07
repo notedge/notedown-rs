@@ -15,7 +15,7 @@ where
         let input = ParseState::new(input);
         let (state, repl) = match Self::parse(input) {
             ParseResult::Pending(s, v) => (s, v),
-            ParseResult::Stop(e) => Err(NoteError::custom(format!("Failed to parse text: {:?}", e)))?,
+            ParseResult::Stop(e) => Err(NoteError::custom(format!("Failed to parse ast: {:?}", e)))?,
         };
         if !state.residual.is_empty() {
             Err(NoteError::custom(format!("Expect EOF, found:\n{}", state.residual)))?

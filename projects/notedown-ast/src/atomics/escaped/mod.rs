@@ -3,7 +3,7 @@ use diagnostic_quick::error_3rd::NodeLocation;
 
 /// ````md
 /// ```cmd(arg=1)
-/// body text
+/// body ast
 /// ```
 /// ````
 #[derive(Debug, Clone, Eq, PartialEq)]

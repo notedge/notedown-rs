@@ -37,8 +37,8 @@ pub enum SmartLink {
     /// ## Tag Definition Block
     /// ```note
     /// [^tag-define]:
-    ///     text text text
-    ///     text text text
+    ///     ast ast ast
+    ///     ast ast ast
     /// ```
     /// ## Tag Reference Inline
     /// ```note
@@ -49,7 +49,7 @@ pub enum SmartLink {
     Reference(Box<TagReference>),
     /// ```note
     /// [[<RD>](options)]
-    /// [[text][<RD>](opts)]
+    /// [[ast][<RD>](opts)]
     /// ```
     TwoWay(Box<TwoWayLink>),
 }

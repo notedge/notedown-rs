@@ -3,8 +3,25 @@ mod display;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct HeadingNode {
-    pub level: usize,
+pub enum HeadingLevel {
+    Part,
+    Chapter,
+    Section,
+    Article,
+    Header1,
+    Header2,
+    Header3,
+    Header4,
+    Header5,
+    Header6,
+}
+
+
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct HeadingSpan {
+    pub level: HeadingLevel,
     pub text: ParagraphNode,
     pub span: Range<u32>,
 }

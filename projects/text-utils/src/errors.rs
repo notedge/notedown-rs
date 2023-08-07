@@ -3,10 +3,10 @@ use std::{
     fmt::{Debug, Display, Formatter},
 };
 
-/// Result of text progress
+/// Result of ast progress
 pub type Result<T> = std::result::Result<T, TextError>;
 
-/// Error of text progress
+/// Error of ast progress
 #[allow(missing_docs)]
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum TextError {

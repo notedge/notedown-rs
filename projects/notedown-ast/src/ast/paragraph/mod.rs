@@ -1,3 +1,4 @@
+use crate::{FontBoldItalicNode, FontBoldNode, FontItalicNode};
 use super::*;
 mod display;
 
@@ -11,9 +12,15 @@ pub struct ParagraphNode {
 #[derive(Clone, Eq, PartialEq, Hash, From)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ParagraphTerm {
-    /// Normal text with white space
+    /// Normal ast with white space
     Text(Box<TextLiteralNode>),
     WhiteSpace(Box<WhitespaceNode>),
+    /// `*italic*`
+    Italic(Box<FontItalicNode>),
+    /// `**bold**`
+    Bold(Box<FontBoldNode>),
+    /// `**bold italic**`
+    BoldItalic(Box<FontBoldItalicNode>),
     NewLine(Box<NewlineNode>),
     Comma(Box<CommaNode>),
     Period(Box<PeriodNode>),

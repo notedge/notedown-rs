@@ -38,7 +38,7 @@ pub async fn completion_provider(p: CompletionParams) -> Option<CompletionRespon
         ContextKind::Code => {}
     }
     todo!()
-    // match text {
+    // match ast {
     //     Some(s) => completion_provider_dynamic(s, p.text_document_position.position),
     //     None => {
     //         let c = p.context.and_then(|e| e.trigger_character).and_then(|e| e.chars().next());

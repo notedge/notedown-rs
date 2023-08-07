@@ -15,7 +15,7 @@ pub struct HyperLink {
     /// ## Description
     /// A normal link without any description
     /// ```note
-    /// [alt-text: link]
+    /// [alt-ast: link]
     /// ```
     pub text: Option<String>,
     /// Click this link to begin downloading
@@ -50,7 +50,7 @@ impl Default for HyperLinkTarget {
 }
 
 impl HyperLink {
-    /// Set description text for the link
+    /// Set description ast for the link
     #[inline]
     pub fn with_text(mut self, msg: impl Into<String>) -> Self {
         self.text = Some(msg.into());
@@ -62,7 +62,7 @@ impl HyperLink {
             None => return self,
             Some(s) => s,
         };
-        args.optional.get_value("text").map(|f| self.with_text(f));
+        args.optional.get_value("ast").map(|f| self.with_text(f));
         return self;
     }
 }
