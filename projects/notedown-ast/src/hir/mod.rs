@@ -9,7 +9,7 @@ use std::ops::Range;
 pub use self::{
     code::CodeNode,
     heading::{HeadingLevel, HeadingNode},
-    paragraph::{ParagraphKind, ParagraphNode, TextPlainNode, TextStyleNode},
+    paragraph::{ParagraphKind, ParagraphNode, TextEscapeNode, TextPlainNode, TextStyleNode},
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash, From)]

@@ -1,4 +1,4 @@
-= Test titles
+= Test Titles
 
 == Title Level 2
 
@@ -12,13 +12,14 @@
 
 ======= Title Level 7
 
-= Test escapes
+= Test Escapes
 
-a \, b
+a \, b \. c \: d \; e \! f \? g \- h \_ i \* j \# k \+ l \( m \) n \[ o \] p \{ q \} r \< s \> t \" u \' v \` w \~ x \^ y \\ z\
+line
 
-= Test styles
+= Test Styles
 
-test *italic*
+test *italic*K
 
 test **bold**
 

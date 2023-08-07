@@ -1,5 +1,5 @@
 use super::*;
-use crate::hir::ParagraphKind;
+use crate::hir::{ParagraphKind, TextEscapeNode};
 mod display;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -30,7 +30,7 @@ pub enum ParagraphTerm {
     NewLine(Box<NewlineSpan>),
     Comma(Box<CommaNode>),
     Period(Box<PeriodNode>),
-    Escape(Box<TextEscapeSpan>),
+    Escape(Box<TextEscapeNode>),
 }
 
 impl ParagraphSpan {
@@ -61,7 +61,12 @@ impl ParagraphSpan {
                     // terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Escape(v) => {
-                    todo!()
+                    match v.escape {
+                        '\r' | '\n' => continue,
+                        'n' => terms.push(ParagraphKind::text('\n', v.span.clone())),
+                        't' => terms.push(ParagraphKind::text('\t', v.span.clone())),
+                        _ => terms.push(ParagraphKind::text(v.escape, v.span.clone())),
+                    }
                     // terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Underline(v) => terms.push(v.as_hir().into()),

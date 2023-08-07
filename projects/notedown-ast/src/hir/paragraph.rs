@@ -21,6 +21,14 @@ pub enum ParagraphKind {
     Code(Box<CodeNode>),
 }
 
+/// `\.`
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct TextEscapeNode {
+    pub escape: char,
+    pub span: Range<u32>,
+}
+
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct TextPlainNode {
@@ -38,6 +46,18 @@ pub struct TextStyleNode {
     pub text: ParagraphNode,
     pub span: Range<u32>,
     pub color: Option<(u8, u8, u8, u8)>,
+}
+
+impl ParagraphKind {
+    pub fn text<S: ToString>(body: S, span: Range<u32>) -> Self {
+        Self::Plain(Box::new(TextPlainNode::new(body, span)))
+    }
+}
+
+impl TextEscapeNode {
+    pub fn new(escape: char, span: Range<u32>) -> Self {
+        Self { escape, span }
+    }
 }
 
 impl TextPlainNode {

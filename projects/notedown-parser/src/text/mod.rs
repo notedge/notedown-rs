@@ -4,9 +4,9 @@ use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
     ast::{
         CodeInlineSpan, FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan, HeadingSpan, NewlineSpan,
-        NotedownTerm, ParagraphBreakSpan, ParagraphSpan, ParagraphTerm, TextEscapeSpan, TextSpaceNode,
+        NotedownTerm, ParagraphBreakSpan, ParagraphSpan, ParagraphTerm, TextSpaceNode,
     },
-    hir::TextPlainNode,
+    hir::{TextEscapeNode, TextPlainNode},
     CommaNode, PeriodNode,
 };
 use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
@@ -22,7 +22,7 @@ impl NoteParser for NotedownTerm {
     }
 }
 
-impl NoteParser for TextEscapeSpan {
+impl NoteParser for TextEscapeNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = input.match_char('\\')?;
         let (state, any) = state.match_char_any()?;
@@ -58,6 +58,7 @@ impl NoteParser for ParagraphTerm {
             .choose_from(FontItalicSpan::parse)
             .choose_from(FontDeleteSpan::parse)
             .choose_from(FontUnderlineSpan::parse)
+            .choose_from(TextEscapeNode::parse)
             .choose_from(TextPlainNode::parse)
             .choose_from(CommaNode::parse)
             .choose_from(PeriodNode::parse)

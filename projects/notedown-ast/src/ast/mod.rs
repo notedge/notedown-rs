@@ -8,7 +8,7 @@ mod whitespace;
 
 pub use self::{
     code::CodeInlineSpan,
-    escaped::{EscapedCommand, TextEscapeSpan},
+    escaped::EscapedCommand,
     paragraph::{ParagraphSpan, ParagraphTerm},
     style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
     title::HeadingSpan,
