@@ -18,9 +18,8 @@ pub use crate::{
         whitespace::{HSpaceNode, IgnoreNode, NewlineNode, ParagraphSpaceNode, VSpaceNode, WhitespaceNode},
     },
     ast::{
-        paragraph::{ParagraphNode, ParagraphTerm},
-        style::{FontBoldItalicNode, FontBoldNode, FontDeleteNode, FontItalicNode, FontUnderlineNode},
-        NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralNode,
+        style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
+        NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralSpan,
     },
-    traits::{NoteGenerator, NoteOptimizer},
+    traits::{NoteGenerator, NoteOptimizer, html::HtmlBuffer},
 };

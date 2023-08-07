@@ -1,4 +1,6 @@
+use crate::ast::paragraph::ParagraphSpan;
 use super::*;
+
 mod display;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -17,19 +19,20 @@ pub enum HeadingLevel {
 }
 
 
-
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct HeadingSpan {
-    pub level: HeadingLevel,
-    pub text: ParagraphNode,
+    pub level: usize,
+    pub text: ParagraphSpan,
     pub span: Range<u32>,
 }
+
+
 
 /// need in start of line
 ///
 /// ```note
-/// 
+///
 /// ===
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]

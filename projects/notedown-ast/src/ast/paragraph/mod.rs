@@ -1,10 +1,11 @@
-use crate::{FontBoldItalicNode, FontBoldNode, FontItalicNode};
+
 use super::*;
 mod display;
 
+
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct ParagraphNode {
+pub struct ParagraphSpan {
     pub terms: Vec<ParagraphTerm>,
     pub span: Range<u32>,
 }
@@ -13,16 +14,55 @@ pub struct ParagraphNode {
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ParagraphTerm {
     /// Normal ast with white space
-    Text(Box<TextLiteralNode>),
+    Text(Box<TextLiteralSpan>),
     WhiteSpace(Box<WhitespaceNode>),
     /// `*italic*`
-    Italic(Box<FontItalicNode>),
+    Italic(Box<FontItalicSpan>),
     /// `**bold**`
-    Bold(Box<FontBoldNode>),
+    Bold(Box<FontBoldSpan>),
     /// `**bold italic**`
-    BoldItalic(Box<FontBoldItalicNode>),
+    BoldItalic(Box<FontBoldItalicSpan>),
     NewLine(Box<NewlineNode>),
     Comma(Box<CommaNode>),
     Period(Box<PeriodNode>),
     Escape(Box<TextEscapeNode>),
+}
+
+
+impl ParagraphSpan {
+    pub fn as_hir(&self) -> ParagraphNode {
+        let mut terms = Vec::with_capacity(self.terms.len());
+        for term in &self.terms {
+            match term {
+                ParagraphTerm::Text(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::WhiteSpace(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::Italic(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::Bold(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::BoldItalic(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::NewLine(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::Comma(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::Period(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+                ParagraphTerm::Escape(v) => {
+                    // terms.push(v.as_hir().into());
+                }
+            }
+        }
+        ParagraphNode { terms, span: self.span.clone() }
+    }
 }

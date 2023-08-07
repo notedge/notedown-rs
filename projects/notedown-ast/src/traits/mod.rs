@@ -1,11 +1,14 @@
+pub mod html;
+
 use crate::NotedownAST;
 use notedown_error::Validation;
+use crate::hir::NotedownHIR;
 
 pub trait NoteOptimizer {
-    fn optimize(&mut self, info: &NotedownAST) -> Validation<NotedownAST>;
+    fn optimize(&mut self, info: &NotedownHIR) -> Validation<NotedownHIR>;
 }
 
 pub trait NoteGenerator {
     type Output;
-    fn generate(&mut self, info: &NotedownAST) -> Validation<Self::Output>;
+    fn generate(&mut self, info: &NotedownHIR) -> Validation<Self::Output>;
 }
