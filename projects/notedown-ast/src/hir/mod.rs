@@ -1,14 +1,14 @@
 mod heading;
 mod paragraph;
 
-use std::ops::Range;
 use deriver::From;
 use notedown_error::Url;
-use crate::ast::title::{HeadingLevel, HeadingSpan};
+use std::ops::Range;
 
-pub use self::paragraph::{ParagraphNode, TextStyleNode, ParagraphKind};
-pub use self::heading::HeadingNode;
-pub use self::paragraph::TextPlainNode;
+pub use self::{
+    heading::{HeadingLevel, HeadingNode},
+    paragraph::{ParagraphKind, ParagraphNode, TextPlainNode, TextSpaceNode, TextStyleNode},
+};
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash, From)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]

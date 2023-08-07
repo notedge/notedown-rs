@@ -1,11 +1,10 @@
-use std::fs::File;
-use std::io::Write;
-use notedown_ast::{ast::{title::HeadingSpan, NotedownAST, NotedownTerm}, NoteGenerator};
-use notedown_error::{NoteError, ParseState, StopBecause};
+use notedown_ast::{
+    ast::{HeadingSpan, ParagraphSpan},
+    HtmlBuilder, NoteGenerator,
+};
+use notedown_error::{NoteError, ParseState};
 use notedown_parser::{parse_file, NoteParser};
-use std::path::Path;
-use notedown_ast::ast::ParagraphSpan;
-use notedown_ast::HtmlBuilder;
+use std::{fs::File, io::Write, path::Path};
 
 #[test]
 fn test() {

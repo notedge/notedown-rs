@@ -10,13 +10,13 @@ impl Debug for IgnoreNode {
     }
 }
 
-impl From<WhitespaceNode> for IgnoreNode {
-    fn from(value: WhitespaceNode) -> Self {
+impl From<WhitespaceSpan> for IgnoreNode {
+    fn from(value: WhitespaceSpan) -> Self {
         Self::WS(value)
     }
 }
 
-impl Display for WhitespaceNode {
+impl Display for WhitespaceSpan {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         for _ in 0..self.width {
             f.write_char(' ')?
@@ -25,7 +25,7 @@ impl Display for WhitespaceNode {
     }
 }
 
-impl Debug for NewlineNode {
+impl Debug for NewlineSpan {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         write!(f, "NewlineNode({:?})", self.span)
     }
@@ -37,14 +37,14 @@ impl Debug for AlignNode {
     }
 }
 
-impl Display for NewlineNode {
+impl Display for NewlineSpan {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.write_char('\n')
     }
 }
 
-impl From<NewlineNode> for IgnoreNode {
-    fn from(value: NewlineNode) -> Self {
+impl From<NewlineSpan> for IgnoreNode {
+    fn from(value: NewlineSpan) -> Self {
         Self::NL(value)
     }
 }

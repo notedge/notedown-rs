@@ -1,25 +1,19 @@
 pub use super::*;
+use crate::hir::TextSpaceNode;
 mod display;
 
 #[derive(Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum IgnoreNode {
     /// Whitespace
-    WS(WhitespaceNode),
+    WS(WhitespaceSpan),
     /// Newline
-    NL(NewlineNode),
-}
-
-/// A period of whitespace longer than two newlines, terminated by a newline
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct ParagraphSpaceNode {
-    pub span: Range<u32>,
+    NL(NewlineSpan),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct WhitespaceNode {
+pub struct WhitespaceSpan {
     pub width: usize,
     pub span: Range<u32>,
 }
@@ -40,7 +34,7 @@ pub struct VSpaceNode {
 
 #[derive(Clone, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct NewlineNode {
+pub struct NewlineSpan {
     pub span: Range<u32>,
 }
 
@@ -50,9 +44,19 @@ pub struct AlignNode {
     pub span: Range<u32>,
 }
 
-impl WhitespaceNode {
+impl WhitespaceSpan {
     /// Create a new whitespace node with the given width and span.
     pub fn new(width: usize, span: Range<u32>) -> Self {
         Self { width, span }
+    }
+
+    pub fn as_hir(&self) -> TextSpaceNode {
+        TextSpaceNode { span: self.span.clone() }
+    }
+}
+
+impl NewlineSpan {
+    pub fn as_hir(&self) -> TextSpaceNode {
+        TextSpaceNode { span: self.span.clone() }
     }
 }

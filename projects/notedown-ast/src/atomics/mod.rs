@@ -4,7 +4,7 @@ pub mod number;
 pub mod punctuation;
 pub mod whitespace;
 
-use crate::{CommaNode, NewlineNode, PeriodNode, WhitespaceNode};
+use crate::{CommaNode, NewlineSpan, PeriodNode, WhitespaceSpan};
 use deriver::From;
 use std::{
     fmt::{Debug, Display, Formatter, Write},

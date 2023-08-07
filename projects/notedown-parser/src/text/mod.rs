@@ -1,21 +1,16 @@
 mod style;
 
 use crate::{helpers::get_span, traits::NoteParser};
-use notedown_ast::{ast::{title::HeadingSpan, NotedownAST, NotedownTerm}, CommaNode, NewlineNode, ParagraphSpaceNode, PeriodNode, TextEscapeNode,  WhitespaceNode, FontBoldItalicSpan, FontItalicSpan, FontBoldSpan};
-use notedown_ast::ast::{ParagraphSpan, ParagraphTerm};
-
-use notedown_ast::ast::title::HeadingLevel;
-use notedown_ast::hir::TextPlainNode;
+use notedown_ast::{
+    ast::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan, HeadingSpan, NotedownTerm, ParagraphSpan, ParagraphTerm},
+    hir::{TextPlainNode, TextSpaceNode},
+    CommaNode, NewlineSpan, PeriodNode, TextEscapeNode, WhitespaceSpan,
+};
 use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
 impl NoteParser for NotedownTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        input
-            .begin_choice()
-            .choose_from(ParagraphSpaceNode::parse)
-            .choose_from(HeadingSpan::parse)
-            .choose_from(ParagraphSpan::parse)
-            .end_choice()
+        input.begin_choice().choose_from(TextSpaceNode::parse).choose_from(HeadingSpan::parse).choose_from(ParagraphSpan::parse).end_choice()
     }
 }
 
@@ -37,7 +32,7 @@ impl NoteParser for ParagraphSpan {
     }
 }
 
-impl NoteParser for ParagraphSpaceNode {
+impl NoteParser for TextSpaceNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = paragraph_break(input)?;
         state.finish(Self { span: get_span(state, state) })
@@ -46,7 +41,7 @@ impl NoteParser for ParagraphSpaceNode {
 
 impl NoteParser for ParagraphTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, _) = input.match_negative(ParagraphSpaceNode::parse, "PARAGRAPH_BREAK")?;
+        let (state, _) = input.match_negative(TextSpaceNode::parse, "PARAGRAPH_BREAK")?;
         state
             .begin_choice()
             .choose_from(FontBoldItalicSpan::parse)
@@ -55,8 +50,8 @@ impl NoteParser for ParagraphTerm {
             .choose_from(TextPlainNode::parse)
             .choose_from(CommaNode::parse)
             .choose_from(PeriodNode::parse)
-            .choose_from(WhitespaceNode::parse)
-            .choose_from(NewlineNode::parse)
+            .choose_from(WhitespaceSpan::parse)
+            .choose_from(NewlineSpan::parse)
             .end_choice()
     }
 }
@@ -78,7 +73,7 @@ impl NoteParser for PeriodNode {
 impl NoteParser for HeadingSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, mark) = input.match_str_if(|c| c == '=', "TITLE_MARK")?;
-        let (state, _) = WhitespaceNode::parse(state)?;
+        let (state, _) = WhitespaceSpan::parse(state)?;
         let (state, text) = ParagraphSpan::parse(state)?;
         state.finish(Self { level: mark.len(), text, span: get_span(input, state) })
     }

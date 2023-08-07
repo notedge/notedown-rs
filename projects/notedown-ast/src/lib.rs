@@ -4,22 +4,19 @@
 // documentation
 #![doc = include_str!("../Readme.md")]
 
+pub mod ast;
 mod atomics;
 pub mod hir;
 mod link;
-pub mod ast;
 mod traits;
 
 pub use crate::{
+    ast::{NotedownAST, NotedownTerm, TextEscapeNode},
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
         identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode},
         punctuation::{CommaNode, PeriodNode},
-        whitespace::{HSpaceNode, IgnoreNode, NewlineNode, ParagraphSpaceNode, VSpaceNode, WhitespaceNode},
-    },
-    ast::{
-        style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
-        NotedownAST, NotedownTerm, TextEscapeNode,
+        whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, VSpaceNode, WhitespaceSpan},
     },
     traits::{NoteGenerator, NoteOptimizer},
 };

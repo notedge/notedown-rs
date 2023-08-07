@@ -1,6 +1,5 @@
-use notedown_ast::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan};
 use super::*;
-
+use notedown_ast::ast::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan};
 
 impl NoteParser for FontBoldItalicSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {

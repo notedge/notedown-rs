@@ -1,15 +1,18 @@
 #[cfg(feature = "html-ast")]
 pub mod html;
 
-use crate::NotedownAST;
+use crate::{hir::NotedownHIR, NotedownAST};
 use notedown_error::Validation;
-use crate::hir::NotedownHIR;
 
+/// Apply IR -> IR transformation
 pub trait NoteOptimizer {
-    fn optimize(&mut self, info: &NotedownHIR) -> Validation<NotedownHIR>;
+    /// Optimize the given notedown AST
+    fn optimize(&mut self, ir: &NotedownHIR) -> Validation<NotedownHIR>;
 }
-
+/// Convert notedown to other formats
 pub trait NoteGenerator {
+    /// The output format
     type Output;
-    fn generate(&mut self, info: &NotedownHIR) -> Validation<Self::Output>;
+    /// Generate the output with the given notedown AST
+    fn generate(&mut self, ir: &NotedownHIR) -> Validation<Self::Output>;
 }

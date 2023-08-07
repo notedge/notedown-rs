@@ -1,5 +1,5 @@
 use super::*;
-use crate::atomics::whitespace::WhitespaceNode;
+use crate::atomics::whitespace::WhitespaceSpan;
 use std::fmt::{Debug, Formatter};
 
 /// CommandNode
@@ -20,7 +20,7 @@ pub struct CommandNode {
 /// ```
 #[derive(Debug)]
 pub struct CommandArguments {
-    prefill: Option<WhitespaceNode>,
+    prefill: Option<WhitespaceSpan>,
     span: Range<u32>,
 }
 
@@ -51,7 +51,7 @@ impl CommandNode {
 }
 
 impl CommandArguments {
-    pub fn with_prefill(self, space: Option<WhitespaceNode>) -> Self {
+    pub fn with_prefill(self, space: Option<WhitespaceSpan>) -> Self {
         Self { prefill: space, ..self }
     }
 }

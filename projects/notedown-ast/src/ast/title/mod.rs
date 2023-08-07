@@ -1,23 +1,6 @@
-use crate::ast::paragraph::ParagraphSpan;
 use super::*;
 
 mod display;
-
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub enum HeadingLevel {
-    Part,
-    Chapter,
-    Section,
-    Article,
-    Header1,
-    Header2,
-    Header3,
-    Header4,
-    Header5,
-    Header6,
-}
-
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -27,12 +10,10 @@ pub struct HeadingSpan {
     pub span: Range<u32>,
 }
 
-
-
 /// need in start of line
 ///
 /// ```note
-///
+/// 
 /// ===
 /// ```
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -40,4 +21,10 @@ pub struct HeadingSpan {
 pub struct HorizontalRuleNode {
     pub marks: usize,
     pub span: Range<u32>,
+}
+
+impl HeadingSpan {
+    pub fn as_hir(&self) -> HeadingNode {
+        HeadingNode { level: HeadingLevel::from(self.level), id: "".to_string(), terms: self.text.as_hir(), span: self.span.clone() }
+    }
 }

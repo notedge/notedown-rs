@@ -1,7 +1,6 @@
-use crate::hir::ParagraphKind;
 use super::*;
+use crate::hir::ParagraphKind;
 mod display;
-
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -15,30 +14,27 @@ pub struct ParagraphSpan {
 pub enum ParagraphTerm {
     /// Normal ast with white space
     Text(Box<TextPlainNode>),
-    WhiteSpace(Box<WhitespaceNode>),
+    WhiteSpace(Box<WhitespaceSpan>),
     /// `*italic*`
     Italic(Box<FontItalicSpan>),
     /// `**bold**`
     Bold(Box<FontBoldSpan>),
     /// `**bold italic**`
     BoldItalic(Box<FontBoldItalicSpan>),
-    NewLine(Box<NewlineNode>),
+    NewLine(Box<NewlineSpan>),
     Comma(Box<CommaNode>),
     Period(Box<PeriodNode>),
     Escape(Box<TextEscapeNode>),
 }
-
 
 impl ParagraphSpan {
     pub fn as_hir(&self) -> ParagraphNode {
         let mut terms: Vec<ParagraphKind> = Vec::with_capacity(self.terms.len());
         for term in &self.terms {
             match term {
-                ParagraphTerm::Text(v) => {
-                    terms.push(v.as_ref().clone().into())
-                }
+                ParagraphTerm::Text(v) => terms.push(v.as_ref().clone().into()),
                 ParagraphTerm::WhiteSpace(v) => {
-                    // terms.push(v.as_hir().into());
+                    terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Italic(v) => {
                     terms.push(v.as_hir().into());
@@ -50,15 +46,18 @@ impl ParagraphSpan {
                     terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::NewLine(v) => {
-                    // terms.push(v.as_hir().into());
+                    terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Comma(v) => {
+                    todo!()
                     // terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Period(v) => {
+                    todo!()
                     // terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Escape(v) => {
+                    todo!()
                     // terms.push(v.as_hir().into());
                 }
             }

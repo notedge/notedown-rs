@@ -1,21 +1,25 @@
+mod code;
 mod display;
 mod paragraph;
 pub mod style;
-pub mod title;
+mod title;
 
-use crate::hir::{ParagraphNode, TextPlainNode};
-use crate::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan};
-use crate::{ast::title::HeadingSpan, CommaNode, NewlineNode,  ParagraphSpaceNode,   PeriodNode, WhitespaceNode};
+pub use self::{
+    code::CodeInlineSpan,
+    paragraph::{ParagraphSpan, ParagraphTerm},
+    style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
+    title::HeadingSpan,
+};
+use crate::{
+    hir::{HeadingLevel, HeadingNode, NotedownHIR, NotedownNode, ParagraphNode, TextPlainNode, TextSpaceNode, TextStyleNode},
+    CommaNode, NewlineSpan, PeriodNode, WhitespaceSpan,
+};
 use deriver::From;
 use notedown_error::Url;
 use std::{
     fmt::{Debug, Display, Formatter, Write},
     ops::Range,
 };
-use crate::hir::{NotedownHIR, NotedownNode};
-pub use self::paragraph::{ParagraphTerm, ParagraphSpan};
-
-
 
 /// The root node of all notedown terms
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -30,30 +34,22 @@ pub struct NotedownAST {
 pub enum NotedownTerm {
     Heading(Box<HeadingSpan>),
     Paragraph(Box<ParagraphSpan>),
-    SpaceBreak(Box<ParagraphSpaceNode>),
+    SpaceBreak(Box<TextSpaceNode>),
 }
 
 impl NotedownAST {
     pub fn as_hir(&self) -> NotedownHIR {
         let mut terms = Vec::with_capacity(self.terms.len());
         for term in &self.terms {
-           match term {
-               NotedownTerm::Heading(v) => {
-                   terms.push(v.as_hir().into())
-               }
-               NotedownTerm::Paragraph(v) => {
-                   terms.push(v.as_hir().into())
-               }
-               NotedownTerm::SpaceBreak(_) => {
-                  continue
-               }
-           }
+            match term {
+                NotedownTerm::Heading(v) => terms.push(v.as_hir().into()),
+                NotedownTerm::Paragraph(v) => terms.push(v.as_hir().into()),
+                NotedownTerm::SpaceBreak(_) => continue,
+            }
         }
         NotedownHIR { node: terms, url: self.path.clone() }
     }
 }
-
-
 
 /// `\.`
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]

@@ -1,7 +1,4 @@
-use crate::ast::paragraph::ParagraphSpan;
-use crate::hir::TextStyleNode;
 use super::*;
-
 
 /// `*italic*`
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -10,7 +7,6 @@ pub struct FontItalicSpan {
     pub text: ParagraphSpan,
     pub span: Range<u32>,
 }
-
 
 /// `**bold**`
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -44,43 +40,20 @@ pub struct FontDeleteSpan {
     pub span: Range<u32>,
 }
 
-
 impl FontItalicSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode {
-            italic: true,
-            bold: false,
-            underline: false,
-            text: self.text.as_hir(),
-            span: self.span.clone(),
-            color: None,
-        }
+        TextStyleNode { italic: true, bold: false, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
     }
 }
 
 impl FontBoldSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode {
-            italic: false,
-            bold: true,
-            underline: false,
-            text: self.text.as_hir(),
-            span: self.span.clone(),
-            color: None,
-        }
+        TextStyleNode { italic: false, bold: true, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
     }
 }
 
 impl FontBoldItalicSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode {
-            italic: true,
-            bold: true,
-            underline: false,
-            text: self.text.as_hir(),
-            span: self.span.clone(),
-            color: None,
-        }
+        TextStyleNode { italic: true, bold: true, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
     }
 }
-
