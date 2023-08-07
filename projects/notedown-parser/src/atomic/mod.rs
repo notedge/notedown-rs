@@ -5,7 +5,9 @@ mod text;
 
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    hir::TextPlainNode, CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineSpan, NumberLiteralNode, NumberValueNode, WhitespaceSpan,
+    ast::{IgnoreNode, NewlineSpan, TextSpaceNode},
+    hir::TextPlainNode,
+    CommandNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode,
 };
 use notedown_error::{ParseResult, ParseState, Regex, StopBecause};
 use std::sync::LazyLock;

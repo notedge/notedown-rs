@@ -34,7 +34,16 @@ impl NoteParser for NotedownAST {
 pub fn parse_file<P: AsRef<Path>>(path: P) -> Result<NotedownAST, NoteError> {
     let url = Url::from_file_path(path.as_ref())?;
     let text = std::fs::read_to_string(path)?;
-    let (_, mut out) = NotedownAST::parse(ParseState::new(&text)).as_result()?;
-    out.path = Some(url);
-    Ok(out)
+    match NotedownAST::parse(ParseState::new(&text)) {
+        ParseResult::Pending(e, mut r) => {
+            if e.is_empty() {
+                r.path = Some(url);
+                Ok(r)
+            }
+            else {
+                Err(NoteError::syntax_error(format!("{:?}", e.residual), e.start_offset..e.end_offset()))?
+            }
+        }
+        ParseResult::Stop(e) => Err(NoteError::from(e)),
+    }
 }

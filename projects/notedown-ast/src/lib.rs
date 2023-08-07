@@ -11,12 +11,11 @@ mod link;
 mod traits;
 
 pub use crate::{
-    ast::{NotedownAST, NotedownTerm, TextEscapeNode},
+    ast::{NotedownAST, NotedownTerm},
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
         identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode},
         punctuation::{CommaNode, PeriodNode},
-        whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, VSpaceNode, WhitespaceSpan},
     },
     traits::{NoteGenerator, NoteOptimizer},
 };

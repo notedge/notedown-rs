@@ -1,5 +1,6 @@
 use crate::{NoteError, NoteErrorKind};
 use pex::StopBecause;
+use std::ops::Range;
 
 impl From<StopBecause> for NoteError {
     fn from(value: StopBecause) -> Self {

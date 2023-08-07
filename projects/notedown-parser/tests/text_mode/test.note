@@ -10,6 +10,12 @@
 
 ====== Title Level 6
 
+======= Title Level 7
+
+= Test escapes
+
+a \, b
+
 = Test styles
 
 test *italic*
@@ -18,7 +24,7 @@ test **bold**
 
 test _underline_
 
-test __delete_
+test __delete__
 
 test `code1`
 

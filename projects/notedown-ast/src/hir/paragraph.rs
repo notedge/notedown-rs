@@ -1,4 +1,5 @@
 use super::*;
+use crate::ast::TextSpaceNode;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
@@ -10,11 +11,14 @@ pub struct ParagraphNode {
 #[derive(Clone, Debug, Eq, PartialEq, Hash, From)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ParagraphKind {
+    /// Normal ast with no white space
     Plain(Box<TextPlainNode>),
     /// Normal ast with white space
     Style(Box<TextStyleNode>),
-
+    /// White space
     Space(Box<TextSpaceNode>),
+    /// Inline code
+    Code(Box<CodeNode>),
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -24,20 +28,20 @@ pub struct TextPlainNode {
     pub span: Range<u32>,
 }
 
-/// A period of whitespace longer than two newlines, terminated by a newline
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct TextSpaceNode {
-    pub span: Range<u32>,
-}
-
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct TextStyleNode {
     pub italic: bool,
     pub bold: bool,
     pub underline: bool,
+    pub delete: bool,
     pub text: ParagraphNode,
     pub span: Range<u32>,
     pub color: Option<(u8, u8, u8, u8)>,
+}
+
+impl TextPlainNode {
+    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
+        Self { text: body.to_string(), span }
+    }
 }

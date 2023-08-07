@@ -2,11 +2,11 @@ use super::*;
 
 impl NoteParser for IgnoreNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        input.begin_choice().choose_from(WhitespaceSpan::parse).choose_from(NewlineSpan::parse).end_choice()
+        input.begin_choice().choose_from(TextSpaceNode::parse).choose_from(NewlineSpan::parse).end_choice()
     }
 }
 
-impl NoteParser for WhitespaceSpan {
+impl NoteParser for TextSpaceNode {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let mut offset = 0;
         let mut width = 0;
@@ -22,7 +22,7 @@ impl NoteParser for WhitespaceSpan {
             return StopBecause::missing_character(' ', input.start_offset)?;
         }
         let state = input.advance(offset);
-        state.finish(WhitespaceSpan::new(width, get_span(input, state)))
+        state.finish(TextSpaceNode::new(width, get_span(input, state)))
     }
 }
 

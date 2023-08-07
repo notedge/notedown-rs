@@ -2,9 +2,8 @@ pub mod command;
 pub mod identifier;
 pub mod number;
 pub mod punctuation;
-pub mod whitespace;
 
-use crate::{CommaNode, NewlineSpan, PeriodNode, WhitespaceSpan};
+use crate::{CommaNode, PeriodNode};
 use deriver::From;
 use std::{
     fmt::{Debug, Display, Formatter, Write},

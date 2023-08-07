@@ -12,6 +12,9 @@ impl Debug for ParagraphTerm {
             ParagraphTerm::Italic(v) => Debug::fmt(v, f),
             ParagraphTerm::Bold(v) => Debug::fmt(v, f),
             ParagraphTerm::BoldItalic(v) => Debug::fmt(v, f),
+            ParagraphTerm::Underline(v) => Debug::fmt(v, f),
+            ParagraphTerm::Delete(v) => Debug::fmt(v, f),
+            ParagraphTerm::Code(v) => Debug::fmt(v, f),
         }
     }
 }

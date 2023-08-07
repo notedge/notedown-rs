@@ -14,17 +14,23 @@ pub struct ParagraphSpan {
 pub enum ParagraphTerm {
     /// Normal ast with white space
     Text(Box<TextPlainNode>),
-    WhiteSpace(Box<WhitespaceSpan>),
+    WhiteSpace(Box<TextSpaceNode>),
     /// `*italic*`
     Italic(Box<FontItalicSpan>),
     /// `**bold**`
     Bold(Box<FontBoldSpan>),
     /// `**bold italic**`
     BoldItalic(Box<FontBoldItalicSpan>),
+    /// `_underline_`
+    Underline(Box<FontUnderlineSpan>),
+    /// `__delete__`
+    Delete(Box<FontDeleteSpan>),
+    /// `` `code` ``
+    Code(Box<CodeInlineSpan>),
     NewLine(Box<NewlineSpan>),
     Comma(Box<CommaNode>),
     Period(Box<PeriodNode>),
-    Escape(Box<TextEscapeNode>),
+    Escape(Box<TextEscapeSpan>),
 }
 
 impl ParagraphSpan {
@@ -34,7 +40,7 @@ impl ParagraphSpan {
             match term {
                 ParagraphTerm::Text(v) => terms.push(v.as_ref().clone().into()),
                 ParagraphTerm::WhiteSpace(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Space(v.clone()));
                 }
                 ParagraphTerm::Italic(v) => {
                     terms.push(v.as_hir().into());
@@ -42,9 +48,7 @@ impl ParagraphSpan {
                 ParagraphTerm::Bold(v) => {
                     terms.push(v.as_hir().into());
                 }
-                ParagraphTerm::BoldItalic(v) => {
-                    terms.push(v.as_hir().into());
-                }
+                ParagraphTerm::BoldItalic(v) => terms.push(v.as_hir().into()),
                 ParagraphTerm::NewLine(v) => {
                     terms.push(v.as_hir().into());
                 }
@@ -60,6 +64,9 @@ impl ParagraphSpan {
                     todo!()
                     // terms.push(v.as_hir().into());
                 }
+                ParagraphTerm::Underline(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::Delete(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::Code(v) => terms.push(v.as_hir().into()),
             }
         }
         ParagraphNode { terms, span: self.span.clone() }

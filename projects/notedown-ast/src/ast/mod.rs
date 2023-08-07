@@ -1,18 +1,22 @@
 mod code;
 mod display;
+mod escaped;
 mod paragraph;
-pub mod style;
+mod style;
 mod title;
+mod whitespace;
 
 pub use self::{
     code::CodeInlineSpan,
+    escaped::{EscapedCommand, TextEscapeSpan},
     paragraph::{ParagraphSpan, ParagraphTerm},
     style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
     title::HeadingSpan,
+    whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, ParagraphBreakSpan, TextSpaceNode, VSpaceNode},
 };
 use crate::{
-    hir::{HeadingLevel, HeadingNode, NotedownHIR, NotedownNode, ParagraphNode, TextPlainNode, TextSpaceNode, TextStyleNode},
-    CommaNode, NewlineSpan, PeriodNode, WhitespaceSpan,
+    hir::{CodeNode, HeadingLevel, HeadingNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode},
+    CommaNode, PeriodNode,
 };
 use deriver::From;
 use notedown_error::Url;
@@ -34,7 +38,7 @@ pub struct NotedownAST {
 pub enum NotedownTerm {
     Heading(Box<HeadingSpan>),
     Paragraph(Box<ParagraphSpan>),
-    SpaceBreak(Box<TextSpaceNode>),
+    SpaceBreak(Box<ParagraphBreakSpan>),
 }
 
 impl NotedownAST {
@@ -48,19 +52,5 @@ impl NotedownAST {
             }
         }
         NotedownHIR { node: terms, url: self.path.clone() }
-    }
-}
-
-/// `\.`
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct TextEscapeNode {
-    pub escape: char,
-    pub span: Range<u32>,
-}
-
-impl TextPlainNode {
-    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
-        Self { text: body.to_string(), span }
     }
 }

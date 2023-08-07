@@ -2,19 +2,27 @@ mod style;
 
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    ast::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan, HeadingSpan, NotedownTerm, ParagraphSpan, ParagraphTerm},
-    hir::{TextPlainNode, TextSpaceNode},
-    CommaNode, NewlineSpan, PeriodNode, TextEscapeNode, WhitespaceSpan,
+    ast::{
+        CodeInlineSpan, FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan, HeadingSpan, NewlineSpan,
+        NotedownTerm, ParagraphBreakSpan, ParagraphSpan, ParagraphTerm, TextEscapeSpan, TextSpaceNode,
+    },
+    hir::TextPlainNode,
+    CommaNode, PeriodNode,
 };
 use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
 
 impl NoteParser for NotedownTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        input.begin_choice().choose_from(TextSpaceNode::parse).choose_from(HeadingSpan::parse).choose_from(ParagraphSpan::parse).end_choice()
+        input
+            .begin_choice()
+            .choose_from(ParagraphBreakSpan::parse)
+            .choose_from(HeadingSpan::parse)
+            .choose_from(ParagraphSpan::parse)
+            .end_choice()
     }
 }
 
-impl NoteParser for TextEscapeNode {
+impl NoteParser for TextEscapeSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = input.match_char('\\')?;
         let (state, any) = state.match_char_any()?;
@@ -32,7 +40,7 @@ impl NoteParser for ParagraphSpan {
     }
 }
 
-impl NoteParser for TextSpaceNode {
+impl NoteParser for ParagraphBreakSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = paragraph_break(input)?;
         state.finish(Self { span: get_span(state, state) })
@@ -41,16 +49,19 @@ impl NoteParser for TextSpaceNode {
 
 impl NoteParser for ParagraphTerm {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, _) = input.match_negative(TextSpaceNode::parse, "PARAGRAPH_BREAK")?;
+        let (state, _) = input.match_negative(ParagraphBreakSpan::parse, "PARAGRAPH_BREAK")?;
         state
             .begin_choice()
+            .choose_from(CodeInlineSpan::parse)
             .choose_from(FontBoldItalicSpan::parse)
             .choose_from(FontBoldSpan::parse)
             .choose_from(FontItalicSpan::parse)
+            .choose_from(FontDeleteSpan::parse)
+            .choose_from(FontUnderlineSpan::parse)
             .choose_from(TextPlainNode::parse)
             .choose_from(CommaNode::parse)
             .choose_from(PeriodNode::parse)
-            .choose_from(WhitespaceSpan::parse)
+            .choose_from(TextSpaceNode::parse)
             .choose_from(NewlineSpan::parse)
             .end_choice()
     }
@@ -73,7 +84,7 @@ impl NoteParser for PeriodNode {
 impl NoteParser for HeadingSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, mark) = input.match_str_if(|c| c == '=', "TITLE_MARK")?;
-        let (state, _) = WhitespaceSpan::parse(state)?;
+        let (state, _) = TextSpaceNode::parse(state)?;
         let (state, text) = ParagraphSpan::parse(state)?;
         state.finish(Self { level: mark.len(), text, span: get_span(input, state) })
     }

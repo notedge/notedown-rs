@@ -52,6 +52,10 @@ impl From<()> for NoteError {
 }
 
 impl NoteError {
+    pub fn syntax_error<T: ToString>(message: T, range: Range<usize>) -> Self {
+        Self { kind: Box::new(NoteErrorKind::Syntax { message: message.to_string(), range, file: None }) }
+    }
+
     pub fn custom<T: ToString>(message: T) -> Self {
         Self { kind: Box::new(NoteErrorKind::Custom { message: message.to_string() }) }
     }

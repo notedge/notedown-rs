@@ -3,7 +3,7 @@ use super::*;
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum HeadingLevel {
-    Part,
+    BookPart,
     Chapter,
     Section,
     Article,
@@ -12,7 +12,6 @@ pub enum HeadingLevel {
     Header3,
     Header4,
     Header5,
-    Header6,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -32,8 +31,7 @@ impl From<usize> for HeadingLevel {
             2 => Self::Header2,
             3 => Self::Header3,
             4 => Self::Header4,
-            5 => Self::Header5,
-            _ => Self::Header6,
+            _ => Self::Header5,
         }
     }
 }

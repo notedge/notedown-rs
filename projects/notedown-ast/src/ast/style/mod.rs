@@ -42,18 +42,70 @@ pub struct FontDeleteSpan {
 
 impl FontItalicSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode { italic: true, bold: false, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
+        TextStyleNode {
+            italic: true,
+            bold: false,
+            underline: false,
+            delete: false,
+            text: self.text.as_hir(),
+            span: self.span.clone(),
+            color: None,
+        }
     }
 }
 
 impl FontBoldSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode { italic: false, bold: true, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
+        TextStyleNode {
+            italic: false,
+            bold: true,
+            underline: false,
+            delete: false,
+            text: self.text.as_hir(),
+            span: self.span.clone(),
+            color: None,
+        }
     }
 }
 
 impl FontBoldItalicSpan {
     pub fn as_hir(&self) -> TextStyleNode {
-        TextStyleNode { italic: true, bold: true, underline: false, text: self.text.as_hir(), span: self.span.clone(), color: None }
+        TextStyleNode {
+            italic: true,
+            bold: true,
+            underline: false,
+            delete: false,
+            text: self.text.as_hir(),
+            span: self.span.clone(),
+            color: None,
+        }
+    }
+}
+
+impl FontUnderlineSpan {
+    pub fn as_hir(&self) -> TextStyleNode {
+        TextStyleNode {
+            italic: false,
+            bold: false,
+            underline: true,
+            delete: false,
+            text: self.text.as_hir(),
+            span: self.span.clone(),
+            color: None,
+        }
+    }
+}
+
+impl FontDeleteSpan {
+    pub fn as_hir(&self) -> TextStyleNode {
+        TextStyleNode {
+            italic: false,
+            bold: false,
+            underline: false,
+            delete: true,
+            text: self.text.as_hir(),
+            span: self.span.clone(),
+            color: None,
+        }
     }
 }

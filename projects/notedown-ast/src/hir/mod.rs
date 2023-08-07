@@ -1,3 +1,4 @@
+mod code;
 mod heading;
 mod paragraph;
 
@@ -6,8 +7,9 @@ use notedown_error::Url;
 use std::ops::Range;
 
 pub use self::{
+    code::CodeNode,
     heading::{HeadingLevel, HeadingNode},
-    paragraph::{ParagraphKind, ParagraphNode, TextPlainNode, TextSpaceNode, TextStyleNode},
+    paragraph::{ParagraphKind, ParagraphNode, TextPlainNode, TextStyleNode},
 };
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash, From)]

@@ -8,7 +8,7 @@ impl Debug for NoteError {
 
 impl Display for NoteError {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        Debug::fmt(&self.kind, f)
+        Display::fmt(&self.kind, f)
     }
 }
 
