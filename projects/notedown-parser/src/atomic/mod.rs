@@ -5,11 +5,12 @@ mod text;
 
 use crate::{helpers::get_span, traits::NoteParser};
 use notedown_ast::{
-    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode, ParagraphNode, ParagraphTerm,
-    TextLiteralNode, WhitespaceNode,
+    CommandNode, IdentifierNode, IgnoreNode, LigatureNode, NewlineNode, NumberLiteralNode, NumberValueNode,
+    WhitespaceNode,
 };
 use notedown_error::{ParseResult, ParseState, Regex, StopBecause};
 use std::sync::LazyLock;
+use notedown_ast::hir::TextPlainNode;
 
 impl NoteParser for CommandNode {
     fn parse(input: ParseState) -> ParseResult<Self> {

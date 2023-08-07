@@ -19,7 +19,12 @@ pub use crate::{
     },
     ast::{
         style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
-        NotedownAST, NotedownTerm, TextEscapeNode, TextLiteralSpan,
+        NotedownAST, NotedownTerm, TextEscapeNode,
     },
-    traits::{NoteGenerator, NoteOptimizer, html::HtmlBuffer},
+    traits::{NoteGenerator, NoteOptimizer},
 };
+
+#[cfg(feature = "html-ast")]
+pub use crate::traits::html::HtmlBuilder;
+#[cfg(feature = "html-ast")]
+pub use html_ast::HtmlElement;

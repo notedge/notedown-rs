@@ -1,29 +1,29 @@
-use notedown_ast::{FontBoldItalicNode, FontBoldNode, FontItalicNode};
+use notedown_ast::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan};
 use super::*;
 
 
-impl NoteParser for FontBoldItalicNode {
+impl NoteParser for FontBoldItalicSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = input.match_str("***")?;
-        let (state, text) = ParagraphNode::parse(state)?;
+        let (state, text) = ParagraphSpan::parse(state)?;
         let (state, _) = state.match_str("***")?;
         state.finish(Self { text, span: get_span(input, state) })
     }
 }
 
-impl NoteParser for FontBoldNode {
+impl NoteParser for FontBoldSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = input.match_str("**")?;
-        let (state, text) = ParagraphNode::parse(state)?;
+        let (state, text) = ParagraphSpan::parse(state)?;
         let (state, _) = state.match_str("**")?;
         state.finish(Self { text, span: get_span(input, state) })
     }
 }
 
-impl NoteParser for FontItalicNode {
+impl NoteParser for FontItalicSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
         let (state, _) = input.match_str("*")?;
-        let (state, text) = ParagraphNode::parse(state)?;
+        let (state, text) = ParagraphSpan::parse(state)?;
         let (state, _) = state.match_str("*")?;
         state.finish(Self { text, span: get_span(input, state) })
     }

@@ -3,7 +3,7 @@ mod paragraph;
 pub mod style;
 pub mod title;
 
-use crate::hir::ParagraphNode;
+use crate::hir::{ParagraphNode, TextPlainNode};
 use crate::{FontBoldItalicSpan, FontBoldSpan, FontItalicSpan};
 use crate::{ast::title::HeadingSpan, CommaNode, NewlineNode,  ParagraphSpaceNode,   PeriodNode, WhitespaceNode};
 use deriver::From;
@@ -15,12 +15,7 @@ use std::{
 use crate::hir::{NotedownHIR, NotedownNode};
 pub use self::paragraph::{ParagraphTerm, ParagraphSpan};
 
-#[derive(Clone, Debug, Eq, PartialEq, Hash)]
-#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
-pub struct TextLiteralSpan {
-    pub text: String,
-    pub span: Range<u32>,
-}
+
 
 /// The root node of all notedown terms
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
@@ -68,7 +63,7 @@ pub struct TextEscapeNode {
     pub span: Range<u32>,
 }
 
-impl TextLiteralSpan {
+impl TextPlainNode {
     pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
         Self { text: body.to_string(), span }
     }

@@ -1,3 +1,4 @@
+#[cfg(feature = "html-ast")]
 pub mod html;
 
 use crate::NotedownAST;

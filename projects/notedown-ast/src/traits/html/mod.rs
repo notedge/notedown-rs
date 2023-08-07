@@ -1,21 +1,32 @@
+use std::fmt::{Display, Formatter, Write};
 use std::mem::take;
+use html_ast::{HtmlElement};
 use notedown_error::{NoteError, Validation};
-use crate::hir::{HeadingNode, NotedownHIR, NotedownNode, ParagraphNode};
+use crate::ast::title::HeadingLevel;
+use crate::hir::{HeadingNode, NotedownHIR, NotedownNode, ParagraphKind, ParagraphNode, TextPlainNode, TextStyleNode};
 use crate::NoteGenerator;
 
-#[derive(Default)]
-pub struct HtmlBuffer {
-    buffer: String,
+
+pub struct HtmlBuilder {
+    root: String,
 }
 
-impl NoteGenerator for HtmlBuffer {
-    type Output = String;
+impl Default for HtmlBuilder {
+    fn default() -> Self {
+        Self {
+            root: "article".to_string(),
+        }
+    }
+}
+
+impl NoteGenerator for HtmlBuilder {
+    type Output = HtmlElement;
 
     fn generate(&mut self, info: &NotedownHIR) -> Validation<Self::Output> {
         let mut errors = vec![];
-        match info.write_html(self, &mut errors) {
-            Ok(_) => {
-                Validation::Success { value: take(&mut self.buffer), diagnostics: errors }
+        match info.as_html(self, &mut errors) {
+            Ok(out) => {
+                Validation::Success { value: out, diagnostics: errors }
             }
             Err(e) => Validation::Failure {
                 fatal: e,
@@ -25,41 +36,108 @@ impl NoteGenerator for HtmlBuffer {
     }
 }
 
-trait WriteHtml {
-    fn write_html(&self, buffer: &mut HtmlBuffer, errors: &mut Vec<NoteError>) -> Result<(), NoteError>;
+trait AsHtml {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError>;
 }
 
 
-impl WriteHtml for NotedownHIR {
-    fn write_html(&self, buffer: &mut HtmlBuffer, errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
+impl AsHtml for NotedownHIR {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = HtmlElement::new(&config.root);
         for node in &self.node {
-            node.write_html(buffer, errors)?;
+            out.push_child(node.as_html(config, errors)?)
         }
-        Ok(())
+        Ok(out)
     }
 }
 
-impl WriteHtml for NotedownNode {
-    fn write_html(&self, buffer: &mut HtmlBuffer, errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
+impl AsHtml for NotedownNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
         match self {
             NotedownNode::Heading(v) => {
-                v.write_html(buffer, errors)
+                v.as_html(config, errors)
             }
             NotedownNode::Paragraph(v) => {
-                v.write_html(buffer, errors)
+                v.as_html(config, errors)
             }
         }
     }
 }
 
-impl WriteHtml for HeadingNode {
-    fn write_html(&self, buffer: &mut HtmlBuffer, errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
-        todo!()
+impl AsHtml for HeadingNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = HtmlElement::default();
+        match self.level {
+            HeadingLevel::Part => {}
+            HeadingLevel::Chapter => {}
+            HeadingLevel::Section => {}
+            HeadingLevel::Article => {}
+            HeadingLevel::Header1 => {
+                out.set_tag("h1")
+            }
+            HeadingLevel::Header2 => {  out.set_tag("h2")  }
+            HeadingLevel::Header3 => {  out.set_tag("h3")}
+            HeadingLevel::Header4 => {  out.set_tag("h4")  }
+            HeadingLevel::Header5 => { out.set_tag("h5")  }
+            HeadingLevel::Header6 => {  out.set_tag("h6")  }
+        }
+        out.set_id(&self.id);
+        for term in &self.terms.terms {
+            match term {
+                ParagraphKind::Plain(v) => {
+                    out.push_child(v.text.clone())
+                }
+                ParagraphKind::Style(v) => {
+                    out.push_child(v.as_html(config, errors)?)
+                }
+            }
+
+        }
+
+        Ok(out)
     }
 }
 
-impl WriteHtml for ParagraphNode {
-    fn write_html(&self, buffer: &mut HtmlBuffer, errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
-        todo!()
+impl AsHtml for ParagraphNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = HtmlElement::new("p");
+        for term in &self.terms {
+            match term {
+                ParagraphKind::Plain(v) => {
+                    out.push_child(v.text.clone())
+                }
+                ParagraphKind::Style(v) => {
+                    out.push_child(v.as_html(config, errors)?)
+                }
+            }
+
+        }
+        Ok(out)
+    }
+}
+
+impl AsHtml for TextStyleNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = if self.italic {
+           HtmlElement::new("i")
+        } else if self.bold {
+            HtmlElement::new("b")
+        } else if self.underline {
+            HtmlElement::new("u")
+        } else {
+            HtmlElement::new("span")
+        };
+        for term in &self.text.terms {
+            match term {
+                ParagraphKind::Plain(v) => {
+                    out.push_child(v.text.clone())
+                }
+                ParagraphKind::Style(v) => {
+                    out.push_child(v.as_html(config, errors)?)
+                }
+            }
+
+        }
+        Ok(out)
     }
 }
