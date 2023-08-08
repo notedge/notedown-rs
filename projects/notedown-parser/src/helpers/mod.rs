@@ -31,3 +31,13 @@ pub fn get_span(input: ParseState, output: ParseState) -> Range<u32> {
     let range = output.away_from(input);
     (range.start as u32)..(range.end as u32)
 }
+
+/// Parse the rest of the line, note this does not catch the newline,
+#[inline]
+pub fn rest_of_line(input: ParseState) -> ParseResult<&str> {
+    let offset = match input.residual.find(&['\r', '\n']) {
+        Some(s) => s,
+        None => input.residual.len(),
+    };
+    input.advance_view(offset)
+}

@@ -1,4 +1,5 @@
 mod code;
+mod command;
 mod display;
 mod escaped;
 mod paragraph;
@@ -8,6 +9,7 @@ mod whitespace;
 
 pub use self::{
     code::CodeInlineSpan,
+    command::CommandLineSpan,
     escaped::EscapedCommand,
     paragraph::{ParagraphSpan, ParagraphTerm},
     style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
@@ -15,7 +17,7 @@ pub use self::{
     whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, ParagraphBreakSpan, TextSpaceNode, VSpaceNode},
 };
 use crate::{
-    hir::{CodeNode, HeadingLevel, HeadingNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode},
+    hir::{CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode},
     CommaNode, PeriodNode,
 };
 use deriver::From;

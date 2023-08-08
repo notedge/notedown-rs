@@ -1,6 +1,7 @@
 #![feature(lazy_cell)]
 
 mod atomic;
+mod commands;
 mod helpers;
 mod text;
 mod traits;

@@ -1,12 +1,13 @@
+mod link;
 mod style;
 
-use crate::{helpers::get_span, traits::NoteParser};
+use crate::{commands::parse_command, helpers::get_span, traits::NoteParser};
 use notedown_ast::{
     ast::{
         CodeInlineSpan, FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan, HeadingSpan, NewlineSpan,
         NotedownTerm, ParagraphBreakSpan, ParagraphSpan, ParagraphTerm, TextSpaceNode,
     },
-    hir::{TextEscapeNode, TextPlainNode},
+    hir::{IdentifierNode, TextEscapeNode, TextPlainNode, UriNode},
     CommaNode, PeriodNode,
 };
 use notedown_error::{helpers::paragraph_break, ParseResult, ParseState, StopBecause};
@@ -58,6 +59,7 @@ impl NoteParser for ParagraphTerm {
             .choose_from(FontItalicSpan::parse)
             .choose_from(FontDeleteSpan::parse)
             .choose_from(FontUnderlineSpan::parse)
+            .choose(parse_command)
             .choose_from(TextEscapeNode::parse)
             .choose_from(TextPlainNode::parse)
             .choose_from(CommaNode::parse)

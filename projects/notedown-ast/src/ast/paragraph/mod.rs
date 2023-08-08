@@ -1,7 +1,8 @@
 use super::*;
-use crate::hir::{ParagraphKind, TextEscapeNode};
+use crate::hir::{ParagraphKind, TextEscapeNode, UriNode};
 mod display;
 
+/// Sequence of paragraph ast
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ParagraphSpan {
@@ -9,12 +10,12 @@ pub struct ParagraphSpan {
     pub span: Range<u32>,
 }
 
+/// Item of paragraph ast
 #[derive(Clone, Eq, PartialEq, Hash, From)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum ParagraphTerm {
     /// Normal ast with white space
     Text(Box<TextPlainNode>),
-    WhiteSpace(Box<TextSpaceNode>),
     /// `*italic*`
     Italic(Box<FontItalicSpan>),
     /// `**bold**`
@@ -27,9 +28,19 @@ pub enum ParagraphTerm {
     Delete(Box<FontDeleteSpan>),
     /// `` `code` ``
     Code(Box<CodeInlineSpan>),
+    /// `https://example.com`
+    Uri(Box<UriNode>),
+    /// `\cmd: rest of the line`
+    CommandLine(Box<CommandLineSpan>),
+    /// ` `
+    WhiteSpace(Box<TextSpaceNode>),
+    /// `\n`
     NewLine(Box<NewlineSpan>),
+    /// `,`
     Comma(Box<CommaNode>),
+    /// `.`
     Period(Box<PeriodNode>),
+    /// `\\`
     Escape(Box<TextEscapeNode>),
 }
 
@@ -62,7 +73,8 @@ impl ParagraphSpan {
                 }
                 ParagraphTerm::Escape(v) => {
                     match v.escape {
-                        '\r' | '\n' => continue,
+                        // skip \s, \r, \n
+                        c if c.is_ascii_whitespace() => continue,
                         'n' => terms.push(ParagraphKind::text('\n', v.span.clone())),
                         't' => terms.push(ParagraphKind::text('\t', v.span.clone())),
                         _ => terms.push(ParagraphKind::text(v.escape, v.span.clone())),
@@ -72,6 +84,10 @@ impl ParagraphSpan {
                 ParagraphTerm::Underline(v) => terms.push(v.as_hir().into()),
                 ParagraphTerm::Delete(v) => terms.push(v.as_hir().into()),
                 ParagraphTerm::Code(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::CommandLine(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::Uri(v) => {
+                    terms.push(ParagraphKind::Uri(v.clone()));
+                }
             }
         }
         ParagraphNode { terms, span: self.span.clone() }

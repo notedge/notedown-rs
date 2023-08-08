@@ -14,7 +14,7 @@ pub use crate::{
     ast::{NotedownAST, NotedownTerm},
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
-        identifier::{AlignNode, IdentifierNode, LigatureNode, NumberLiteralNode, NumberValueNode},
+        identifier::{AlignNode, LigatureNode, NumberLiteralNode, NumberValueNode},
         punctuation::{CommaNode, PeriodNode},
     },
     traits::{NoteGenerator, NoteOptimizer},

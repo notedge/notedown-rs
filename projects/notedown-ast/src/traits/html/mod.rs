@@ -1,6 +1,9 @@
 use crate::{
     ast::ParagraphTerm,
-    hir::{CodeNode, HeadingLevel, HeadingNode, NotedownHIR, NotedownNode, ParagraphKind, ParagraphNode, TextPlainNode, TextStyleNode},
+    hir::{
+        CodeNode, CommandNode, HeadingLevel, HeadingNode, NotedownHIR, NotedownKind, ParagraphKind, ParagraphNode, TextPlainNode,
+        TextStyleNode, UriNode,
+    },
     NoteGenerator,
 };
 use html_ast::HtmlElement;
@@ -55,17 +58,17 @@ impl AsHtml for NotedownHIR {
     fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
         let mut out = HtmlElement::new(&config.root);
         for node in &self.node {
-            out.push_child(node.as_html(config, errors)?)
+            out.add_child(node.as_html(config, errors)?)
         }
         Ok(out)
     }
 }
 
-impl AsHtml for NotedownNode {
+impl AsHtml for NotedownKind {
     fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
         match self {
-            NotedownNode::Heading(v) => v.as_html(config, errors),
-            NotedownNode::Paragraph(v) => v.as_html(config, errors),
+            NotedownKind::Heading(v) => v.as_html(config, errors),
+            NotedownKind::Paragraph(v) => v.as_html(config, errors),
         }
     }
 }
@@ -107,10 +110,12 @@ impl HtmlBuilder {
     fn push_terms(&self, out: &mut HtmlElement, terms: &[ParagraphKind], errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
         for term in terms {
             match term {
-                ParagraphKind::Plain(v) => out.push_child(v.text.clone()),
-                ParagraphKind::Style(v) => out.push_child(v.as_html(self, errors)?),
-                ParagraphKind::Space(_) => out.push_child(" "),
-                ParagraphKind::Code(v) => out.push_child(v.as_html(self, errors)?),
+                ParagraphKind::Plain(v) => out.add_child(v.text.clone()),
+                ParagraphKind::Style(v) => out.add_child(v.as_html(self, errors)?),
+                ParagraphKind::Space(_) => out.add_child(" "),
+                ParagraphKind::Code(v) => out.add_child(v.as_html(self, errors)?),
+                ParagraphKind::Command(v) => out.add_child(v.as_html(self, errors)?),
+                ParagraphKind::Uri(v) => out.add_child(v.as_html(self, errors)?),
             }
         }
         Ok(())
@@ -150,7 +155,36 @@ impl AsHtml for TextStyleNode {
 impl AsHtml for CodeNode {
     fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
         let mut out = HtmlElement::new("code");
-        out.push_child(self.code.clone());
+        out.add_child(self.code.clone());
         Ok(out)
+    }
+}
+
+impl AsHtml for CommandNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = HtmlElement::new(&self.command);
+        for arg in &self.arguments {
+            todo!()
+        }
+        out.add_child(self.text.clone());
+        Ok(out)
+    }
+}
+
+impl AsHtml for UriNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        match self.scheme.name.as_ref() {
+            "http" | "https" => {
+                let mut out = HtmlElement::new("a");
+                out.add_attribute("href", &self.body.text);
+                out.add_child(self.body.text.clone());
+                Ok(out)
+            }
+            _ => {
+                let mut out = HtmlElement::new("span");
+                out.add_child(self.body.text.clone());
+                Ok(out)
+            }
+        }
     }
 }

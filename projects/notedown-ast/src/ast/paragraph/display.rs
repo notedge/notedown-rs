@@ -15,6 +15,8 @@ impl Debug for ParagraphTerm {
             ParagraphTerm::Underline(v) => Debug::fmt(v, f),
             ParagraphTerm::Delete(v) => Debug::fmt(v, f),
             ParagraphTerm::Code(v) => Debug::fmt(v, f),
+            ParagraphTerm::CommandLine(v) => Debug::fmt(v, f),
+            ParagraphTerm::Uri(v) => Debug::fmt(v, f),
         }
     }
 }

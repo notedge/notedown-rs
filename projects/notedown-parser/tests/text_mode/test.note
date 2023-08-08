@@ -19,7 +19,7 @@ line
 
 = Test Styles
 
-test *italic*K
+test *italic*
 
 test **bold**
 
@@ -35,3 +35,18 @@ test ```code``3```
 
 test ````code```4````
 
+text \sub: sub_script
+
+text \sup: sup_script
+
+= Test Item Lists
+
+= Test Quotes
+
+\quote { }
+
+
+\js
+```
+
+```
