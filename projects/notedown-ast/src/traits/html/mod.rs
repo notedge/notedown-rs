@@ -1,7 +1,7 @@
 use crate::{
     ast::ParagraphTerm,
     hir::{
-        CodeNode, CommandNode, HeadingLevel, HeadingNode, NotedownHIR, NotedownKind, ParagraphKind, ParagraphNode, TextPlainNode,
+        BadNode, CodeNode, CommandNode, HeadingLevel, HeadingNode, NotedownHIR, NotedownKind, ParagraphKind, ParagraphNode, TextPlainNode,
         TextStyleNode, UriNode,
     },
     NoteGenerator,
@@ -69,6 +69,7 @@ impl AsHtml for NotedownKind {
         match self {
             NotedownKind::Heading(v) => v.as_html(config, errors),
             NotedownKind::Paragraph(v) => v.as_html(config, errors),
+            NotedownKind::SyntaxError(v) => v.as_html(config, errors),
         }
     }
 }
@@ -79,19 +80,19 @@ impl AsHtml for HeadingNode {
         match self.level {
             HeadingLevel::BookPart => {
                 out.set_tag("h1");
-                out.push_class("note-book-part")
+                out.add_class("note-book-part")
             }
             HeadingLevel::Chapter => {
                 out.set_tag("h1");
-                out.push_class("note-chapter")
+                out.add_class("note-chapter")
             }
             HeadingLevel::Section => {
                 out.set_tag("h1");
-                out.push_class("note-section")
+                out.add_class("note-section")
             }
             HeadingLevel::Article => {
                 out.set_tag("h1");
-                out.push_class("note-article")
+                out.add_class("note-article")
             }
             HeadingLevel::Header1 => out.set_tag("h2"),
             HeadingLevel::Header2 => out.set_tag("h3"),
@@ -110,7 +111,7 @@ impl HtmlBuilder {
     fn push_terms(&self, out: &mut HtmlElement, terms: &[ParagraphKind], errors: &mut Vec<NoteError>) -> Result<(), NoteError> {
         for term in terms {
             match term {
-                ParagraphKind::Plain(v) => out.add_child(v.text.clone()),
+                ParagraphKind::Plain(v) => out.add_text(&v.text),
                 ParagraphKind::Style(v) => out.add_child(v.as_html(self, errors)?),
                 ParagraphKind::Space(_) => out.add_child(" "),
                 ParagraphKind::Code(v) => out.add_child(v.as_html(self, errors)?),
@@ -174,17 +175,30 @@ impl AsHtml for CommandNode {
 impl AsHtml for UriNode {
     fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
         match self.scheme.name.as_ref() {
-            "http" | "https" => {
+            s @ ("http" | "https") => {
                 let mut out = HtmlElement::new("a");
-                out.add_attribute("href", &self.body.text);
+                out.add_attribute("href", &format!("{}://{}", s, self.body.text));
                 out.add_child(self.body.text.clone());
                 Ok(out)
             }
+            // not all browsers support this
+            // <https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler#browser_compatibility>
             _ => {
-                let mut out = HtmlElement::new("span");
+                let mut out = HtmlElement::new("a");
+                out.add_attribute("scheme", &self.scheme.name);
+                out.add_attribute("href", &format!("{}:{}", self.scheme.name, self.body.text));
                 out.add_child(self.body.text.clone());
                 Ok(out)
             }
         }
+    }
+}
+
+impl AsHtml for BadNode {
+    fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
+        let mut out = HtmlElement::new("span");
+        out.add_class("note-error");
+        out.add_child(self.text.clone());
+        Ok(out)
     }
 }

@@ -4,6 +4,13 @@ use notedown_error::helpers::CommentBlock;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
+pub struct BadNode {
+    pub text: String,
+    pub span: Range<u32>,
+}
+
+#[derive(Clone, Debug, Eq, PartialEq, Hash)]
+#[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct ParagraphNode {
     pub terms: Vec<ParagraphKind>,
     pub span: Range<u32>,

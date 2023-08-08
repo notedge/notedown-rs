@@ -1,9 +1,8 @@
 pub mod command;
 pub mod identifier;
 pub mod number;
-pub mod punctuation;
 
-use crate::{hir::IdentifierNode, CommaNode, PeriodNode};
+use crate::hir::IdentifierNode;
 use deriver::From;
 use std::{
     fmt::{Debug, Display, Formatter, Write},

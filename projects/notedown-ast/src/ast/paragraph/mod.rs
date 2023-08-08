@@ -64,12 +64,10 @@ impl ParagraphSpan {
                     terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Comma(v) => {
-                    todo!()
-                    // terms.push(v.as_hir().into());
+                    terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Period(v) => {
-                    todo!()
-                    // terms.push(v.as_hir().into());
+                    terms.push(v.as_hir().into());
                 }
                 ParagraphTerm::Escape(v) => {
                     match v.escape {

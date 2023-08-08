@@ -17,6 +17,8 @@
 a \, b \. c \: d \; e \! f \? g \- h \_ i \* j \# k \+ l \( m \) n \[ o \] p \{ q \} r \< s \> t \" u \' v \` w \~ x \^ y \\ z\
 line
 
+<><>&&""''
+
 = Test Styles
 
 test *italic*
@@ -38,6 +40,22 @@ test ````code```4````
 text \sub: sub_script
 
 text \sup: sup_script
+
+= Test Uri
+
+https://john.doe@www.example.com:123/forum/questions/?tag=networking&order=newest#top
+
+ldap://[2001:db8::7]/c=GB?objectClass?one
+
+mailto:John.Doe@example.com
+
+news:comp.infosystems.www.servers.unix
+
+tel:+1-816-555-1212
+
+telnet://192.0.2.16:80/
+
+urn:oasis:names:specification:docbook:dtd:xml:4.1.2
 
 = Test Item Lists
 

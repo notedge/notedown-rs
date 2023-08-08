@@ -15,7 +15,7 @@ pub use self::{
     command::CommandNode,
     heading::{HeadingLevel, HeadingNode},
     link::UriNode,
-    paragraph::{ParagraphKind, ParagraphNode},
+    paragraph::{BadNode, ParagraphKind, ParagraphNode},
     programming::IdentifierNode,
     style::{TextEscapeNode, TextPlainNode, TextStyleNode},
 };
@@ -25,6 +25,7 @@ pub use self::{
 pub enum NotedownKind {
     Heading(Box<HeadingNode>),
     Paragraph(Box<ParagraphNode>),
+    SyntaxError(Box<BadNode>),
 }
 
 ///

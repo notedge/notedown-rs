@@ -15,7 +15,6 @@ pub use crate::{
     atomics::{
         command::{CommandArguments, CommandBody, CommandNode},
         identifier::{AlignNode, LigatureNode, NumberLiteralNode, NumberValueNode},
-        punctuation::{CommaNode, PeriodNode},
     },
     traits::{NoteGenerator, NoteOptimizer},
 };

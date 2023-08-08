@@ -36,13 +36,11 @@ pub fn parse_file<P: AsRef<Path>>(path: P) -> Result<NotedownAST, NoteError> {
     let text = std::fs::read_to_string(path)?;
     match NotedownAST::parse(ParseState::new(&text)) {
         ParseResult::Pending(e, mut r) => {
-            if e.is_empty() {
-                r.path = Some(url);
-                Ok(r)
+            if !e.is_empty() {
+                r.add_error(e.residual)
             }
-            else {
-                Err(NoteError::syntax_error(format!("{:?}", e.residual), e.start_offset..e.end_offset()))?
-            }
+            r.path = Some(url);
+            Ok(r)
         }
         ParseResult::Stop(e) => Err(NoteError::from(e)),
     }

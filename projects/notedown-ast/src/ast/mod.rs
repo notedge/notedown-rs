@@ -3,6 +3,7 @@ mod command;
 mod display;
 mod escaped;
 mod paragraph;
+mod punctuation;
 mod style;
 mod title;
 mod whitespace;
@@ -12,14 +13,12 @@ pub use self::{
     command::CommandLineSpan,
     escaped::EscapedCommand,
     paragraph::{ParagraphSpan, ParagraphTerm},
+    punctuation::{CommaNode, PeriodNode},
     style::{FontBoldItalicSpan, FontBoldSpan, FontDeleteSpan, FontItalicSpan, FontUnderlineSpan},
     title::HeadingSpan,
     whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, ParagraphBreakSpan, TextSpaceNode, VSpaceNode},
 };
-use crate::{
-    hir::{CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode},
-    CommaNode, PeriodNode,
-};
+use crate::hir::{CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode};
 use deriver::From;
 use notedown_error::Url;
 use std::{
@@ -44,6 +43,12 @@ pub enum NotedownTerm {
 }
 
 impl NotedownAST {
+    pub fn add_error<T: ToString>(&mut self, error: T) {
+        self.terms.push(NotedownTerm::Paragraph(Box::new(ParagraphSpan {
+            terms: vec![ParagraphTerm::Text(Box::new(TextPlainNode { text: error.to_string(), span: 0..0 }))],
+            span: 0..0,
+        })));
+    }
     pub fn as_hir(&self) -> NotedownHIR {
         let mut terms = Vec::with_capacity(self.terms.len());
         for term in &self.terms {
