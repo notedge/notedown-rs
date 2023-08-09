@@ -27,14 +27,16 @@ pub struct TextStyleNode {
     pub color: Option<(u8, u8, u8, u8)>,
 }
 
-impl TextEscapeNode {
-    pub fn new(escape: char, span: Range<u32>) -> Self {
-        Self { escape, span }
+impl TextPlainNode {
+    /// Create a new plain text node.
+    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
+        Self { text: body.to_string(), span }
     }
 }
 
-impl TextPlainNode {
-    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
-        Self { text: body.to_string(), span }
+impl TextEscapeNode {
+    /// Create a new escape node.
+    pub fn new(escape: char, span: Range<u32>) -> Self {
+        Self { escape, span }
     }
 }

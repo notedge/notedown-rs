@@ -1,10 +1,7 @@
-use notedown_ast::{
-    ast::{HeadingSpan, ParagraphSpan},
-    HtmlBuilder, NoteGenerator,
-};
-use notedown_error::{NoteError, ParseState};
+use notedown_ast::{ast::ParagraphSpan, HtmlBuilder, NoteGenerator};
+use notedown_error::{NoteError, ParseState, Url};
 use notedown_parser::{parse_file, NoteParser};
-use std::{fs::File, io::Write, path::Path};
+use std::{fs::File, io::Write, path::Path, str::FromStr};
 
 #[test]
 fn test() {
@@ -15,7 +12,7 @@ fn test() {
 
 #[test]
 fn test_title() {
-    let id = HeadingSpan::parse(ParseState::new("== title"));
+    let id = Url::from_str("https:///node/ok");
     // println!("{}", id);
     println!("{:#?}", id);
 }

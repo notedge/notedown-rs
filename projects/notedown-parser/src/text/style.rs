@@ -30,18 +30,18 @@ impl NoteParser for FontItalicSpan {
 
 impl NoteParser for FontDeleteSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, _) = input.match_str("__")?;
+        let (state, _) = input.match_str("~~")?;
         let (state, text) = ParagraphSpan::parse(state)?;
-        let (state, _) = state.match_str("__")?;
+        let (state, _) = state.match_str("~~")?;
         state.finish(Self { text, span: get_span(input, state) })
     }
 }
 
 impl NoteParser for FontUnderlineSpan {
     fn parse(input: ParseState) -> ParseResult<Self> {
-        let (state, _) = input.match_str("_")?;
+        let (state, _) = input.match_str("~")?;
         let (state, text) = ParagraphSpan::parse(state)?;
-        let (state, _) = state.match_str("_")?;
+        let (state, _) = state.match_str("~")?;
         state.finish(Self { text, span: get_span(input, state) })
     }
 }

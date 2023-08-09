@@ -1,7 +1,5 @@
 use super::*;
 
-mod display;
-
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct HeadingSpan {

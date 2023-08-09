@@ -2,6 +2,7 @@ mod code;
 mod command;
 mod display;
 mod escaped;
+mod math;
 mod paragraph;
 mod punctuation;
 mod style;
@@ -18,7 +19,10 @@ pub use self::{
     title::HeadingSpan,
     whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, ParagraphBreakSpan, TextSpaceNode, VSpaceNode},
 };
-use crate::hir::{CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphNode, TextPlainNode, TextStyleNode};
+use crate::hir::{
+    CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphKind, ParagraphNode, TextEscapeNode, TextPlainNode,
+    TextStyleNode, UriNode,
+};
 use deriver::From;
 use notedown_error::Url;
 use std::{

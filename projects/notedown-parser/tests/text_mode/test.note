@@ -25,9 +25,9 @@ test *italic*
 
 test **bold**
 
-test _underline_
+test ~underline~
 
-test __delete__
+test ~~delete~~
 
 test `code1`
 

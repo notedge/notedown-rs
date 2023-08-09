@@ -15,20 +15,24 @@ use std::{
 
 /// generate html compatible with most browsers
 pub struct HtmlBuilder {
-    style: String,
-    root: &'static str,
+    /// The root node
+    pub root: &'static str,
+    /// The style
+    pub style: String,
+    /// Allow rendering of bare uri
+    pub allow_uri: bool,
 }
 
 impl Default for HtmlBuilder {
     fn default() -> Self {
-        Self { style: "".to_string(), root: "article" }
+        Self { style: "".to_string(), root: "article", allow_uri: true }
     }
 }
 
 impl HtmlBuilder {
     /// Use the given name as the root node
     pub fn new(root: &'static str) -> Self {
-        Self { style: "".to_string(), root }
+        Self { root, ..Default::default() }
     }
     /// Use the builtin style
     pub const DEFAULT_STYLE: &'static str = include_str!("style.css");
@@ -174,23 +178,19 @@ impl AsHtml for CommandNode {
 
 impl AsHtml for UriNode {
     fn as_html(&self, config: &HtmlBuilder, errors: &mut Vec<NoteError>) -> Result<HtmlElement, NoteError> {
-        match self.scheme.name.as_ref() {
-            s @ ("http" | "https") => {
-                let mut out = HtmlElement::new("a");
-                out.add_attribute("href", &format!("{}://{}", s, self.body.text));
-                out.add_child(self.body.text.clone());
-                Ok(out)
-            }
+        let html = if config.allow_uri {
             // not all browsers support this
             // <https://developer.mozilla.org/en-US/docs/Web/API/Navigator/registerProtocolHandler#browser_compatibility>
-            _ => {
-                let mut out = HtmlElement::new("a");
-                out.add_attribute("scheme", &self.scheme.name);
-                out.add_attribute("href", &format!("{}:{}", self.scheme.name, self.body.text));
-                out.add_child(self.body.text.clone());
-                Ok(out)
-            }
+            let mut out = HtmlElement::new("a");
+            out.add_attribute("scheme", &self.scheme.name);
+            out.add_attribute("href", &format!("{}:{}", self.scheme.name, self.body.text));
+            out.add_text(self.body.text.trim_matches('/'));
+            out
         }
+        else {
+            HtmlElement::new("span").with_text(format!("{}:{}", self.scheme.name, self.body.text))
+        };
+        Ok(html)
     }
 }
 

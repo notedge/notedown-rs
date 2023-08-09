@@ -1,6 +1,4 @@
 use super::*;
-use crate::hir::{ParagraphKind, TextEscapeNode, UriNode};
-mod display;
 
 /// Sequence of paragraph ast
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
