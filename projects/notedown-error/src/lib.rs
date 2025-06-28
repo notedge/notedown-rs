@@ -6,8 +6,3 @@ pub use url::Url;
 
 pub use errors::{NoteError, NoteErrorKind, Validation};
 
-pub use pex::{
-    helpers, ParseResult,
-    ParseResult::{Pending, Stop},
-    ParseState, Regex, StopBecause,
-};

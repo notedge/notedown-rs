@@ -1,6 +1,5 @@
 use super::*;
 use crate::ast::TextSpaceNode;
-use notedown_error::helpers::CommentBlock;
 
 #[derive(Clone, Debug, Eq, PartialEq, Hash)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
