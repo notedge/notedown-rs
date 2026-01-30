@@ -1,13 +1,13 @@
-mod code;
-mod command;
-mod display;
-mod escaped;
-mod math;
-mod paragraph;
-mod punctuation;
-mod style;
-mod title;
-mod whitespace;
+pub mod code;
+pub mod command;
+pub mod display;
+pub mod escaped;
+pub mod math;
+pub mod paragraph;
+pub mod punctuation;
+pub mod style;
+pub mod title;
+pub mod whitespace;
 
 pub use self::{
     code::CodeInlineSpan,
@@ -20,8 +20,9 @@ pub use self::{
     title::HeadingSpan,
     whitespace::{HSpaceNode, IgnoreNode, NewlineSpan, ParagraphBreakSpan, TextSpaceNode, VSpaceNode},
 };
+pub use crate::hir::TextPlainNode;
 use crate::hir::{
-    CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphKind, ParagraphNode, TextPlainNode, TextStyleNode,
+    CodeNode, CommandNode, HeadingLevel, HeadingNode, IdentifierNode, NotedownHIR, ParagraphKind, ParagraphNode, TextStyleNode,
     UriNode,
 };
 use deriver::From;
@@ -62,8 +63,14 @@ impl NotedownAST {
                 NotedownTerm::Heading(v) => terms.push(v.as_hir().into()),
                 NotedownTerm::Paragraph(v) => terms.push(v.as_hir().into()),
                 NotedownTerm::SpaceBreak(_) => continue,
-                NotedownTerm::MathBlock(_) => {
-                    todo!()
+                NotedownTerm::MathBlock(v) => {
+                    // Convert math block to paragraph with code
+                    let code_node = v.as_hir();
+                    let paragraph = ParagraphNode {
+                        terms: vec![ParagraphKind::Code(Box::new(code_node))],
+                        span: v.span.clone(),
+                    };
+                    terms.push(paragraph.into());
                 }
             }
         }

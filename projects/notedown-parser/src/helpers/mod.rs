@@ -1,8 +1,10 @@
 //! Helper functions and utilities for Vampire parser
 
+//! Helper functions and utilities for Vampire parser
+
+use arcstr::ArcStr;
 use notedown_error::NoteError;
-use nyar_error::{ArcStr, NyarError};
-use nyar_hir::helpers::{Location, Position};
+// use notedown_ast::ast::{Location, Position};
 
 /// Trait for nodes that can be parsed from input
 pub trait NotedownNode: Sized {
@@ -17,7 +19,8 @@ pub trait NotedownNode: Sized {
 #[derive(Clone, Debug)]
 pub struct ParseState {
     pub input: ArcStr,
-    pub position: Position,
+    // pub position: Position,
+    pub position: usize, // Temporary
     pub file: ArcStr,
     pub indent_stack: Vec<usize>,
 }
@@ -26,7 +29,7 @@ impl ParseState {
     pub fn new(input: String) -> Self {
         Self { 
             input: ArcStr::from(input), 
-            position: Position::default(), 
+            position: 0, // Temporary 
             file: ArcStr::from("<unknown>"),
             indent_stack: vec![0],
         }
@@ -35,14 +38,14 @@ impl ParseState {
     pub fn new_with_file(input: String, file: ArcStr) -> Self {
         Self { 
             input: ArcStr::from(input), 
-            position: Position::default(), 
+            position: 0, // Temporary 
             file,
             indent_stack: vec![0],
         }
     }
 
     pub fn rest(&self) -> &str {
-        unsafe { self.input.get_unchecked(self.position.offset as usize..) }
+        unsafe { self.input.get_unchecked(self.position as usize..) }
     }
 
     pub fn peek(&self) -> Option<char> {
@@ -59,7 +62,7 @@ impl ParseState {
     
     pub fn advance(&mut self) -> Option<char> {
         if let Some(ch) = self.peek() {
-            self.position.advance(ch);
+            self.position += ch.len_utf8();
             Some(ch)
         } else {
             None
@@ -67,24 +70,24 @@ impl ParseState {
     }
     
     pub fn advance_by(&mut self, text: &str) {
-        self.position.advance_by(text);
+        self.position += text.len();
     }
 
     pub fn is_at_end(&self) -> bool {
-        self.position.offset as usize >= self.input.len()
+        self.position as usize >= self.input.len()
     }
 
-    pub fn current_location(&self) -> Location {
-        Location { start: self.position, end: self.position, file: self.file.clone() }
-    }
+    // pub fn current_location(&self) -> Location {
+    //     Location { start: self.position, end: self.position, file: self.file.clone() }
+    // }
 
-    /// Create a location spanning from start position to current position
-    pub fn location_from(&self, start: Position) -> Location {
-        Location { start, end: self.position, file: self.file.clone() }
-    }
+    // /// Create a location spanning from start position to current position
+    // pub fn location_from(&self, start: Position) -> Location {
+    //     Location { start, end: self.position, file: self.file.clone() }
+    // }
 
     /// Mark the current position for later span creation
-    pub fn mark_position(&self) -> Position {
+    pub fn mark_position(&self) -> usize { // Temporary
         self.position
     }
 
@@ -131,7 +134,7 @@ impl ParseState {
             self.skip_whitespace();
             self.skip_comment();
             // If position didn't change, we're done
-            if self.position.offset == start_pos.offset {
+            if self.position == start_pos {
                 break;
             }
         }
@@ -167,12 +170,15 @@ impl ParseState {
         }
     }
 
-    pub fn consume_required(&mut self, expected: char) -> Result<(), NyarError> {
+    pub fn consume_required(&mut self, expected: char) -> Result<(), NoteError> {
         if self.peek() == Some(expected) {
             self.advance();
             Ok(())
         } else {
-            Err(NyarError::syntax_error(format!("Expected '{}', found {:?}", expected, self.peek())))
+            Err(NoteError::syntax_error(
+                format!("Expected '{}', found {:?}", expected, self.peek()),
+                self.position.offset..self.position.offset,
+            ))
         }
     }
 
@@ -221,20 +227,26 @@ impl ParseState {
     }
 
     /// Parse an identifier
-    pub fn parse_identifier(&mut self) -> Result<String, NyarError> {
+    pub fn parse_identifier(&mut self) -> Result<String, NoteError> {
         self.skip_ignored();
-        
+
         if self.is_at_end() {
-            return Err(NyarError::syntax_error("Unexpected end of input".to_string()));
+            return Err(NoteError::syntax_error(
+                "Unexpected end of input",
+                self.position..self.position,
+            ));
         }
-        
+
         let start_char = self.peek().unwrap();
         if !start_char.is_ascii_alphabetic() && start_char != '_' {
-            return Err(NyarError::syntax_error("Invalid identifier start".to_string()));
+            return Err(NoteError::syntax_error(
+                "Invalid identifier start",
+                self.position..self.position,
+            ));
         }
-        
+
         let mut identifier = String::new();
-        
+
         // Continue with letters, digits, or underscores
         while let Some(ch) = self.peek() {
             if ch.is_ascii_alphanumeric() || ch == '_' {
@@ -244,14 +256,14 @@ impl ParseState {
                 break;
             }
         }
-        
+
         Ok(identifier)
     }
 
-    /// Check if we're at the start of a new line (after newline)
-    pub fn at_line_start(&self) -> bool {
-        self.position.column == 1
-    }
+    // /// Check if we're at the start of a new line (after newline)
+    // pub fn at_line_start(&self) -> bool {
+    //     self.position.column == 1
+    // }
 
     /// Get current indentation level
     pub fn current_indent(&self) -> usize {

@@ -1,5 +1,5 @@
 mod code;
-mod command;
+pub mod command;
 mod heading;
 mod link;
 mod math;

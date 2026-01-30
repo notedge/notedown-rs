@@ -1,17 +1,8 @@
 use super::*;
 use crate::ast::TextSpaceNode;
-use std::fmt::{Debug, Formatter};
+use std::fmt::{Debug, Display, Formatter};
 
-/// CommandNode
-///
-/// ```note
-/// \cmd () { }
-/// ```
-#[derive(Debug)]
-pub struct CommandNode {
-    name: String,
-    span: Range<u32>,
-}
+
 
 /// CommandNode
 ///
@@ -34,21 +25,17 @@ pub struct CommandBody {}
 
 impl Display for CommandArguments {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        todo!()
+        if let Some(ref prefill) = self.prefill {
+            write!(f, "({})", prefill)
+        } else {
+            write!(f, "()")
+        }
     }
 }
 
-impl Display for CommandNode {
-    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        write!(f, "\\{}", self.name)
-    }
-}
 
-impl CommandNode {
-    pub fn new<S: ToString>(body: S, span: Range<u32>) -> Self {
-        Self { name: body.to_string(), span }
-    }
-}
+
+
 
 impl CommandArguments {
     pub fn with_prefill(self, space: Option<TextSpaceNode>) -> Self {

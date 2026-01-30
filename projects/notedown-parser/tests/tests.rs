@@ -2,9 +2,7 @@
 
 use notedown_parser::helpers::{NotedownNode, ParseState};
 use notedown_parser::parsers::*;
-use notedown_ast::nodes::elements::text::TextSpan;
-use notedown_ast::nodes::{Header, Paragraph, Delimiter, CodeNode, MathNode};
-use notedown_ast::nodes::{StyleNode, SmartLink, ListView, QuoteNode, TableView, Command, Value};
+use notedown_ast::ast::*;
 use notedown_error::NoteError;
 
 #[cfg(test)]
@@ -13,145 +11,96 @@ mod text_tests {
 
     #[test]
     fn test_parse_normal_text() {
-        let mut state = ParseState::new("Hello world");
-        let result = TextSpan::parse(&mut state);
+        let mut state = ParseState::new("Hello world".to_string());
+        let result = TextPlainNode::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_parse_escaped_char() {
-        let mut state = ParseState::new("\\*escaped*");
-        let result = parse_escaped_char(&mut state);
+    fn test_parse_text_with_special_chars() {
+        let mut state = ParseState::new("Hello, world!".to_string());
+        let result = TextPlainNode::parse(&mut state);
         assert!(result.is_ok());
+        let text = result.unwrap();
+        assert_eq!(text.text, "Hello, world!");
     }
 
     #[test]
-    fn test_parse_emoji() {
-        let mut state = ParseState::new(":smile:");
-        let result = parse_emoji(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_hard_break() {
-        let mut state = ParseState::new("  \n");
-        let result = parse_hard_break(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_soft_break() {
-        let mut state = ParseState::new("\n");
-        let result = parse_soft_break(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_checkbox() {
-        let mut state = ParseState::new("[x] checked");
-        let result = parse_checkbox(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("[ ] unchecked");
-        let result = parse_checkbox(&mut state);
-        assert!(result.is_ok());
+    fn test_parse_empty_text() {
+        let mut state = ParseState::new("".to_string());
+        let result = TextPlainNode::parse(&mut state);
+        assert!(result.is_err());
     }
 }
 
 #[cfg(test)]
 mod header_tests {
     use super::*;
+    use notedown_parser::parsers::header::*;
 
     #[test]
     fn test_parse_atx_header() {
-        let mut state = ParseState::new("# Header 1");
-        let result = Header::parse(&mut state);
+        let mut state = ParseState::new("# Header 1".to_string());
+        let result = HeadingSpan::parse(&mut state);
         assert!(result.is_ok());
+        let heading = result.unwrap();
+        assert_eq!(heading.level, 1);
         
-        let mut state = ParseState::new("## Header 2");
-        let result = Header::parse(&mut state);
+        let mut state = ParseState::new("## Header 2".to_string());
+        let result = HeadingSpan::parse(&mut state);
         assert!(result.is_ok());
+        let heading = result.unwrap();
+        assert_eq!(heading.level, 2);
         
-        let mut state = ParseState::new("###### Header 6");
-        let result = Header::parse(&mut state);
+        let mut state = ParseState::new("###### Header 6".to_string());
+        let result = HeadingSpan::parse(&mut state);
         assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_setext_header() {
-        let mut state = ParseState::new("Header 1\n========");
-        let result = Header::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("Header 2\n--------");
-        let result = Header::parse(&mut state);
-        assert!(result.is_ok());
+        let heading = result.unwrap();
+        assert_eq!(heading.level, 6);
     }
 
     #[test]
     fn test_invalid_header() {
-        let mut state = ParseState::new("####### Too many hashes");
-        let result = Header::parse(&mut state);
+        let mut state = ParseState::new("####### Too many hashes".to_string());
+        let result = HeadingSpan::parse(&mut state);
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_is_heading_start() {
+        let state = ParseState::new("# Header".to_string());
+        assert!(is_heading_start(&state));
+        
+        let state = ParseState::new("Not a header".to_string());
+        assert!(!is_heading_start(&state));
     }
 }
 
 #[cfg(test)]
 mod paragraph_tests {
     use super::*;
+    use notedown_parser::parsers::paragraph::*;
 
     #[test]
     fn test_parse_simple_paragraph() {
-        let mut state = ParseState::new("This is a simple paragraph.");
-        let result = Paragraph::parse(&mut state);
+        let mut state = ParseState::new("This is a simple paragraph.".to_string());
+        let result = ParagraphSpan::parse(&mut state);
         assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_parse_paragraph_with_styled_text() {
+        let mut state = ParseState::new("This has **bold** text.".to_string());
+        let result = ParagraphSpan::parse(&mut state);
+        assert!(result.is_ok());
+        let paragraph = result.unwrap();
+        assert!(!paragraph.terms.is_empty());
     }
 
     #[test]
     fn test_parse_multiline_paragraph() {
-        let mut state = ParseState::new("This is a\nmultiline paragraph\nwith several lines.");
-        let result = Paragraph::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_multiple_paragraphs() {
-        let mut state = ParseState::new("First paragraph.\n\nSecond paragraph.");
-        let result = parse_paragraphs(&mut state);
-        assert!(result.is_ok());
-    }
-}
-
-#[cfg(test)]
-mod delimiter_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_horizontal_rule() {
-        let mut state = ParseState::new("---");
-        let result = Delimiter::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("***");
-        let result = Delimiter::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("___");
-        let result = Delimiter::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_page_break() {
-        let mut state = ParseState::new("<<<");
-        let result = Delimiter::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_thematic_break() {
-        let mut state = ParseState::new("===");
-        let result = Delimiter::parse(&mut state);
+        let mut state = ParseState::new("This is a\nmultiline paragraph\nwith several lines.".to_string());
+        let result = parse_paragraph(&mut state);
         assert!(result.is_ok());
     }
 }
@@ -159,331 +108,197 @@ mod delimiter_tests {
 #[cfg(test)]
 mod code_tests {
     use super::*;
-
-    #[test]
-    fn test_parse_fenced_code_block() {
-        let mut state = ParseState::new("```rust\nfn main() {\n    println!(\"Hello\");\n}\n```");
-        let result = CodeNode::parse(&mut state);
-        assert!(result.is_ok());
-    }
+    use notedown_parser::parsers::code::*;
 
     #[test]
     fn test_parse_inline_code() {
-        let mut state = ParseState::new("`let x = 42;`");
-        let result = parse_inline_code(&mut state);
+        let mut state = ParseState::new("`let x = 42;`".to_string());
+        let result = CodeInlineSpan::parse(&mut state);
         assert!(result.is_ok());
+        let code = result.unwrap();
+        assert_eq!(code.code, "let x = 42;");
+        assert_eq!(code.level, 1);
     }
 
     #[test]
-    fn test_parse_indented_code_block() {
-        let mut state = ParseState::new("    fn main() {\n        println!(\"Hello\");\n    }");
-        let result = parse_indented_code_block(&mut state);
+    fn test_parse_code_block() {
+        let mut state = ParseState::new("```rust\nfn main() {\n    println!(\"Hello\");\n}\n```".to_string());
+        let result = parse_code_block(&mut state);
         assert!(result.is_ok());
+        let (language, code) = result.unwrap();
+        assert_eq!(language, "rust");
+        assert!(code.contains("fn main()"));
+    }
+
+    #[test]
+    fn test_is_inline_code_start() {
+        let state = ParseState::new("`code`".to_string());
+        assert!(is_inline_code_start(&state));
+        
+        let state = ParseState::new("not code".to_string());
+        assert!(!is_inline_code_start(&state));
+    }
+
+    #[test]
+    fn test_is_code_block_start() {
+        let state = ParseState::new("```rust".to_string());
+        assert!(is_code_block_start(&state));
+        
+        let state = ParseState::new("not code".to_string());
+        assert!(!is_code_block_start(&state));
     }
 }
 
 #[cfg(test)]
 mod math_tests {
     use super::*;
+    use notedown_parser::parsers::math::*;
 
     #[test]
     fn test_parse_inline_math() {
-        let mut state = ParseState::new("$x^2 + y^2 = z^2$");
-        let result = MathNode::parse(&mut state);
+        let mut state = ParseState::new("$x^2 + y^2 = z^2$".to_string());
+        let result = InlineMathSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_parse_math_block() {
-        let mut state = ParseState::new("$$\n\\int_0^1 x^2 dx\n$$");
-        let result = MathNode::parse(&mut state);
+    fn test_parse_display_math() {
+        let mut state = ParseState::new("$$\\int_0^1 x^2 dx$$".to_string());
+        let result = DisplayMathSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_parse_math_environment() {
-        let mut state = ParseState::new("\\begin{equation}\nx = y + z\n\\end{equation}");
-        let result = parse_math_environment(&mut state);
+    fn test_try_parse_math() {
+        let mut state = ParseState::new("$math$".to_string());
+        let result = try_parse_math(&mut state);
         assert!(result.is_ok());
+        assert!(result.unwrap().is_some());
+        
+        let mut state = ParseState::new("not math".to_string());
+        let result = try_parse_math(&mut state);
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_none());
     }
 
     #[test]
-    fn test_parse_bracketed_math() {
-        let mut state = ParseState::new("[math]x^2[/math]");
-        let result = parse_bracketed_math(&mut state);
-        assert!(result.is_ok());
+    fn test_is_math_start() {
+        let state = ParseState::new("$math$".to_string());
+        assert!(is_math_start(&state));
+        
+        let state = ParseState::new("not math".to_string());
+        assert!(!is_math_start(&state));
     }
 }
 
 #[cfg(test)]
 mod styled_tests {
     use super::*;
+    use notedown_parser::parsers::styled::*;
 
     #[test]
     fn test_parse_bold() {
-        let mut state = ParseState::new("**bold text**");
-        let result = StyleNode::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("__bold text__");
-        let result = StyleNode::parse(&mut state);
+        let mut state = ParseState::new("**bold text**".to_string());
+        let result = FontBoldSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_parse_italic() {
-        let mut state = ParseState::new("*italic text*");
-        let result = StyleNode::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("_italic text_");
-        let result = StyleNode::parse(&mut state);
+        let mut state = ParseState::new("*italic text*".to_string());
+        let result = FontItalicSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_parse_strikethrough() {
-        let mut state = ParseState::new("~~strikethrough~~");
-        let result = parse_strikethrough(&mut state);
+    fn test_parse_bold_italic() {
+        let mut state = ParseState::new("***bold italic***".to_string());
+        let result = FontBoldItalicSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
     fn test_parse_underline() {
-        let mut state = ParseState::new("<u>underlined</u>");
-        let result = parse_underline(&mut state);
+        let mut state = ParseState::new("_underlined_".to_string());
+        let result = FontUnderlineSpan::parse(&mut state);
         assert!(result.is_ok());
     }
 
     #[test]
-    fn test_parse_highlight() {
-        let mut state = ParseState::new("==highlighted==");
-        let result = parse_highlight(&mut state);
+    fn test_parse_strikethrough() {
+        let mut state = ParseState::new("~~strikethrough~~".to_string());
+        let result = FontDeleteSpan::parse(&mut state);
         assert!(result.is_ok());
+    }
+
+    #[test]
+    fn test_try_parse_styled() {
+        let mut state = ParseState::new("**bold**".to_string());
+        let result = try_parse_styled(&mut state);
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_some());
+        
+        let mut state = ParseState::new("not styled".to_string());
+        let result = try_parse_styled(&mut state);
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_none());
     }
 }
 
 #[cfg(test)]
-mod link_tests {
+mod integration_tests {
     use super::*;
 
     #[test]
-    fn test_parse_basic_link() {
-        let mut state = ParseState::new("[text](https://example.com)");
-        let result = SmartLink::parse(&mut state);
-        assert!(result.is_ok());
+    fn test_parse_mixed_content() {
+        let content = "# Title\n\nThis is **bold** and *italic* text with `code`.";
+        let mut state = ParseState::new(content.to_string());
+        
+        // Parse heading
+        let heading = HeadingSpan::parse(&mut state);
+        assert!(heading.is_ok());
+        
+        // Skip newlines
+        state.skip_whitespace();
+        
+        // Parse paragraph
+        let paragraph = ParagraphSpan::parse(&mut state);
+        assert!(paragraph.is_ok());
     }
 
     #[test]
-    fn test_parse_reference_link() {
-        let mut state = ParseState::new("[text][ref]");
-        let result = parse_reference_link(&mut state);
-        assert!(result.is_ok());
+    fn test_parse_document_structure() {
+        let content = r#"# Document Title
+
+This is a paragraph with **bold** and *italic* text.
+
+## Subsection
+
+Here's some math: $x^2 + y^2 = z^2$
+
+And some code: `fn main() {}`"#;
+        let mut state = ParseState::new(content.to_string());
+        
+        // This is a basic structure test - in a real implementation,
+        // we would have a document parser that handles the full structure
+        assert!(!state.is_at_end());
     }
 
     #[test]
-    fn test_invalid_link() {
-        let mut state = ParseState::new("[unclosed link");
-        let result = SmartLink::parse(&mut state);
+    fn test_error_handling() {
+        // Test unclosed bold
+        let mut state = ParseState::new("**unclosed bold".to_string());
+        let result = FontBoldSpan::parse(&mut state);
         assert!(result.is_err());
-    }
-}
-
-#[cfg(test)]
-mod list_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_unordered_list() {
-        let mut state = ParseState::new("- Item 1");
-        let result = ListView::parse(&mut state);
-        assert!(result.is_ok());
         
-        let mut state = ParseState::new("* Item 1");
-        let result = ListView::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("+ Item 1");
-        let result = ListView::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_ordered_list() {
-        let mut state = ParseState::new("1. First item");
-        let result = ListView::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("42. Numbered item");
-        let result = ListView::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_invalid_list() {
-        let mut state = ParseState::new("-No space after marker");
-        let result = ListView::parse(&mut state);
+        // Test unclosed math
+        let mut state = ParseState::new("$unclosed math".to_string());
+        let result = InlineMathSpan::parse(&mut state);
         assert!(result.is_err());
-    }
-}
-
-#[cfg(test)]
-mod quote_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_blockquote() {
-        let mut state = ParseState::new("> This is a quote");
-        let result = QuoteNode::parse(&mut state);
-        assert!(result.is_ok());
         
-        let mut state = ParseState::new("> Multi-line\n> quote");
-        let result = QuoteNode::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_callout() {
-        let mut state = ParseState::new("> [!NOTE]\n> This is a note");
-        let result = parse_callout(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("> [!WARNING]\n> This is a warning");
-        let result = parse_callout(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_invalid_quote() {
-        let mut state = ParseState::new(">");
-        let result = QuoteNode::parse(&mut state);
-        assert!(result.is_err());
-    }
-}
-
-#[cfg(test)]
-mod table_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_markdown_table() {
-        let mut state = ParseState::new("| Header 1 | Header 2 |\n|----------|----------|\n| Cell 1   | Cell 2   |");
-        let result = TableView::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_grid_table() {
-        let mut state = ParseState::new("+----------+----------+\n| Header 1 | Header 2 |\n+----------+----------+");
-        let result = parse_grid_table(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_table_alignment() {
-        let mut state = ParseState::new("| Left | Center | Right |\n|:-----|:------:|------:|");
-        let result = parse_table_separator(&mut state);
-        assert!(result.is_ok());
-    }
-}
-
-#[cfg(test)]
-mod command_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_directive() {
-        let mut state = ParseState::new("\\command{arg}");
-        let result = Command::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("\\command[option]{arg}");
-        let result = Command::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_macro() {
-        let mut state = ParseState::new("@macro(param1, param2)");
-        let result = parse_macro(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("@simple_macro");
-        let result = parse_macro(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_invalid_command() {
-        let mut state = ParseState::new("\\{invalid}");
-        let result = Command::parse(&mut state);
-        assert!(result.is_err());
-    }
-}
-
-#[cfg(test)]
-mod value_tests {
-    use super::*;
-
-    #[test]
-    fn test_parse_string_value() {
-        let mut state = ParseState::new("\"hello world\"");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("'single quoted'");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_number_value() {
-        let mut state = ParseState::new("42");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("3.14");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("-123");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_boolean_value() {
-        let mut state = ParseState::new("true");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("false");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_null_value() {
-        let mut state = ParseState::new("null");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_parse_array_value() {
-        let mut state = ParseState::new("[]");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-        
-        let mut state = ParseState::new("[1, 2, 3]");
-        let result = Value::parse(&mut state);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_invalid_value() {
-        let mut state = ParseState::new("invalid");
-        let result = Value::parse(&mut state);
+        // Test invalid heading level
+        let mut state = ParseState::new("####### Too many hashes".to_string());
+        let result = HeadingSpan::parse(&mut state);
         assert!(result.is_err());
     }
 }

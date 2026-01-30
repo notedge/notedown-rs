@@ -47,10 +47,10 @@ mod benchmark_tests {
     #[test]
     fn benchmark_small_document() {
         let doc = create_sample_document(10);
-        let mut state = ParseState::new(&doc);
+        let mut state = ParseState::new(doc.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -61,10 +61,10 @@ mod benchmark_tests {
     #[test]
     fn benchmark_medium_document() {
         let doc = create_sample_document(100);
-        let mut state = ParseState::new(&doc);
+        let mut state = ParseState::new(doc.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -75,10 +75,10 @@ mod benchmark_tests {
     #[test]
     fn benchmark_large_document() {
         let doc = create_sample_document(500);
-        let mut state = ParseState::new(&doc);
+        let mut state = ParseState::new(doc.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -89,10 +89,10 @@ mod benchmark_tests {
     #[test]
     fn benchmark_text_parsing() {
         let text = "This is a **bold** text with *italic* and `code` elements. ".repeat(1000);
-        let mut state = ParseState::new(&text);
+        let mut state = ParseState::new(text.as_str());
         
         let start = Instant::now();
-        let result = parse_inline_elements(&mut state);
+        let result = paragraph::ParagraphSpan::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -105,12 +105,12 @@ mod benchmark_tests {
         let headers = (1..=1000)
             .map(|i| format!("# Header {}\n", i))
             .collect::<String>();
-        let mut state = ParseState::new(&headers);
+        let mut state = ParseState::new(headers.as_str());
         
         let start = Instant::now();
         let mut count = 0;
         while !state.is_at_end() {
-            if let Ok(_) = parse_block_element(&mut state) {
+            if let Ok(_) = header::HeadingSpan::parse(&mut state) {
                 count += 1;
             }
             state.skip_whitespace();
@@ -127,12 +127,12 @@ mod benchmark_tests {
         for i in 1..=1000 {
             list_content.push_str(&format!("- List item {}\n", i));
         }
-        let mut state = ParseState::new(&list_content);
+        let mut state = ParseState::new(list_content.as_str());
         
         let start = Instant::now();
         let mut count = 0;
         while !state.is_at_end() {
-            if let Ok(_) = parse_block_element(&mut state) {
+            if let Ok(_) = list::parse_list(&mut state) {
                 count += 1;
             }
             state.skip_whitespace();
@@ -152,12 +152,12 @@ mod benchmark_tests {
                 i, i, i
             ));
         }
-        let mut state = ParseState::new(&code_blocks);
+        let mut state = ParseState::new(code_blocks.as_str());
         
         let start = Instant::now();
         let mut count = 0;
         while !state.is_at_end() {
-            if let Ok(_) = parse_block_element(&mut state) {
+            if let Ok(_) = code::parse_code_block(&mut state) {
                 count += 1;
             }
             state.skip_whitespace();
@@ -175,10 +175,10 @@ mod benchmark_tests {
             math_content.push_str(&format!("$x_{} = y_{} + z_{}$\n\n", i, i, i));
             math_content.push_str(&format!("$$\n\\sum_{{i=0}}^{{{}}} i^2 = \\frac{{{}({}+1)(2\\cdot{}+1)}}{{6}}\n$$\n\n", i, i, i, i));
         }
-        let mut state = ParseState::new(&math_content);
+        let mut state = ParseState::new(math_content.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -197,12 +197,12 @@ mod benchmark_tests {
             }
             table_content.push_str("\n");
         }
-        let mut state = ParseState::new(&table_content);
+        let mut state = ParseState::new(table_content.as_str());
         
         let start = Instant::now();
         let mut count = 0;
         while !state.is_at_end() {
-            if let Ok(_) = parse_block_element(&mut state) {
+            if let Ok(_) = table::parse_table(&mut state) {
                 count += 1;
             }
             state.skip_whitespace();
@@ -250,10 +250,10 @@ $$
 
 "#.repeat(100);
         
-        let mut state = ParseState::new(&mixed_content);
+        let mut state = ParseState::new(mixed_content.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -268,8 +268,8 @@ $$
         let doc = create_sample_document(1000);
         
         for _ in 0..10 {
-            let mut state = ParseState::new(&doc);
-            let _result = parse_document(&mut state);
+            let mut state = ParseState::new(doc.as_str());
+            let _result = NotedownAST::parse(&mut state);
             // Force garbage collection if available
             // In Rust, memory is automatically managed
         }
@@ -293,9 +293,9 @@ mod stress_tests {
             nested_content.push_str(&format!("Nested level {}\n", i + 1));
         }
         
-        let mut state = ParseState::new(&nested_content);
+        let mut state = ParseState::new(nested_content.as_str());
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -306,10 +306,10 @@ mod stress_tests {
     #[test]
     fn stress_test_long_lines() {
         let long_line = "This is a very long line with **bold** and *italic* text. ".repeat(1000);
-        let mut state = ParseState::new(&long_line);
+        let mut state = ParseState::new(long_line.as_str());
         
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
@@ -324,13 +324,121 @@ mod stress_tests {
             content.push_str(&format!("**{}** ", i));
         }
         
-        let mut state = ParseState::new(&content);
+        let mut state = ParseState::new(content.as_str());
         let start = Instant::now();
-        let result = parse_document(&mut state);
+        let result = NotedownAST::parse(&mut state);
         let duration = start.elapsed();
         
         assert!(result.is_ok());
         println!("Many small elements: {:?}", duration);
         assert!(duration.as_secs() < 3);
     }
+}
+
+fn bench_parse_document_small(c: &mut Criterion) {
+    let doc = "# Small Document\n\nThis is a small test document.";
+    c.bench_function("parse_document_small", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_parse_document_medium(c: &mut Criterion) {
+    let doc = medium_doc;
+    c.bench_function("parse_document_medium", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_parse_document_large(c: &mut Criterion) {
+    let doc = large_doc;
+    c.bench_function("parse_document_large", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_parse_text(c: &mut Criterion) {
+    let text = "This is a simple paragraph.";
+    c.bench_function("parse_text", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        paragraph::ParagraphSpan::parse(&mut state)
+    }));
+}
+
+fn bench_parse_header(c: &mut Criterion) {
+    let text = "## This is a header";
+    c.bench_function("parse_header", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        header::HeadingSpan::parse(&mut state)
+    }));
+}
+
+fn bench_parse_list(c: &mut Criterion) {
+    let text = "- Item 1\n- Item 2\n- Item 3";
+    c.bench_function("parse_list", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        list::parse_list(&mut state)
+    }));
+}
+
+fn bench_parse_code_block(c: &mut Criterion) {
+    let text = "```rust\nfn main() {\n    println!(\"Hello, world!\");\n}\n```";
+    c.bench_function("parse_code_block", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        code::parse_code_block(&mut state)
+    }));
+}
+
+fn bench_parse_math(c: &mut Criterion) {
+    let text = "$$ E = mc^2 $$";
+    c.bench_function("parse_math", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        math::parse_math_block(&mut state)
+    }));
+}
+
+fn bench_parse_table(c: &mut Criterion) {
+    let text = "| Header 1 | Header 2 |\n|---|---|\n| Cell 1 | Cell 2 |";
+    c.bench_function("parse_table", |b| b.iter(|| {
+        let mut state = ParseState::new(text);
+        table::parse_table(&mut state)
+    }));
+}
+
+fn bench_stress_deeply_nested(c: &mut Criterion) {
+    let doc = nested_doc;
+    c.bench_function("stress_deeply_nested", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_stress_long_lines(c: &mut Criterion) {
+    let doc = long_line_doc;
+    c.bench_function("stress_long_lines", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_stress_many_small_elements(c: &mut Criterion) {
+    let doc = many_elements_doc;
+    c.bench_function("stress_many_small_elements", |b| b.iter(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+fn bench_memory_usage(c: &mut Criterion) {
+    let doc = large_doc;
+    c.bench_function("memory_usage", |b| b.iter_with_large_drop(|| {
+        let mut state = ParseState::new(&doc);
+        parse_document(&mut state)
+    }));
+}
+
+criterion_group!(
+    use super::*;
 }

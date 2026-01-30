@@ -3,9 +3,8 @@ pub mod identifier;
 pub mod number;
 
 use crate::hir::IdentifierNode;
-use deriver::From;
 use std::{
-    fmt::{Debug, Display, Formatter, Write},
+    fmt::Debug,
     ops::Range,
 };
 

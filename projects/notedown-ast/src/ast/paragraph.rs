@@ -52,25 +52,25 @@ impl ParagraphSpan {
         let mut terms: Vec<ParagraphKind> = Vec::with_capacity(self.terms.len());
         for term in &self.terms {
             match term {
-                ParagraphTerm::Text(v) => terms.push(v.as_ref().clone().into()),
+                ParagraphTerm::Text(v) => terms.push(ParagraphKind::Plain(v.clone())),
                 ParagraphTerm::WhiteSpace(v) => {
                     terms.push(ParagraphKind::Space(v.clone()));
                 }
                 ParagraphTerm::Italic(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Style(Box::new(v.as_hir())));
                 }
                 ParagraphTerm::Bold(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Style(Box::new(v.as_hir())));
                 }
-                ParagraphTerm::BoldItalic(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::BoldItalic(v) => terms.push(ParagraphKind::Style(Box::new(v.as_hir()))),
                 ParagraphTerm::NewLine(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Space(Box::new(v.as_hir())));
                 }
                 ParagraphTerm::Comma(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Plain(Box::new(v.as_hir())));
                 }
                 ParagraphTerm::Period(v) => {
-                    terms.push(v.as_hir().into());
+                    terms.push(ParagraphKind::Plain(Box::new(v.as_hir())));
                 }
                 ParagraphTerm::Escape(v) => {
                     match v.escape {
@@ -82,13 +82,13 @@ impl ParagraphSpan {
                     }
                     // terms.push(v.as_hir().into());
                 }
-                ParagraphTerm::Underline(v) => terms.push(v.as_hir().into()),
-                ParagraphTerm::Delete(v) => terms.push(v.as_hir().into()),
-                ParagraphTerm::Code(v) => terms.push(v.as_hir().into()),
-                ParagraphTerm::CommandLine(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::Underline(v) => terms.push(ParagraphKind::Style(Box::new(v.as_hir()))),
+                ParagraphTerm::Delete(v) => terms.push(ParagraphKind::Style(Box::new(v.as_hir()))),
+                ParagraphTerm::Code(v) => terms.push(ParagraphKind::Code(Box::new(v.as_hir()))),
+                ParagraphTerm::CommandLine(v) => terms.push(ParagraphKind::Command(Box::new(v.as_hir()))),
                 ParagraphTerm::Uri(v) => terms.push(ParagraphKind::Uri(v.clone())),
-                ParagraphTerm::DisplayMath(v) => terms.push(v.as_hir().into()),
-                ParagraphTerm::InlineMath(v) => terms.push(v.as_hir().into()),
+                ParagraphTerm::DisplayMath(v) => terms.push(ParagraphKind::Code(Box::new(v.as_hir()))),
+                ParagraphTerm::InlineMath(v) => terms.push(ParagraphKind::Code(Box::new(v.as_hir()))),
             }
         }
         ParagraphNode { terms, span: self.span.clone() }

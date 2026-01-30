@@ -1,7 +1,7 @@
 #[cfg(feature = "html-ast")]
 pub mod html;
 
-use crate::{hir::NotedownHIR, NotedownAST};
+use crate::hir::NotedownHIR;
 use notedown_error::Validation;
 
 /// Apply IR -> IR transformation

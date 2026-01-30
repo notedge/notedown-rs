@@ -13,9 +13,10 @@ mod traits;
 pub use crate::{
     ast::{NotedownAST, NotedownTerm},
     atomics::{
-        command::{CommandArguments, CommandBody, CommandNode},
+        command::{CommandArguments, CommandBody},
         identifier::{AlignNode, LigatureNode, NumberLiteralNode, NumberValueNode},
     },
+    hir::command::CommandNode,
     traits::{CodeEngine, MathEngine, NoteGenerator, NoteTransformer},
 };
 
