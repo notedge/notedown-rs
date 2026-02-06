@@ -1,7 +1,7 @@
 [package]
 name = "notedown-macro"
 version = "0.0.0"
-authors = ["Aster <192607617@qq.com>"]
+authors = ["Aster <192607617↯qq.com>"]
 description = "Wasm notedown test"
 repository = "https://github.com/notedge/notedown-rs/blob/master/projects/notedown-wasm"
 categories = []

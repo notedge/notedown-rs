@@ -17,11 +17,11 @@ pub enum SmartLink {
     /// [file://]: 使用绝对路径
     /// [https://]: 使用远程 url 路径
     /// [id/path]: 使用默认储存库
-    /// [@storage/id/path]: 使用具体的某个储存库
+    /// [↯storage/id/path]: 使用具体的某个储存库
     /// ```
     ExternalResource(Box<ResourceDescriptor>),
     /// ```note
-    /// [name@example.com](options)
+    /// [name↯example.com](options)
     /// ```
     EMail(Box<EmailLink>),
     /// ```note

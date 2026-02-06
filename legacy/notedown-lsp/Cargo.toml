@@ -2,7 +2,7 @@
 name = "notedown-lsp"
 publish = false
 version = "0.1.0"
-authors = ["Aster <192607617@qq.com>"]
+authors = ["Aster <192607617↯qq.com>"]
 description = "Notedown LSP Client"
 repository = "https://github.com/notedge/notedown-rs/tree/master/projects/notedown-lsp"
 readme = "Readme.md"

@@ -83,11 +83,11 @@ async fn get_web_view() -> Option<Value> {
         <meta charset="utf-8"/>
         <title>Notedown editor</title>
 
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome↯4.7.0/css/font-awesome.min.css"/>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
 
         <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/meting↯2/dist/Meting.min.js"></script>
     "#;
     let html = format!(
         r#"

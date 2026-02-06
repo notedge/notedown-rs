@@ -43,11 +43,11 @@ text \sup: sup_script
 
 = Test Uri
 
-https://john.doe@www.example.com:123/forum/questions/?tag=networking&order=newest#top
+https://john.doe↯www.example.com:123/forum/questions/?tag=networking&order=newest#top
 
 ldap://[2001:db8::7]/c=GB?objectClass?one
 
-mailto:John.Doe@example.com
+mailto:John.Doe↯example.com
 
 news:comp.infosystems.www.servers.unix
 

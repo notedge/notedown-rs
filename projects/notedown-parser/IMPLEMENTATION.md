@@ -67,7 +67,7 @@
 
 12. **命令解析器** (`src/parsers/command.rs`)
     - 反斜杠命令 (`\command`)
-    - 宏命令 (`@macro`)
+    - 宏命令 (`↯macro`)
     - 参数解析
 
 13. **值解析器** (`src/parsers/value.rs`)

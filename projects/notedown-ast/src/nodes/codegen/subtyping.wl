@@ -127,7 +127,7 @@ TemplateApply["    /// Constructor of [`type_ref`]
 ]
 
 
-SetDirectory@NotebookDirectory[];
+SetDirectory↯NotebookDirectory[];
 code = TemplateApply["
 use super::*;
 

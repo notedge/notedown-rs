@@ -133,7 +133,7 @@ $$"#;
     fn test_parse_commands_and_macros() {
         let input = r#"\command{argument}
 
-@macro(param1, param2)
+↯macro(param1, param2)
 
 Normal text after commands."#;
         let mut state = ParseState::new(input);

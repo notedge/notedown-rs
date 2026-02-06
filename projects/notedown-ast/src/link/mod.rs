@@ -1,2 +1,2 @@
-/// `[link][@resource]`
+/// `[link][↯resource]`
 pub struct LinkNode {}

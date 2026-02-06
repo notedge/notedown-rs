@@ -1,4 +1,4 @@
-package notedown: core@0.1.0;
+package notedown: core↯0.1.0;
 
 world host {
     export types;

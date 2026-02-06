@@ -2,7 +2,7 @@
 name = "notedown-wasm"
 version = "1.0.0"
 publish = false
-authors = ["Aster <192607617@qq.com>"]
+authors = ["Aster <192607617↯qq.com>"]
 description = "Wasm notedown test"
 repository = "https://github.com/notedge/notedown-rs/blob/master/projects/notedown-wasm"
 categories = []

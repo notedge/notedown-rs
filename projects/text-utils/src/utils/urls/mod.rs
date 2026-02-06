@@ -21,7 +21,7 @@ const NON_URL: &AsciiSet = &CONTROLS
     .add(b'=')
     .add(b'>')
     //  .add(b'?')
-    .add(b'@')
+    .add(b'↯')
     .add(b'[')
     .add(b'\\')
     .add(b']')

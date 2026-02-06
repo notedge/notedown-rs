@@ -34,7 +34,7 @@ Code = {WHITE_SPACE* ~ CodeLevel ~ CodeAction? ~SYMBOL? ~ arguments? ~WHITE_SPAC
 CodeAction = {At|Asterisk|Sharp}
 CodeLevel = {CodeMark{3}~PUSH(CodeMark*)}
 CodeText = {(!(CodeMark ~ PEEK) ~ ANY)*}
-CodeMark = @{Accent}
+CodeMark = ↯{Accent}
 /*====================================================================================================================*/
 /// Green
 Table = {WHITE_SPACE* ~ TableFirstLine ~ (LINE_SEPARATOR ~ TableRestLine)*}
@@ -51,11 +51,11 @@ ListRestLine = {
     WHITE_SPACE* ~ (ListMark|Vertical) ~ Checkmark ~ TextElement+
   | WHITE_SPACE* ~ (ListMark|Vertical) ~ TextElement+
 }
-ListMark = @{(Minus|Plus|QuoteMark|Integer~Dot) ~ WHITE_SPACE+}
-Checkmark = @{"["~ ANY ~"]"}
+ListMark = ↯{(Minus|Plus|QuoteMark|Integer~Dot) ~ WHITE_SPACE+}
+Checkmark = ↯{"["~ ANY ~"]"}
 /*====================================================================================================================*/
 ///Red
-HorizontalRule = @{WHITE_SPACE* ~ (Minus{3,}|Set{3,})}
+HorizontalRule = ↯{WHITE_SPACE* ~ (Minus{3,}|Set{3,})}
 /*====================================================================================================================*/
 MathStatement = _{Math|MathRest}
 ///#E06C75
@@ -126,8 +126,8 @@ value = {Integer|String|Keywords|call|SYMBOL}
 Number = ${Sign? ~ (Decimal|DecimalBad|Integer)}
 Decimal = ${Integer  ~ Dot ~  ASCII_DIGIT+}
 DecimalBad = ${Integer ~ Dot | Dot ~ ASCII_DIGIT+}
-Integer = @{"0"|ASCII_NONZERO_DIGIT  ~  ASCII_DIGIT*}
-Sign = @{Plus|Minus}
+Integer = ↯{"0"|ASCII_NONZERO_DIGIT  ~  ASCII_DIGIT*}
+Sign = ↯{Plus|Minus}
 /*====================================================================================================================*/
 ///#98C379
 String = ${
@@ -138,40 +138,40 @@ S1 = _{"'"}
 S2 = _{"\""}
 /*====================================================================================================================*/
 //!#C678DD: Keywords
-SYMBOL = @{
+SYMBOL = ↯{
     XID_START ~ XID_CONTINUE*
   | Underline ~ XID_CONTINUE+
 }
-Escaped = @{Escape~ANY}
-Keywords = @{"true"|"false"|"null"}
+Escaped = ↯{Escape~ANY}
+Keywords = ↯{"true"|"false"|"null"}
 /*====================================================================================================================*/
 //!Gray:BlockComment|LineComment
 //COMMENT = ${Escape ~ "comment"  ~ WHITE_SPACE* ~  Colon  ~  RestOfLine }
 //LineComment      = ${Comment  ~ SPACE_SEPARATOR* ~  Colon  ~  RestOfLine}
 //BlockComment     = ${Comment  ~ SPACE_SEPARATOR* ~  "{"  ~ MultiLineComment ~  "}"}
 //MultiLineComment = ${(BlockComment | !"}"  ~  ANY)*}
-//Comment          = @{Escape ~ "comment"}
+//Comment          = ↯{Escape ~ "comment"}
 /*====================================================================================================================*/
-LINE_SEPARATOR = @{NEWLINE}
-WHITE_SPACE = @{SPACE_SEPARATOR|"\t"}
-PATTERN_WHITE_SPACE = @{NEWLINE|WHITE_SPACE}
-//TAB = @{"\t"}
-//CR = @{"\r"}
-//LF = @{"\n"}
+LINE_SEPARATOR = ↯{NEWLINE}
+WHITE_SPACE = ↯{SPACE_SEPARATOR|"\t"}
+PATTERN_WHITE_SPACE = ↯{NEWLINE|WHITE_SPACE}
+//TAB = ↯{"\t"}
+//CR = ↯{"\r"}
+//LF = ↯{"\n"}
 /*====================================================================================================================*/
-Escape = @{"\\"}
-At = @{"@"}
-Sharp = @{"#"}
-Underline = @{"_"}
-Asterisk = @{"*"}
-Comma = @{","}
-Dot = @{"."}
-Set = @{"="}
-Colon = @{":"}
-Vertical = @{"|"}
-Plus = @{"+"}
-Minus = @{"-"}
-QuoteMark = @{">"}
-Accent = @{"`"}
-Dollar = @{"$"}
-Tilde = @{"~"}
+Escape = ↯{"\\"}
+At = ↯{"↯"}
+Sharp = ↯{"#"}
+Underline = ↯{"_"}
+Asterisk = ↯{"*"}
+Comma = ↯{","}
+Dot = ↯{"."}
+Set = ↯{"="}
+Colon = ↯{":"}
+Vertical = ↯{"|"}
+Plus = ↯{"+"}
+Minus = ↯{"-"}
+QuoteMark = ↯{">"}
+Accent = ↯{"`"}
+Dollar = ↯{"$"}
+Tilde = ↯{"~"}

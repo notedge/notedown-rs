@@ -140,7 +140,7 @@ pub mod exports {
 
                         #[cfg(target_arch = "wasm32")]
                         {
-                            #[link(wasm_import_module = "[export]notedown:core/types@0.1.0")]
+                            #[link(wasm_import_module = "[export]notedown:core/types↯0.1.0")]
                             extern "C" {
                                 #[link_name = "[resource-drop]url"]
                                 fn drop(_: u32);
@@ -242,7 +242,7 @@ pub mod exports {
 
                         #[cfg(target_arch = "wasm32")]
                         {
-                            #[link(wasm_import_module = "[export]notedown:core/types@0.1.0")]
+                            #[link(wasm_import_module = "[export]notedown:core/types↯0.1.0")]
                             extern "C" {
                                 #[link_name = "[resource-new]url"]
                                 fn new(_: *mut u8) -> u32;
@@ -264,7 +264,7 @@ pub mod exports {
 
                         #[cfg(target_arch = "wasm32")]
                         {
-                            #[link(wasm_import_module = "[export]notedown:core/types@0.1.0")]
+                            #[link(wasm_import_module = "[export]notedown:core/types↯0.1.0")]
                             extern "C" {
                                 #[link_name = "[resource-rep]url"]
                                 fn rep(_: u32) -> *mut u8;
@@ -281,7 +281,7 @@ pub mod exports {
 
             const _: () = {
               #[doc(hidden)]
-              #[export_name = "notedown:core/types@0.1.0#[dtor]url"]
+              #[export_name = "notedown:core/types↯0.1.0#[dtor]url"]
               #[allow(non_snake_case)]
               unsafe extern "C" fn dtor(rep: *mut u8) {
                 $($path_to_types)*::Url::dtor::<
@@ -908,7 +908,7 @@ value\x03\0\x02\x01o\x02s\x03\x01p\x04\x01r\x01\x03map\x05\x04\0\x06object\x03\0
 \x06\x01r\x02\x0bhead-offsety\x0btail-offsety\x04\0\x0atext-range\x03\0\x08\x01k\
 \x01\x01r\x03\x06reasons\x04file\x0a\x05range\x09\x04\0\x0csyntax-error\x03\0\x0b\
 \x01q\x01\x06syntax\x01\x0c\0\x04\0\x0enotedown-error\x03\0\x0d\x04\x01\x19noted\
-own:core/types@0.1.0\x05\0\x02\x03\0\0\x0atext-range\x02\x03\0\0\x03url\x02\x03\0\
+own:core/types↯0.1.0\x05\0\x02\x03\0\0\x0atext-range\x02\x03\0\0\x03url\x02\x03\0\
 \0\x06object\x02\x03\0\0\x0enotedown-error\x01BB\x02\x03\x02\x01\x01\x04\0\x0ate\
 xt-range\x03\0\0\x02\x03\x02\x01\x02\x04\0\x03url\x03\0\x02\x02\x03\x02\x01\x03\x04\
 \0\x06object\x03\0\x04\x02\x03\x02\x01\x04\x04\0\x0enotedown-error\x03\0\x06\x01\
@@ -937,9 +937,9 @@ tem\x03\06\x01p7\x01r\x02\x05terms8\x05range\x01\x04\0\x0fparagraph-block\x03\09
 \x0bplaceholder\0\0\x07heading\x01<\0\x0fhorizontal-rule\x01\x09\0\x09paragraph\x01\
 :\0\x0bspace-break\x01\x0b\0\x04code\x01\x13\0\x04math\x01\x1b\0\x04list\x01!\0\x05\
 table\x01)\0\x04\0\x09root-item\x03\0=\x01p>\x01r\x03\x06blocks?\x06config\x05\x04\
-path1\x04\0\x0dnotedown-root\x03\0@\x04\x01\x1fnotedown:core/syntax-tree@0.1.0\x05\
-\x05\x01B\0\x04\x01\x18notedown:core/math@0.1.0\x05\x06\x01B\0\x04\x01\x18notedo\
-wn:core/code@0.1.0\x05\x07\x04\x01\x18notedown:core/host@0.1.0\x04\0\x0b\x0a\x01\
+path1\x04\0\x0dnotedown-root\x03\0↯\x04\x01\x1fnotedown:core/syntax-tree↯0.1.0\x05\
+\x05\x01B\0\x04\x01\x18notedown:core/math↯0.1.0\x05\x06\x01B\0\x04\x01\x18notedo\
+wn:core/code↯0.1.0\x05\x07\x04\x01\x18notedown:core/host↯0.1.0\x04\0\x0b\x0a\x01\
 \0\x04host\x03\0\0\0G\x09producers\x01\x0cprocessed-by\x02\x0dwit-component\x070\
 .202.0\x10wit-bindgen-rust\x060.24.0";
 
